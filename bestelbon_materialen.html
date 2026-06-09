@@ -376,6 +376,7 @@ let state = { orders: [], archief: [], settings:{year:"2025-2026"} };
 let sortMode = "klas";
 let search = "";
 let selected = new Set();
+let lastSig = "";
 
 /* ---------- Supabase ---------- */
 const SUPA_URL = "https://vmvxawjfryaijkhhnnyr.supabase.co";
@@ -414,6 +415,7 @@ async function fetchAll(){
     if(r1.error) throw r1.error; if(r2.error) throw r2.error;
     state.orders=(r1.data||[]).map(r=>({id:r.id,klas:r.klas||"",leverancier:r.leverancier||"",artikel:r.artikel||"",omschrijving:r.omschrijving||"",aantal:r.aantal||"",prijs:r.prijs||"",opmerking:r.opmerking||"",notitie:r.notitie||"",besteld:!!r.besteld}));
     state.archief=(r2.data||[]).map(r=>({id:r.id,datum:r.datum,lijnen:r.lijnen||[]}));
+    lastSig=dataSig(state.orders,state.archief);
     setStatus(true);
   }catch(e){ console.error("fetch",e); setStatus(false); toast("Kon de gegevens niet laden — controleer je verbinding","err"); }
 }
@@ -822,6 +824,52 @@ function initSettings(){
   };
 }
 
+/* ---------- Silent background refresh (every 20s, never while busy) ---------- */
+function dataSig(orders,arch){
+  return orders.map(o=>[o.id,o.klas,o.leverancier,o.artikel,o.omschrijving,o.aantal,o.prijs,o.opmerking,o.notitie,o.besteld?1:0].join("\u0001")).join("\u0002")
+    + "||" + arch.map(r=>r.id+":"+((r.lijnen&&r.lijnen.length)||0)).join(",");
+}
+function isBusy(){
+  if(document.hidden) return true;
+  const ae=document.activeElement;
+  if(ae && (ae.tagName==="INPUT"||ae.tagName==="TEXTAREA"||ae.tagName==="SELECT")) return true;
+  if(document.querySelector(".overlay.open")) return true;
+  return false;
+}
+function rerenderPreserving(){
+  const openNotes=[...document.querySelectorAll(".note-editor.open")].map(e=>e.dataset.id);
+  const sy=window.scrollY;
+  renderGroups();
+  openNotes.forEach(id=>{ const ed=document.querySelector(`.note-editor[data-id="${id}"]`); if(ed) ed.classList.add("open"); });
+  window.scrollTo(0,sy);
+}
+async function silentRefresh(){
+  if(!sb) return;
+  const active=document.querySelector(".tab.active");
+  const view=active?active.dataset.view:"";
+  if(view!=="overzicht" && view!=="archief") return;
+  if(isBusy()) return;
+  let od,ad;
+  try{
+    const [r1,r2]=await Promise.all([
+      sb.from(T_ORD).select("*").order("created_at",{ascending:true}),
+      sb.from(T_ARCH).select("*").order("datum",{ascending:false})
+    ]);
+    if(r1.error||r2.error) throw (r1.error||r2.error);
+    od=r1.data||[]; ad=r2.data||[]; setStatus(true);
+  }catch(e){ setStatus(false); return; }
+  if(isBusy()) return;
+  const newOrders=od.map(r=>({id:r.id,klas:r.klas||"",leverancier:r.leverancier||"",artikel:r.artikel||"",omschrijving:r.omschrijving||"",aantal:r.aantal||"",prijs:r.prijs||"",opmerking:r.opmerking||"",notitie:r.notitie||"",besteld:!!r.besteld}));
+  const newArch=ad.map(r=>({id:r.id,datum:r.datum,lijnen:r.lijnen||[]}));
+  const sig=dataSig(newOrders,newArch);
+  if(sig===lastSig) return;
+  lastSig=sig;
+  state.orders=newOrders; state.archief=newArch;
+  refreshSupplierList(); updateCount(); updateArchCount();
+  if(view==="overzicht") rerenderPreserving();
+  else renderArchive();
+}
+
 /* ---------- Boot ---------- */
 document.getElementById("refreshBtn").onclick=async ()=>{
   await fetchAll(); refreshSupplierList(); renderGroups(); toast("Lijst vernieuwd ✓");
@@ -834,6 +882,7 @@ async function boot(){
   document.getElementById("yearLabel").textContent=state.settings.year;
   await fetchAll();
   refreshSupplierList(); updateCount(); updateArchCount(); renderGroups();
+  setInterval(silentRefresh, 20000);
 }
 boot();
 </script>
