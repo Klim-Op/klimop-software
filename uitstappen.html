@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Uitstappen &amp; Activiteiten — GO! basisschool Klim-Op</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --teal:#0E9E96;--teal-d:#0B7E78;--teal-xd:#08534f;--teal-l:#e6f4f2;
+  --coral:#FF6B5C;--coral-d:#d8523f;--coral-soft:rgba(255,107,92,.16);--coral-line:rgba(255,107,92,.55);
+  --green:#3FA34D;--green-d:#2f8a3c;--green-l:#e7f6e9;
+  --amber:#dd9128;--amber-d:#a96f17;--amber-l:#fbf1de;
+  --sand:#ece4d3;--sand-d:#8c7c5c;
+  --ink:#16302e;--slate:#5d716f;--slate-l:#90a4a2;
+  --paper:#fff;--bg:#eef4f3;--bg-2:#f7faf9;--line:#dde8e6;--line-d:#cbdad7;
+  --shadow:0 1px 2px rgba(8,83,79,.05),0 8px 24px rgba(8,83,79,.07);
+  --shadow-lg:0 14px 50px rgba(8,83,79,.20);
+  --r:14px;--r-sm:10px;--r-lg:20px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Outfit',system-ui,sans-serif;background:var(--bg);color:var(--ink);font-feature-settings:"tnum" 1;line-height:1.45;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,select,textarea{font-family:inherit;font-size:15px;color:var(--ink)}
+::selection{background:var(--teal);color:#fff}
+.app{max-width:1200px;margin:0 auto;padding:0 18px 90px}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(238,244,243,.88);backdrop-filter:blur(10px);margin:0 -18px;padding:0 18px;border-bottom:1px solid var(--line)}
+.topbar-in{display:flex;align-items:center;gap:16px;padding:14px 0 0}
+.brand{display:flex;align-items:center;gap:12px;flex:1;min-width:0}
+.logo{width:42px;height:42px;border-radius:12px;flex-shrink:0;background:linear-gradient(135deg,var(--teal),var(--teal-d));display:grid;place-items:center;color:#fff;font-weight:800;font-size:19px;box-shadow:0 4px 12px rgba(14,158,150,.35);letter-spacing:-.5px}
+.brand h1{font-size:17px;font-weight:700;letter-spacing:-.3px;line-height:1.1}
+.brand p{font-size:12.5px;color:var(--slate);font-weight:500}
+.admin-toggle{display:flex;align-items:center;gap:7px;padding:8px 14px;border-radius:999px;border:1px solid var(--line-d);background:var(--paper);font-size:13.5px;font-weight:600;color:var(--slate);transition:.18s;white-space:nowrap}
+.admin-toggle:hover{border-color:var(--teal);color:var(--teal-d)}
+.admin-toggle.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+.admin-toggle svg{width:15px;height:15px}
+.tabs{display:flex;gap:4px;padding:12px 0 0}
+.tab{padding:10px 18px 14px;font-size:15px;font-weight:600;color:var(--slate);position:relative;border-radius:8px 8px 0 0;transition:color .15s}
+.tab:hover{color:var(--ink)}.tab.active{color:var(--teal-d)}
+.tab.active::after{content:"";position:absolute;left:10px;right:10px;bottom:-1px;height:3px;background:var(--teal);border-radius:3px 3px 0 0}
+.tab .badge-n{display:inline-block;margin-left:6px;font-size:11.5px;font-weight:700;background:var(--line);color:var(--slate);padding:1px 7px;border-radius:999px}
+.tab.active .badge-n{background:var(--teal);color:#fff}
+.stripe{height:4px;border-radius:4px;margin:0 -18px;background:linear-gradient(90deg,var(--teal) 0%,var(--green) 40%,#e7c34e 66%,var(--coral) 100%)}
+main{padding-top:26px}
+.view-title{font-size:24px;font-weight:800;letter-spacing:-.6px;margin-bottom:3px}
+.view-sub{color:var(--slate);font-size:14.5px;margin-bottom:22px;max-width:66ch}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow)}
+.form-wrap{max-width:820px}
+.fieldset{padding:24px 26px;border-bottom:1px solid var(--line)}.fieldset:last-child{border-bottom:none}
+.legend{display:flex;align-items:center;gap:9px;font-size:12px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--teal-d);margin-bottom:18px}
+.legend .dot{width:7px;height:7px;border-radius:50%;background:var(--teal)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 18px}
+.grid.three{grid-template-columns:2fr 1fr 1fr}.grid .full{grid-column:1/-1}
+label.fld{display:block}
+.lbl{display:block;font-size:13.5px;font-weight:600;margin-bottom:6px;color:var(--ink)}
+.lbl .opt{color:var(--slate-l);font-weight:500}
+.inp{width:100%;padding:11px 13px;border:1.5px solid var(--line-d);border-radius:var(--r-sm);background:var(--bg-2);transition:.15s;font-size:14.5px}
+.inp:focus{outline:none;border-color:var(--teal);background:#fff;box-shadow:0 0 0 3px rgba(14,158,150,.13)}
+.inp::placeholder{color:var(--slate-l)}
+textarea.inp{resize:vertical;min-height:60px;line-height:1.5}
+.hint{font-size:12.5px;color:var(--slate);margin-top:6px}
+.radio-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.rcard{display:flex;align-items:center;gap:13px;text-align:left;padding:15px 16px;border:2px solid var(--line-d);border-radius:14px;background:var(--bg-2);transition:.16s;position:relative}
+.rcard:hover{border-color:var(--teal);background:#fff}
+.rcard.sel{border-color:var(--teal);background:var(--teal-l);box-shadow:0 0 0 3px rgba(14,158,150,.1)}
+.rc-check{width:22px;height:22px;border-radius:50%;border:2px solid var(--line-d);flex-shrink:0;display:grid;place-items:center;transition:.16s;background:#fff}
+.rcard.sel .rc-check{background:var(--teal);border-color:var(--teal)}
+.rc-check svg{width:13px;height:13px;color:#fff;opacity:0;transform:scale(.4);transition:.16s}
+.rcard.sel .rc-check svg{opacity:1;transform:scale(1)}
+.rc-ic{font-size:22px;flex-shrink:0}
+.rc-title{display:block;font-weight:700;font-size:14.5px}
+.rc-sub{display:block;font-size:12.5px;color:var(--slate);font-weight:500}
+.callout{display:flex;gap:11px;align-items:flex-start;background:var(--amber-l);border:1px solid #f0dcb1;color:var(--amber-d);padding:12px 15px;border-radius:12px;font-size:13.5px;font-weight:500;margin-bottom:16px;line-height:1.45}
+.callout b{font-weight:700}
+.subblock{margin-top:16px;padding:16px;border:1.5px dashed var(--line-d);border-radius:14px;background:var(--bg-2);display:none}
+.subblock.show{display:block;animation:fade .2s}
+@keyframes fade{from{opacity:0;transform:translateY(-4px)}to{opacity:1}}
+.subblock .sub-lbl{font-size:13.5px;font-weight:600;margin-bottom:10px}
+.warn{margin-top:12px;font-size:13.5px;color:var(--coral-d);font-weight:600;display:none}
+.warn.show{display:block}
+.klas-head{display:flex;align-items:baseline;gap:10px;margin:16px 0 9px}.klas-head:first-child{margin-top:0}
+.klas-head h4{font-size:11.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--slate-l)}
+.klas-head .wis{margin-left:auto;font-size:12.5px;color:var(--teal-d);font-weight:600;cursor:pointer}
+.klas-head .wis:hover{text-decoration:underline}
+.klas-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(58px,1fr));gap:8px}
+.klas-tile{padding:10px 6px;border:1.5px solid var(--line-d);border-radius:11px;background:var(--bg-2);font-weight:700;font-size:13px;color:var(--slate);text-align:center;transition:.13s;position:relative;user-select:none;line-height:1.1}
+.klas-tile:hover{border-color:var(--teal);color:var(--teal-d)}
+.klas-tile.sel{background:var(--teal);border-color:var(--teal);color:#fff}
+.klas-tile.sel::after{content:"";position:absolute;top:5px;right:6px;width:6px;height:6px;border-radius:50%;background:#fff}
+.klas-count{font-size:12.5px;color:var(--slate);font-weight:600;margin-top:10px}
+.form-actions{display:flex;gap:12px;align-items:center;padding:22px 26px;background:var(--bg-2);border-radius:0 0 var(--r-lg) var(--r-lg)}
+.btn{padding:12px 22px;border-radius:11px;font-size:15px;font-weight:700;transition:.15s;display:inline-flex;align-items:center;gap:9px}
+.btn-primary{background:var(--teal);color:#fff;box-shadow:0 4px 14px rgba(14,158,150,.3)}
+.btn-primary:hover{background:var(--teal-d);transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:var(--slate);font-weight:600}.btn-ghost:hover{color:var(--ink)}
+.btn-teal{background:var(--teal);color:#fff}.btn-teal:hover{background:var(--teal-d)}
+.btn-sm{padding:8px 14px;font-size:13.5px;border-radius:9px}
+.btn-line{border:1.5px solid var(--line-d);background:#fff;color:var(--slate);font-weight:600}
+.btn-line:hover{border-color:var(--teal);color:var(--teal-d)}
+.btn-danger{color:#c0493b;font-weight:600}.btn-danger:hover{background:#fceae8}
+.toolbar{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow);padding:14px 16px;margin-bottom:18px}
+.tb-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tb-row+.tb-row{margin-top:11px;padding-top:11px;border-top:1px solid var(--line)}
+.tb-lbl{font-size:11.5px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--slate-l);margin-right:2px}
+.search{position:relative;flex:1;min-width:200px}
+.search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:17px;height:17px;color:var(--slate-l)}
+.search .inp{padding-left:38px;background:#fff}
+.sort-pills,.seg-pills{display:flex;gap:4px;background:var(--bg);border:1px solid var(--line);padding:4px;border-radius:11px}
+.sort-pills button,.seg-pills button{padding:7px 13px;border-radius:8px;font-size:13.5px;font-weight:600;color:var(--slate);transition:.13s;display:inline-flex;align-items:center;gap:5px}
+.sort-pills button.on,.seg-pills button.on{background:var(--teal);color:#fff}
+.sort-pills button .dir{font-size:10px}
+.mini-sel{padding:8px 11px;border:1.5px solid var(--line-d);border-radius:9px;background:#fff;font-size:13.5px;font-weight:600;color:var(--ink)}
+.mini-sel:focus{outline:none;border-color:var(--teal)}
+.tbl-wrap{border-radius:var(--r-lg);border:1px solid var(--line);background:#fff;box-shadow:var(--shadow);overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:13.5px;table-layout:auto}
+thead th{text-align:left;padding:11px 13px;font-size:11px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;color:var(--slate);background:var(--bg-2);border-bottom:1.5px solid var(--line);white-space:nowrap}
+thead th.r{text-align:right}thead th.c{text-align:center}
+tbody tr.trip{border-bottom:1px solid var(--line);transition:background .12s;cursor:pointer}
+tbody tr.trip:last-child{border-bottom:none}
+tbody tr.trip:hover{background:var(--bg-2)}
+td{padding:11px 13px;vertical-align:middle}
+.t-date{font-weight:600;white-space:nowrap}.t-date small{display:block;color:var(--slate);font-weight:500;font-size:11.5px}
+.t-act{font-weight:600}.t-act small{display:block;color:var(--slate);font-weight:400;font-size:12px}
+.t-act .mtag{display:inline-block;font-size:9.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--coral-d);background:var(--coral-soft);padding:1px 6px;border-radius:5px;margin-left:6px;vertical-align:middle}
+.klas-tags{display:flex;flex-wrap:wrap;gap:3px;max-width:160px}
+.klas-tag{font-size:11px;font-weight:700;background:var(--teal-l);color:var(--teal-d);padding:2px 7px;border-radius:6px}
+.num{font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap}.r{text-align:right}.c{text-align:center}
+.muted{color:var(--slate-l)}
+.verv{display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:13px;white-space:nowrap}
+.verv small{display:block;color:var(--slate);font-weight:500;font-size:11.5px}
+.verv.bus{color:var(--teal-d)}
+.cost{font-variant-numeric:tabular-nums;font-weight:700;white-space:nowrap}
+.cost small{display:block;color:var(--slate);font-weight:500;font-size:11.5px}
+.fac{display:flex;flex-direction:column;gap:4px;align-items:flex-start}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap;border:1px solid transparent}
+.pill.open{background:var(--amber-l);color:var(--amber-d);border-color:#f0dcb1}
+.pill.done{background:var(--green-l);color:var(--green-d);border-color:#bfe6c5}
+.pill .pt{width:6px;height:6px;border-radius:50%}.pill.open .pt{background:var(--amber)}.pill.done .pt{background:var(--green)}
+.note-ic{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;color:var(--slate-l);background:transparent;transition:.13s;position:relative}
+.note-ic:hover{background:var(--bg)}
+.note-ic.has{color:var(--coral)}
+.note-ic.has::after{content:"";position:absolute;top:5px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--coral);border:1.5px solid #fff}
+.note-ic svg{width:17px;height:17px}
+tr.grp-head td{background:var(--ink);color:#fff;font-weight:700;font-size:12.5px;letter-spacing:.5px;padding:7px 14px}
+tr.grp-head td .gh-c{font-weight:500;opacity:.7;margin-left:8px}
+.empty{text-align:center;padding:60px 20px;color:var(--slate)}
+.empty .em-ic{font-size:38px;margin-bottom:10px;opacity:.5}.empty h3{font-size:17px;color:var(--ink);margin-bottom:4px}
+/* kalender */
+.cal-head{display:flex;align-items:center;gap:14px;margin-bottom:16px;flex-wrap:wrap}
+.cal-nav{display:flex;align-items:center;gap:6px}
+.cal-nav button{width:38px;height:38px;border-radius:10px;border:1px solid var(--line-d);background:#fff;display:grid;place-items:center;transition:.13s;font-size:18px;color:var(--slate)}
+.cal-nav button:hover:not(:disabled){border-color:var(--teal);color:var(--teal-d)}
+.cal-nav button:disabled{opacity:.35;cursor:not-allowed}
+.cal-month{font-size:21px;font-weight:800;letter-spacing:-.5px;min-width:185px}.cal-month span{color:var(--slate-l);font-weight:600}
+.cal-legend{display:flex;gap:15px;flex-wrap:wrap;margin-left:auto;font-size:12.5px;color:var(--slate)}
+.cal-legend span{display:inline-flex;align-items:center;gap:6px}
+.lg-sw{width:22px;height:11px;border-radius:3px}
+.cal{border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--line);background:#fff;box-shadow:var(--shadow)}
+.cal-dow{display:grid;grid-template-columns:repeat(7,1fr);background:var(--teal-xd)}
+.cal-dow div{padding:10px;color:#fff;font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;text-align:center}
+.cal-week{position:relative;border-bottom:1px solid var(--line)}.cal-week:last-child{border-bottom:none}
+.week-days{display:grid;grid-template-columns:repeat(7,1fr);height:100%}
+.wd{border-right:1px solid var(--line);padding:6px 8px;min-height:100%;background:#fff}.wd:last-child{border-right:none}
+.wd.out{background:var(--bg-2)}.wd.weekend{background:#fbfcfc}
+.wd.vakantie{background:repeating-linear-gradient(135deg,#faf6ec,#faf6ec 8px,#f2ebda 8px,#f2ebda 16px)}
+.wd.feestdag{background:#f4f6f6}
+.wd-num{font-size:12.5px;font-weight:700;color:var(--slate);display:flex;justify-content:space-between;align-items:flex-start;gap:4px}
+.wd.today .wd-num .n{background:var(--teal);color:#fff;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:12px}
+.wd-hol{font-size:10px;font-weight:700;padding:1px 6px;border-radius:5px;text-align:right;line-height:1.25}
+.wd-hol.vak{background:var(--sand);color:var(--sand-d)}.wd-hol.fst{background:#dfe6e5;color:var(--slate)}
+.week-events{position:absolute;left:0;right:0;top:30px;display:grid;grid-template-columns:repeat(7,1fr);grid-auto-rows:25px;row-gap:4px;padding:0 4px;pointer-events:none}
+.bar{pointer-events:auto;margin:0 2px;border-radius:7px;padding:0 8px;font-size:11.5px;line-height:24px;height:24px;cursor:pointer;display:flex;align-items:center;gap:6px;overflow:hidden;white-space:nowrap;transition:.12s;box-shadow:0 1px 2px rgba(8,83,79,.06)}
+.bar:hover{filter:brightness(1.03);box-shadow:var(--shadow)}
+.bar .b-klas{font-weight:800;font-size:10.5px;flex-shrink:0}
+.bar .b-name{font-weight:600;overflow:hidden;text-overflow:ellipsis;opacity:.92}
+.bar .b-bus{flex-shrink:0;display:inline-flex}.bar .b-arr{flex-shrink:0;opacity:.7;font-weight:800}
+.bar.dag{background:var(--teal-l);color:var(--teal-xd);border-left:3px solid var(--teal)}
+.bar.meer{background:var(--coral-soft);color:var(--coral-d);border-left:3px solid var(--coral-line)}
+.bar.meer.contL{border-top-left-radius:0;border-bottom-left-radius:0;border-left:none}
+.bar.meer.contR{border-top-right-radius:0;border-bottom-right-radius:0}
+/* overlay/modal */
+.overlay{position:fixed;inset:0;background:rgba(8,48,46,.45);backdrop-filter:blur(3px);z-index:90;display:grid;place-items:center;padding:20px;opacity:0;pointer-events:none;transition:.18s}
+.overlay.show{opacity:1;pointer-events:auto}
+.modal{background:#fff;border-radius:var(--r-lg);width:100%;max-width:880px;max-height:90vh;display:flex;flex-direction:column;box-shadow:var(--shadow-lg);transform:translateY(12px) scale(.98);transition:.2s;overflow:hidden}
+.overlay.show .modal{transform:none}
+.modal-head{display:flex;align-items:flex-start;gap:14px;padding:20px 24px 14px;border-bottom:1px solid var(--line)}
+.modal-head h2{font-size:19px;font-weight:800;letter-spacing:-.4px;line-height:1.2}
+.modal-head .m-meta{font-size:13px;color:var(--slate);margin-top:3px}
+.m-title{flex:1;min-width:0}
+.modal-close{width:34px;height:34px;border-radius:9px;background:var(--bg);display:grid;place-items:center;font-size:20px;color:var(--slate);transition:.13s;flex-shrink:0}
+.modal-close:hover{background:var(--line);color:var(--ink)}
+.mtabs{display:flex;gap:2px;padding:0 18px;border-bottom:1px solid var(--line);background:var(--bg-2)}
+.mtab{padding:12px 15px;font-size:13.5px;font-weight:600;color:var(--slate);border-bottom:2px solid transparent;transition:.13s}
+.mtab:hover{color:var(--ink)}.mtab.on{color:var(--teal-d);border-color:var(--teal)}
+.modal-body{padding:20px 24px;overflow:auto}
+.mpane{display:none}.mpane.on{display:block}
+.det-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px 20px}
+.det{font-size:14px}.det.full{grid-column:1/-1}.det.span2{grid-column:span 2}
+.det .dk{font-size:11px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--slate-l);margin-bottom:3px}
+.det .dv{font-weight:600}.det .dv.muted{font-weight:500;font-style:italic}
+.det .inp{font-size:14px;padding:9px 11px}
+.det textarea.inp{min-height:54px}
+.modal-foot{display:flex;gap:10px;padding:14px 24px;border-top:1px solid var(--line);background:var(--bg-2);align-items:center}
+.modal-foot .spacer{flex:1}
+.toggle-pill{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;padding:8px 14px;border-radius:10px;border:1.5px solid transparent;transition:.13s;cursor:pointer}
+.toggle-pill.open{background:var(--amber-l);color:var(--amber-d);border-color:#f0dcb1}
+.toggle-pill.done{background:var(--green-l);color:var(--green-d);border-color:#bfe6c5}
+.toggle-pill .pt{width:8px;height:8px;border-radius:50%}.toggle-pill.open .pt{background:var(--amber)}.toggle-pill.done .pt{background:var(--green)}
+.pin-modal{max-width:380px;text-align:center;padding:30px 28px;display:block}
+.pin-modal .lk{width:54px;height:54px;border-radius:16px;background:var(--bg);display:grid;place-items:center;margin:0 auto 14px;color:var(--teal-d)}
+.pin-modal h2{font-size:19px;margin-bottom:5px}.pin-modal p{color:var(--slate);font-size:14px;margin-bottom:18px}
+.pin-in{text-align:center;letter-spacing:8px;font-size:22px;font-weight:700;padding:12px}
+.pin-err{color:#c0493b;font-size:13px;font-weight:600;margin-top:10px;min-height:18px}
+.toast-wrap{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:120;display:flex;flex-direction:column;gap:8px;align-items:center}
+.toast{background:var(--ink);color:#fff;padding:13px 20px;border-radius:12px;font-size:14.5px;font-weight:600;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:10px;animation:tin .25s;max-width:90vw}
+.toast.ok{background:var(--green-d)}.toast.err{background:#c0493b}
+@keyframes tin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.demo-note{display:flex;gap:10px;align-items:center;background:var(--amber-l);border:1px solid #f0dcb1;color:var(--amber-d);padding:11px 15px;border-radius:12px;font-size:13.5px;font-weight:500;margin-bottom:18px}
+.demo-note b{font-weight:700}
+.print-header{display:none}
+
+/* euro-veld */
+.euro-field{position:relative}
+.euro-pre{position:absolute;left:14px;top:12px;font-weight:700;color:var(--slate);opacity:0;transition:.15s;pointer-events:none}
+.euro-field.has .euro-pre{opacity:1}
+.euro-inp{padding-left:30px}
+.req{color:var(--coral);font-weight:800;margin-left:1px}
+.btn-txt-del{background:none;color:var(--coral-d);font-weight:600;font-size:14px;padding:12px 4px}
+.btn-txt-del:hover{text-decoration:underline;color:#c0493b}
+/* meldingbalk in kalender */
+.bar.melding{background:#eef1f1;color:#41575;color:var(--slate);border-left:3px solid #b8c4c2}
+.bar.melding .b-name{font-weight:700;opacity:1}
+.bar .b-pin{font-size:10.5px;flex-shrink:0}
+.bar.melding.contL{border-top-left-radius:0;border-bottom-left-radius:0}
+.bar.melding.contR{border-top-right-radius:0;border-bottom-right-radius:0}
+.cal.admin .wd{cursor:pointer}
+.cal.admin .wd:hover{box-shadow:inset 0 0 0 2px var(--teal-l)}
+/* instellingen */
+.set-list{display:flex;flex-direction:column;gap:8px}
+.set-row{display:grid;grid-template-columns:1fr 150px 150px 30px;gap:8px;align-items:center}
+.set-row.two{grid-template-columns:1fr 150px 30px}
+.set-row .inp{padding:8px 10px;font-size:13.5px}
+.set-row .btn-txt-del{font-size:19px;padding:2px;text-align:center;line-height:1}
+@media(max-width:760px){.set-row,.set-row.two{grid-template-columns:1fr}}
+
+.check-row{display:flex;align-items:center;gap:9px;margin-top:8px;font-size:14px;color:var(--ink);cursor:pointer;font-weight:500}
+.check-row input{width:17px;height:17px;accent-color:var(--teal);cursor:pointer;flex-shrink:0}
+.radio-cards.three{grid-template-columns:repeat(3,1fr)}
+@media(max-width:620px){.radio-cards.three{grid-template-columns:1fr}}
+.radio-cards.four{grid-template-columns:repeat(4,1fr)}
+@media(max-width:780px){.radio-cards.four{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.radio-cards.four{grid-template-columns:1fr}}
+.t-bon{font-variant-numeric:tabular-nums;font-weight:600;color:var(--ink)}
+/* kostprijs basis: duidelijke 50/50 toggle */
+.basis-toggle{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--bg);border:1.5px solid var(--line);padding:5px;border-radius:12px;margin-top:9px}
+.basis-toggle button{width:100%;padding:10px 8px;border-radius:8px;font-size:13.5px;font-weight:600;color:var(--slate);border:1.5px dashed transparent;background:rgba(255,255,255,.55);transition:.15s;text-align:center}
+.basis-toggle button:not(.on):hover{border-color:var(--teal-l);color:var(--ink)}
+.basis-toggle button.on{background:var(--teal);border-color:var(--teal);border-style:solid;color:#fff;box-shadow:0 2px 8px rgba(14,158,150,.28)}
+@media print{
+  .topbar,.toolbar,.demo-note,.cal-nav,.form-actions,.note-ic{display:none!important}
+  body{background:#fff}.app{padding:0}
+  .print-header{display:block;margin-bottom:14px}.print-header h2{font-size:18px}.print-header p{font-size:12px;color:#444}
+  .tbl-wrap,.cal{box-shadow:none;border:1px solid #bbb}
+  thead th,.bar,.wd.vakantie,.wd.feestdag,.pill,.klas-tag{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  @page{size:landscape;margin:12mm}
+}
+@media(max-width:760px){.grid,.grid.three,.radio-cards,.det-grid{grid-template-columns:1fr}.brand p{display:none}.cal-legend{width:100%;margin-left:0}.view-title{font-size:21px}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="brand"><div class="logo">K</div><div><h1>Uitstappen &amp; Activiteiten</h1><p id="brandSub">GO! basisschool Klim-Op — schooljaar 2026-2027</p></div></div>
+    <button class="admin-toggle" id="adminToggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span id="adminLabel">Beheer</span></button>
+  </div>
+  <div class="tabs" id="tabs">
+    <button class="tab active" data-view="bestellen">Bestellen</button>
+    <button class="tab" data-view="overzicht">Overzicht <span class="badge-n" id="ovCount">0</span></button>
+    <button class="tab" data-view="kalender">Kalender</button>
+    <button class="tab" data-view="instellingen" id="tabInstellingen" style="display:none">Instellingen</button>
+  </div>
+  <div class="stripe"></div>
+</div>
+<div class="app"><main id="main"></main></div>
+<div class="overlay" id="overlay"></div>
+<div class="toast-wrap" id="toastWrap"></div>
+<datalist id="busmijList"></datalist>
+<script>
+const CONFIG={ADMIN_PIN:"klimop"};
+/* ====== SUPABASE — vul hieronder éénmalig de "anon public" key in ====== */
+const SUPA={URL:"https://vmvxawjfryaijkhhnnyr.supabase.co",KEY:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZtdnhhd2pmcnlhaWpraGhubnlyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0NjM0NDgsImV4cCI6MjA5NjAzOTQ0OH0.6UMvrhkHwbrtQwOvn3od8X6DAKXSiPdtCeFdt3nZZdE"};
+
+/* ---------------- SUPABASE SYNC ---------------- */
+function supaOn(){return !!(SUPA.URL&&SUPA.KEY&&!/PLAK_HIER/.test(SUPA.KEY));}
+function supaHeaders(extra){return Object.assign({apikey:SUPA.KEY,Authorization:"Bearer "+SUPA.KEY,"Content-Type":"application/json"},extra||{});}
+async function supaGet(path){const r=await fetch(SUPA.URL+path,{headers:supaHeaders()});if(!r.ok)throw new Error("Supabase "+r.status);return r.json();}
+async function supaSend(path,method,body,extra){try{const r=await fetch(SUPA.URL+path,{method,headers:supaHeaders(extra),body:body!==undefined?JSON.stringify(body):undefined});if(!r.ok){console.error("Supabase",method,path,r.status);toast("Opslaan in de database mislukte — wijziging enkel lokaal bewaard","err");}}catch(e){console.error("Supabase",e);toast("Geen verbinding — wijziging enkel lokaal bewaard","err");}}
+function supaUpsertTrips(trips){supaSend("/rest/v1/uitstappen?on_conflict=id","POST",trips.map(t=>({id:t.id,schooljaar:SJ(),trip:t})),{Prefer:"resolution=merge-duplicates,return=minimal"});}
+function supaDeleteTrip(id){supaSend("/rest/v1/uitstappen?id=eq."+encodeURIComponent(id),"DELETE");}
+function supaDeleteAll(){supaSend("/rest/v1/uitstappen?id=not.is.null","DELETE");}
+function supaSaveSettings(s){if(!supaOn())return;supaSend("/rest/v1/instellingen?on_conflict=id","POST",[{id:"klimop",data:s}],{Prefer:"resolution=merge-duplicates,return=minimal"});}
+async function supaBoot(){
+  const [tr,st]=await Promise.all([
+    supaGet("/rest/v1/uitstappen?select=trip&order=updated_at.asc"),
+    supaGet("/rest/v1/instellingen?id=eq.klimop&select=data")
+  ]);
+  if(Array.isArray(tr))Store.setAll(tr.map(r=>r&&r.trip).filter(Boolean));
+  if(Array.isArray(st)&&st.length&&st[0].data)Settings.applyRemote(st[0].data);
+  else if(Array.isArray(st))supaSaveSettings(Settings.get());
+}
+
+function klasList(){return Settings.get().klassen||[];}
+function klasGroups(){const o={Kleuter:[],Lager:[]};klasList().forEach(k=>{if(!o[k.groep])o[k.groep]=[];o[k.groep].push(k.naam);});return o;}
+function klasVolgorde(){const out=[];["Kleuter","Lager"].forEach(g=>klasList().filter(k=>k.groep===g).forEach(k=>out.push(k.naam)));klasList().forEach(k=>{if(out.indexOf(k.naam)<0)out.push(k.naam);});return out;}
+const BUSMIJ=["Ros Beiaard","Coachpartners","Patsy Travel"];
+const MAANDEN=["jan","feb","mrt","apr","mei","jun","jul","aug","sep","okt","nov","dec"];
+const MAANDEN_VOL=["januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december"];
+const DOW=["Ma","Di","Wo","Do","Vr","Za","Zo"];
+/* Instellingen: schooljaar + kalenderdagen (zelf te beheren via de Instellingen-tab) */
+const Settings=(()=>{
+  const KEY="klimop_settings_v1";let mem=null;
+  const defaults={schooljaar:"2026-2027",
+    vakanties:[{id:"v1",naam:"Herfstvakantie",van:"2026-11-02",tot:"2026-11-08"},{id:"v2",naam:"Kerstvakantie",van:"2026-12-21",tot:"2027-01-03"},{id:"v3",naam:"Krokusvakantie",van:"2027-02-08",tot:"2027-02-14"},{id:"v4",naam:"Paasvakantie",van:"2027-03-29",tot:"2027-04-11"}],
+    vrijedagen:[{id:"f1",naam:"Wapenstilstand",datum:"2026-11-11"},{id:"f2",naam:"Nieuwjaar",datum:"2027-01-01"},{id:"f3",naam:"Dag v/d Arbeid",datum:"2027-05-01"},{id:"f4",naam:"Hemelvaart",datum:"2027-05-06"},{id:"f5",naam:"Brugdag",datum:"2027-05-07"},{id:"f6",naam:"Pinkstermaandag",datum:"2027-05-17"}],
+    meldingen:[],
+    klassen:[{id:"k01",naam:"Instap A",groep:"Kleuter"},{id:"k02",naam:"Instap B",groep:"Kleuter"},{id:"k03",naam:"1KA",groep:"Kleuter"},{id:"k04",naam:"1KB",groep:"Kleuter"},{id:"k05",naam:"2KA",groep:"Kleuter"},{id:"k06",naam:"2KB",groep:"Kleuter"},{id:"k07",naam:"3KA",groep:"Kleuter"},{id:"k08",naam:"3KB",groep:"Kleuter"},{id:"k09",naam:"1A",groep:"Lager"},{id:"k10",naam:"1B",groep:"Lager"},{id:"k11",naam:"2A",groep:"Lager"},{id:"k12",naam:"2B",groep:"Lager"},{id:"k13",naam:"3A",groep:"Lager"},{id:"k14",naam:"3B",groep:"Lager"},{id:"k15",naam:"4A",groep:"Lager"},{id:"k16",naam:"4B",groep:"Lager"},{id:"k17",naam:"5A",groep:"Lager"},{id:"k18",naam:"5B",groep:"Lager"},{id:"k19",naam:"5C",groep:"Lager"},{id:"k20",naam:"6A",groep:"Lager"},{id:"k21",naam:"6B",groep:"Lager"},{id:"k22",naam:"6C",groep:"Lager"}]};
+  const read=()=>{try{const r=localStorage.getItem(KEY);return r?JSON.parse(r):null;}catch(e){return mem;}};
+  const write=o=>{try{localStorage.setItem(KEY,JSON.stringify(o));mem=o;}catch(e){mem=o;}};
+  let cur=read();if(!cur){cur=JSON.parse(JSON.stringify(defaults));}
+  cur.vakanties=cur.vakanties||[];cur.vrijedagen=cur.vrijedagen||[];cur.meldingen=cur.meldingen||[];if(!cur.klassen||!cur.klassen.length)cur.klassen=JSON.parse(JSON.stringify(defaults.klassen));
+  const fix=o=>{o.vakanties=o.vakanties||[];o.vrijedagen=o.vrijedagen||[];o.meldingen=o.meldingen||[];if(!o.klassen||!o.klassen.length)o.klassen=JSON.parse(JSON.stringify(defaults.klassen));return o;};
+  return {get:()=>cur,save:o=>{cur=fix(o);write(cur);supaSaveSettings(cur);},applyRemote:o=>{cur=fix(o);write(cur);},defaults:()=>JSON.parse(JSON.stringify(defaults))};
+})();
+const SJ=()=>Settings.get().schooljaar;
+function kalMaanden(){const y1=Number(SJ().split("-")[0])||2026;const out=[];let y=y1,m=8;for(let i=0;i<10;i++){out.push({y,m});m++;if(m>11){m=0;y++;}}return out;}
+const sjMin=()=>{const y=Number(SJ().split("-")[0])||2026;return y+"-09-01";};
+const sjMax=()=>{const y=Number((SJ().split("-")[1]||SJ().split("-")[0]))||2027;return y+"-08-31";};
+const Store=(()=>{const KEY="klimop_uitstappen_v3";let mem=[];
+  const readL=()=>{try{const r=localStorage.getItem(KEY);return r?JSON.parse(r):[];}catch(e){return mem;}};
+  const writeL=a=>{mem=a;try{localStorage.setItem(KEY,JSON.stringify(a));}catch(e){}};
+  let cache=readL();
+  let synced=new Map(cache.map(t=>[t.id,JSON.stringify(t)]));
+  const mark=a=>{synced=new Map(a.map(t=>[t.id,JSON.stringify(t)]));};
+  return {
+    all:()=>cache,
+    setAll:a=>{cache=a;writeL(a);mark(a);},
+    save:arr=>{
+      cache=arr;writeL(arr);
+      if(!supaOn()){mark(arr);return;}
+      const ids=new Set(arr.map(t=>t.id));
+      const changed=arr.filter(t=>synced.get(t.id)!==JSON.stringify(t));
+      const removedIds=[...synced.keys()].filter(id=>!ids.has(id));
+      if(changed.length)supaUpsertTrips(changed);
+      if(removedIds.length){if(!arr.length)supaDeleteAll();else removedIds.forEach(id=>supaDeleteTrip(id));}
+      mark(arr);
+    }
+  };})();
+let state={view:"bestellen",isAdmin:false,sortKey:"datum",sortDir:1,search:"",fKlas:"",fMaand:"",busFilter:"alle",factuurFilter:"alle",ovView:"standaard",groupBy:"",calIdx:0,
+  fType:"dag",fKlassen:[],fBus:null,fVervoerwijze:null,fOpenbaar:null,fBetaalKeuze:"",fBetaalAnder:"",fKostBasis:"",fVoorschot:false,fVoorschotIncl:""};
+let modalTab=0;
+const $=(s,el=document)=>el.querySelector(s);
+const $$=(s,el=document)=>[...el.querySelectorAll(s)];
+const esc=s=>(s==null?"":String(s)).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const uid=()=>"u"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const parseISO=s=>{if(!s)return null;const[y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d);};
+const toISO=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const fmtDate=s=>{const d=parseISO(s);return d?DOW[(d.getDay()+6)%7]+" "+d.getDate()+" "+MAANDEN[d.getMonth()]:"";};
+const fmtLong=s=>{const d=parseISO(s);return d?DOW[(d.getDay()+6)%7]+" "+d.getDate()+" "+MAANDEN_VOL[d.getMonth()]+" "+d.getFullYear():"";};
+const fmtEuro=n=>(n==null||n==="")?null:"€ "+Number(n).toLocaleString("nl-BE",{minimumFractionDigits:2,maximumFractionDigits:2});
+const sortedKlassen=a=>{const o=klasVolgorde();return [...(a||[])].sort((x,y)=>o.indexOf(x)-o.indexOf(y));};
+const klasIdx=a=>{if(!a||!a.length)return 999;const o=klasVolgorde();return Math.min(...a.map(k=>{const i=o.indexOf(k);return i<0?500:i;}));};
+const tripEnd=t=>(t.type==="meerdaags"&&t.datumEind)?t.datumEind:t.datumStart;
+const adres=t=>[[t.straat,t.nummer].filter(Boolean).join(" "),[t.postcode,t.stad].filter(Boolean).join(" ")].filter(Boolean).join(", ");
+function dayType(iso){const d=parseISO(iso);const dow=(d.getDay()+6)%7;const s=Settings.get();const f=s.vrijedagen.find(x=>x.datum===iso);if(f)return{t:"feestdag",label:f.naam};for(const v of s.vakanties)if(iso>=v.van&&iso<=v.tot)return{t:"vakantie",label:v.naam};if(dow>=5)return{t:"weekend"};return{t:"school"};}
+function annForDate(iso){const s=Settings.get();const out=[];s.vakanties.forEach(v=>{if(iso>=v.van&&iso<=v.tot)out.push({kind:"vakantie",naam:v.naam});});s.vrijedagen.forEach(f=>{if(iso===f.datum)out.push({kind:"vrije dag",naam:f.naam});});s.meldingen.forEach(m=>{const e=m.datumEind||m.datum;if(iso>=m.datum&&iso<=e)out.push({kind:"melding",naam:m.naam});});return out;}
+function annForRange(s,e){const out=[];let d=parseISO(s);if(!d)return out;const end=parseISO(e||s);while(d<=end){annForDate(toISO(d)).forEach(a=>{if(!out.find(x=>x.kind===a.kind&&x.naam===a.naam))out.push(a);});d.setDate(d.getDate()+1);}return out;}
+function parseEuro(str){if(str==null)return null;let s=String(str).replace(/[^0-9.,]/g,"").trim();if(s==="")return null;if(s.indexOf(",")>-1&&s.indexOf(".")>-1)s=s.replace(/\./g,"").replace(",",".");else if(s.indexOf(",")>-1)s=s.replace(",",".");const n=Number(s);return isNaN(n)?null:n;}
+const busSvg=(s=13)=>`<svg style="width:${s}px;height:${s}px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 17V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v11M4 17h16M4 17v2a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-2m10 0v2a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-2M4 11h16"/><circle cx="7.5" cy="14.5" r="1"/><circle cx="16.5" cy="14.5" r="1"/></svg>`;
+function vervoerLabel(t){if(t.busNodig)return{ic:"🚌",txt:"Bus",sub:t.busmaatschappij||"",cls:"bus"};if(t.vervoerwijze==="openbaar")return{ic:"🚆",txt:t.openbaarVervoerder||"Openbaar vervoer",sub:"",cls:""};if(t.vervoerwijze==="actief")return{ic:"🚶",txt:"Te voet / fiets",sub:"",cls:""};if(t.vervoerwijze==="school")return{ic:"🏫",txt:"Op school",sub:"",cls:""};return{ic:"",txt:"—",sub:"",cls:"muted"};}
+function vervoerKost(t){if(t.busNodig)return t.prijsVervoer!=null?{lbl:"bus",val:t.prijsVervoer}:null;if(t.vervoerwijze==="openbaar"&&t.kostOpenbaar!=null)return{lbl:t.openbaarVervoerder||"OV",val:t.kostOpenbaar};return null;}
+function toast(msg,kind="ok"){const t=document.createElement("div");t.className="toast "+kind;t.innerHTML=(kind==="err"?"⚠ ":"✓ ")+esc(msg);$("#toastWrap").appendChild(t);setTimeout(()=>{t.style.opacity="0";t.style.transition=".3s";setTimeout(()=>t.remove(),300);},2600);}
+function get(id){return Store.all().find(x=>x.id===id);}
+$("#busmijList").innerHTML=BUSMIJ.map(b=>`<option value="${esc(b)}">`).join("");
+
+function render(){
+  $$(".tab").forEach(t=>t.classList.toggle("active",t.dataset.view===state.view));
+  $("#ovCount").textContent=Store.all().length;
+  $("#adminToggle").classList.toggle("on",state.isAdmin);
+  $("#adminLabel").textContent=state.isAdmin?"Beheer aan":"Beheer";
+  const ti=$("#tabInstellingen");if(ti)ti.style.display=state.isAdmin?"":"none";
+  if(state.view==="instellingen"&&!state.isAdmin)state.view="overzicht";
+  const bs=$("#brandSub");if(bs)bs.textContent="GO! basisschool Klim-Op — schooljaar "+SJ();
+  const mx=kalMaanden().length-1;if(state.calIdx>mx)state.calIdx=mx;if(state.calIdx<0)state.calIdx=0;
+  $$(".tab").forEach(t=>t.classList.toggle("active",t.dataset.view===state.view));
+  const m=$("#main");
+  m.innerHTML=state.view==="bestellen"?viewBestellen():state.view==="overzicht"?viewOverzicht():state.view==="kalender"?viewKalender():viewInstellingen();
+  bindView();
+}
+
+/* ---------------- BESTELLEN ---------------- */
+function viewBestellen(){
+  const chk=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l5 5L20 7"/></svg>`;
+  const tiles=grp=>(klasGroups()[grp]||[]).map(k=>`<div class="klas-tile${state.fKlassen.includes(k)?" sel":""}" data-klas="${esc(k)}">${esc(k)}</div>`).join("");
+  return `
+  <div class="view-title">Een uitstap of activiteit bestellen</div>
+  <p class="view-sub">Vul de gegevens in — na verzenden verschijnt de uitstap automatisch in het overzicht én de kalender. De administratie vult nadien bestelbonnummers en busgegevens aan.</p>
+  <div class="form-wrap"><div class="card">
+    <div class="fieldset">
+      <div class="legend"><span class="dot"></span>Soort</div>
+      <div class="radio-cards" id="typeCards">
+        <button type="button" class="rcard${state.fType==='dag'?' sel':''}" data-val="dag"><span class="rc-check">${chk}</span><span class="rc-ic">📅</span><span><span class="rc-title">Daguitstap of activiteit</span><span class="rc-sub">Eén dag</span></span></button>
+        <button type="button" class="rcard${state.fType==='meerdaags'?' sel':''}" data-val="meerdaags"><span class="rc-check">${chk}</span><span class="rc-ic">🧳</span><span><span class="rc-title">Meerdaagse uitstap</span><span class="rc-sub">Meerdere dagen, met einddatum</span></span></button>
+      </div>
+    </div>
+    <div class="fieldset">
+      <div class="legend"><span class="dot"></span>Algemeen</div>
+      <div class="grid">
+        <label class="fld"><span class="lbl">Naam leerkracht <span class="req">*</span></span><input class="inp" id="f_leerkracht" placeholder="Voornaam Naam"></label>
+        <label class="fld"><span class="lbl">Naam uitstap / activiteit <span class="req">*</span></span><input class="inp" id="f_activiteit" placeholder="bv. Technopolis"></label>
+        <label class="fld"><span class="lbl"><span id="dsLbl">${state.fType==='meerdaags'?'Startdatum':'Datum'}</span> <span class="req">*</span></span><input class="inp" type="date" id="f_datumStart" min="${sjMin()}" max="${sjMax()}"></label>
+        <label class="fld" id="eindWrap" style="${state.fType==='meerdaags'?'':'display:none'}"><span class="lbl">Einddatum <span class="req">*</span></span><input class="inp" type="date" id="f_datumEind" min="${sjMin()}" max="${sjMax()}"></label>
+        <label class="fld"><span class="lbl">Aantal leerlingen <span class="req">*</span></span><input class="inp" type="number" min="0" id="f_lln" placeholder="0"></label>
+        <label class="fld"><span class="lbl">Aantal begeleiders</span><input class="inp" type="number" min="0" id="f_beg" placeholder="0"></label>
+      </div>
+    </div>
+    <div class="fieldset">
+      <div class="legend"><span class="dot"></span>Klas(sen) <span class="req">*</span></div>
+      <div class="klas-head"><h4>Kleuter</h4><span class="wis" id="wisKlas">Wis selectie</span></div>
+      <div class="klas-grid">${tiles("Kleuter")}</div>
+      <div class="klas-head"><h4>Lager</h4></div>
+      <div class="klas-grid">${tiles("Lager")}</div>
+      <div class="klas-count" id="klasCount"></div>
+    </div>
+    <div class="fieldset">
+      <div class="legend"><span class="dot"></span>Bestemming &amp; contact</div>
+      <div class="grid three">
+        <label class="fld"><span class="lbl">Straat</span><input class="inp" id="f_straat" placeholder="Straatnaam"></label>
+        <label class="fld"><span class="lbl">Nummer</span><input class="inp" id="f_nummer" placeholder="Nr"></label>
+        <label class="fld"><span class="lbl">Postcode</span><input class="inp" id="f_postcode" placeholder="0000"></label>
+      </div>
+      <div class="grid" style="margin-top:16px">
+        <label class="fld"><span class="lbl">Stad / gemeente</span><input class="inp" id="f_stad" placeholder="Plaats"></label>
+        <div></div>
+        <label class="fld"><span class="lbl">Tel of GSM organisatie</span><input class="inp" id="f_tel" placeholder="bv. 03 123 45 67"></label>
+        <label class="fld"><span class="lbl">E-mail organisatie</span><input class="inp" type="email" id="f_email" placeholder="bv. info@bestemming.be"></label>
+        <label class="fld"><span class="lbl">Uur vertrek school</span><input class="inp" type="time" id="f_vertrek"></label>
+        <label class="fld"><span class="lbl">Uur terug op school <span class="opt">(richttijd)</span></span><input class="inp" type="time" id="f_terug"></label>
+      </div>
+    </div>
+    <div class="fieldset">
+      <div class="legend"><span class="dot"></span>Kostprijs &amp; vervoer</div>
+      <div class="grid" style="margin-bottom:18px">
+        <label class="fld"><span class="lbl">Kostprijs uitstap / activiteit <span class="req">*</span></span><div class="euro-field" id="kostWrap"><span class="euro-pre">€</span><input class="inp euro-inp" id="f_kostprijs" inputmode="decimal" placeholder="bedrag (0 mag)"></div>
+        <div class="basis-toggle" id="kostBasis"><button type="button" class="${state.fKostBasis==='totaal'?'on':''}" data-kb="totaal">Totaal voor de groep</button><button type="button" class="${state.fKostBasis==='perLln'?'on':''}" data-kb="perLln">Per leerling</button></div>
+        <div class="hint" id="kostCalc" style="display:none;font-weight:600;color:var(--teal)"></div>
+        <span class="hint">Duid aan of dit het totaalbedrag is of de prijs per leerling — bij prijs per leerling rekenen we het totaal automatisch uit. Exclusief eventuele kost openbaar vervoer.</span></label>
+        <div></div>
+      </div>
+      <label class="check-row"><input type="checkbox" id="f_voorschotChk" ${state.fVoorschot?'checked':''}> <span>Er moet een voorschot betaald worden</span></label>
+      <div class="subblock${state.fVoorschot?' show':''}" id="voorschotBlok" style="margin-top:6px">
+        <div class="grid">
+          <label class="fld"><span class="lbl">Bedrag voorschot</span><div class="euro-field" id="vsWrap"><span class="euro-pre">€</span><input class="inp euro-inp" id="f_voorschot" inputmode="decimal" placeholder="bedrag"></div></label>
+          <label class="fld"><span class="lbl">De opgegeven kostprijs is…</span><select class="inp" id="f_voorschotIncl"><option value="">Maak een keuze</option><option value="incl" ${state.fVoorschotIncl==='incl'?'selected':''}>Inclusief het voorschot</option><option value="excl" ${state.fVoorschotIncl==='excl'?'selected':''}>Exclusief het voorschot</option></select></label>
+        </div>
+      </div>
+      <div style="margin-top:18px"><span class="lbl">Betaling via <span class="req">*</span></span>
+        <div class="radio-cards four" id="betaalCards">
+          <button type="button" class="rcard${state.fBetaalKeuze==='Factuur (voorkeur)'?' sel':''}" data-val="Factuur (voorkeur)"><span class="rc-check">${chk}</span><span class="rc-ic">🧾</span><span><span class="rc-title">Factuur</span><span class="rc-sub">Voorkeur</span></span></button>
+          <button type="button" class="rcard${state.fBetaalKeuze==='Cash'?' sel':''}" data-val="Cash"><span class="rc-check">${chk}</span><span class="rc-ic">💶</span><span><span class="rc-title">Cash</span><span class="rc-sub">Contant</span></span></button>
+          <button type="button" class="rcard${state.fBetaalKeuze==='Bankkaart'?' sel':''}" data-val="Bankkaart"><span class="rc-check">${chk}</span><span class="rc-ic">💳</span><span><span class="rc-title">Bankkaart</span><span class="rc-sub">Terminal</span></span></button>
+          <button type="button" class="rcard${state.fBetaalKeuze==='Andere'?' sel':''}" data-val="Andere"><span class="rc-check">${chk}</span><span class="rc-ic">✏️</span><span><span class="rc-title">Andere</span><span class="rc-sub">Beschrijf zelf</span></span></button>
+        </div>
+        <div class="subblock${state.fBetaalKeuze==='Andere'?' show':''}" id="anderBlok" style="margin-top:10px">
+          <input class="inp" id="f_betaalwijze" value="${esc(state.fBetaalAnder||'')}" placeholder="beschrijf hier de andere betaalwijze">
+        </div>
+        <span class="hint">Betaling op factuur heeft altijd de voorkeur.</span>
+      </div>
+      <div class="callout"><span>🚌</span><div><b>Belangrijk:</b> duid hieronder duidelijk aan of er busvervoer nodig is. Op basis van jouw keuze regelt de administratie wél of géén bus. <b>De Lijn valt hier niet onder.</b> Busvervoer met De Lijn dien je zelf te regelen.</div></div>
+      <span class="lbl">Busvervoer nodig?</span>
+      <div class="radio-cards" id="busCards">
+        <button type="button" class="rcard${state.fBus===true?' sel':''}" data-val="ja"><span class="rc-check">${chk}</span><span class="rc-ic">🚌</span><span><span class="rc-title">Ja, regel busvervoer</span><span class="rc-sub">De administratie boekt de bus</span></span></button>
+        <button type="button" class="rcard${state.fBus===false?' sel':''}" data-val="nee"><span class="rc-check">${chk}</span><span class="rc-ic">🚫</span><span><span class="rc-title">Nee, geen bus nodig</span><span class="rc-sub">We gaan op een andere manier</span></span></button>
+      </div>
+      <div class="warn" id="busWarn">Maak een keuze voor het busvervoer.</div>
+
+      <div class="subblock${state.fBus===false?' show':''}" id="geenBus">
+        <div class="sub-lbl">Hoe verplaatsen jullie je dan?</div>
+        <div class="radio-cards three" id="vwCards">
+          <button type="button" class="rcard${state.fVervoerwijze==='actief'?' sel':''}" data-val="actief"><span class="rc-check">${chk}</span><span class="rc-ic">🚶</span><span><span class="rc-title">Te voet of met de fiets</span><span class="rc-sub">Geen vervoerskost</span></span></button>
+          <button type="button" class="rcard${state.fVervoerwijze==='openbaar'?' sel':''}" data-val="openbaar"><span class="rc-check">${chk}</span><span class="rc-ic">🚆</span><span><span class="rc-title">Openbaar vervoer</span><span class="rc-sub">De Lijn of NMBS</span></span></button>
+          <button type="button" class="rcard${state.fVervoerwijze==='school'?' sel':''}" data-val="school"><span class="rc-check">${chk}</span><span class="rc-ic">🏫</span><span><span class="rc-title">Op school</span><span class="rc-sub">De activiteit vindt plaats op school</span></span></button>
+        </div>
+        <div class="subblock${state.fVervoerwijze==='openbaar'?' show':''}" id="openbaar" style="margin-top:14px">
+          <div class="sub-lbl">Met welke vervoerder?</div>
+          <div class="radio-cards" id="ovCards">
+            <button type="button" class="rcard${state.fOpenbaar==='De Lijn'?' sel':''}" data-val="De Lijn"><span class="rc-check">${chk}</span><span class="rc-ic">🚊</span><span><span class="rc-title">De Lijn</span><span class="rc-sub">Bus / tram</span></span></button>
+            <button type="button" class="rcard${state.fOpenbaar==='NMBS'?' sel':''}" data-val="NMBS"><span class="rc-check">${chk}</span><span class="rc-ic">🚆</span><span><span class="rc-title">NMBS</span><span class="rc-sub">Trein</span></span></button>
+          </div>
+          <label class="fld" style="margin-top:14px"><span class="lbl">Kostprijs openbaar vervoer</span><div class="euro-field" id="kostOvWrap"><span class="euro-pre">€</span><input class="inp euro-inp" id="f_kostOpenbaar" inputmode="decimal" placeholder="bedrag"></div></label>
+        </div>
+      </div>
+      <label class="fld full" style="margin-top:18px"><span class="lbl">Opmerkingen <span class="opt">(optioneel)</span></span><textarea class="inp" id="f_opm" placeholder="Bijzonderheden voor de administratie"></textarea></label>
+    </div>
+    <div class="form-actions"><button class="btn btn-primary" id="submitBtn">Uitstap verzenden</button><button class="btn btn-ghost" id="resetBtn">Velden leegmaken</button></div>
+  </div></div>`;
+}
+
+/* ---------------- OVERZICHT ---------------- */
+function applyFilters(){
+  let rows=Store.all();
+  if(state.fKlas)rows=rows.filter(r=>(r.klassen||[]).includes(state.fKlas));
+  if(state.busFilter==="ja")rows=rows.filter(r=>r.busNodig);else if(state.busFilter==="nee")rows=rows.filter(r=>!r.busNodig);
+  if(state.fMaand!==""){const[y,mo]=state.fMaand.split("-").map(Number);const ms=`${y}-${String(mo+1).padStart(2,"0")}-01`,me=`${y}-${String(mo+1).padStart(2,"0")}-31`;rows=rows.filter(r=>r.datumStart<=me&&tripEnd(r)>=ms);}
+  if(state.factuurFilter!=="alle")rows=rows.filter(r=>{const full=r.factuurUitstap&&(!r.busNodig||r.factuurBus);return state.factuurFilter==="open"?!full:full;});
+  if(state.search.trim()){const q=state.search.toLowerCase();rows=rows.filter(r=>[r.activiteit,r.leerkracht,r.straat,r.stad,r.busmaatschappij,(r.klassen||[]).join(" ")].join(" ").toLowerCase().includes(q));}
+  rows.sort((a,b)=>{let c;if(state.sortKey==="klas")c=klasIdx(a.klassen)-klasIdx(b.klassen);else if(state.sortKey==="activiteit")c=(a.activiteit||"").localeCompare(b.activiteit||"");else if(state.sortKey==="leerkracht")c=(a.leerkracht||"").localeCompare(b.leerkracht||"");else c=(a.datumStart||"").localeCompare(b.datumStart||"");if(c===0)c=(a.datumStart||"").localeCompare(b.datumStart||"");return c*state.sortDir;});
+  return rows;
+}
+function viewOverzicht(){
+  const rows=applyFilters(),A=state.isAdmin;const bon=A&&state.ovView==='bestelbon';
+  const sortBtn=(k,l)=>`<button class="${state.sortKey===k?'on':''}" data-sort="${k}">${l}${state.sortKey===k?` <span class="dir">${state.sortDir>0?'▲':'▼'}</span>`:''}</button>`;
+  const KM=kalMaanden();const maandOpts=`<option value="">Alle maanden</option>`+KM.map(km=>`<option value="${km.y}-${km.m}" ${state.fMaand===km.y+"-"+km.m?"selected":""}>${MAANDEN_VOL[km.m].charAt(0).toUpperCase()+MAANDEN_VOL[km.m].slice(1)} ${km.y}</option>`).join("");
+  const klasOpts=`<option value="">Alle klassen</option>`+klasVolgorde().map(k=>`<option ${state.fKlas===k?"selected":""}>${esc(k)}</option>`).join("");
+  let body="";
+  if(!rows.length){body=`<tr><td colspan="${bon?8:9}"><div class="empty"><div class="em-ic">🗒️</div><h3>Geen uitstappen</h3><p>${state.search||state.fKlas||state.fMaand||state.busFilter!=='alle'||state.factuurFilter!=='alle'?'Geen resultaten voor deze filters.':'Voeg er een toe via Bestellen.'}</p></div></td></tr>`;}
+  else if(state.groupBy){const gs=buildGroups(rows);body=gs.map(g=>`<tr class="grp-head"><td colspan="${bon?8:9}">${esc(g.label)}<span class="gh-c">${g.rows.length} uitstap${g.rows.length===1?'':'pen'}</span></td></tr>`+g.rows.map(rowHtml).join("")).join("");}
+  else body=rows.map(rowHtml).join("");
+  return `
+  <div class="print-header" id="printHdr"></div>
+  <div class="view-title">Overzicht uitstappen</div>
+  <p class="view-sub">Klik op een uitstap voor alle details${A?' — in beheermodus pas je daar alles aan':''}. Sorteer, filter, groepeer of druk de huidige weergave af.</p>
+  ${!A?`<div class="demo-note"><span>🔒</span><div>Je bekijkt dit als leerkracht (alleen-lezen). Klik rechtsboven op <b>Beheer</b> om gegevens aan te passen.</div></div>`:''}
+  <div class="toolbar">
+    <div class="tb-row">
+      <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><input class="inp" id="searchInp" placeholder="Zoek op activiteit, klas, leerkracht of plaats…" value="${esc(state.search)}"></div>
+      <button class="btn btn-line btn-sm" id="printBtn">🖨 Afdrukken</button>
+      ${A?`<button class="btn btn-line btn-sm" id="archiefBtn">📦 Archief (CSV)</button>`:''}
+    </div>
+    <div class="tb-row">
+      <span class="tb-lbl">Sorteer</span>
+      <div class="sort-pills">${sortBtn("datum","Datum")}${sortBtn("klas","Klas")}${sortBtn("activiteit","Activiteit")}${sortBtn("leerkracht","Leerkracht")}</div>
+      <span class="tb-lbl" style="margin-left:6px">Groepeer</span>
+      <select class="mini-sel" id="groupSel"><option value="" ${!state.groupBy?'selected':''}>Geen</option><option value="klas" ${state.groupBy==='klas'?'selected':''}>Per klas</option><option value="maand" ${state.groupBy==='maand'?'selected':''}>Per maand</option></select>
+    </div>
+    <div class="tb-row">
+      <span class="tb-lbl">Filter</span>
+      <select class="mini-sel" id="klasFilter">${klasOpts}</select>
+      <select class="mini-sel" id="maandFilter">${maandOpts}</select>
+      <div class="seg-pills"><button class="${state.busFilter==='alle'?'on':''}" data-busf="alle">Alle</button><button class="${state.busFilter==='ja'?'on':''}" data-busf="ja">🚌 Met bus</button><button class="${state.busFilter==='nee'?'on':''}" data-busf="nee">Zonder bus</button></div>
+      <div class="seg-pills"><button class="${state.factuurFilter==='alle'?'on':''}" data-facf="alle">Alle facturen</button><button class="${state.factuurFilter==='open'?'on':''}" data-facf="open">Openstaand</button><button class="${state.factuurFilter==='done'?'on':''}" data-facf="done">Volledig</button></div>
+    </div>
+    ${A?`<div class="tb-row"><span class="tb-lbl">Weergave</span><div class="seg-pills"><button class="${state.ovView==='standaard'?'on':''}" data-ovview="standaard">Standaard</button><button class="${state.ovView==='bestelbon'?'on':''}" data-ovview="bestelbon">📑 Bestelbonnen</button></div></div>`:''}
+  </div>
+  <div class="tbl-wrap"><table id="ovTable">
+    <thead><tr>
+      ${bon?`<th>Datum</th><th>Activiteit</th><th>Klas</th><th>Vervoer</th><th class="r">Kostprijs</th><th>Facturatie</th><th>Bestelbon uitstap</th><th>Bestelbon bus</th>`:`<th>Datum</th><th>Activiteit</th><th>Klas</th><th class="c">Lln</th><th>Leerkracht</th><th>Vervoer</th><th class="r">Kostprijs</th><th>Facturatie</th><th class="c">Notitie</th>`}
+    </tr></thead>
+    <tbody>${body}</tbody>
+  </table></div>`;
+}
+function buildGroups(rows){
+  if(state.groupBy==="klas")return klasVolgorde().map(k=>({label:k,rows:rows.filter(r=>(r.klassen||[]).includes(k))})).filter(g=>g.rows.length);
+  const seen=new Map();rows.forEach(r=>{const d=parseISO(r.datumStart),key=d.getFullYear()+"-"+d.getMonth();if(!seen.has(key))seen.set(key,{label:MAANDEN_VOL[d.getMonth()].charAt(0).toUpperCase()+MAANDEN_VOL[d.getMonth()].slice(1)+" "+d.getFullYear(),rows:[]});seen.get(key).rows.push(r);});return [...seen.values()];
+}
+function rowHtml(r){
+  const klas=sortedKlassen(r.klassen).map(k=>`<span class="klas-tag">${esc(k)}</span>`).join("")||'<span class="muted">—</span>';
+  const v=vervoerLabel(r);
+  const vk=vervoerKost(r);
+  const cost=`<div class="cost">${fmtEuro(r.kostprijs)||'<span class="muted">—</span>'}${vk?`<small>+ ${esc(vk.lbl)} ${fmtEuro(vk.val)}</small>`:''}</div>`;
+  const facU=`<span class="pill ${r.factuurUitstap?'done':'open'}"><span class="pt"></span>Uitstap ${r.factuurUitstap?'✓':'open'}</span>`;
+  const facB=r.busNodig?`<span class="pill ${r.factuurBus?'done':'open'}"><span class="pt"></span>Bus ${r.factuurBus?'✓':'open'}</span>`:'';
+  const noteHas=!!(r.adminNotitie&&r.adminNotitie.trim());
+  const note=`<button class="note-ic ${noteHas?'has':''}" data-note="${r.id}" title="${noteHas?esc(r.adminNotitie):'Geen notitie'}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button>`;
+  if(state.isAdmin&&state.ovView==='bestelbon'){
+    return `<tr class="trip" data-id="${r.id}">
+    <td class="t-date">${fmtDate(r.datumStart)}${r.type==='meerdaags'&&r.datumEind?`<small>t.e.m. ${fmtDate(r.datumEind)}</small>`:''}</td>
+    <td class="t-act">${esc(r.activiteit)}${r.type==='meerdaags'?'<span class="mtag">Meerdaags</span>':''}<small>${esc(r.stad||'')}</small></td>
+    <td><div class="klas-tags">${klas}</div></td>
+    <td><div class="verv ${v.cls}">${v.ic?v.ic+' ':''}<span>${esc(v.txt)}${v.sub?`<small>${esc(v.sub)}</small>`:''}</span></div></td>
+    <td class="r">${cost}</td>
+    <td><div class="fac">${facU}${facB}</div></td>
+    <td class="t-bon">${r.internBestelbonUitstap?esc(r.internBestelbonUitstap):'<span class="muted">—</span>'}</td>
+    <td class="t-bon">${r.busNodig?(r.internBestelbonBus?esc(r.internBestelbonBus):'<span class="muted">—</span>'):'<span class="muted">geen bus</span>'}</td>
+  </tr>`;
+  }
+  return `<tr class="trip" data-id="${r.id}">
+    <td class="t-date">${fmtDate(r.datumStart)}${r.type==='meerdaags'&&r.datumEind?`<small>t.e.m. ${fmtDate(r.datumEind)}</small>`:''}</td>
+    <td class="t-act">${esc(r.activiteit)}${r.type==='meerdaags'?'<span class="mtag">Meerdaags</span>':''}<small>${esc(r.stad||'')}</small></td>
+    <td><div class="klas-tags">${klas}</div></td>
+    <td class="c num">${r.aantalLln||0}</td>
+    <td>${r.leerkracht?esc(r.leerkracht):'<span class="muted">—</span>'}</td>
+    <td><div class="verv ${v.cls}">${v.ic?v.ic+' ':''}<span>${esc(v.txt)}${v.sub?`<small>${esc(v.sub)}</small>`:''}</span></div></td>
+    <td class="r">${cost}</td>
+    <td><div class="fac">${facU}${facB}</div></td>
+    <td class="c" data-stop="1">${note}</td>
+  </tr>`;
+}
+
+/* ---------------- KALENDER ---------------- */
+function monthWeeks(y,m){const last=new Date(y,m+1,0),sd=(new Date(y,m,1).getDay()+6)%7;const weeks=[];let cur=[];for(let i=0;i<sd;i++)cur.push(null);for(let d=1;d<=last.getDate();d++){cur.push(new Date(y,m,d));if(cur.length===7){weeks.push(cur);cur=[];}}if(cur.length){while(cur.length<7)cur.push(null);weeks.push(cur);}return weeks;}
+function layoutWeek(week,events){const days=week.map(d=>d?toISO(d):null);const segs=[];events.forEach(ev=>{const s=ev.s,e=ev.e;let sc=-1,ec=-1;for(let i=0;i<7;i++){const iso=days[i];if(iso&&iso>=s&&iso<=e){if(sc<0)sc=i;ec=i;}}if(sc<0)return;segs.push({ev,sc,ec,contL:days[sc]>s,contR:days[ec]<e});});segs.sort((a,b)=>a.sc-b.sc||(b.ec-b.sc)-(a.ec-a.sc));const laneEnd=[];segs.forEach(sg=>{let l=0;while(laneEnd[l]!=null&&laneEnd[l]>=sg.sc)l++;sg.lane=l;laneEnd[l]=sg.ec;});return {segs,lanes:segs.length?Math.max(...segs.map(s=>s.lane))+1:0};}
+function viewKalender(){
+  const KM=kalMaanden();const {y,m}=KM[state.calIdx]||KM[0],weeks=monthWeeks(y,m);
+  const events=[...Store.all().map(t=>({id:t.id,kind:"trip",s:t.datumStart,e:tripEnd(t),ref:t})),
+    ...Settings.get().meldingen.map(mm=>({id:mm.id,kind:"melding",s:mm.datum,e:mm.datumEind||mm.datum,ref:mm}))];
+  let wk="";
+  weeks.forEach(week=>{
+    const {segs,lanes}=layoutWeek(week,events),h2=Math.max(108,32+lanes*29+8);
+    let cells="";
+    week.forEach(d=>{
+      if(!d){cells+=`<div class="wd out"></div>`;return;}
+      const iso=toISO(d),dt=dayType(iso),today=iso===toISO(new Date());
+      const hol=dt.t==='vakantie'?`<span class="wd-hol vak">${esc(dt.label)}</span>`:dt.t==='feestdag'?`<span class="wd-hol fst">${esc(dt.label)}</span>`:'';
+      cells+=`<div class="wd ${dt.t} ${today?'today':''}" data-iso="${iso}"><div class="wd-num"><span class="n">${d.getDate()}</span>${hol}</div></div>`;
+    });
+    let bars="";
+    segs.forEach(sg=>{const ev=sg.ev;const arrL=sg.contL?'<span class="b-arr">‹</span>':'',arrR=sg.contR?'<span class="b-arr">›</span>':'';
+      if(ev.kind==="melding"){
+        bars+=`<div class="bar melding ${sg.contL?'contL':''} ${sg.contR?'contR':''}" data-mid="${ev.id}" style="grid-column:${sg.sc+1}/${sg.ec+2};grid-row:${sg.lane+1}" title="Melding: ${esc(ev.ref.naam)}">${arrL}<span class="b-pin">📌</span><span class="b-name">${esc(ev.ref.naam)}</span>${arrR}</div>`;
+      }else{
+        const t=ev.ref,meer=t.type==='meerdaags',klas=sortedKlassen(t.klassen).join(" "),bus=t.busNodig?`<span class="b-bus">${busSvg(12)}</span>`:'';
+        bars+=`<div class="bar ${meer?'meer':'dag'} ${sg.contL?'contL':''} ${sg.contR?'contR':''}" data-id="${t.id}" style="grid-column:${sg.sc+1}/${sg.ec+2};grid-row:${sg.lane+1}" title="${esc(klas)} — ${esc(t.activiteit)}">${arrL}${bus}<span class="b-klas">${esc(klas)}</span><span class="b-name">${esc(t.activiteit)}</span>${arrR}</div>`;
+      }
+    });
+    wk+=`<div class="cal-week" style="min-height:${h2}px"><div class="week-days">${cells}</div><div class="week-events">${bars}</div></div>`;
+  });
+  return `
+  <div class="print-header" id="printHdr"></div>
+  <div class="view-title">Kalender</div>
+  <p class="view-sub">Klik op een uitstap voor details. Meerdaagse uitstappen lopen als één balk door.${state.isAdmin?' Klik op een lege dag om een melding toe te voegen (studiedag, fotograaf, sluiting…).':''}</p>
+  <div class="cal-head">
+    <div class="cal-nav"><button id="calPrev" ${state.calIdx===0?'disabled':''}>‹</button><button id="calNext" ${state.calIdx===KM.length-1?'disabled':''}>›</button></div>
+    <div class="cal-month">${MAANDEN_VOL[m].charAt(0).toUpperCase()+MAANDEN_VOL[m].slice(1)} <span>${y}</span></div>
+    <button class="btn btn-line btn-sm" id="calPrint">🖨 Afdrukken</button>
+    <div class="cal-legend"><span><span class="lg-sw" style="background:var(--teal-l);border-left:3px solid var(--teal)"></span>Dagactiviteit</span><span><span class="lg-sw" style="background:var(--coral-soft);border-left:3px solid var(--coral-line)"></span>Meerdaags</span><span><span class="lg-sw" style="background:#eef1f1;border-left:3px solid #b8c4c2"></span>Melding</span><span><span class="lg-sw" style="background:var(--sand)"></span>Vakantie</span></div>
+  </div>
+  <div class="cal${state.isAdmin?' admin':''}"><div class="cal-dow">${DOW.map(d=>`<div>${d}</div>`).join("")}</div><div class="cal-grid">${wk}</div></div>`;
+}
+
+/* ---------------- DATA MUTATIES ---------------- */
+function setField(id,field,value){
+  const all=Store.all(),t=all.find(x=>x.id===id);if(!t)return;
+  if(["kostprijs","prijsVervoer","aantalLln","aantalBegeleiders","kostOpenbaar","voorschotBedrag"].includes(field))t[field]=value===""?null:Number(value);
+  else if(field==="busNodig"){t.busNodig=(value==="ja");if(t.busNodig){t.vervoerwijze=null;t.openbaarVervoerder=null;t.kostOpenbaar=null;}}
+  else if(field==="vervoerwijze"){t.vervoerwijze=value||null;if(value!=="openbaar"){t.openbaarVervoerder=null;t.kostOpenbaar=null;}}
+  else if(field==="type"){t.type=value;if(value==="dag")t.datumEind=null;}
+  else t[field]=value;
+  Store.save(all);
+}
+function toggleInvoice(which,id){const all=Store.all(),t=all.find(x=>x.id===id);if(!t)return;if(which==="uitstap")t.factuurUitstap=!t.factuurUitstap;else t.factuurBus=!t.factuurBus;Store.save(all);}
+function toggleKlas(id,k){const all=Store.all(),t=all.find(x=>x.id===id);if(!t)return;t.klassen=t.klassen||[];t.klassen=t.klassen.includes(k)?t.klassen.filter(x=>x!==k):[...t.klassen,k];Store.save(all);}
+function delTrip(id){Store.save(Store.all().filter(x=>x.id!==id));}
+
+/* ---------------- BINDING ROUTER ---------------- */
+function bindView(){if(state.view==="bestellen")bindForm();if(state.view==="overzicht")bindOverzicht();if(state.view==="kalender")bindKalender();if(state.view==="instellingen")bindInstellingen();}
+
+/* form: DOM-toggles i.p.v. re-render (zo gaan getypte velden niet verloren) */
+function bindForm(){
+  $$("#typeCards .rcard").forEach(b=>b.onclick=()=>{state.fType=b.dataset.val;$$("#typeCards .rcard").forEach(x=>x.classList.toggle("sel",x===b));$("#eindWrap").style.display=state.fType==='meerdaags'?'':'none';$("#dsLbl").textContent=state.fType==='meerdaags'?'Startdatum':'Datum';});
+  $$("#busCards .rcard").forEach(b=>b.onclick=()=>{state.fBus=b.dataset.val==="ja";$$("#busCards .rcard").forEach(x=>x.classList.toggle("sel",x===b));$("#busWarn").classList.remove("show");$("#geenBus").classList.toggle("show",state.fBus===false);if(state.fBus===true){state.fVervoerwijze=null;state.fOpenbaar=null;$("#openbaar").classList.remove("show");$$("#vwCards .rcard,#ovCards .rcard").forEach(x=>x.classList.remove("sel"));}});
+  $$("#vwCards .rcard").forEach(b=>b.onclick=()=>{state.fVervoerwijze=b.dataset.val;$$("#vwCards .rcard").forEach(x=>x.classList.toggle("sel",x===b));$("#openbaar").classList.toggle("show",state.fVervoerwijze==='openbaar');});
+  $$("#ovCards .rcard").forEach(b=>b.onclick=()=>{state.fOpenbaar=b.dataset.val;$$("#ovCards .rcard").forEach(x=>x.classList.toggle("sel",x===b));});
+  $$('[data-klas]').forEach(c=>c.onclick=()=>{const k=c.dataset.klas;state.fKlassen=state.fKlassen.includes(k)?state.fKlassen.filter(x=>x!==k):[...state.fKlassen,k];c.classList.toggle("sel");updKlasCount();});
+  $("#wisKlas").onclick=()=>{state.fKlassen=[];$$('[data-klas]').forEach(c=>c.classList.remove("sel"));updKlasCount();};
+  $("#resetBtn").onclick=()=>{state.fKlassen=[];state.fBus=null;state.fVervoerwijze=null;state.fOpenbaar=null;state.fType="dag";state.fBetaalKeuze="";state.fBetaalAnder="";state.fKostBasis="";state.fVoorschot=false;state.fVoorschotIncl="";render();};
+  bindEuro($("#f_kostprijs"));bindEuro($("#f_kostOpenbaar"));bindEuro($("#f_voorschot"));
+  const kostCalc=()=>{const el=$("#kostCalc");if(!el)return;const kp=parseEuro($("#f_kostprijs")?.value),n=Number($("#f_lln")?.value);if(state.fKostBasis==="perLln"&&kp!=null&&n>0){el.style.display="";el.textContent="= "+fmtEuro(Math.round(kp*n*100)/100)+" totaal voor "+n+" leerlingen";}else{el.style.display="none";el.textContent="";}};
+  $$("#kostBasis button").forEach(b=>b.onclick=()=>{state.fKostBasis=b.dataset.kb;$$("#kostBasis button").forEach(x=>x.classList.toggle("on",x===b));kostCalc();});
+  $("#f_kostprijs")?.addEventListener("input",kostCalc);$("#f_lln")?.addEventListener("input",kostCalc);kostCalc();
+  const anderInp=$("#f_betaalwijze");
+  const syncBet=()=>{$$("#betaalCards .rcard").forEach(x=>x.classList.toggle("sel",x.dataset.val===state.fBetaalKeuze));const ab=$("#anderBlok");if(ab)ab.classList.toggle("show",state.fBetaalKeuze==='Andere');};
+  $$("#betaalCards .rcard").forEach(b=>b.onclick=()=>{state.fBetaalKeuze=b.dataset.val;syncBet();if(b.dataset.val!=='Factuur (voorkeur)')warnFactuur();if(b.dataset.val==='Andere'&&anderInp)setTimeout(()=>anderInp.focus(),60);});
+  if(anderInp){anderInp.addEventListener("input",()=>{state.fBetaalAnder=anderInp.value;});}
+  const vsChk=$("#f_voorschotChk");if(vsChk)vsChk.onchange=()=>{state.fVoorschot=vsChk.checked;$("#voorschotBlok").classList.toggle("show",vsChk.checked);};
+  const vsInc=$("#f_voorschotIncl");if(vsInc)vsInc.onchange=()=>{state.fVoorschotIncl=vsInc.value;};
+  const dchk=()=>{const ds=$("#f_datumStart")?.value,de=$("#f_datumEind")?.value;if(!ds)return;const anns=annForRange(ds,state.fType==="meerdaags"?(de||ds):ds);if(anns.length)showConflict(anns);};
+  $("#f_datumStart")?.addEventListener("change",dchk);$("#f_datumEind")?.addEventListener("change",dchk);
+  $("#submitBtn").onclick=submitForm;updKlasCount();
+}
+function updKlasCount(){const el=$("#klasCount");if(el)el.textContent=state.fKlassen.length?`${state.fKlassen.length} klas${state.fKlassen.length===1?'':'sen'} geselecteerd: ${sortedKlassen(state.fKlassen).join(", ")}`:"Nog geen klas geselecteerd.";}
+function submitForm(){
+  const v=id=>($("#"+id)?.value||"").trim();
+  if(!v("f_leerkracht")){toast("Vul de naam van de leerkracht in","err");$("#f_leerkracht").focus();return;}
+  if(!v("f_activiteit")){toast("Vul een naam voor de activiteit in","err");$("#f_activiteit").focus();return;}
+  if(!v("f_datumStart")){toast("Kies een datum","err");$("#f_datumStart").focus();return;}
+  if(!v("f_lln")){toast("Vul het aantal leerlingen in","err");$("#f_lln").focus();return;}
+  if(!state.fKlassen.length){toast("Selecteer minstens één klas","err");return;}
+  const kp=parseEuro(v("f_kostprijs"));
+  if(kp===null){toast("Vul de kostprijs in (mag 0 zijn)","err");$("#f_kostprijs").focus();return;}
+  if(!state.fKostBasis){toast("Duid aan of de kostprijs het totaal of de prijs per leerling is","err");return;}
+  const lln=Number(v("f_lln"))||0;
+  const kpTotaal=state.fKostBasis==="perLln"?Math.round(kp*lln*100)/100:kp;
+  if(state.fBus===null){toast("Duid aan of er busvervoer nodig is","err");$("#busWarn").classList.add("show");return;}
+  if(state.fBus===false&&!state.fVervoerwijze){toast("Duid aan hoe jullie je verplaatsen","err");return;}
+  if(state.fVervoerwijze==="openbaar"&&!state.fOpenbaar){toast("Kies De Lijn of NMBS","err");return;}
+  if(state.fType==="meerdaags"&&!v("f_datumEind")){toast("Kies de einddatum van de meerdaagse uitstap","err");$("#f_datumEind").focus();return;}
+  if(state.fType==="meerdaags"&&v("f_datumEind")&&v("f_datumEind")<v("f_datumStart")){toast("Einddatum ligt vóór de startdatum","err");return;}
+  if(!state.fBetaalKeuze){toast("Geef aan hoe de uitstap betaald wordt","err");return;}
+  let betaalwijze=state.fBetaalKeuze;
+  if(state.fBetaalKeuze==="Andere"){betaalwijze=v("f_betaalwijze");if(!betaalwijze){toast("Beschrijf de andere betaalwijze","err");$("#f_betaalwijze").focus();return;}}
+  const email=v("f_email");
+  if(email&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){toast("Controleer het e-mailadres (een geldig adres bevat een @ en een domein)","err");$("#f_email").focus();return;}
+  const vsOn=!!$("#f_voorschotChk")?.checked;let vsBedrag=null,vsIncl=null;
+  if(vsOn){vsBedrag=parseEuro(v("f_voorschot"));if(vsBedrag===null){toast("Vul het bedrag van het voorschot in","err");$("#f_voorschot").focus();return;}vsIncl=$("#f_voorschotIncl").value;if(!vsIncl){toast("Geef aan of de kostprijs in- of exclusief het voorschot is","err");$("#f_voorschotIncl").focus();return;}}
+  const t={id:uid(),type:state.fType,datumStart:v("f_datumStart"),datumEind:state.fType==="meerdaags"?(v("f_datumEind")||v("f_datumStart")):null,
+    leerkracht:v("f_leerkracht"),klassen:[...state.fKlassen],aantalLln:Number(v("f_lln"))||0,aantalBegeleiders:v("f_beg")?Number(v("f_beg")):0,
+    activiteit:v("f_activiteit"),straat:v("f_straat"),nummer:v("f_nummer"),postcode:v("f_postcode"),stad:v("f_stad"),contactTel:v("f_tel"),contactEmail:v("f_email"),
+    vertrekSchool:v("f_vertrek"),terug:v("f_terug"),busNodig:state.fBus,
+    vervoerwijze:state.fBus?null:state.fVervoerwijze,openbaarVervoerder:state.fVervoerwijze==="openbaar"?state.fOpenbaar:null,kostOpenbaar:state.fVervoerwijze==="openbaar"?parseEuro(v("f_kostOpenbaar")):null,
+    kostprijs:kpTotaal,kostprijsBasis:state.fKostBasis,kostprijsPerLln:state.fKostBasis==="perLln"?kp:null,prijsVervoer:null,busmaatschappij:"",internBestelbonUitstap:"",internBestelbonBus:"",factuurUitstap:false,factuurBus:false,
+    betaalwijze:betaalwijze,voorschot:vsOn,voorschotBedrag:vsBedrag,voorschotInclusief:vsIncl||null,
+    opmerking:v("f_opm"),adminNotitie:"",ingevoerdOp:new Date().toISOString()};
+  Store.save([...Store.all(),t]);
+  state.fKlassen=[];state.fBus=null;state.fVervoerwijze=null;state.fOpenbaar=null;state.fType="dag";state.fBetaalKeuze="";state.fBetaalAnder="";state.fKostBasis="";state.fVoorschot=false;state.fVoorschotIncl="";
+  toast("Uitstap verzonden — staat nu in overzicht en kalender");state.view="overzicht";render();
+}
+
+/* overzicht */
+function bindOverzicht(){
+  const si=$("#searchInp");if(si)si.oninput=e=>{state.search=e.target.value;const tmp=document.createElement("div");tmp.innerHTML=viewOverzicht();$("#ovTable tbody").replaceWith(tmp.querySelector("#ovTable tbody"));bindRows();};
+  $$('[data-sort]').forEach(b=>b.onclick=()=>{const k=b.dataset.sort;if(state.sortKey===k)state.sortDir*=-1;else{state.sortKey=k;state.sortDir=1;}render();});
+  $$('[data-busf]').forEach(b=>b.onclick=()=>{state.busFilter=b.dataset.busf;render();});
+  $$('[data-facf]').forEach(b=>b.onclick=()=>{state.factuurFilter=b.dataset.facf;render();});
+  $$('[data-ovview]').forEach(b=>b.onclick=()=>{state.ovView=b.dataset.ovview;render();});
+  $("#klasFilter").onchange=e=>{state.fKlas=e.target.value;render();};
+  $("#maandFilter").onchange=e=>{state.fMaand=e.target.value;render();};
+  $("#groupSel").onchange=e=>{state.groupBy=e.target.value;render();};
+  $("#printBtn").onclick=doPrint;
+  const a=$("#archiefBtn");if(a)a.onclick=exportCSV;
+  bindRows();
+}
+function bindRows(){
+  $$('tr.trip').forEach(tr=>tr.onclick=e=>{if(e.target.closest('[data-stop]'))return;openTrip(tr.dataset.id,false);});
+  $$('[data-note]').forEach(b=>b.onclick=e=>{e.stopPropagation();openNote(b.dataset.note);});
+}
+/* kalender */
+function bindKalender(){
+  const p=$("#calPrev"),n=$("#calNext");
+  if(p)p.onclick=()=>{if(state.calIdx>0){state.calIdx--;render();}};
+  if(n)n.onclick=()=>{if(state.calIdx<kalMaanden().length-1){state.calIdx++;render();}};
+  $("#calPrint").onclick=doPrint;
+  $$('.bar[data-id]').forEach(b=>b.onclick=()=>openTrip(b.dataset.id,true));
+  $$('.bar[data-mid]').forEach(b=>b.onclick=e=>{e.stopPropagation();openMelding(b.dataset.mid);});
+  if(state.isAdmin)$$('.wd[data-iso]').forEach(c=>c.onclick=()=>openMelding(null,c.dataset.iso));
+}
+
+/* ---------------- MODALS ---------------- */
+function closeModal(refresh=true){const ov=$("#overlay");ov.classList.remove("show");setTimeout(()=>{if(!ov.classList.contains("show")){ov.innerHTML="";ov.onclick=null;if(refresh&&state.view!=="bestellen")render();}},200);}
+function openNote(id){
+  const t=get(id);if(!t)return;const A=state.isAdmin,ov=$("#overlay");const heeft=!!(t.adminNotitie&&t.adminNotitie.trim());
+  ov.innerHTML=`<div class="modal" style="max-width:460px">
+    <div class="modal-head"><div class="m-title"><h2>Notitie administratie</h2><div class="m-meta">${esc(t.activiteit)} · ${fmtDate(t.datumStart)}</div></div><button class="modal-close" data-close>×</button></div>
+    <div class="modal-body">${A?`<textarea class="inp" id="noteTxt" style="min-height:120px" placeholder="Interne notitie — leerkrachten kunnen dit lezen maar niet wijzigen.">${esc(t.adminNotitie||"")}</textarea>`:`<div class="dv ${t.adminNotitie?'':'muted'}" style="font-size:15px;white-space:pre-wrap">${t.adminNotitie?esc(t.adminNotitie):'Geen notitie ingevuld.'}</div>`}</div>
+    <div class="modal-foot">${A&&heeft?`<button class="btn-txt-del" id="noteDel">Verwijderen</button>`:''}<div class="spacer"></div><button class="btn btn-ghost" data-close>${A?'Annuleren':'Sluiten'}</button>${A?'<button class="btn btn-teal" id="noteSave">Opslaan</button>':''}</div></div>`;
+  ov.classList.add("show");ov.onclick=e=>{if(e.target===ov)closeModal();};
+  $$("[data-close]",ov).forEach(b=>b.onclick=closeModal);
+  const s=$("#noteSave");if(s)s.onclick=()=>{setField(id,"adminNotitie",$("#noteTxt").value);closeModal();toast("Notitie opgeslagen");};
+  const dl=$("#noteDel");if(dl)dl.onclick=()=>{if(confirm("Deze notitie verwijderen?")){setField(id,"adminNotitie","");closeModal();toast("Notitie verwijderd");}};
+}
+function openTrip(id,fromCalendar){modalTab=0;renderTrip(id,fromCalendar);}
+function renderTrip(id,fromCalendar){
+  const t=get(id);if(!t)return;const ov=$("#overlay");
+  const editable=state.isAdmin&&!fromCalendar;
+  const head=`<div class="modal-head"><div class="m-title"><h2>${esc(t.activiteit)}</h2><div class="m-meta">${fmtLong(t.datumStart)}${t.type==='meerdaags'&&t.datumEind?' — t.e.m. '+fmtLong(t.datumEind):''}</div></div><button class="modal-close" data-close>×</button></div>`;
+  let bodyInner,tabsHtml="",foot;
+  if(editable){
+    tabsHtml=`<div class="mtabs"><button class="mtab ${modalTab===0?'on':''}" data-mtab="0">Algemeen</button><button class="mtab ${modalTab===1?'on':''}" data-mtab="1">Bestemming</button><button class="mtab ${modalTab===2?'on':''}" data-mtab="2">Vervoer &amp; facturatie</button></div>`;
+    bodyInner=editPanes(t);
+    foot=`<button class="btn btn-ghost btn-danger" data-del="${t.id}">Verwijderen</button><div class="spacer"></div><button class="btn btn-teal" data-close>Klaar</button>`;
+  }else{
+    bodyInner=`<div class="mpane on">${detView(t)}</div>`;
+    foot=`<div class="spacer"></div><button class="btn btn-ghost" data-close>Sluiten</button>${(fromCalendar&&state.isAdmin)?`<button class="btn btn-teal" id="editInOv">Bewerk in overzicht</button>`:''}`;
+  }
+  ov.innerHTML=`<div class="modal">${head}${tabsHtml}<div class="modal-body">${bodyInner}</div><div class="modal-foot">${foot}</div></div>`;
+  ov.classList.add("show");ov.onclick=e=>{if(e.target===ov)closeModal();};
+  $$("[data-close]",ov).forEach(b=>b.onclick=closeModal);
+  // tabs
+  $$('[data-mtab]',ov).forEach(b=>b.onclick=()=>{modalTab=+b.dataset.mtab;$$('.mtab',ov).forEach(x=>x.classList.toggle("on",x===b));$$('.mpane',ov).forEach((p,i)=>p.classList.toggle("on",i===modalTab));});
+  // edit fields
+  $$('[data-field]',ov).forEach(inp=>inp.onchange=()=>{const struct=inp.dataset.struct==="1";setField(id,inp.dataset.field,inp.value);if(struct)renderTrip(id,fromCalendar);});
+  $$('[data-eklas]',ov).forEach(c=>c.onclick=()=>{toggleKlas(id,c.dataset.eklas);c.classList.toggle("sel");});
+  $$('[data-fac]',ov).forEach(b=>b.onclick=()=>{toggleInvoice(b.dataset.fac,id);renderTrip(id,fromCalendar);});
+  const del=$("[data-del]",ov);if(del)del.onclick=()=>{if(confirm("Deze uitstap definitief verwijderen?")){delTrip(id);closeModal();toast("Uitstap verwijderd");render();}};
+  const e=$("#editInOv");if(e)e.onclick=()=>{closeModal();state.view="overzicht";render();setTimeout(()=>openTrip(id,false),120);};
+  // re-render onderliggende weergave wanneer modal sluit gebeurt via closeModal? we re-renderen bij elke wijziging niet; doe het bij sluiten:
+
+}
+function editPanes(t){
+  const ef=(field,val,type="text",struct=false)=>`<input class="inp" type="${type}" data-id="${t.id}" data-field="${field}" ${struct?'data-struct="1"':''} value="${esc(val??"")}">`;
+  const eta=(field,val)=>`<textarea class="inp" data-id="${t.id}" data-field="${field}">${esc(val||"")}</textarea>`;
+  const tiles=klasVolgorde().map(k=>`<div class="klas-tile${(t.klassen||[]).includes(k)?" sel":""}" data-eklas="${esc(k)}" style="padding:7px 4px;font-size:12px">${esc(k)}</div>`).join("");
+  const facU=`<button class="toggle-pill ${t.factuurUitstap?'done':'open'}" data-fac="uitstap"><span class="pt"></span>Factuur uitstap ${t.factuurUitstap?'ontvangen ✓':'nog niet ontvangen'}</button>`;
+  // pane 0
+  const p0=`<div class="mpane ${modalTab===0?'on':''}"><div class="det-grid">
+    <div class="det"><div class="dk">Soort</div><select class="inp" data-id="${t.id}" data-field="type" data-struct="1"><option value="dag" ${t.type==='dag'?'selected':''}>Daguitstap / activiteit</option><option value="meerdaags" ${t.type==='meerdaags'?'selected':''}>Meerdaagse uitstap</option></select></div>
+    <div class="det"><div class="dk">Startdatum</div>${ef("datumStart",t.datumStart,"date")}</div>
+    <div class="det"><div class="dk">Einddatum ${t.type==='meerdaags'?'':'(enkel meerdaags)'}</div>${ef("datumEind",t.datumEind,"date")}</div>
+    <div class="det"><div class="dk">Leerkracht</div>${ef("leerkracht",t.leerkracht)}</div>
+    <div class="det"><div class="dk">Aantal leerlingen</div>${ef("aantalLln",t.aantalLln,"number")}</div>
+    <div class="det"><div class="dk">Aantal begeleiders</div>${ef("aantalBegeleiders",t.aantalBegeleiders,"number")}</div>
+    <div class="det full"><div class="dk">Naam uitstap / activiteit</div>${ef("activiteit",t.activiteit)}</div>
+    <div class="det full"><div class="dk">Klassen — klik om aan/uit te zetten</div><div class="klas-grid" style="margin-top:4px">${tiles}</div></div>
+    <div class="det full"><div class="dk">Opmerking leerkracht</div>${eta("opmerking",t.opmerking)}</div>
+  </div></div>`;
+  // pane 1
+  const p1=`<div class="mpane ${modalTab===1?'on':''}"><div class="det-grid">
+    <div class="det span2"><div class="dk">Straat</div>${ef("straat",t.straat)}</div>
+    <div class="det"><div class="dk">Nummer</div>${ef("nummer",t.nummer)}</div>
+    <div class="det"><div class="dk">Postcode</div>${ef("postcode",t.postcode)}</div>
+    <div class="det span2"><div class="dk">Stad / gemeente</div>${ef("stad",t.stad)}</div>
+    <div class="det"><div class="dk">Tel of GSM organisatie</div>${ef("contactTel",t.contactTel)}</div>
+    <div class="det span2"><div class="dk">E-mail organisatie</div>${ef("contactEmail",t.contactEmail,"email")}</div>
+    <div class="det"><div class="dk">Uur vertrek school</div>${ef("vertrekSchool",t.vertrekSchool,"time")}</div>
+    <div class="det"><div class="dk">Uur terug op school</div>${ef("terug",t.terug,"time")}</div>
+  </div></div>`;
+  // pane 2 — vervoer cascade
+  let vervBlok;
+  if(t.busNodig){
+    vervBlok=`<div class="det"><div class="dk">Busmaatschappij</div><input class="inp" list="busmijList" data-id="${t.id}" data-field="busmaatschappij" value="${esc(t.busmaatschappij||"")}" placeholder="kies of typ"></div>
+      <div class="det"><div class="dk">Kostprijs bus (€)</div>${ef("prijsVervoer",t.prijsVervoer,"number")}</div>
+      <div class="det"><div class="dk">Bestelbon bus</div>${ef("internBestelbonBus",t.internBestelbonBus)}</div>
+      <div class="det full"><button class="toggle-pill ${t.factuurBus?'done':'open'}" data-fac="bus"><span class="pt"></span>Factuur bus ${t.factuurBus?'ontvangen ✓':'nog niet ontvangen'}</button></div>`;
+  }else{
+    let ob="";
+    if(t.vervoerwijze==="openbaar"){
+      ob=`<div class="det"><div class="dk">Vervoerder</div><select class="inp" data-id="${t.id}" data-field="openbaarVervoerder" data-struct="1"><option value="" ${!t.openbaarVervoerder?'selected':''}>—</option><option ${t.openbaarVervoerder==='De Lijn'?'selected':''}>De Lijn</option><option ${t.openbaarVervoerder==='NMBS'?'selected':''}>NMBS</option></select></div>
+        <div class="det"><div class="dk">Kostprijs openbaar vervoer (€)</div>${ef("kostOpenbaar",t.kostOpenbaar,"number")}</div>`;
+    }
+    vervBlok=`<div class="det"><div class="dk">Verplaatsing</div><select class="inp" data-id="${t.id}" data-field="vervoerwijze" data-struct="1"><option value="" ${!t.vervoerwijze?'selected':''}>—</option><option value="actief" ${t.vervoerwijze==='actief'?'selected':''}>Te voet / fiets</option><option value="openbaar" ${t.vervoerwijze==='openbaar'?'selected':''}>Openbaar vervoer</option><option value="school" ${t.vervoerwijze==='school'?'selected':''}>Op school</option></select></div>${ob}`;
+  }
+  const p2=`<div class="mpane ${modalTab===2?'on':''}"><div class="det-grid">
+    <div class="det"><div class="dk">Busvervoer</div><select class="inp" data-id="${t.id}" data-field="busNodig" data-struct="1"><option value="ja" ${t.busNodig?'selected':''}>Ja — school regelt bus</option><option value="nee" ${!t.busNodig?'selected':''}>Nee</option></select></div>
+    ${vervBlok}
+    <div class="det" style="grid-column:1"><div class="dk">Kostprijs uitstap (€)</div>${ef("kostprijs",t.kostprijs,"number")}</div>
+    <div class="det"><div class="dk">Bestelbon uitstap</div>${ef("internBestelbonUitstap",t.internBestelbonUitstap)}</div>
+    <div class="det"><div class="dk">Betaling via</div>${ef("betaalwijze",t.betaalwijze)}</div>
+    <div class="det"><div class="dk">Voorschot (€)</div>${ef("voorschotBedrag",t.voorschotBedrag,"number")}</div>
+    <div class="det"><div class="dk">Kostprijs is</div><select class="inp" data-id="${t.id}" data-field="voorschotInclusief" data-struct="1"><option value="" ${!t.voorschotInclusief?'selected':''}>—</option><option value="incl" ${t.voorschotInclusief==='incl'?'selected':''}>incl. voorschot</option><option value="excl" ${t.voorschotInclusief==='excl'?'selected':''}>excl. voorschot</option></select></div>
+    <div class="det full">${facU}</div>
+    <div class="det full"><div class="dk">Notitie administratie <span style="color:var(--coral);font-weight:700">(intern)</span></div>${eta("adminNotitie",t.adminNotitie)}</div>
+  </div></div>`;
+  return p0+p1+p2;
+}
+function detView(t){
+  const d=(k,v,cls="")=>`<div class="det ${cls}"><div class="dk">${k}</div><div class="dv ${v?'':'muted'}">${v||'niet ingevuld'}</div></div>`;
+  const v=vervoerLabel(t),vk=vervoerKost(t);
+  const verv=t.busNodig?('🚌 Busvervoer'+(t.busmaatschappij?' — '+esc(t.busmaatschappij):'')):t.vervoerwijze==="openbaar"?('🚆 '+esc(t.openbaarVervoerder||'Openbaar vervoer')):t.vervoerwijze==="actief"?'🚶 Te voet / fiets':t.vervoerwijze==="school"?'🏫 Op school':'—';
+  const tijd=(t.vertrekSchool||t.terug)?`${t.vertrekSchool||'…'}${t.terug?' → '+t.terug:''}`:'';
+  const fac=`${t.factuurUitstap?'Uitstap ✓':'Uitstap open'}${t.busNodig?(t.factuurBus?' · Bus ✓':' · Bus open'):''}`;
+  return `<div class="det-grid">
+    ${d("Soort",t.type==='meerdaags'?'Meerdaagse uitstap':'Daguitstap / activiteit')}
+    ${d("Klas(sen)",sortedKlassen(t.klassen).join(", "))}
+    ${d("Leerkracht",esc(t.leerkracht))}
+    ${d("Aantal",`${t.aantalLln||0} lln · ${t.aantalBegeleiders||0} begeleiders`)}
+    ${d("Bestemming",esc(adres(t)),"span2")}
+    ${d("Uren",tijd)}
+    ${d("Contact",[t.contactTel,t.contactEmail].filter(Boolean).map(esc).join(" · "),"span2")}
+    ${d("Vervoer",verv)}
+    ${d("Kostprijs uitstap",t.kostprijsBasis==="perLln"&&t.kostprijsPerLln!=null?(fmtEuro(t.kostprijs)+" <small style=\"color:var(--slate);font-weight:500\">("+fmtEuro(t.kostprijsPerLln)+" per leerling)</small>"):fmtEuro(t.kostprijs))}
+    ${d("Betaling via",esc(t.betaalwijze))}
+    ${t.voorschot?d("Voorschot",(fmtEuro(t.voorschotBedrag)||'—')+(t.voorschotInclusief?(' · kostprijs '+(t.voorschotInclusief==='incl'?'incl.':'excl.')+' voorschot'):'')):''}
+    ${vk?d("Kostprijs "+esc(vk.lbl),fmtEuro(vk.val)):'<div class="det"></div>'}
+    ${d("Facturatie",fac)}
+    ${t.opmerking?d("Opmerking",esc(t.opmerking),"full"):''}
+  </div>`;
+}
+
+/* ---------------- PRINT + EXPORT ---------------- */
+function doPrint(){
+  const hdr=$("#printHdr");
+  if(hdr){let ctx=[];
+    if(state.view==="overzicht"){const sl={datum:"datum",klas:"klas",activiteit:"activiteit",leerkracht:"leerkracht"}[state.sortKey];ctx.push("Gesorteerd op "+sl+(state.sortDir>0?" (oplopend)":" (aflopend)"));if(state.groupBy)ctx.push("gegroepeerd "+(state.groupBy==="klas"?"per klas":"per maand"));if(state.fKlas)ctx.push("klas "+state.fKlas);if(state.fMaand!==""){const[y,mo]=state.fMaand.split("-").map(Number);ctx.push(MAANDEN_VOL[mo]+" "+y);}if(state.busFilter!=="alle")ctx.push(state.busFilter==="ja"?"enkel met bus":"zonder bus");if(state.factuurFilter!=="alle")ctx.push(state.factuurFilter==="open"?"openstaande facturen":"volledige facturen");}
+    else{const km=kalMaanden()[state.calIdx];ctx.push(MAANDEN_VOL[km.m]+" "+km.y);}
+    hdr.innerHTML=`<h2>Uitstappen &amp; Activiteiten — GO! basisschool Klim-Op</h2><p>Schooljaar ${SJ()} · ${esc(ctx.join(" · "))} · afgedrukt op ${new Date().toLocaleDateString("nl-BE")}</p>`;}
+  window.print();
+}
+function exportCSV(){
+  const cols=["Datum start","Datum eind","Soort","Activiteit","Straat","Nummer","Postcode","Stad","Tel/GSM","E-mail","Klassen","Lln","Begeleiders","Leerkracht","Vertrek","Terug","Busvervoer","Busmaatschappij","Kostprijs bus","Bestelbon bus","Factuur bus","Verplaatsing (geen bus)","Vervoerder OV","Kostprijs OV","Kostprijs uitstap","Kostprijs per leerling","Betaalwijze","Voorschot","Kostprijs in/excl voorschot","Bestelbon uitstap","Factuur uitstap","Opmerking leerkracht","Notitie administratie","Ingevoerd op"];
+  const rows=Store.all().map(t=>[t.datumStart,t.datumEind||"",t.type,t.activiteit,t.straat,t.nummer,t.postcode,t.stad,t.contactTel,t.contactEmail,sortedKlassen(t.klassen).join(" "),t.aantalLln,t.aantalBegeleiders,t.leerkracht,t.vertrekSchool,t.terug,t.busNodig?"Ja":"Nee",t.busNodig?t.busmaatschappij:"",t.busNodig?(t.prijsVervoer??""):"",t.busNodig?t.internBestelbonBus:"",t.busNodig?(t.factuurBus?"Ja":"Nee"):"",!t.busNodig?(t.vervoerwijze==="actief"?"te voet/fiets":t.vervoerwijze==="openbaar"?"openbaar vervoer":t.vervoerwijze==="school"?"op school":""):"",t.vervoerwijze==="openbaar"?(t.openbaarVervoerder||""):"",t.vervoerwijze==="openbaar"?(t.kostOpenbaar??""):"",t.kostprijs??"",t.kostprijsBasis==="perLln"?(t.kostprijsPerLln??""):"",t.betaalwijze||"",t.voorschot?(t.voorschotBedrag??""):"",t.voorschot?(t.voorschotInclusief==="incl"?"inclusief":t.voorschotInclusief==="excl"?"exclusief":""):"",t.internBestelbonUitstap,t.factuurUitstap?"Ja":"Nee",t.opmerking,t.adminNotitie,t.ingevoerdOp]);
+  const csv=[cols,...rows].map(r=>r.map(c=>`"${String(c??"").replace(/"/g,'""')}"`).join(";")).join("\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"}));a.download="archief_uitstappen_"+SJ()+".csv";a.click();toast("Archief (CSV) gedownload");
+}
+
+/* ---------------- ADMIN LOCK ---------------- */
+$("#adminToggle").onclick=()=>{if(state.isAdmin){state.isAdmin=false;render();toast("Beheermodus uit");}else openPin();};
+function openPin(){
+  const ov=$("#overlay");
+  ov.innerHTML=`<div class="modal pin-modal"><div class="lk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:26px;height:26px"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div><h2>Beheermodus</h2><p>Geef je code in om alle gegevens te kunnen aanpassen.</p><input class="inp pin-in" id="pinIn" type="password" maxlength="20" placeholder="••••" autocomplete="off"><div class="pin-err" id="pinErr"></div><div style="display:flex;gap:10px;margin-top:6px"><button class="btn btn-ghost" data-close style="flex:1">Annuleren</button><button class="btn btn-teal" id="pinOk" style="flex:1">Ontgrendelen</button></div></div>`;
+  ov.classList.add("show");const inp=$("#pinIn");setTimeout(()=>inp.focus(),50);
+  ov.onclick=e=>{if(e.target===ov)closeModal();};$$("[data-close]",ov).forEach(b=>b.onclick=closeModal);
+  const go=()=>{if(inp.value===CONFIG.ADMIN_PIN){state.isAdmin=true;closeModal();render();toast("Beheermodus aan");}else{$("#pinErr").textContent="Onjuiste code.";inp.value="";inp.focus();}};
+  $("#pinOk").onclick=go;inp.onkeydown=e=>{if(e.key==="Enter")go();};
+}
+
+/* ---------------- EURO-VELD ---------------- */
+function bindEuro(inp){if(!inp)return;const wrap=inp.closest(".euro-field");const upd=()=>{const cleaned=inp.value.replace(/[^0-9.,]/g,"");if(cleaned!==inp.value)inp.value=cleaned;if(wrap)wrap.classList.toggle("has",inp.value.trim()!=="");};inp.addEventListener("input",upd);upd();}
+
+/* ---------------- WAARSCHUWING BIJ DATUM ---------------- */
+function showConflict(anns){
+  const ov=$("#overlay");
+  const list=anns.map(a=>`<li><b>${esc(a.naam)}</b> <span class="muted">(${esc(a.kind)})</span></li>`).join("");
+  ov.innerHTML=`<div class="modal" style="max-width:460px">
+    <div class="modal-head"><div class="m-title"><h2>Let op deze datum</h2><div class="m-meta">Er staat al iets in de kalender op deze dag.</div></div><button class="modal-close" data-close>×</button></div>
+    <div class="modal-body"><p style="margin-bottom:8px">Op de gekozen datum staat in de kalender:</p><ul style="margin:0 0 4px 18px;line-height:1.7">${list}</ul><p class="hint" style="margin-top:10px">Je kan gewoon verder gaan — dit is enkel een waarschuwing.</p></div>
+    <div class="modal-foot"><div class="spacer"></div><button class="btn btn-teal" data-close>Begrepen</button></div></div>`;
+  ov.classList.add("show");ov.onclick=e=>{if(e.target===ov)closeModal();};$$("[data-close]",ov).forEach(b=>b.onclick=closeModal);
+}
+function warnModal(title,msg){
+  const ov=$("#overlay");
+  ov.innerHTML=`<div class="modal" style="max-width:460px">
+    <div class="modal-head"><div class="m-title"><h2>${esc(title)}</h2></div><button class="modal-close" data-close>×</button></div>
+    <div class="modal-body"><p style="line-height:1.6">${esc(msg)}</p></div>
+    <div class="modal-foot"><div class="spacer"></div><button class="btn btn-teal" data-close>Begrepen</button></div></div>`;
+  ov.classList.add("show");ov.onclick=e=>{if(e.target===ov)closeModal();};$$("[data-close]",ov).forEach(b=>b.onclick=closeModal);
+}
+function warnFactuur(){warnModal("Niet op factuur?","Ben je zeker dat de uitstap/activiteit niet op factuur kan? Zo niet, vraag dit dan zeker na bij de organisatie. Betaling op factuur heeft altijd de voorkeur.");}
+
+/* ---------------- KALENDER-MELDING ---------------- */
+function openMelding(id,presetDate){
+  const A=state.isAdmin,ov=$("#overlay");
+  const m=id?Settings.get().meldingen.find(x=>x.id===id):null;
+  const naam=m?m.naam:"",datum=m?m.datum:(presetDate||""),eind=m?(m.datumEind||""):"";
+  ov.innerHTML=`<div class="modal" style="max-width:480px">
+    <div class="modal-head"><div class="m-title"><h2>${m?'Melding bewerken':'Melding toevoegen'}</h2><div class="m-meta">Studiedag, fotograaf, sluiting… — geeft een waarschuwing bij het bestellen.</div></div><button class="modal-close" data-close>×</button></div>
+    <div class="modal-body">${A?`<div class="det-grid" style="grid-template-columns:1fr 1fr">
+      <div class="det full"><div class="dk">Omschrijving</div><input class="inp" id="mNaam" value="${esc(naam)}" placeholder="bv. Pedagogische studiedag"></div>
+      <div class="det"><div class="dk">Datum</div><input class="inp" type="date" id="mDatum" value="${esc(datum)}" min="${sjMin()}" max="${sjMax()}"></div>
+      <div class="det"><div class="dk">Einddatum <span class="opt">(optioneel)</span></div><input class="inp" type="date" id="mEind" value="${esc(eind)}" min="${sjMin()}" max="${sjMax()}"></div>
+    </div>`:`<div class="dv">${esc(naam)}<br><span class="muted">${fmtLong(datum)}${eind?(' t.e.m. '+fmtLong(eind)):''}</span></div>`}</div>
+    <div class="modal-foot">${A&&m?`<button class="btn-txt-del" id="mDel">Verwijderen</button>`:''}<div class="spacer"></div><button class="btn btn-ghost" data-close>${A?'Annuleren':'Sluiten'}</button>${A?`<button class="btn btn-teal" id="mSave">Opslaan</button>`:''}</div></div>`;
+  ov.classList.add("show");ov.onclick=e=>{if(e.target===ov)closeModal();};$$("[data-close]",ov).forEach(b=>b.onclick=closeModal);
+  const sv=$("#mSave");if(sv)sv.onclick=()=>{const nm=$("#mNaam").value.trim(),dt=$("#mDatum").value,en=$("#mEind").value;if(!nm){toast("Geef een omschrijving","err");return;}if(!dt){toast("Kies een datum","err");return;}if(en&&en<dt){toast("Einddatum ligt vóór de startdatum","err");return;}const s=Settings.get();if(m){m.naam=nm;m.datum=dt;m.datumEind=en||null;}else{s.meldingen.push({id:uid(),naam:nm,datum:dt,datumEind:en||null});}Settings.save(s);closeModal();toast("Melding bewaard");};
+  const dl=$("#mDel");if(dl)dl.onclick=()=>{if(confirm("Deze melding verwijderen?")){const s=Settings.get();s.meldingen=s.meldingen.filter(x=>x.id!==id);Settings.save(s);closeModal();toast("Melding verwijderd");}};
+}
+
+/* ---------------- INSTELLINGEN ---------------- */
+function viewInstellingen(){
+  const s=Settings.get();
+  const vakRows=s.vakanties.map(v=>`<div class="set-row"><input class="inp" data-sl="vakanties" data-id="${v.id}" data-f="naam" value="${esc(v.naam)}" placeholder="naam"><input class="inp" type="date" data-sl="vakanties" data-id="${v.id}" data-f="van" value="${esc(v.van)}"><input class="inp" type="date" data-sl="vakanties" data-id="${v.id}" data-f="tot" value="${esc(v.tot)}"><button class="btn-txt-del" data-del-sl="vakanties" data-id="${v.id}" title="verwijderen">×</button></div>`).join("")||'<p class="muted">Nog geen vakanties ingevuld.</p>';
+  const vrijRows=s.vrijedagen.map(v=>`<div class="set-row two"><input class="inp" data-sl="vrijedagen" data-id="${v.id}" data-f="naam" value="${esc(v.naam)}" placeholder="naam"><input class="inp" type="date" data-sl="vrijedagen" data-id="${v.id}" data-f="datum" value="${esc(v.datum)}"><button class="btn-txt-del" data-del-sl="vrijedagen" data-id="${v.id}" title="verwijderen">×</button></div>`).join("")||'<p class="muted">Nog geen vrije dagen ingevuld.</p>';
+  const klasRows=(s.klassen||[]).map(k=>`<div class="set-row two"><input class="inp" data-kl="${k.id}" data-klf="naam" data-old="${esc(k.naam)}" value="${esc(k.naam)}" placeholder="klasnaam"><select class="inp" data-kl="${k.id}" data-klf="groep"><option ${k.groep==='Kleuter'?'selected':''}>Kleuter</option><option ${k.groep==='Lager'?'selected':''}>Lager</option></select><button class="btn-txt-del" data-del-kl="${k.id}" title="verwijderen">×</button></div>`).join("")||'<p class="muted">Nog geen klassen.</p>';
+  const meldRows=s.meldingen.map(v=>`<div class="set-row"><input class="inp" data-sl="meldingen" data-id="${v.id}" data-f="naam" value="${esc(v.naam)}" placeholder="bv. pedagogische studiedag"><input class="inp" type="date" data-sl="meldingen" data-id="${v.id}" data-f="datum" value="${esc(v.datum)}"><input class="inp" type="date" data-sl="meldingen" data-id="${v.id}" data-f="datumEind" value="${esc(v.datumEind||'')}"><button class="btn-txt-del" data-del-sl="meldingen" data-id="${v.id}" title="verwijderen">×</button></div>`).join("")||'<p class="muted">Nog geen meldingen ingevuld.</p>';
+  return `
+  <div class="view-title">Instellingen</div>
+  <p class="view-sub">Beheer het schooljaar en de kalenderdagen. Vakanties, vrije dagen en meldingen verschijnen in de kalender én geven een waarschuwing wanneer iemand er een uitstap op plant.</p>
+  <div class="form-wrap"><div class="card">
+    <div class="fieldset">
+      <div class="legend"><span class="dot"></span>Schooljaar</div>
+      <div class="grid"><label class="fld"><span class="lbl">Huidig schooljaar</span><input class="inp" id="setSJ" value="${esc(s.schooljaar)}" placeholder="bv. 2026-2027"></label><div></div></div>
+      <p class="hint">De kalender (september–juni) past zich automatisch aan op basis van het eerste jaartal.</p>
+    </div>
+    <div class="fieldset">
+      <div class="legend"><span class="dot"></span>Klassenstructuur <span class="opt" style="text-transform:none;letter-spacing:0;font-weight:500">(naam · groep)</span></div>
+      <div class="set-list">${klasRows}</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px"><button class="btn btn-line btn-sm" id="addKleuter">+ Kleuterklas</button><button class="btn btn-line btn-sm" id="addLager">+ Lagere klas</button></div>
+      <p class="hint">Wijzigingen verschijnen meteen in het bestelformulier én de filters. Een klas hernoemen past ook bestaande uitstappen automatisch aan.</p>
+    </div>
+    <div class="fieldset">
+      <div class="legend"><span class="dot"></span>Vakanties <span class="opt" style="text-transform:none;letter-spacing:0;font-weight:500">(naam · van · tot)</span></div>
+      <div class="set-list">${vakRows}</div>
+      <button class="btn btn-line btn-sm" id="addVak" style="margin-top:10px">+ Vakantie toevoegen</button>
+    </div>
+    <div class="fieldset">
+      <div class="legend"><span class="dot"></span>Vrije &amp; feestdagen <span class="opt" style="text-transform:none;letter-spacing:0;font-weight:500">(naam · datum)</span></div>
+      <div class="set-list">${vrijRows}</div>
+      <button class="btn btn-line btn-sm" id="addVrij" style="margin-top:10px">+ Vrije dag toevoegen</button>
+    </div>
+    <div class="fieldset">
+      <div class="legend"><span class="dot"></span>Meldingen <span class="opt" style="text-transform:none;letter-spacing:0;font-weight:500">(naam · datum · eind optioneel)</span></div>
+      <div class="set-list">${meldRows}</div>
+      <button class="btn btn-line btn-sm" id="addMeld" style="margin-top:10px">+ Melding toevoegen</button>
+      <p class="hint">Studiedag, schoolfotograaf, andere sluiting… Deze blokkeren niets, maar geven een waarschuwing bij het bestellen. Je kan ze ook rechtstreeks in de kalender toevoegen.</p>
+    </div>
+    <div class="fieldset">
+      <div class="legend"><span class="dot"></span>Nieuw schooljaar klaarzetten</div>
+      <p class="hint" style="margin-bottom:12px">Dit downloadt eerst alle huidige uitstappen als archief (CSV), wist daarna de uitstappenlijst en zet het schooljaar + de kalenderdagen leeg klaar voor een nieuw jaar.</p>
+      <button class="btn btn-primary" id="nieuwJaar">Archiveer &amp; start nieuw schooljaar</button>
+    </div>
+  </div></div>`;
+}
+function bindInstellingen(){
+  const sj=$("#setSJ");if(sj)sj.onchange=()=>{const s=Settings.get();s.schooljaar=sj.value.trim()||s.schooljaar;Settings.save(s);state.calIdx=0;render();};
+  $$('[data-sl]').forEach(inp=>inp.onchange=()=>{const s=Settings.get();const it=(s[inp.dataset.sl]||[]).find(x=>x.id===inp.dataset.id);if(it){const val=inp.value;it[inp.dataset.f]=(inp.dataset.f==='datumEind'&&!val)?null:val;}Settings.save(s);});
+  $$('[data-del-sl]').forEach(b=>b.onclick=()=>{const s=Settings.get();const k=b.dataset.delSl;s[k]=s[k].filter(x=>x.id!==b.dataset.id);Settings.save(s);render();});
+  const av=$("#addVak");if(av)av.onclick=()=>{const s=Settings.get();s.vakanties.push({id:uid(),naam:"",van:"",tot:""});Settings.save(s);render();};
+  const af=$("#addVrij");if(af)af.onclick=()=>{const s=Settings.get();s.vrijedagen.push({id:uid(),naam:"",datum:""});Settings.save(s);render();};
+  const am=$("#addMeld");if(am)am.onclick=()=>{const s=Settings.get();s.meldingen.push({id:uid(),naam:"",datum:"",datumEind:null});Settings.save(s);render();};
+  $$('[data-kl]').forEach(el=>el.onchange=()=>{const s=Settings.get();const k=s.klassen.find(x=>x.id===el.dataset.kl);if(!k)return;const fld=el.dataset.klf;if(fld==='naam'){const oud=el.dataset.old,nieuw=el.value.trim();if(!nieuw){el.value=oud;return;}if(nieuw!==oud){k.naam=nieuw;const all=Store.all();let ch=false;all.forEach(t=>{if(t.klassen&&t.klassen.includes(oud)){t.klassen=t.klassen.map(x=>x===oud?nieuw:x);ch=true;}});if(ch)Store.save(all);}}else{k.groep=el.value;}Settings.save(s);render();});
+  $$('[data-del-kl]').forEach(b=>b.onclick=()=>{if(!confirm("Deze klas uit de lijst verwijderen?"))return;const s=Settings.get();s.klassen=s.klassen.filter(x=>x.id!==b.dataset.delKl);Settings.save(s);render();});
+  const ak=$("#addKleuter");if(ak)ak.onclick=()=>{const s=Settings.get();s.klassen.push({id:uid(),naam:"",groep:"Kleuter"});Settings.save(s);render();};
+  const al=$("#addLager");if(al)al.onclick=()=>{const s=Settings.get();s.klassen.push({id:uid(),naam:"",groep:"Lager"});Settings.save(s);render();};
+  const nj=$("#nieuwJaar");if(nj)nj.onclick=nieuwSchooljaar;
+}
+function nieuwSchooljaar(){
+  if(!confirm("Zeker? Dit downloadt eerst een archief (CSV) van alle uitstappen, wist daarna de uitstappenlijst en zet een nieuw schooljaar klaar."))return;
+  if(Store.all().length)exportCSV();
+  const s=Settings.get();const parts=(s.schooljaar.match(/\d{4}/g)||[]);let nj=s.schooljaar;
+  if(parts.length>=2)nj=(Number(parts[0])+1)+"-"+(Number(parts[1])+1);else if(parts.length===1)nj=(Number(parts[0])+1)+"-"+(Number(parts[0])+2);
+  Store.save([]);
+  s.schooljaar=nj;s.vakanties=[];s.vrijedagen=[];s.meldingen=[];Settings.save(s);
+  state.calIdx=0;state.view="instellingen";render();
+  toast("Nieuw schooljaar "+nj+" klaargezet — vul de vakanties en vrije dagen in.");
+}
+
+$$(".tab").forEach(t=>t.onclick=()=>{state.view=t.dataset.view;render();});
+(async()=>{
+  if(supaOn()){
+    try{await supaBoot();}
+    catch(e){console.error(e);toast("Geen verbinding met de database — lokale gegevens worden getoond","err");}
+  }
+  render();
+})();
+document.addEventListener("visibilitychange",()=>{
+  if(document.visibilityState!=="visible"||!supaOn())return;
+  supaBoot().then(()=>{const ov=$("#overlay");if(state.view!=="bestellen"&&!(ov&&ov.classList.contains("show")))render();}).catch(()=>{});
+});
+</script>
+</body>
+</html>
