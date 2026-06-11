@@ -1,0 +1,57 @@
+# ============================================================
+# Supabase heartbeat — houdt het gratis Supabase-project wakker
+# (gratis projecten pauzeren na 7 dagen zonder databaseactiviteit)
+#
+# Plaats dit bestand in de repo op exact dit pad:
+#   .github/workflows/heartbeat.yml
+#
+# Vul hieronder bij ANON_KEY dezelfde "anon public" key in
+# als in uitstappen.html.
+#
+# Werking: elke maandag en donderdag om 06:00 (UTC) doet deze
+# workflow één mini-query op de database (= activiteit voor
+# Supabase) en werkt hij een logbestandje bij (= activiteit voor
+# GitHub, zodat GitHub deze geplande workflow zelf ook nooit
+# uitschakelt wegens inactiviteit van de repo).
+# ============================================================
+name: Supabase heartbeat
+
+on:
+  schedule:
+    - cron: "0 6 * * 1,4"   # maandag + donderdag, 06:00 UTC
+  workflow_dispatch:          # ook manueel te starten via Actions-tab
+
+permissions:
+  contents: write
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    env:
+      SUPA_URL: https://vmvxawjfryaijkhhnnyr.supabase.co
+      ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZtdnhhd2pmcnlhaWpraGhubnlyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0NjM0NDgsImV4cCI6MjA5NjAzOTQ0OH0.6UMvrhkHwbrtQwOvn3od8X6DAKXSiPdtCeFdt3nZZdE
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Ping Supabase database
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            "$SUPA_URL/rest/v1/uitstappen?select=id&limit=1" \
+            -H "apikey: $ANON_KEY" \
+            -H "Authorization: Bearer $ANON_KEY")
+          echo "Supabase antwoordde met HTTP $STATUS"
+          if [ "$STATUS" != "200" ]; then
+            echo "::error::Heartbeat mislukt (HTTP $STATUS) — controleer de anon key."
+            exit 1
+          fi
+
+      - name: Log bijwerken (houdt ook deze workflow actief)
+        run: |
+          mkdir -p .github
+          date -u +"%Y-%m-%d %H:%M UTC — heartbeat OK" > .github/heartbeat.log
+          git config user.name "heartbeat-bot"
+          git config user.email "actions@github.com"
+          git add .github/heartbeat.log
+          git commit -m "Supabase heartbeat [skip ci]" || echo "niets te committen"
+          git push
