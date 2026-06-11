@@ -446,7 +446,7 @@ function viewBestellen(){
         <label class="fld"><span class="lbl">Tel of GSM organisatie</span><input class="inp" id="f_tel" placeholder="bv. 03 123 45 67"></label>
         <label class="fld"><span class="lbl">E-mail organisatie</span><input class="inp" type="email" id="f_email" placeholder="bv. info@bestemming.be"></label>
         <label class="fld"><span class="lbl">Uur vertrek school</span><input class="inp" type="time" id="f_vertrek"></label>
-        <label class="fld"><span class="lbl">Uur terug op school <span class="opt">(richttijd)</span></span><input class="inp" type="time" id="f_terug"></label>
+        <label class="fld"><span class="lbl">Uur vertrek op locatie <span class="opt">(richttijd)</span></span><input class="inp" type="time" id="f_terug"></label>
       </div>
     </div>
     <div class="fieldset">
@@ -813,7 +813,7 @@ function editPanes(t){
     <div class="det"><div class="dk">Tel of GSM organisatie</div>${ef("contactTel",t.contactTel)}</div>
     <div class="det span2"><div class="dk">E-mail organisatie</div>${ef("contactEmail",t.contactEmail,"email")}</div>
     <div class="det"><div class="dk">Uur vertrek school</div>${ef("vertrekSchool",t.vertrekSchool,"time")}</div>
-    <div class="det"><div class="dk">Uur terug op school</div>${ef("terug",t.terug,"time")}</div>
+    <div class="det"><div class="dk">Uur vertrek op locatie</div>${ef("terug",t.terug,"time")}</div>
   </div></div>`;
   // pane 2 — vervoer cascade
   let vervBlok;
@@ -877,7 +877,7 @@ function doPrint(){
   window.print();
 }
 function exportCSV(){
-  const cols=["Datum start","Datum eind","Soort","Activiteit","Straat","Nummer","Postcode","Stad","Tel/GSM","E-mail","Klassen","Lln","Begeleiders","Leerkracht","Vertrek","Terug","Busvervoer","Busmaatschappij","Kostprijs bus","Bestelbon bus","Factuur bus","Verplaatsing (geen bus)","Vervoerder OV","Kostprijs OV","Kostprijs uitstap","Kostprijs per leerling","Betaalwijze","Voorschot","Kostprijs in/excl voorschot","Bestelbon uitstap","Factuur uitstap","Opmerking leerkracht","Notitie administratie","Ingevoerd op"];
+  const cols=["Datum start","Datum eind","Soort","Activiteit","Straat","Nummer","Postcode","Stad","Tel/GSM","E-mail","Klassen","Lln","Begeleiders","Leerkracht","Vertrek school","Vertrek locatie","Busvervoer","Busmaatschappij","Kostprijs bus","Bestelbon bus","Factuur bus","Verplaatsing (geen bus)","Vervoerder OV","Kostprijs OV","Kostprijs uitstap","Kostprijs per leerling","Betaalwijze","Voorschot","Kostprijs in/excl voorschot","Bestelbon uitstap","Factuur uitstap","Opmerking leerkracht","Notitie administratie","Ingevoerd op"];
   const rows=Store.all().map(t=>[t.datumStart,t.datumEind||"",t.type,t.activiteit,t.straat,t.nummer,t.postcode,t.stad,t.contactTel,t.contactEmail,sortedKlassen(t.klassen).join(" "),t.aantalLln,t.aantalBegeleiders,t.leerkracht,t.vertrekSchool,t.terug,t.busNodig?"Ja":"Nee",t.busNodig?t.busmaatschappij:"",t.busNodig?(t.prijsVervoer??""):"",t.busNodig?t.internBestelbonBus:"",t.busNodig?(t.factuurBus?"Ja":"Nee"):"",!t.busNodig?(t.vervoerwijze==="actief"?"te voet/fiets":t.vervoerwijze==="openbaar"?"openbaar vervoer":t.vervoerwijze==="school"?"op school":""):"",t.vervoerwijze==="openbaar"?(t.openbaarVervoerder||""):"",t.vervoerwijze==="openbaar"?(t.kostOpenbaar??""):"",t.kostprijs??"",t.kostprijsBasis==="perLln"?(t.kostprijsPerLln??""):"",t.betaalwijze||"",t.voorschot?(t.voorschotBedrag??""):"",t.voorschot?(t.voorschotInclusief==="incl"?"inclusief":t.voorschotInclusief==="excl"?"exclusief":""):"",t.internBestelbonUitstap,t.factuurUitstap?"Ja":"Nee",t.opmerking,t.adminNotitie,t.ingevoerdOp]);
   const csv=[cols,...rows].map(r=>r.map(c=>`"${String(c??"").replace(/"/g,'""')}"`).join(";")).join("\n");
   const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"}));a.download="archief_uitstappen_"+SJ()+".csv";a.click();toast("Archief (CSV) gedownload");
