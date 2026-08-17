@@ -18,7 +18,7 @@ name: Supabase heartbeat
 
 on:
   schedule:
-    - cron: "0 6 * * 1,4"   # maandag + donderdag, 06:00 UTC
+    - cron: "17 6 * * *"   # elke dag om 06:17 UTC
   workflow_dispatch:          # ook manueel te starten via Actions-tab
 
 permissions:
@@ -36,15 +36,20 @@ jobs:
 
       - name: Ping Supabase database
         run: |
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
-            "$SUPA_URL/rest/v1/uitstappen?select=id&limit=1" \
-            -H "apikey: $ANON_KEY" \
-            -H "Authorization: Bearer $ANON_KEY")
-          echo "Supabase antwoordde met HTTP $STATUS"
-          if [ "$STATUS" != "200" ]; then
-            echo "::error::Heartbeat mislukt (HTTP $STATUS) — controleer de anon key."
-            exit 1
-          fi
+          for i in 1 2 3; do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+              "$SUPA_URL/rest/v1/uitstappen?select=id&limit=1" \
+              -H "apikey: $ANON_KEY" \
+              -H "Authorization: Bearer $ANON_KEY")
+            echo "Poging $i — HTTP $STATUS"
+            if [ "$STATUS" = "200" ]; then
+              echo "Heartbeat OK, de database is wakker."
+              exit 0
+            fi
+            sleep 20
+          done
+          echo "::error::Heartbeat mislukt na 3 pogingen (laatste status: $STATUS). Staat er 000? Dan is het Supabase-project gepauzeerd — herstel het via het Supabase-dashboard. Staat er 401? Dan klopt de anon key niet meer."
+          exit 1
 
       - name: Log bijwerken (houdt ook deze workflow actief)
         run: |
