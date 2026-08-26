@@ -52,6 +52,7 @@ jobs:
           exit 1
 
       - name: Log bijwerken (houdt ook deze workflow actief)
+        continue-on-error: true
         run: |
           mkdir -p .github
           date -u +"%Y-%m-%d %H:%M UTC — heartbeat OK" > .github/heartbeat.log
