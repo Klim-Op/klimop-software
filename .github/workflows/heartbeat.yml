@@ -50,14 +50,3 @@ jobs:
           done
           echo "::error::Heartbeat mislukt na 3 pogingen (laatste status: $STATUS). Staat er 000? Dan is het Supabase-project gepauzeerd — herstel het via het Supabase-dashboard. Staat er 401? Dan klopt de anon key niet meer."
           exit 1
-
-      - name: Log bijwerken (houdt ook deze workflow actief)
-        continue-on-error: true
-        run: |
-          mkdir -p .github
-          date -u +"%Y-%m-%d %H:%M UTC — heartbeat OK" > .github/heartbeat.log
-          git config user.name "heartbeat-bot"
-          git config user.email "actions@github.com"
-          git add .github/heartbeat.log
-          git commit -m "Supabase heartbeat [skip ci]" || echo "niets te committen"
-          git push
