@@ -152,6 +152,9 @@
   .note-editor textarea{width:100%;border:1.5px solid var(--coral);border-radius:10px;padding:10px 12px;background:var(--coral-soft);min-height:44px;resize:vertical}
   .note-editor textarea:focus{outline:none;box-shadow:0 0 0 3px var(--coral-soft)}
   .oms-note{margin:-2px 12px 8px 46px;padding:4px 10px;font-size:12.5px;color:#3f4d55;background:#EEF4F6;border-left:3px solid var(--teal);border-radius:0 9px 9px 0;display:flex;gap:9px;align-items:center}
+  .row-date{margin:-6px 12px 4px 46px;font-size:10.5px;color:var(--muted);opacity:.5;letter-spacing:.2px;cursor:default}
+  .order-wrap:hover .row-date{opacity:.8}
+  .arch-date{display:block;font-size:10px;color:var(--muted);opacity:.55;margin-top:1px}
   .oms-note-lbl{font-size:10px;font-weight:700;color:var(--teal-dark);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap;flex-shrink:0}
 
   .empty-state{text-align:center;padding:70px 20px;color:var(--muted)}
@@ -224,6 +227,7 @@
     .print-block th.tick,.print-block td.tick{width:20px;text-align:center}
     .print-block td.tick{border:1px solid #aaa}
     .pnote{font-size:9px;color:#555;font-style:italic;margin-top:1px}
+    .pdate{font-size:8.5px;color:#888;margin-top:1px}
     tr{break-inside:avoid}
     tr.pb td{background:#eaf6df !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
     .print-grand{margin-top:10px;text-align:right;font-size:13px;font-weight:800;border-top:2px solid #157f75;padding-top:6px}
@@ -417,7 +421,17 @@ function setStatus(ok){
   c.className="conn "+(ok?"on":"off");
   document.getElementById("connTxt").textContent = ok ? "verbonden" : "geen verbinding";
 }
-function toRow(o){ return {id:o.id,klas:o.klas,leverancier:o.leverancier,artikel:o.artikel,omschrijving:o.omschrijving,aantal:o.aantal,prijs:o.prijs,opmerking:o.opmerking,notitie:o.notitie,besteld:!!o.besteld}; }
+function toRow(o){ const r={id:o.id,klas:o.klas,leverancier:o.leverancier,artikel:o.artikel,omschrijving:o.omschrijving,aantal:o.aantal,prijs:o.prijs,opmerking:o.opmerking,notitie:o.notitie,besteld:!!o.besteld}; if(o.created_at) r.created_at=o.created_at; return r; }
+function datumLabel(v){
+  if(!v) return "";
+  const d=new Date(v); if(isNaN(d)) return "";
+  return d.toLocaleDateString("nl-BE",{day:"2-digit",month:"2-digit",year:"numeric"});
+}
+function datumTitel(v){
+  if(!v) return "";
+  const d=new Date(v); if(isNaN(d)) return "";
+  return "Ingegeven op "+d.toLocaleDateString("nl-BE",{day:"numeric",month:"long",year:"numeric"})+" om "+d.toLocaleTimeString("nl-BE",{hour:"2-digit",minute:"2-digit"});
+}
 
 async function dbRun(builder,label){
   if(!sb) return;
@@ -440,7 +454,7 @@ async function fetchAll(){
       sb.from(T_ARCH).select("*").order("datum",{ascending:false})
     ]);
     if(r1.error) throw r1.error; if(r2.error) throw r2.error;
-    state.orders=(r1.data||[]).map(r=>({id:r.id,klas:r.klas||"",leverancier:r.leverancier||"",artikel:r.artikel||"",omschrijving:r.omschrijving||"",aantal:r.aantal||"",prijs:r.prijs||"",opmerking:r.opmerking||"",notitie:r.notitie||"",besteld:!!r.besteld}));
+    state.orders=(r1.data||[]).map(r=>({id:r.id,klas:r.klas||"",leverancier:r.leverancier||"",artikel:r.artikel||"",omschrijving:r.omschrijving||"",aantal:r.aantal||"",prijs:r.prijs||"",opmerking:r.opmerking||"",notitie:r.notitie||"",besteld:!!r.besteld,created_at:r.created_at||null}));
     state.archief=(r2.data||[]).map(r=>({id:r.id,datum:r.datum,lijnen:r.lijnen||[]}));
     lastSig=dataSig(state.orders,state.archief);
     setStatus(true);
@@ -535,7 +549,8 @@ document.getElementById("addBtn").onclick=()=>{
     prijs:document.getElementById("f-prijs").value,
     opmerking:document.getElementById("f-opmerking").value.trim(),
     notitie:"",
-    besteld:false
+    besteld:false,
+    created_at:new Date().toISOString()
   };
   state.orders.push(o);
   clearForm(true); updateCount(); refreshSupplierList();
@@ -626,6 +641,7 @@ function orderRow(o){
       ${locked?`<span></span>`:`<button class="note-btn ${hasNote?"has":""}" data-act="note" data-id="${o.id}" title="Mijn opmerking">${NOTE_ICON}</button>`}
       ${locked?`<span class="lockicon" title="Deze regel is besteld en vergrendeld">🔒</span>`:`<button class="del" data-act="del" data-id="${o.id}" title="Verwijder regel">✕</button>`}
     </div>
+    ${o.created_at?`<div class="row-date" title="${esc(datumTitel(o.created_at))}">${esc(datumLabel(o.created_at))}</div>`:""}
     ${teacherNote?`<div class="oms-note"><span class="oms-note-lbl">Opmerking leerkracht</span><input class="oms-note-input" data-omsid="${o.id}" value="${esc(o.opmerking)}" readonly>${locked?"":`<button class="oms-edit" data-act="editoms" data-id="${o.id}" title="Opmerking aanpassen">${PENCIL_ICON}</button>`}</div>`:""}
     ${locked?"":`<div class="note-editor" data-id="${o.id}">
       <div class="nlabel"><span>📝 Mijn extra opmerking</span><button class="nclear" data-act="note-clear" data-id="${o.id}">wissen</button></div>
@@ -762,7 +778,7 @@ function renderArchive(){
       </div>
       <div class="rows">
         <div class="arch-row arch-head"><span>Klas</span><span>Leverancier</span><span>Art.nr</span><span>Omschrijving</span><span class="num">Aantal</span><span class="num">Totaal</span><span>Opmerking</span></div>
-        ${r.lijnen.map(o=>`<div class="arch-row ${o.besteld?"b":""}"><span>${esc(o.klas)}</span><span>${esc(o.leverancier)}</span><span>${esc(o.artikel)}</span><span>${esc(o.omschrijving)}</span><span class="num">${esc(o.aantal)}</span><span class="num">${euro(rowTotal(o))}</span><span>${esc([o.opmerking,o.notitie].filter(x=>x&&x.trim()).join(" — "))}</span></div>`).join("")}
+        ${r.lijnen.map(o=>`<div class="arch-row ${o.besteld?"b":""}"><span>${esc(o.klas)}</span><span>${esc(o.leverancier)}</span><span>${esc(o.artikel)}</span><span>${esc(o.omschrijving)}${o.created_at?`<span class="arch-date">${esc(datumLabel(o.created_at))}</span>`:""}</span><span class="num">${esc(o.aantal)}</span><span class="num">${euro(rowTotal(o))}</span><span>${esc([o.opmerking,o.notitie].filter(x=>x&&x.trim()).join(" — "))}</span></div>`).join("")}
       </div>
     </div>`;
   }).join("");
@@ -775,8 +791,8 @@ document.getElementById("archive").addEventListener("click",e=>{
 
 /* ---------- CSV ---------- */
 function exportRows(rows,name){
-  const head=["Klas","Leverancier","Artikelnummer","Omschrijving","Aantal","Prijs per stuk","Totale prijs","Besteld","Opmerking leerkracht","Mijn opmerking"];
-  const data=rows.map(o=>[o.klas,o.leverancier,o.artikel,o.omschrijving,o.aantal,o.prijs,rowTotal(o).toFixed(2),o.besteld?"ja":"nee",o.opmerking,o.notitie]);
+  const head=["Ingegeven op","Klas","Leverancier","Artikelnummer","Omschrijving","Aantal","Prijs per stuk","Totale prijs","Besteld","Opmerking leerkracht","Mijn opmerking"];
+  const data=rows.map(o=>[datumLabel(o.created_at),o.klas,o.leverancier,o.artikel,o.omschrijving,o.aantal,o.prijs,rowTotal(o).toFixed(2),o.besteld?"ja":"nee",o.opmerking,o.notitie]);
   const csv=[head,...data].map(r=>r.map(c=>`"${String(c??"").replace(/"/g,'""')}"`).join(";")).join("\n");
   const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"});
   const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=name+".csv"; a.click();
@@ -814,7 +830,7 @@ function buildPrint(keys){
     const rows=items.map(o=>{
       const notes=[o.opmerking,o.notitie].filter(x=>x&&x.trim()).join(" — ");
       const c2=perLev?esc(o.klas):esc(o.leverancier);
-      return `<tr class="${o.besteld?"pb":""}"><td class="tick"></td><td>${c2}</td><td>${esc(o.artikel)}</td><td>${esc(o.omschrijving)}${notes?`<div class="pnote">${esc(notes)}</div>`:""}</td><td class="r">${esc(o.aantal)}</td><td class="r">${o.prijs?euro(o.prijs):""}</td><td class="r">${euro(rowTotal(o))}</td></tr>`;
+      return `<tr class="${o.besteld?"pb":""}"><td class="tick"></td><td>${c2}</td><td>${esc(o.artikel)}</td><td>${esc(o.omschrijving)}${o.created_at?`<div class="pdate">ingegeven ${esc(datumLabel(o.created_at))}</div>`:""}${notes?`<div class="pnote">${esc(notes)}</div>`:""}</td><td class="r">${esc(o.aantal)}</td><td class="r">${o.prijs?euro(o.prijs):""}</td><td class="r">${euro(rowTotal(o))}</td></tr>`;
     }).join("");
     return `<section class="print-block">
       <h2>${perLev?"":"Klas "}${esc(key)}<span class="pcount">${items.length} item${items.length>1?"s":""} · ${euro(tot)}</span></h2>
@@ -835,9 +851,9 @@ function buildPrint(keys){
 /* ---------- Archive: download-all + wipe ---------- */
 function exportArchiveAll(){
   if(!state.archief.length){ toast("Het archief is leeg","err"); return; }
-  const head=["Bestelronde","Klas","Leverancier","Artikelnummer","Omschrijving","Aantal","Prijs per stuk","Totale prijs","Besteld","Opmerking leerkracht","Mijn opmerking"];
+  const head=["Bestelronde","Ingegeven op","Klas","Leverancier","Artikelnummer","Omschrijving","Aantal","Prijs per stuk","Totale prijs","Besteld","Opmerking leerkracht","Mijn opmerking"];
   const data=[];
-  state.archief.forEach(r=>{ const d=new Date(r.datum).toLocaleString("nl-BE"); r.lijnen.forEach(o=>data.push([d,o.klas,o.leverancier,o.artikel,o.omschrijving,o.aantal,o.prijs,rowTotal(o).toFixed(2),o.besteld?"ja":"nee",o.opmerking,o.notitie])); });
+  state.archief.forEach(r=>{ const d=new Date(r.datum).toLocaleString("nl-BE"); r.lijnen.forEach(o=>data.push([d,datumLabel(o.created_at),o.klas,o.leverancier,o.artikel,o.omschrijving,o.aantal,o.prijs,rowTotal(o).toFixed(2),o.besteld?"ja":"nee",o.opmerking,o.notitie])); });
   const csv=[head,...data].map(r=>r.map(c=>`"${String(c??"").replace(/"/g,'""')}"`).join(";")).join("\n");
   const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"});
   const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="Archief_volledig_"+new Date().toISOString().slice(0,10)+".csv"; a.click();
@@ -945,7 +961,7 @@ async function silentRefresh(){
     od=r1.data||[]; ad=r2.data||[]; setStatus(true);
   }catch(e){ setStatus(false); return; }
   if(isBusy()) return;
-  const newOrders=od.map(r=>({id:r.id,klas:r.klas||"",leverancier:r.leverancier||"",artikel:r.artikel||"",omschrijving:r.omschrijving||"",aantal:r.aantal||"",prijs:r.prijs||"",opmerking:r.opmerking||"",notitie:r.notitie||"",besteld:!!r.besteld}));
+  const newOrders=od.map(r=>({id:r.id,klas:r.klas||"",leverancier:r.leverancier||"",artikel:r.artikel||"",omschrijving:r.omschrijving||"",aantal:r.aantal||"",prijs:r.prijs||"",opmerking:r.opmerking||"",notitie:r.notitie||"",besteld:!!r.besteld,created_at:r.created_at||null}));
   const newArch=ad.map(r=>({id:r.id,datum:r.datum,lijnen:r.lijnen||[]}));
   const sig=dataSig(newOrders,newArch);
   if(sig===lastSig) return;
