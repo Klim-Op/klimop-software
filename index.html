@@ -622,6 +622,12 @@
     font-weight: 700;
     margin-bottom: 8px;
   }
+  .detail-subsection {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+  .detail-subsection .check-list { max-height: none; }
 
   .check-list {
     display: flex;
@@ -1847,6 +1853,10 @@
       <div class="detail-col">
         <h4>DigCompEdu-competenties</h4>
         <div class="check-list" id="detailCompetencies"></div>
+        <div class="detail-subsection">
+          <h4>Gebruikt door</h4>
+          <div class="check-list" id="detailUsedBy"></div>
+        </div>
       </div>
       <div class="detail-col">
         <h4>Leergebieden</h4>
@@ -1971,6 +1981,8 @@ const COMPETENCIES = [
   'Leerlingen ondersteunen',
   'Aanleren van digitale competenties'
 ];
+
+const USED_BY = ['Leerlingen', 'Leerkracht'];
 
 const DOMAINS = [
   'Aardrijkskunde','Burgerschap','Frans','Geschiedenis','ICT','Leren leren',
@@ -2112,6 +2124,7 @@ async function loadData() {
       data.details[row.grade_id + '__' + row.app_name] = {
         competencies: row.competencies || [],
         domains: row.domains || [],
+        usedBy: row.used_by || [],
         notes: row.notes || ''
       };
     });
@@ -2247,6 +2260,10 @@ async function dbDeleteTeacher(teacherId) {
   });
 }
 
+// Wordt op false gezet zodra blijkt dat de kolom used_by nog niet in de database
+// bestaat, zodat opslaan blijft werken tot de kolom is toegevoegd.
+let usedByColumnAvailable = true;
+
 async function dbUpsertDetail(gradeId, appName, detail) {
   return withWriteWrapper(async () => {
     const row = {
@@ -2257,7 +2274,21 @@ async function dbUpsertDetail(gradeId, appName, detail) {
       notes: detail.notes || '',
       updated_at: new Date().toISOString()
     };
-    const { error } = await supabase.from('details').upsert(row, { onConflict: 'grade_id,app_name' });
+    if (usedByColumnAvailable) row.used_by = detail.usedBy || [];
+
+    let { error } = await supabase.from('details').upsert(row, { onConflict: 'grade_id,app_name' });
+
+    // Vangnet: bestaat de kolom used_by nog niet, sla dan de rest wel gewoon op.
+    if (error && usedByColumnAvailable && /used_by/i.test(error.message || '')) {
+      console.warn('Kolom used_by ontbreekt in de database - "Gebruikt door" wordt nog niet bewaard.');
+      usedByColumnAvailable = false;
+      delete row.used_by;
+      ({ error } = await supabase.from('details').upsert(row, { onConflict: 'grade_id,app_name' }));
+      if (!error) {
+        showToast('Let op: "Gebruikt door" kon nog niet bewaard worden (database-kolom ontbreekt)');
+        return;
+      }
+    }
     if (error) throw error;
   });
 }
@@ -2473,7 +2504,7 @@ function renderExpandedGrade(grade, teachers) {
           if (!meta) return '';
           const detailKey = grade.id + '__' + appName;
           const detail = data.details[detailKey];
-          const hasDetail = detail && ((detail.competencies && detail.competencies.length) || (detail.domains && detail.domains.length) || (detail.notes && detail.notes.trim()));
+          const hasDetail = detail && ((detail.competencies && detail.competencies.length) || (detail.domains && detail.domains.length) || (detail.usedBy && detail.usedBy.length) || (detail.notes && detail.notes.trim()));
           const detailClass = hasDetail ? ' has-detail' : '';
           return `<span class="app-chip-wrap">
             <span class="app-chip ${shellClass(meta.shell)}${detailClass}" data-app="${attrEscape(appName)}"
@@ -2506,7 +2537,7 @@ function renderCollapsedGrade(grade) {
     const detailKey = grade.id + '__' + appName;
     const detail = data.details[detailKey];
     const aggregatedDomains = (detail && detail.domains) ? detail.domains : [];
-    const hasDetail = detail && ((detail.competencies && detail.competencies.length) || (detail.domains && detail.domains.length) || (detail.notes && detail.notes.trim()));
+    const hasDetail = detail && ((detail.competencies && detail.competencies.length) || (detail.domains && detail.domains.length) || (detail.usedBy && detail.usedBy.length) || (detail.notes && detail.notes.trim()));
     const detailClass = hasDetail ? ' has-detail' : '';
     const domainHtml = aggregatedDomains.length
       ? '<div class="collapsed-domains">' + aggregatedDomains.map(d => `<span class="collapsed-domain">${escapeHtml(d)}</span>`).join('') + '</div>'
@@ -2602,9 +2633,10 @@ function openDetail(gradeId, appName) {
   const meta = data.apps[appName];
   if (!meta) return;
   const key = gradeId + '__' + appName;
-  const detail = data.details[key] || { competencies: [], domains: [], notes: '' };
+  const detail = data.details[key] || { competencies: [], domains: [], usedBy: [], notes: '' };
   if (!detail.domains) detail.domains = [];
   if (!detail.competencies) detail.competencies = [];
+  if (!detail.usedBy) detail.usedBy = [];
 
   document.getElementById('detailDot').style.background = shellColor(meta.shell);
   document.getElementById('detailAppName').textContent = appName;
@@ -2620,6 +2652,17 @@ function openDetail(gradeId, appName) {
     return `<label class="check-item ${disabledClass}">
       <input type="checkbox" data-comp="${attrEscape(c)}" ${checked} ${disabled}>
       <span>${escapeHtml(c)}</span>
+    </label>`;
+  }).join('');
+
+  // Gebruikt door
+  document.getElementById('detailUsedBy').innerHTML = USED_BY.map(u => {
+    const checked = detail.usedBy.includes(u) ? 'checked' : '';
+    const disabled = readonly ? 'disabled' : '';
+    const disabledClass = readonly ? 'disabled' : '';
+    return `<label class="check-item ${disabledClass}">
+      <input type="checkbox" data-usedby="${attrEscape(u)}" ${checked} ${disabled}>
+      <span>${escapeHtml(u)}</span>
     </label>`;
   }).join('');
 
@@ -2655,8 +2698,9 @@ async function saveDetail() {
   const key = detailContext.gradeId + '__' + detailContext.appName;
   const comps = Array.from(document.querySelectorAll('#detailCompetencies input[type=checkbox]:checked')).map(c => c.dataset.comp);
   const doms = Array.from(document.querySelectorAll('#detailDomains input[type=checkbox]:checked')).map(c => c.dataset.dom);
+  const usedBy = Array.from(document.querySelectorAll('#detailUsedBy input[type=checkbox]:checked')).map(c => c.dataset.usedby);
   const notes = document.getElementById('detailNotes').value;
-  const detail = { competencies: comps, domains: doms, notes };
+  const detail = { competencies: comps, domains: doms, usedBy, notes };
   data.details[key] = detail;
   await dbUpsertDetail(detailContext.gradeId, detailContext.appName, detail);
   closeDetail();
