@@ -355,6 +355,12 @@
     transition: background 0.15s;
   }
   .grade-action-btn:hover { background: rgba(255,255,255,0.32); }
+  .grade-action-btn.dup-warning {
+    background: #fde68a;
+    color: #78350f;
+    font-weight: 700;
+  }
+  .grade-action-btn.dup-warning:hover { background: #fcd34d; }
   .grade-action-btn.has-content::after {
     content: '●';
     margin-left: 4px;
@@ -2561,6 +2567,7 @@ function renderOneGrade(grade) {
       <div class="grade-name">${escapeHtml(grade.label)}</div>
       <div class="grade-count">${teacherCount} ${teacherCount === 1 ? 'leerkracht' : 'leerkrachten'}</div>
       <div class="grade-actions">
+        ${duplicateTeacherGroups(grade.id).length ? `<button class="grade-action-btn dup-warning edit-only" onclick="mergeDuplicateTeachers('${grade.id}')" title="Deze leerkracht staat meer dan één keer in dit leerjaar">⚠ dubbels samenvoegen</button>` : ''}
         <button class="grade-action-btn edit-only" onclick="openAddTeacher('${grade.id}')">➕ leerkracht</button>
         <button class="grade-action-btn${hasGradeNotes ? ' has-content' : ''}" onclick="toggleGradeNotes('${grade.id}')">📝 notities</button>
       </div>
@@ -3049,13 +3056,37 @@ async function saveNewTeacher() {
   const selected = addTeacherContext.appsData.filter(a => a.checked || a.domains.length > 0);
   const appNames = [...selected.map(a => a.name), ...customs.map(c => c.name)];
 
+  // Bestaat deze leerkracht al in dit leerjaar? Dan samenvoegen i.p.v. een dubbele rij maken.
+  if (!data.teachers[gid]) data.teachers[gid] = [];
+  const bestaande = data.teachers[gid].find(t => (t.naam || '').trim().toLowerCase() === naam.toLowerCase());
+  if (bestaande) {
+    const keuze = confirm(
+      `"${bestaande.naam}" staat al in ${GRADES.find(g=>g.id===gid).label}.\n\n` +
+      `OK  = de aangeduide apps toevoegen bij de bestaande leerkracht (aanbevolen)\n` +
+      `Annuleren = niets doen`
+    );
+    if (!keuze) return;
+
+    for (const ca of customs) {
+      data.apps[ca.name] = { shell: null, cost: 0, isCustom: true };
+      await dbUpsertApp(ca.name, { shell: null, cost: 0, is_custom: true });
+    }
+    appNames.forEach(a => { if (!bestaande.apps.includes(a)) bestaande.apps.push(a); });
+    await dbUpdateTeacher(bestaande);
+    await mergeTeacherDomains(gid, selected, customs);
+
+    closeAddTeacher();
+    renderAll();
+    showToast(`Apps toegevoegd bij ${bestaande.naam}`);
+    return;
+  }
+
   // First create any custom apps
   for (const ca of customs) {
     data.apps[ca.name] = { shell: null, cost: 0, isCustom: true };
     await dbUpsertApp(ca.name, { shell: null, cost: 0, is_custom: true });
   }
 
-  if (!data.teachers[gid]) data.teachers[gid] = [];
   const newTeacher = { naam, klas: klas || GRADES.find(g=>g.id===gid).label, apps: appNames };
   data.teachers[gid].push(newTeacher);
   await dbInsertTeacher(gid, newTeacher);
@@ -3082,6 +3113,72 @@ async function saveNewTeacher() {
   renderAll();
   const customsSuffix = customs.length ? ` (incl. ${customs.length} nieuwe app${customs.length===1?'':'s'})` : '';
   showToast(`Leerkracht "${naam}" toegevoegd${customsSuffix}`);
+}
+
+// Leergebieden uit de mini-bevraging samenvoegen met wat er al staat
+async function mergeTeacherDomains(gid, selected, customs) {
+  for (const a of selected) {
+    if (!a.domains.length) continue;
+    const key = gid + '__' + a.name;
+    if (!data.details[key]) data.details[key] = { competencies: [], domains: [], usedBy: [], notes: '' };
+    const set = new Set(data.details[key].domains || []);
+    a.domains.forEach(d => set.add(d));
+    data.details[key].domains = Array.from(set);
+    await dbUpsertDetail(gid, a.name, data.details[key]);
+  }
+  for (const ca of customs) {
+    if (!ca.domains.length) continue;
+    const key = gid + '__' + ca.name;
+    if (!data.details[key]) data.details[key] = { competencies: [], domains: [], usedBy: [], notes: '' };
+    const set = new Set(data.details[key].domains || []);
+    ca.domains.forEach(d => set.add(d));
+    data.details[key].domains = Array.from(set);
+    await dbUpsertDetail(gid, ca.name, data.details[key]);
+  }
+}
+
+/* ──────────────────────────────────────────
+   DUBBELE LEERKRACHTEN SAMENVOEGEN
+   ────────────────────────────────────────── */
+function duplicateTeacherGroups(gradeId) {
+  const perNaam = {};
+  (data.teachers[gradeId] || []).forEach(t => {
+    const key = (t.naam || '').trim().toLowerCase();
+    if (!key) return;
+    (perNaam[key] = perNaam[key] || []).push(t);
+  });
+  return Object.values(perNaam).filter(groep => groep.length > 1);
+}
+
+async function mergeDuplicateTeachers(gradeId) {
+  const groepen = duplicateTeacherGroups(gradeId);
+  if (!groepen.length) { showToast('Geen dubbele leerkrachten gevonden'); return; }
+
+  const overzicht = groepen.map(g => `• ${g[0].naam} (${g.length} rijen)`).join('\n');
+  if (!confirm(
+    `Dubbele leerkrachten samenvoegen in ${GRADES.find(g=>g.id===gradeId).label}?\n\n${overzicht}\n\n` +
+    `Alle apps worden gebundeld in één rij per leerkracht. Leergebieden, competenties en notities blijven behouden.`
+  )) return;
+
+  for (const groep of groepen) {
+    const behouden = groep[0];
+    const rest = groep.slice(1);
+    rest.forEach(t => (t.apps || []).forEach(a => {
+      if (!behouden.apps.includes(a)) behouden.apps.push(a);
+    }));
+    if (!behouden.klas) {
+      const metKlas = rest.find(t => t.klas);
+      if (metKlas) behouden.klas = metKlas.klas;
+    }
+    await dbUpdateTeacher(behouden);
+    for (const t of rest) {
+      const i = data.teachers[gradeId].indexOf(t);
+      if (i >= 0) data.teachers[gradeId].splice(i, 1);
+      if (t._id) await dbDeleteTeacher(t._id);
+    }
+  }
+  renderAll();
+  showToast('Dubbele leerkrachten samengevoegd');
 }
 
 function closeAddTeacher() {
