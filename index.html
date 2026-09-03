@@ -488,6 +488,64 @@
     align-items: center;
     position: relative;
   }
+
+  /* "+ app" knop achter de app-chips van een leerkracht */
+  .add-app-chip-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 10px;
+    font-size: 10px;
+    font-weight: 600;
+    border-radius: 20px;
+    border: 1px dashed var(--border-strong);
+    background: transparent;
+    color: var(--primary);
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    white-space: nowrap;
+  }
+  .add-app-chip-btn:hover { background: var(--primary-light); border-color: var(--primary); }
+
+  /* App-kiezer */
+  .app-picker-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
+    gap: 6px;
+    max-height: 340px;
+    overflow-y: auto;
+    padding: 2px;
+  }
+  .app-picker-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 10px;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    background: var(--bg);
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: left;
+    transition: background 0.12s, border-color 0.12s;
+    width: 100%;
+  }
+  .app-picker-item:hover { background: var(--primary-light); }
+  .app-picker-item.selected { border-color: var(--primary); background: var(--primary-light); }
+  .app-picker-swatch {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .app-picker-name { flex: 1; }
+  .app-picker-tick { color: var(--primary); font-weight: 700; visibility: hidden; }
+  .app-picker-item.selected .app-picker-tick { visibility: visible; }
+  .app-picker-count {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 10px;
+  }
   .app-chip-remove {
     display: none;
     margin-left: -3px;
@@ -1893,6 +1951,28 @@
   </div>
 </div>
 
+<!-- APP-KIEZER: bestaande app toevoegen bij een bestaande leerkracht -->
+<div class="detail-overlay" id="appPickerOverlay" onclick="closeAppPickerOnOverlay(event)">
+  <div class="detail-box">
+    <div class="detail-header">
+      <div style="flex:1">
+        <div class="detail-app-name">App toevoegen</div>
+        <div class="detail-sub" id="appPickerContext"></div>
+      </div>
+      <button class="detail-close" onclick="closeAppPicker()">×</button>
+    </div>
+    <div class="passport-search">
+      <input type="text" id="appPickerSearch" placeholder="Zoek een app..." oninput="filterAppPicker(this.value)">
+    </div>
+    <div class="app-picker-grid" id="appPickerGrid"></div>
+    <div class="app-picker-count" id="appPickerCount"></div>
+    <div class="detail-footer">
+      <button class="detail-btn detail-btn-secondary" onclick="closeAppPicker()">Annuleren</button>
+      <button class="detail-btn detail-btn-primary" onclick="confirmAppPicker()">Toevoegen</button>
+    </div>
+  </div>
+</div>
+
 <!-- ADD TEACHER POPUP -->
 <div class="detail-overlay" id="addTeacherOverlay" onclick="closeAddTeacherOnOverlay(event)">
   <div class="detail-box">
@@ -2515,7 +2595,7 @@ function renderExpandedGrade(grade, teachers) {
         }).join('');
     return `<div class="teacher-row">
       <div class="teacher-name">${escapeHtml(t.naam)}<span class="teacher-klas">${escapeHtml(t.klas)}</span></div>
-      <div class="app-chips">${chipsHtml}</div>
+      <div class="app-chips">${chipsHtml}<button class="add-app-chip-btn edit-only" onclick="openAppPicker('${grade.id}', ${idx})" title="Bestaande app toevoegen bij ${escapeHtml(t.naam).replace(/'/g,"&#39;")}">+ app</button></div>
       <div class="teacher-actions">
         <button class="teacher-action-btn danger" onclick="removeTeacher('${grade.id}', ${idx})" title="Leerkracht verwijderen">✕</button>
       </div>
@@ -3010,6 +3090,99 @@ function closeAddTeacher() {
 }
 function closeAddTeacherOnOverlay(e) {
   if (e.target === document.getElementById('addTeacherOverlay')) closeAddTeacher();
+}
+
+/* ──────────────────────────────────────────
+   BESTAANDE APP TOEVOEGEN BIJ EEN BESTAANDE LEERKRACHT
+   ────────────────────────────────────────── */
+let appPickerContext = null;   // { gradeId, teacherIdx, selected: [], filter: '' }
+
+function openAppPicker(gradeId, teacherIdx) {
+  const t = (data.teachers[gradeId] || [])[teacherIdx];
+  if (!t) return;
+  const grade = GRADES.find(g => g.id === gradeId);
+  appPickerContext = { gradeId, teacherIdx, selected: [], filter: '' };
+  document.getElementById('appPickerContext').textContent = `${t.naam} — ${grade.label}`;
+  document.getElementById('appPickerSearch').value = '';
+  renderAppPicker();
+  document.getElementById('appPickerOverlay').classList.add('open');
+  setTimeout(() => document.getElementById('appPickerSearch').focus(), 60);
+}
+
+function renderAppPicker() {
+  if (!appPickerContext) return;
+  const { gradeId, teacherIdx, selected, filter } = appPickerContext;
+  const t = (data.teachers[gradeId] || [])[teacherIdx];
+  if (!t) return;
+
+  const shellOrder = { 'kern': 0, 'schil': 1, 'vrijblijvend': 2 };
+  let apps = Object.keys(data.apps).filter(a => !(t.apps || []).includes(a));
+  if (filter) {
+    const q = filter.toLowerCase();
+    apps = apps.filter(a => a.toLowerCase().includes(q));
+  }
+  apps.sort((a, b) => {
+    const oa = data.apps[a].shell in shellOrder ? shellOrder[data.apps[a].shell] : 3;
+    const ob = data.apps[b].shell in shellOrder ? shellOrder[data.apps[b].shell] : 3;
+    if (oa !== ob) return oa - ob;
+    return a.localeCompare(b, 'nl');
+  });
+
+  const grid = document.getElementById('appPickerGrid');
+  if (apps.length === 0) {
+    grid.innerHTML = filter
+      ? '<div class="empty-state">Geen app gevonden met die naam.</div>'
+      : '<div class="empty-state">Deze leerkracht gebruikt al alle apps uit de lijst.</div>';
+  } else {
+    grid.innerHTML = apps.map(app => {
+      const isSel = selected.includes(app);
+      return `<button class="app-picker-item ${isSel ? 'selected' : ''}" onclick="toggleAppPickerItem('${jsEscape(app)}')">
+        <span class="app-picker-swatch" style="background:${shellColor(data.apps[app].shell)}"></span>
+        <span class="app-picker-name">${escapeHtml(app)}</span>
+        <span class="app-picker-tick">✓</span>
+      </button>`;
+    }).join('');
+  }
+
+  document.getElementById('appPickerCount').textContent = selected.length === 0
+    ? 'Nog niets geselecteerd — klik op één of meerdere apps.'
+    : `${selected.length} app${selected.length === 1 ? '' : 's'} geselecteerd: ${selected.join(', ')}`;
+}
+
+function toggleAppPickerItem(app) {
+  const sel = appPickerContext.selected;
+  const i = sel.indexOf(app);
+  if (i >= 0) sel.splice(i, 1); else sel.push(app);
+  renderAppPicker();
+}
+
+function filterAppPicker(value) {
+  appPickerContext.filter = value;
+  renderAppPicker();
+}
+
+async function confirmAppPicker() {
+  if (!appPickerContext) return;
+  const { gradeId, teacherIdx, selected } = appPickerContext;
+  if (selected.length === 0) { closeAppPicker(); return; }
+  const t = (data.teachers[gradeId] || [])[teacherIdx];
+  if (!t) { closeAppPicker(); return; }
+
+  selected.forEach(app => { if (!t.apps.includes(app)) t.apps.push(app); });
+  const naam = t.naam;
+  const aantal = selected.length;
+  await dbUpdateTeacher(t);
+  closeAppPicker();
+  renderAll();
+  showToast(`${aantal} app${aantal === 1 ? '' : 's'} toegevoegd bij ${naam}`);
+}
+
+function closeAppPicker() {
+  document.getElementById('appPickerOverlay').classList.remove('open');
+  appPickerContext = null;
+}
+function closeAppPickerOnOverlay(e) {
+  if (e.target === document.getElementById('appPickerOverlay')) closeAppPicker();
 }
 
 async function removeTeacher(gradeId, idx) {
@@ -3702,6 +3875,7 @@ document.addEventListener('keydown', e => {
     closeDetail();
     closeShell();
     closeAddTeacher();
+    closeAppPicker();
     clearHighlight();
   }
 });
