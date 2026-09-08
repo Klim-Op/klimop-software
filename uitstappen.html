@@ -259,9 +259,9 @@ tr.grp-head td .gh-c{font-weight:500;opacity:.7;margin-left:8px}
 .basis-toggle button:not(.on):hover{border-color:var(--teal-l);color:var(--ink)}
 .basis-toggle button.on{background:var(--teal);border-color:var(--teal);border-style:solid;color:#fff;box-shadow:0 2px 8px rgba(14,158,150,.28)}
 /* klassenlijst: selecteren + verplaatsen */
-.klas-row{cursor:pointer;border-radius:8px;transition:.13s}
-.klas-row:hover{outline:1.5px dashed rgba(14,158,150,.4);outline-offset:3px}
-.klas-row.sel{background:var(--teal-l);outline:2px solid var(--teal);outline-offset:3px}
+.klas-row{cursor:pointer;border-radius:8px;outline:1.5px dashed transparent;outline-offset:3px;transition:outline-color .13s,background .13s}
+.klas-row:hover{outline-color:rgba(14,158,150,.4)}
+.klas-row.sel{background:var(--teal-l);outline:2px solid var(--teal);outline-offset:3px;transition:none}
 .move-bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px}
 .move-btns{display:inline-flex;gap:6px;background:var(--bg);border:1.5px solid var(--line);padding:5px;border-radius:12px}
 .move-btns button{display:inline-flex;align-items:center;gap:6px;padding:9px 15px;border-radius:8px;font-size:13.5px;font-weight:700;color:#fff;background:var(--teal);transition:.15s;box-shadow:0 2px 8px rgba(14,158,150,.25)}
@@ -1008,6 +1008,7 @@ function bindInstellingen(){
   const markSel=()=>{const s=Settings.get();const i=s.klassen.findIndex(x=>x.id===state.selKlas);$$('[data-selkl]').forEach(r=>r.classList.toggle("sel",r.dataset.selkl===state.selKlas));const row=$(".klas-row.sel");const nm=row?(row.querySelector('[data-klf="naam"]').value||"").trim():"";const bu=$("#klasUp"),bd=$("#klasDown"),tx=$(".move-txt");if(bu)bu.disabled=i<=0;if(bd)bd.disabled=i<0||i>=s.klassen.length-1;if(tx)tx.innerHTML=i>=0?`<b>${esc(nm||s.klassen[i].naam||"naamloze klas")}</b> geselecteerd — verplaats met de knoppen`:"Klik een klas aan om ze te verplaatsen";};
   $$('[data-selkl]').forEach(r=>r.addEventListener("mousedown",e=>{if(e.target.closest("button"))return;state.selKlas=r.dataset.selkl;markSel();}));
   $$('[data-kl][data-klf="naam"]').forEach(i=>i.addEventListener("input",()=>{if(state.selKlas===i.dataset.kl)markSel();}));
+  document.onmousedown=e=>{if(state.view!=="instellingen"||!state.selKlas)return;if(e.target.closest(".klas-row,.move-btns"))return;state.selKlas=null;markSel();};
   const moveKlas=dir=>{const s=Settings.get();const i=s.klassen.findIndex(x=>x.id===state.selKlas),j=i+dir;if(i<0||j<0||j>=s.klassen.length)return;const t=s.klassen[i];s.klassen[i]=s.klassen[j];s.klassen[j]=t;Settings.save(s);render();};
   const ku=$("#klasUp");if(ku)ku.onclick=()=>moveKlas(-1);
   const kd=$("#klasDown");if(kd)kd.onclick=()=>moveKlas(1);
