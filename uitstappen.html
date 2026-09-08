@@ -258,6 +258,18 @@ tr.grp-head td .gh-c{font-weight:500;opacity:.7;margin-left:8px}
 .basis-toggle button{width:100%;padding:10px 8px;border-radius:8px;font-size:13.5px;font-weight:600;color:var(--slate);border:1.5px dashed transparent;background:rgba(255,255,255,.55);transition:.15s;text-align:center}
 .basis-toggle button:not(.on):hover{border-color:var(--teal-l);color:var(--ink)}
 .basis-toggle button.on{background:var(--teal);border-color:var(--teal);border-style:solid;color:#fff;box-shadow:0 2px 8px rgba(14,158,150,.28)}
+/* klassenlijst: selecteren + verplaatsen */
+.klas-row{cursor:pointer;padding:4px 6px;border-radius:9px;border:1.5px solid transparent;transition:.13s}
+.klas-row:hover{background:rgba(14,158,150,.06)}
+.klas-row.sel{background:var(--teal-l);border-color:var(--teal);box-shadow:0 1px 6px rgba(14,158,150,.16)}
+.move-bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px}
+.move-btns{display:inline-flex;gap:6px;background:var(--bg);border:1.5px solid var(--line);padding:5px;border-radius:12px}
+.move-btns button{display:inline-flex;align-items:center;gap:6px;padding:9px 15px;border-radius:8px;font-size:13.5px;font-weight:700;color:#fff;background:var(--teal);transition:.15s;box-shadow:0 2px 8px rgba(14,158,150,.25)}
+.move-btns button span{font-weight:600}
+.move-btns button:hover:not(:disabled){filter:brightness(1.07)}
+.move-btns button:disabled{background:rgba(255,255,255,.6);color:var(--slate);opacity:.5;box-shadow:none;cursor:default}
+.move-txt{font-size:13px;color:var(--slate)}
+.move-txt b{color:var(--ink)}
 @media print{
   .topbar,.toolbar,.demo-note,.cal-nav,.form-actions,.note-ic{display:none!important}
   body{background:#fff}.app{padding:0}
@@ -940,7 +952,10 @@ function viewInstellingen(){
   const s=Settings.get();
   const vakRows=s.vakanties.map(v=>`<div class="set-row"><input class="inp" data-sl="vakanties" data-id="${v.id}" data-f="naam" value="${esc(v.naam)}" placeholder="naam"><input class="inp" type="date" data-sl="vakanties" data-id="${v.id}" data-f="van" value="${esc(v.van)}"><input class="inp" type="date" data-sl="vakanties" data-id="${v.id}" data-f="tot" value="${esc(v.tot)}"><button class="btn-txt-del" data-del-sl="vakanties" data-id="${v.id}" title="verwijderen">×</button></div>`).join("")||'<p class="muted">Nog geen vakanties ingevuld.</p>';
   const vrijRows=s.vrijedagen.map(v=>`<div class="set-row two"><input class="inp" data-sl="vrijedagen" data-id="${v.id}" data-f="naam" value="${esc(v.naam)}" placeholder="naam"><input class="inp" type="date" data-sl="vrijedagen" data-id="${v.id}" data-f="datum" value="${esc(v.datum)}"><button class="btn-txt-del" data-del-sl="vrijedagen" data-id="${v.id}" title="verwijderen">×</button></div>`).join("")||'<p class="muted">Nog geen vrije dagen ingevuld.</p>';
-  const klasRows=(s.klassen||[]).map((k,i)=>`<div class="set-row two" style="grid-template-columns:1fr 150px 88px"><input class="inp" data-kl="${k.id}" data-klf="naam" data-old="${esc(k.naam)}" value="${esc(k.naam)}" placeholder="klasnaam"><select class="inp" data-kl="${k.id}" data-klf="groep"><option ${k.groep==='Kleuter'?'selected':''}>Kleuter</option><option ${k.groep==='Lager'?'selected':''}>Lager</option></select><span style="display:flex;align-items:center;justify-content:flex-end;gap:2px"><button class="btn-txt-del" data-mv-kl="${k.id}" data-dir="-1" title="omhoog" style="color:var(--slate);font-size:14px"${i===0?' disabled':''}>▲</button><button class="btn-txt-del" data-mv-kl="${k.id}" data-dir="1" title="omlaag" style="color:var(--slate);font-size:14px"${i===s.klassen.length-1?' disabled':''}>▼</button><button class="btn-txt-del" data-del-kl="${k.id}" title="verwijderen">×</button></span></div>`).join("")||'<p class="muted">Nog geen klassen.</p>';
+  const selK=state.selKlas,selIdx=(s.klassen||[]).findIndex(x=>x.id===selK);
+  const klasRows=(s.klassen||[]).map(k=>`<div class="set-row two klas-row${k.id===selK?' sel':''}" data-selkl="${k.id}"><input class="inp" data-kl="${k.id}" data-klf="naam" data-old="${esc(k.naam)}" value="${esc(k.naam)}" placeholder="klasnaam"><select class="inp" data-kl="${k.id}" data-klf="groep"><option ${k.groep==='Kleuter'?'selected':''}>Kleuter</option><option ${k.groep==='Lager'?'selected':''}>Lager</option></select><button class="btn-txt-del" data-del-kl="${k.id}" title="verwijderen">×</button></div>`).join("")||'<p class="muted">Nog geen klassen.</p>';
+  const kName=selIdx>=0?esc(s.klassen[selIdx].naam||"naamloze klas"):"";
+  const moveBar=`<div class="move-bar"><div class="move-btns"><button type="button" id="klasUp" ${selIdx<=0?'disabled':''} title="een plaats omhoog">▲<span>Omhoog</span></button><button type="button" id="klasDown" ${selIdx<0||selIdx>=s.klassen.length-1?'disabled':''} title="een plaats omlaag">▼<span>Omlaag</span></button></div><span class="move-txt">${selIdx>=0?`<b>${kName}</b> geselecteerd — verplaats met de knoppen`:'Klik een klas aan om ze te verplaatsen'}</span></div>`;
   const meldRows=s.meldingen.map(v=>`<div class="set-row"><input class="inp" data-sl="meldingen" data-id="${v.id}" data-f="naam" value="${esc(v.naam)}" placeholder="bv. pedagogische studiedag"><input class="inp" type="date" data-sl="meldingen" data-id="${v.id}" data-f="datum" value="${esc(v.datum)}"><input class="inp" type="date" data-sl="meldingen" data-id="${v.id}" data-f="datumEind" value="${esc(v.datumEind||'')}"><button class="btn-txt-del" data-del-sl="meldingen" data-id="${v.id}" title="verwijderen">×</button></div>`).join("")||'<p class="muted">Nog geen meldingen ingevuld.</p>';
   return `
   <div class="view-title">Instellingen</div>
@@ -954,6 +969,7 @@ function viewInstellingen(){
     <div class="fieldset">
       <div class="legend"><span class="dot"></span>Klassenstructuur <span class="opt" style="text-transform:none;letter-spacing:0;font-weight:500">(naam · groep)</span></div>
       <div class="set-list">${klasRows}</div>
+      ${moveBar}
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px"><button class="btn btn-line btn-sm" id="addKleuter">+ Kleuterklas</button><button class="btn btn-line btn-sm" id="addLager">+ Lagere klas</button></div>
       <p class="hint">Wijzigingen verschijnen meteen in het bestelformulier én de filters. Een klas hernoemen past ook bestaande uitstappen automatisch aan.</p>
     </div>
@@ -991,6 +1007,11 @@ function bindInstellingen(){
   $$('[data-del-kl]').forEach(b=>b.onclick=()=>{if(!confirm("Deze klas uit de lijst verwijderen?"))return;const s=Settings.get();s.klassen=s.klassen.filter(x=>x.id!==b.dataset.delKl);Settings.save(s);render();});
   const addKlas=g=>{const s=Settings.get();let i=-1;s.klassen.forEach((k,n)=>{if(k.groep===g)i=n;});s.klassen.splice(i<0?s.klassen.length:i+1,0,{id:uid(),naam:"",groep:g});Settings.save(s);render();};
   $$('[data-mv-kl]').forEach(b=>b.onclick=()=>{const s=Settings.get();const i=s.klassen.findIndex(x=>x.id===b.dataset.mvKl),j=i+Number(b.dataset.dir);if(i<0||j<0||j>=s.klassen.length)return;const tmp=s.klassen[i];s.klassen[i]=s.klassen[j];s.klassen[j]=tmp;Settings.save(s);render();});
+  $$('[data-selkl]').forEach(r=>r.addEventListener("click",e=>{if(e.target.closest("input,select,button"))return;state.selKlas=state.selKlas===r.dataset.selkl?null:r.dataset.selkl;render();}));
+  const moveKlas=dir=>{const s=Settings.get();const i=s.klassen.findIndex(x=>x.id===state.selKlas),j=i+dir;if(i<0||j<0||j>=s.klassen.length)return;const t=s.klassen[i];s.klassen[i]=s.klassen[j];s.klassen[j]=t;Settings.save(s);render();};
+  const ku=$("#klasUp");if(ku)ku.onclick=()=>moveKlas(-1);
+  const kd=$("#klasDown");if(kd)kd.onclick=()=>moveKlas(1);
+  const addKlas=g=>{const s=Settings.get();let i=-1;s.klassen.forEach((k,n)=>{if(k.groep===g)i=n;});const nk={id:uid(),naam:"",groep:g};s.klassen.splice(i<0?s.klassen.length:i+1,0,nk);state.selKlas=nk.id;Settings.save(s);render();};
   const ak=$("#addKleuter");if(ak)ak.onclick=()=>addKlas("Kleuter");
   const al=$("#addLager");if(al)al.onclick=()=>addKlas("Lager");
   const nj=$("#nieuwJaar");if(nj)nj.onclick=nieuwSchooljaar;
