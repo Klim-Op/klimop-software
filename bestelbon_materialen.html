@@ -419,11 +419,19 @@
   <!-- ============ ARCHIEF ============ -->
   <section class="view" id="view-archief">
     <div class="ov-controls">
-      <div class="section-title" style="margin:0">Gearchiveerde bestelrondes</div>
-      <button class="btn btn-ghost btn-sm" id="archDownloadAll" style="margin-left:auto">⬇️ Volledig archief downloaden</button>
+      <div class="toggle">
+        <button id="archTabRondes" class="active">📦 Bestelrondes</button>
+        <button id="archTabBons">🧾 Bestelbons</button>
+      </div>
+      <div class="search" style="min-width:220px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+        <input id="archSearch" placeholder="Zoek in het archief op omschrijving, art.nr, klas, bonnummer…">
+      </div>
+      <button class="btn btn-ghost btn-sm" id="archDownloadAll">⬇️ Volledig archief downloaden</button>
       <button class="btn btn-ghost btn-sm admin-only" id="archWipe" style="color:var(--coral-dark);border-color:var(--coral)">🗑️ Archief wissen</button>
     </div>
     <div id="archive"></div>
+    <div id="archiveBons" style="display:none"></div>
   </section>
 
   <!-- ============ BESTELBONS ============ -->
@@ -447,6 +455,7 @@
         <option value="bedrag-desc">Bedrag — hoogste eerst</option>
       </select>
       <button class="btn btn-ghost btn-sm" id="bonExportAll">⬇️ CSV</button>
+      <button class="btn btn-ghost btn-sm admin-only" id="bonArchiveDone">📥 Afgehandelde archiveren</button>
       <div class="grand-total" style="margin-left:auto">Openstaand: <b id="bonOpenTotal">€ 0,00</b></div>
     </div>
     <div id="bonList"></div>
@@ -553,7 +562,7 @@ function setStatus(ok){
   document.getElementById("connTxt").textContent = ok ? "verbonden" : "geen verbinding";
 }
 function toRow(o){ const r={id:o.id,klas:o.klas,leverancier:o.leverancier,artikel:o.artikel,omschrijving:o.omschrijving,aantal:o.aantal,prijs:o.prijs,opmerking:o.opmerking,notitie:o.notitie,besteld:!!o.besteld,bon_id:o.bon_id||null,nietgeleverd:!!o.nietgeleverd}; if(o.created_at) r.created_at=o.created_at; return r; }
-function bonRow(b){ return {id:b.id,nummer:b.nummer,leverancier:b.leverancier,datum:b.datum,factuur_ontvangen:!!b.factuur_ontvangen,opmerking:b.opmerking||"",lijnen:b.lijnen||[]}; }
+function bonRow(b){ return {id:b.id,nummer:b.nummer,leverancier:b.leverancier,datum:b.datum,factuur_ontvangen:!!b.factuur_ontvangen,opmerking:b.opmerking||"",lijnen:b.lijnen||[],gearchiveerd:!!b.gearchiveerd}; }
 function datumLabel(v){
   if(!v) return "";
   const d=new Date(v); if(isNaN(d)) return "";
@@ -591,7 +600,7 @@ async function fetchAll(){
     if(r1.error) throw r1.error; if(r2.error) throw r2.error; if(r3.error) throw r3.error;
     state.orders=(r1.data||[]).map(r=>({id:r.id,klas:r.klas||"",leverancier:r.leverancier||"",artikel:r.artikel||"",omschrijving:r.omschrijving||"",aantal:r.aantal||"",prijs:r.prijs||"",opmerking:r.opmerking||"",notitie:r.notitie||"",besteld:!!r.besteld,created_at:r.created_at||null,bon_id:r.bon_id||null,nietgeleverd:!!r.nietgeleverd}));
     state.archief=(r2.data||[]).map(r=>({id:r.id,datum:r.datum,lijnen:r.lijnen||[]}));
-    state.bons=(r3.data||[]).map(r=>({id:r.id,nummer:r.nummer||"",leverancier:r.leverancier||"",datum:r.datum,factuur_ontvangen:!!r.factuur_ontvangen,opmerking:r.opmerking||"",lijnen:r.lijnen||[]}));
+    state.bons=(r3.data||[]).map(r=>({id:r.id,nummer:r.nummer||"",leverancier:r.leverancier||"",datum:r.datum,factuur_ontvangen:!!r.factuur_ontvangen,opmerking:r.opmerking||"",lijnen:r.lijnen||[],gearchiveerd:!!r.gearchiveerd}));
     lastSig=dataSig(state.orders,state.archief,state.bons);
     setStatus(true);
   }catch(e){ console.error("fetch",e); setStatus(false); toast("Kon de gegevens niet laden — controleer je verbinding","err"); }
@@ -645,7 +654,7 @@ document.querySelectorAll(".tab").forEach(tab=>{
     tab.classList.add("active");
     document.getElementById("view-"+tab.dataset.view).classList.add("active");
     if(tab.dataset.view==="overzicht"){ await fetchAll(); refreshSupplierList(); renderGroups(); }
-    if(tab.dataset.view==="archief"){ await fetchAll(); renderArchive(); }
+    if(tab.dataset.view==="archief"){ await fetchAll(); setArchTab(archTab); }
     if(tab.dataset.view==="bestelbons"){ await fetchAll(); renderBons(); }
   };
 });
@@ -898,14 +907,26 @@ document.getElementById("afrondBtn").onclick=()=>{
 };
 
 /* ---------- Archive ---------- */
+let archTab="rondes";
+function archQuery(){ const e=document.getElementById("archSearch"); return e?(e.value||"").trim().toLowerCase():""; }
+function roundMatches(r,q){
+  if(!q) return true;
+  return (datumLabel(r.datum)+" "+r.lijnen.map(o=>[o.klas,o.leverancier,o.artikel,o.omschrijving,o.aantal,o.prijs,rowTotal(o).toFixed(2),o.opmerking,o.notitie].join(" ")).join(" ")).toLowerCase().includes(q);
+}
 function renderArchive(){
   updateArchCount();
   const w=document.getElementById("archive");
+  const q=archQuery();
+  const rondes=state.archief.filter(r=>roundMatches(r,q));
+  if(state.archief.length && !rondes.length){
+    w.innerHTML=`<div class="card empty-state"><div class="big">\ud83d\udd0d</div><div style="font-weight:600;font-size:16px;color:var(--ink)">Geen bestelrondes gevonden</div><div style="margin-top:6px">Pas je zoekterm aan.</div></div>`;
+    return;
+  }
   if(!state.archief.length){
     w.innerHTML=`<div class="card empty-state"><div class="big">🗂️</div><div style="font-weight:600;font-size:16px;color:var(--ink)">Nog geen gearchiveerde rondes</div><div style="margin-top:6px">Rond een bestelronde af in het overzicht om hier een momentopname te bewaren.</div></div>`;
     return;
   }
-  w.innerHTML=state.archief.map(r=>{
+  w.innerHTML=rondes.map(r=>{
     const tot=r.lijnen.reduce((s,o)=>s+rowTotal(o),0);
     const b=r.lijnen.filter(o=>o.besteld).length;
     const d=new Date(r.datum).toLocaleDateString("nl-BE",{day:"numeric",month:"long",year:"numeric"});
@@ -1002,7 +1023,10 @@ function exportArchiveAll(){
   const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="Archief_volledig_"+new Date().toISOString().slice(0,10)+".csv"; a.click();
   toast("Volledig archief gedownload ✓");
 }
-document.getElementById("archDownloadAll").onclick=exportArchiveAll;
+document.getElementById("archDownloadAll").onclick=()=>{
+  if(archTab==="bons") exportBonsCsv(archivedBons(),"Archief_bestelbons_"+new Date().toISOString().slice(0,10));
+  else exportArchiveAll();
+};
 function openWipe(){
   if(!isAdmin){ toast("Alleen de beheerder kan het archief wissen","err"); return; }
   if(!state.archief.length){ toast("Het archief is al leeg","err"); return; }
@@ -1070,7 +1094,14 @@ document.getElementById("adminBtn").onclick=()=>{
 };
 
 /* ---------- Bestelbons ---------- */
-function updateBonCount(){ const e=document.getElementById("bonCount"); if(e) e.textContent=state.bons.length; }
+function activeBons(){ return state.bons.filter(b=>!b.gearchiveerd); }
+function archivedBons(){ return state.bons.filter(b=>b.gearchiveerd); }
+function updateBonCount(){
+  const e=document.getElementById("bonCount"); if(e) e.textContent=activeBons().length;
+  const btn=document.getElementById("bonArchiveDone");
+  if(btn){ const n=activeBons().filter(b=>b.factuur_ontvangen).length;
+    btn.textContent=`\ud83d\udce5 Afgehandelde archiveren${n?` (${n})`:""}`; btn.disabled=!n; }
+}
 function bonLines(b){
   const live=state.orders.filter(o=>o.bon_id===b.id);
   return live.length ? live : (b.lijnen||[]);
@@ -1163,7 +1194,7 @@ document.getElementById("mkBonDo").onclick=()=>{
 function refreshBonFilters(){
   const sel=document.getElementById("bonFilterSupp"); if(!sel) return;
   const cur=sel.value;
-  const supps=[...new Set(state.bons.map(b=>b.leverancier).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"nl"));
+  const supps=[...new Set(activeBons().map(b=>b.leverancier).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"nl"));
   sel.innerHTML=`<option value="">Alle leveranciers</option>`+supps.map(s=>`<option value="${esc(s)}">${esc(s)}</option>`).join("");
   if(supps.includes(cur)) sel.value=cur;
 }
@@ -1183,9 +1214,9 @@ function renderBons(){
   const sort=document.getElementById("bonSort").value;
 
   document.getElementById("bonOpenTotal").textContent=euro(
-    state.bons.filter(b=>!b.factuur_ontvangen).reduce((s,b)=>s+bonTotal(b),0));
+    activeBons().filter(b=>!b.factuur_ontvangen).reduce((s,b)=>s+bonTotal(b),0));
 
-  let list=state.bons.filter(b=>bonMatches(b,q))
+  let list=activeBons().filter(b=>bonMatches(b,q))
     .filter(b=>!fs||b.leverancier===fs)
     .filter(b=>!fi||(fi==="paid"?b.factuur_ontvangen:!b.factuur_ontvangen));
 
@@ -1197,7 +1228,7 @@ function renderBons(){
     return new Date(b.datum)-new Date(a.datum);
   });
 
-  if(!state.bons.length){
+  if(!activeBons().length){
     w.innerHTML=`<div class="card empty-state"><div class="big">🧾</div><div style="font-weight:600;font-size:16px;color:var(--ink)">Nog geen bestelbons</div><div style="margin-top:6px">Vink in het overzicht de bestelde regels aan en klik op <b>Bestelbon aanmaken</b>.</div></div>`;
     return;
   }
@@ -1218,6 +1249,7 @@ function renderBons(){
         <button class="inv-toggle ${b.factuur_ontvangen?"paid":"open"}" data-inv="${b.id}" title="Klik om de factuurstatus te wijzigen">${b.factuur_ontvangen?"✓ Factuur ontvangen":"⏳ Factuur openstaand"}</button>
         <button class="icon-btn" data-bondet="${b.id}" title="Details bekijken">🔍</button>
         <button class="icon-btn" data-bonprint="${b.id}" title="Afdrukken">🖨️</button>
+        ${isAdmin?`<button class="icon-btn" data-bonarch="${b.id}" title="Verplaats deze bon naar het archief">📥</button>`:""}
       </div>
       ${b.opmerking?`<div class="bon-note">📝 ${esc(b.opmerking)}</div>`:""}
     </div>`;
@@ -1236,11 +1268,98 @@ document.getElementById("bonList").addEventListener("click",e=>{
     toast(b.factuur_ontvangen?"Factuur gemarkeerd als ontvangen ✓":"Factuur terug op openstaand");
     dbUpsertBon(b); return;
   }
+  const ar=e.target.closest("[data-bonarch]");
+  if(ar){
+    e.stopPropagation();
+    if(!isAdmin){ toast("Alleen de beheerder kan dit","err"); return; }
+    const b=state.bons.find(x=>x.id===ar.dataset.bonarch); if(!b) return;
+    if(!b.factuur_ontvangen && !confirm(`De factuur van bon ${bonLabel(b)} staat nog als openstaand.\n\nToch naar het archief verplaatsen?\n\nJe kan hem daar altijd terugzetten naar het werktabblad.`)) return;
+    archiveBon(b); return;
+  }
   const pr=e.target.closest("[data-bonprint]");
   if(pr){ e.stopPropagation(); const b=state.bons.find(x=>x.id===pr.dataset.bonprint); if(b){ buildBonPrint(b); window.print(); } return; }
   const card=e.target.closest("[data-bon],[data-bondet]");
   if(card){ const id=card.dataset.bondet||card.dataset.bon; openBonDetail(id); }
 });
+
+/* --- archiveren van bons --- */
+function archiveBon(b){
+  syncBonSnapshot(b);                       // momentopname vastzetten
+  if(!b.lijnen || !b.lijnen.length) b.lijnen=b.lijnen||[];
+  b.gearchiveerd=true;
+  renderBons(); updateBonCount();
+  toast(`Bestelbon ${bonLabel(b)} naar het archief verplaatst ✓`);
+  dbUpsertBon(b);
+}
+function unarchiveBon(b){
+  b.gearchiveerd=false;
+  renderArchiveBons(); updateBonCount(); renderBons();
+  toast(`Bestelbon ${bonLabel(b)} teruggezet naar het werktabblad ✓`);
+  dbUpsertBon(b);
+}
+document.getElementById("bonArchiveDone").onclick=()=>{
+  if(!isAdmin){ toast("Alleen de beheerder kan dit","err"); return; }
+  const done=activeBons().filter(b=>b.factuur_ontvangen);
+  if(!done.length){ toast("Geen afgehandelde bons om te archiveren","err"); return; }
+  if(!confirm(`${done.length} afgehandelde bon(s) naar het archief verplaatsen?\n\nJe blijft ze raadplegen via het tabblad Archief → Bestelbons.`)) return;
+  done.forEach(b=>{ syncBonSnapshot(b); b.gearchiveerd=true; dbUpsertBon(b); });
+  renderBons(); updateBonCount();
+  toast(`${done.length} bon(s) gearchiveerd ✓`);
+};
+
+/* --- archief: gearchiveerde bestelbons --- */
+function renderArchiveBons(){
+  const w=document.getElementById("archiveBons"); if(!w) return;
+  const q=archQuery();
+  const all=archivedBons();
+  const list=all.filter(b=>bonMatches(b,q));
+  if(!all.length){
+    w.innerHTML=`<div class="card empty-state"><div class="big">🧾</div><div style="font-weight:600;font-size:16px;color:var(--ink)">Nog geen gearchiveerde bestelbons</div><div style="margin-top:6px">Verplaats een bon vanuit het tabblad <b>Bestelbons</b> met de knop 📥.</div></div>`;
+    return;
+  }
+  if(!list.length){ w.innerHTML=`<div class="card empty-state"><div class="big">🔍</div><div style="font-weight:600;font-size:16px;color:var(--ink)">Geen bestelbons gevonden</div><div style="margin-top:6px">Pas je zoekterm aan.</div></div>`; return; }
+  w.innerHTML=list.map(b=>{
+    const lines=bonLines(b); const nd=lines.filter(o=>o.nietgeleverd).length;
+    return `<div class="bon-card ${b.factuur_ontvangen?"paid":""}" data-bon="${b.id}" title="Klik voor de details">
+      <div class="bon-num"><small>Bestelbon</small>${esc(bonLabel(b))}</div>
+      <span class="bon-supp">${esc(b.leverancier||"—")}</span>
+      <div class="bon-meta">
+        <span>📅 <b>${esc(datumLabel(b.datum))}</b></span>
+        <span><b>${lines.length}</b> regel${lines.length===1?"":"s"}</span>
+        <span>💶 <b>${euro(bonTotal(b))}</b></span>
+        ${nd?`<span style="color:var(--coral-dark)">⚠️ ${nd} niet geleverd</span>`:""}
+      </div>
+      <div class="bon-actions">
+        <span class="inv-toggle ${b.factuur_ontvangen?"paid":"open"}" style="cursor:default">${b.factuur_ontvangen?"✓ Factuur ontvangen":"⏳ Factuur openstaand"}</span>
+        <button class="icon-btn" data-bondet="${b.id}" title="Details bekijken">🔍</button>
+        <button class="icon-btn" data-bonprint="${b.id}" title="Afdrukken">🖨️</button>
+        ${isAdmin?`<button class="icon-btn" data-bonunarch="${b.id}" title="Terugzetten naar het werktabblad">↩︎</button>`:""}
+      </div>
+      ${b.opmerking?`<div class="bon-note">📝 ${esc(b.opmerking)}</div>`:""}
+    </div>`;
+  }).join("");
+}
+document.getElementById("archiveBons").addEventListener("click",e=>{
+  const un=e.target.closest("[data-bonunarch]");
+  if(un){ e.stopPropagation();
+    if(!isAdmin){ toast("Alleen de beheerder kan dit","err"); return; }
+    const b=state.bons.find(x=>x.id===un.dataset.bonunarch); if(b) unarchiveBon(b); return; }
+  const pr=e.target.closest("[data-bonprint]");
+  if(pr){ e.stopPropagation(); const b=state.bons.find(x=>x.id===pr.dataset.bonprint); if(b){ buildBonPrint(b); window.print(); } return; }
+  const card=e.target.closest("[data-bon],[data-bondet]");
+  if(card){ openBonDetail(card.dataset.bondet||card.dataset.bon); }
+});
+function setArchTab(t){
+  archTab=t;
+  document.getElementById("archTabRondes").classList.toggle("active",t==="rondes");
+  document.getElementById("archTabBons").classList.toggle("active",t==="bons");
+  document.getElementById("archive").style.display = t==="rondes" ? "" : "none";
+  document.getElementById("archiveBons").style.display = t==="bons" ? "" : "none";
+  if(t==="rondes") renderArchive(); else renderArchiveBons();
+}
+document.getElementById("archTabRondes").onclick=()=>setArchTab("rondes");
+document.getElementById("archTabBons").onclick=()=>setArchTab("bons");
+document.getElementById("archSearch").addEventListener("input",()=>{ if(archTab==="rondes") renderArchive(); else renderArchiveBons(); });
 
 /* --- detail pop-up --- */
 let curBon=null;
@@ -1254,7 +1373,7 @@ function openBonDetail(id){
 function renderBonDetail(){
   const b=curBon; if(!b) return;
   const lines=bonLines(b);
-  const live=state.orders.some(o=>o.bon_id===b.id);
+  const live=state.orders.some(o=>o.bon_id===b.id) && !b.gearchiveerd;
   const others=state.bons.filter(x=>x.id!==b.id);
   const body=document.getElementById("bonDetBody");
   body.innerHTML=`
@@ -1262,10 +1381,13 @@ function renderBonDetail(){
       <span class="bon-supp">${esc(b.leverancier||"—")}</span>
       <span style="font-size:13px;color:var(--muted)">📅 <b style="color:var(--ink)">${esc(datumLabel(b.datum))}</b></span>
       <span style="font-size:13px;color:var(--muted)"><b style="color:var(--ink)">${lines.length}</b> regels</span>
-      <button class="inv-toggle ${b.factuur_ontvangen?"paid":"open"}" data-dinv="1" style="margin-left:auto">${b.factuur_ontvangen?"✓ Factuur ontvangen":"⏳ Factuur openstaand"}</button>
+      ${b.gearchiveerd
+        ? `<span class="inv-toggle ${b.factuur_ontvangen?"paid":"open"}" style="margin-left:auto;cursor:default">${b.factuur_ontvangen?"✓ Factuur ontvangen":"⏳ Factuur openstaand"}</span>`
+        : `<button class="inv-toggle ${b.factuur_ontvangen?"paid":"open"}" data-dinv="1" style="margin-left:auto">${b.factuur_ontvangen?"✓ Factuur ontvangen":"⏳ Factuur openstaand"}</button>`}
     </div>
     ${b.opmerking?`<div style="font-size:12.5px;color:var(--muted);font-style:italic">📝 ${esc(b.opmerking)}</div>`:""}
-    ${live?"":`<div class="lockpill" style="align-self:flex-start">🔒 gearchiveerd — momentopname</div>`}
+    ${b.gearchiveerd?`<div class="lockpill" style="align-self:flex-start">🗂️ gearchiveerd — alleen-lezen (terugzetten kan met ↩︎)</div>`
+      :(live?"":`<div class="lockpill" style="align-self:flex-start">🔒 momentopname — de regels staan in het archief</div>`)}
     <div>
       <div class="bd-line head"><span>Klas</span><span>Art.nr</span><span>Omschrijving</span><span class="r">Aant.</span><span class="r">Prijs/st</span><span class="r">Totaal</span><span></span></div>
       ${lines.map(o=>`<div class="bd-line ${o.nietgeleverd?"nd":""}">
@@ -1294,6 +1416,7 @@ document.getElementById("bonDetPrint").onclick=()=>{ if(curBon){ buildBonPrint(c
 document.getElementById("bonDetCsv").onclick=()=>{ if(curBon) exportRows(bonLines(curBon),"Bestelbon_"+(curBon.nummer||"").replace(/[^\w-]/g,"_")); };
 document.getElementById("bonDetDel").onclick=()=>{
   if(!isAdmin||!curBon) return;
+  if(curBon.gearchiveerd){ toast("Gearchiveerde bons kunnen niet gewist worden \u2014 zet hem eerst terug","err"); return; }
   if(!confirm(`Bestelbon ${bonLabel(curBon)} verwijderen?\n\nDe regels blijven bestaan en komen terug vrij om aan een andere bon toe te wijzen.`)) return;
   const b=curBon, freed=state.orders.filter(o=>o.bon_id===b.id);
   freed.forEach(o=>o.bon_id=null);
@@ -1352,16 +1475,17 @@ function buildBonPrint(b){
     <div class="print-grand">Totaal bestelbon: ${euro(bonTotal(b))}</div>`;
 }
 
-document.getElementById("bonExportAll").onclick=()=>{
-  if(!state.bons.length){ toast("Geen bestelbons om te exporteren","err"); return; }
-  const head=["Bestelbon","Leverancier","Besteldatum","Factuur ontvangen","Klas","Artikelnummer","Omschrijving","Aantal","Prijs per stuk","Totaal","Niet geleverd","Opmerking"];
+function exportBonsCsv(list,name){
+  if(!list.length){ toast("Geen bestelbons om te exporteren","err"); return; }
+  const head=["Bestelbon","Leverancier","Besteldatum","Factuur ontvangen","Gearchiveerd","Klas","Artikelnummer","Omschrijving","Aantal","Prijs per stuk","Totaal","Niet geleverd","Opmerking"];
   const data=[];
-  state.bons.forEach(b=>bonLines(b).forEach(o=>data.push([b.nummer,b.leverancier,datumLabel(b.datum),b.factuur_ontvangen?"ja":"nee",o.klas,o.artikel,o.omschrijving,o.aantal,o.prijs,rowTotal(o).toFixed(2),o.nietgeleverd?"ja":"nee",[o.opmerking,o.notitie].filter(Boolean).join(" — ")])));
+  list.forEach(b=>bonLines(b).forEach(o=>data.push([b.nummer,b.leverancier,datumLabel(b.datum),b.factuur_ontvangen?"ja":"nee",b.gearchiveerd?"ja":"nee",o.klas,o.artikel,o.omschrijving,o.aantal,o.prijs,rowTotal(o).toFixed(2),o.nietgeleverd?"ja":"nee",[o.opmerking,o.notitie].filter(Boolean).join(" \u2014 ")])));
   const csv=[head,...data].map(r=>r.map(c=>`"${String(c??"").replace(/"/g,'""')}"`).join(";")).join("\n");
   const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"});
-  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="Bestelbons_"+state.settings.year+".csv"; a.click();
-  toast("CSV gedownload ✓");
-};
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=name+".csv"; a.click();
+  toast("CSV gedownload \u2713");
+}
+document.getElementById("bonExportAll").onclick=()=>exportBonsCsv(activeBons(),"Bestelbons_"+state.settings.year);
 
 /* ---------- Zwevende balk bij scrollen ---------- */
 (function(){
@@ -1375,7 +1499,7 @@ document.getElementById("bonExportAll").onclick=()=>{
 function dataSig(orders,arch,bons){
   return orders.map(o=>[o.id,o.klas,o.leverancier,o.artikel,o.omschrijving,o.aantal,o.prijs,o.opmerking,o.notitie,o.besteld?1:0,o.bon_id||"",o.nietgeleverd?1:0].join("\u0001")).join("\u0002")
     + "||" + arch.map(r=>r.id+":"+((r.lijnen&&r.lijnen.length)||0)).join(",")
-    + "||" + (bons||[]).map(b=>[b.id,b.nummer,b.factuur_ontvangen?1:0,(b.lijnen&&b.lijnen.length)||0].join("\u0001")).join(",");
+    + "||" + (bons||[]).map(b=>[b.id,b.nummer,b.factuur_ontvangen?1:0,b.gearchiveerd?1:0,(b.lijnen&&b.lijnen.length)||0].join("\u0001")).join(",");
 }
 function isBusy(){
   if(document.hidden) return true;
@@ -1410,14 +1534,14 @@ async function silentRefresh(){
   if(isBusy()) return;
   const newOrders=od.map(r=>({id:r.id,klas:r.klas||"",leverancier:r.leverancier||"",artikel:r.artikel||"",omschrijving:r.omschrijving||"",aantal:r.aantal||"",prijs:r.prijs||"",opmerking:r.opmerking||"",notitie:r.notitie||"",besteld:!!r.besteld,created_at:r.created_at||null,bon_id:r.bon_id||null,nietgeleverd:!!r.nietgeleverd}));
   const newArch=ad.map(r=>({id:r.id,datum:r.datum,lijnen:r.lijnen||[]}));
-  const newBons=bd.map(r=>({id:r.id,nummer:r.nummer||"",leverancier:r.leverancier||"",datum:r.datum,factuur_ontvangen:!!r.factuur_ontvangen,opmerking:r.opmerking||"",lijnen:r.lijnen||[]}));
+  const newBons=bd.map(r=>({id:r.id,nummer:r.nummer||"",leverancier:r.leverancier||"",datum:r.datum,factuur_ontvangen:!!r.factuur_ontvangen,opmerking:r.opmerking||"",lijnen:r.lijnen||[],gearchiveerd:!!r.gearchiveerd}));
   const sig=dataSig(newOrders,newArch,newBons);
   if(sig===lastSig) return;
   lastSig=sig;
   state.orders=newOrders; state.archief=newArch; state.bons=newBons;
   refreshSupplierList(); updateCount(); updateArchCount(); updateBonCount();
   if(view==="overzicht") rerenderPreserving();
-  else if(view==="archief") renderArchive();
+  else if(view==="archief"){ if(archTab==="bons") renderArchiveBons(); else renderArchive(); }
   else renderBons();
 }
 
