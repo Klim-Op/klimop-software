@@ -155,6 +155,54 @@
   .row-date{margin:-5px 8px 6px 42px;font-size:10.5px;color:var(--muted);opacity:.5;letter-spacing:.2px;cursor:default}
   .order-wrap:hover .row-date{opacity:.8}
   .arch-date{display:block;font-size:10px;color:var(--muted);opacity:.55;margin-top:1px}
+
+  /* ---- Bestelbons ---- */
+  .bon-toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:18px}
+  .sel-ctrl{padding:10px 12px;border:1.5px solid var(--line);border-radius:11px;background:#fff;font-weight:600;font-size:13px;color:var(--ink);cursor:pointer}
+  .sel-ctrl:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-soft)}
+  .bon-card{display:flex;align-items:center;gap:16px;padding:15px 18px;margin-bottom:11px;background:var(--card);border:1px solid var(--line);border-left:5px solid var(--teal);border-radius:14px;box-shadow:var(--shadow);transition:.15s;cursor:pointer;flex-wrap:wrap}
+  .bon-card:hover{transform:translateY(-1px);box-shadow:0 10px 26px rgba(31,158,146,.14)}
+  .bon-card.paid{border-left-color:var(--green)}
+  .bon-num{font-size:17px;font-weight:800;color:var(--ink);letter-spacing:-.2px;white-space:nowrap}
+  .bon-num small{display:block;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+  .bon-supp{background:var(--teal-soft);color:var(--teal-dark);font-weight:700;font-size:13px;padding:5px 13px;border-radius:999px;white-space:nowrap}
+  .bon-meta{display:flex;gap:16px;align-items:center;font-size:13px;color:var(--muted);flex-wrap:wrap}
+  .bon-meta b{color:var(--ink)}
+  .bon-actions{margin-left:auto;display:flex;gap:8px;align-items:center}
+  .inv-toggle{display:inline-flex;align-items:center;gap:7px;padding:6px 13px;border-radius:999px;font-size:12px;font-weight:700;border:1.5px solid;transition:.15s;white-space:nowrap}
+  .inv-toggle.open{background:#FFF6E3;border-color:var(--yellow);color:#9a6b06}
+  .inv-toggle.paid{background:var(--green-soft);border-color:var(--green);color:var(--green-dark)}
+  .inv-toggle:hover{filter:brightness(.96)}
+  .icon-btn{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;border:1.5px solid var(--line);background:#fff;color:var(--muted);transition:.15s}
+  .icon-btn:hover{border-color:var(--teal);color:var(--teal-dark);background:var(--teal-soft)}
+  .bon-note{width:100%;font-size:12px;color:var(--muted);font-style:italic;padding-left:2px}
+
+  /* bon detail modal */
+  .modal.wide{max-width:900px}
+  .bd-head{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding-bottom:14px;border-bottom:1px solid var(--line);margin-bottom:4px}
+  .bd-line{display:grid;grid-template-columns:64px 0.85fr 2.1fr 46px 82px 86px 1fr;gap:9px;align-items:center;padding:9px 8px;border-bottom:1px solid var(--line);font-size:13px}
+  .bd-line.head{font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;border-bottom:1.5px solid var(--line)}
+  .bd-line .r{text-align:right;font-variant-numeric:tabular-nums}
+  .bd-line.nd{background:var(--coral-soft);border-radius:8px}
+  .bd-line.nd .bd-oms{text-decoration:line-through;opacity:.65}
+  .bd-klas{background:var(--teal-soft);color:var(--teal-dark);font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;text-align:center}
+  .bd-oms{overflow-wrap:anywhere}
+  .bd-oms small{display:block;font-size:10.5px;color:var(--muted);font-style:italic}
+  .bd-tools{display:flex;gap:6px;align-items:center;justify-content:flex-end}
+  .bd-sel{font-size:11px;padding:4px 6px;border:1.5px solid var(--line);border-radius:8px;background:#fff;max-width:120px;font-family:inherit}
+  .bd-nd{width:26px;height:26px;border-radius:7px;display:grid;place-items:center;border:1.5px solid var(--line);background:#fff;font-size:12px;color:var(--muted);flex-shrink:0}
+  .bd-nd:hover{border-color:var(--coral);color:var(--coral-dark)}
+  .bd-nd.on{background:var(--coral);border-color:var(--coral);color:#fff}
+  .bd-tot{display:flex;justify-content:flex-end;gap:14px;align-items:baseline;padding-top:12px;font-size:15px;font-weight:800}
+  .bd-tot span{font-size:12px;font-weight:600;color:var(--muted)}
+  .legend{display:flex;gap:16px;align-items:center;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-bottom:14px;padding:9px 14px;background:var(--card);border:1px solid var(--line);border-radius:11px}
+  .legend i{display:inline-block;width:13px;height:13px;border-radius:4px;margin-right:6px;vertical-align:-2px}
+  .legend .lg-green{background:var(--green-soft);border:1.5px solid var(--green)}
+  .bon-tag{display:inline-block;font-size:9.5px;font-weight:700;color:var(--teal-dark);background:var(--teal-soft);padding:1px 7px;border-radius:5px;margin-left:7px;letter-spacing:.3px}
+  @media(max-width:860px){
+    .bd-line{grid-template-columns:1fr 1fr;gap:5px}
+    .bd-line.head{display:none}
+  }
   .oms-note-lbl{font-size:10px;font-weight:700;color:var(--teal-dark);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap;flex-shrink:0}
 
   .empty-state{text-align:center;padding:70px 20px;color:var(--muted)}
@@ -257,6 +305,7 @@
     <button class="tab active" data-view="bestellen">➕ Nieuwe bestelling</button>
     <button class="tab" data-view="overzicht">📋 Overzicht <span class="count" id="tabCount">0</span></button>
     <button class="tab" data-view="archief">🗂️ Archief <span class="count" id="archCount">0</span></button>
+    <button class="tab admin-only" data-view="bestelbons">🧾 Bestelbons <span class="count" id="bonCount">0</span></button>
     <button class="tab" data-view="instellingen">⚙️ Instellingen</button>
   </nav>
 </header>
@@ -332,8 +381,13 @@
       </div>
       <button class="btn btn-ghost btn-sm" id="refreshBtn">🔄 Vernieuwen</button>
       <button class="btn btn-ghost btn-sm" id="exportBtn">⬇️ CSV</button>
+      <button class="btn btn-primary btn-sm admin-only" id="makeBonBtn">🧾 Bestelbon aanmaken</button>
       <button class="btn btn-coral btn-sm admin-only" id="afrondBtn">✅ Bestelronde afronden</button>
       <div class="grand-total">Totaal: <b id="grandTotal">€ 0,00</b></div>
+    </div>
+    <div class="legend">
+      <span><i class="lg-green"></i>Groen = <b>besteld</b></span>
+      <span style="opacity:.7">Witte regels zijn nog niet besteld.</span>
     </div>
     <div class="print-bar">
       <span class="pb-lbl">🖨️ Afdrukken</span>
@@ -353,6 +407,32 @@
       <button class="btn btn-ghost btn-sm admin-only" id="archWipe" style="color:var(--coral-dark);border-color:var(--coral)">🗑️ Archief wissen</button>
     </div>
     <div id="archive"></div>
+  </section>
+
+  <!-- ============ BESTELBONS ============ -->
+  <section class="view" id="view-bestelbons">
+    <div class="bon-toolbar">
+      <div class="search" style="min-width:240px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+        <input id="bonSearch" placeholder="Zoek op bonnummer, artikelnummer, omschrijving, klas, prijs…">
+      </div>
+      <select class="sel-ctrl" id="bonFilterSupp"><option value="">Alle leveranciers</option></select>
+      <select class="sel-ctrl" id="bonFilterInv">
+        <option value="">Alle facturen</option>
+        <option value="open">Factuur openstaand</option>
+        <option value="paid">Factuur ontvangen</option>
+      </select>
+      <select class="sel-ctrl" id="bonSort">
+        <option value="datum-desc">Datum — nieuwste eerst</option>
+        <option value="datum-asc">Datum — oudste eerst</option>
+        <option value="lev">Leverancier (A–Z)</option>
+        <option value="nummer">Bonnummer</option>
+        <option value="bedrag-desc">Bedrag — hoogste eerst</option>
+      </select>
+      <button class="btn btn-ghost btn-sm" id="bonExportAll">⬇️ CSV</button>
+      <div class="grand-total" style="margin-left:auto">Openstaand: <b id="bonOpenTotal">€ 0,00</b></div>
+    </div>
+    <div id="bonList"></div>
   </section>
 
   <!-- ============ INSTELLINGEN ============ -->
@@ -390,6 +470,35 @@
   </div>
 </div>
 
+<div class="overlay" id="mkBonOverlay">
+  <div class="modal">
+    <div class="modal-head"><h3>🧾 Bestelbon aanmaken</h3><button class="del" id="mkBonClose" style="font-size:22px">×</button></div>
+    <div class="modal-body">
+      <div class="warnbox" id="mkBonInfo" style="background:var(--teal-soft);border-color:var(--teal)"></div>
+      <div class="field"><label>Bestelbonnummer <span class="req">*</span></label><input class="ctrl" id="mkBonNum" placeholder="bv. 2026-0142"></div>
+      <div class="field"><label>Datum bestelling</label><input class="ctrl" id="mkBonDate" type="date"></div>
+      <div class="field"><label>Opmerking (optioneel)</label><input class="ctrl" id="mkBonNote" placeholder="bv. spoedbestelling, deellevering…"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" id="mkBonCancel">Annuleren</button>
+      <button class="btn btn-primary" id="mkBonDo">🧾 Bon aanmaken</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="bonDetOverlay">
+  <div class="modal wide">
+    <div class="modal-head"><h3 id="bonDetTitle">Bestelbon</h3><button class="del" id="bonDetClose" style="font-size:22px">×</button></div>
+    <div class="modal-body" id="bonDetBody"></div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" id="bonDetCsv">⬇️ CSV</button>
+      <button class="btn btn-ghost" id="bonDetPrint">🖨️ Afdrukken</button>
+      <button class="btn btn-ghost admin-only" id="bonDetDel" style="color:var(--coral-dark);border-color:var(--coral)">🗑️ Bon verwijderen</button>
+      <button class="btn btn-primary" id="bonDetOk">Sluiten</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -401,9 +510,12 @@ const PENCIL_ICON='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" s
 /* Beheerdersmodus: enkel de beheerder kan de besteld-status wijzigen */
 const LS_ADMIN="klimop_mat_admin";
 const ADMIN_PIN="Claudius147";
-let isAdmin = localStorage.getItem(LS_ADMIN)==="1";
+function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+function lsDel(k){ try{ localStorage.removeItem(k); }catch(e){} }
+let isAdmin = lsGet(LS_ADMIN)==="1";
 
-let state = { orders: [], archief: [], settings:{year:"2025-2026"} };
+let state = { orders: [], archief: [], bons: [], settings:{year:"2025-2026"} };
 let sortMode = "klas";
 let search = "";
 let selected = new Set();
@@ -414,6 +526,7 @@ const SUPA_URL = "https://vmvxawjfryaijkhhnnyr.supabase.co";
 const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZtdnhhd2pmcnlhaWpraGhubnlyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0NjM0NDgsImV4cCI6MjA5NjAzOTQ0OH0.6UMvrhkHwbrtQwOvn3od8X6DAKXSiPdtCeFdt3nZZdE";
 const T_ORD = "materiaal_bestellingen";
 const T_ARCH = "materiaal_archief";
+const T_BON = "materiaal_bestelbons";
 const sb = window.supabase ? window.supabase.createClient(SUPA_URL, SUPA_KEY) : null;
 
 function setStatus(ok){
@@ -421,7 +534,8 @@ function setStatus(ok){
   c.className="conn "+(ok?"on":"off");
   document.getElementById("connTxt").textContent = ok ? "verbonden" : "geen verbinding";
 }
-function toRow(o){ const r={id:o.id,klas:o.klas,leverancier:o.leverancier,artikel:o.artikel,omschrijving:o.omschrijving,aantal:o.aantal,prijs:o.prijs,opmerking:o.opmerking,notitie:o.notitie,besteld:!!o.besteld}; if(o.created_at) r.created_at=o.created_at; return r; }
+function toRow(o){ const r={id:o.id,klas:o.klas,leverancier:o.leverancier,artikel:o.artikel,omschrijving:o.omschrijving,aantal:o.aantal,prijs:o.prijs,opmerking:o.opmerking,notitie:o.notitie,besteld:!!o.besteld,bon_id:o.bon_id||null,nietgeleverd:!!o.nietgeleverd}; if(o.created_at) r.created_at=o.created_at; return r; }
+function bonRow(b){ return {id:b.id,nummer:b.nummer,leverancier:b.leverancier,datum:b.datum,factuur_ontvangen:!!b.factuur_ontvangen,opmerking:b.opmerking||"",lijnen:b.lijnen||[]}; }
 function datumLabel(v){
   if(!v) return "";
   const d=new Date(v); if(isNaN(d)) return "";
@@ -445,18 +559,22 @@ const dbDeleteOrderIds= ids => dbRun(sb.from(T_ORD).delete().in("id",ids),"delet
 const dbDeleteAllOrd  = ()  => dbRun(sb.from(T_ORD).delete().neq("id",""),"delAllOrd");
 const dbInsertArchief = r   => dbRun(sb.from(T_ARCH).insert({id:r.id,datum:r.datum,lijnen:r.lijnen}),"archIns");
 const dbDeleteAllArch = ()  => dbRun(sb.from(T_ARCH).delete().neq("id",""),"archDel");
+const dbUpsertBon     = b   => dbRun(sb.from(T_BON).upsert(bonRow(b)),"bonUpsert");
+const dbDeleteBon     = id  => dbRun(sb.from(T_BON).delete().eq("id",id),"bonDel");
 
 async function fetchAll(){
   if(!sb){ setStatus(false); toast("Database-bibliotheek niet geladen — controleer je internetverbinding","err"); return; }
   try{
-    const [r1,r2]=await Promise.all([
+    const [r1,r2,r3]=await Promise.all([
       sb.from(T_ORD).select("*").order("created_at",{ascending:true}),
-      sb.from(T_ARCH).select("*").order("datum",{ascending:false})
+      sb.from(T_ARCH).select("*").order("datum",{ascending:false}),
+      sb.from(T_BON).select("*").order("datum",{ascending:false})
     ]);
-    if(r1.error) throw r1.error; if(r2.error) throw r2.error;
-    state.orders=(r1.data||[]).map(r=>({id:r.id,klas:r.klas||"",leverancier:r.leverancier||"",artikel:r.artikel||"",omschrijving:r.omschrijving||"",aantal:r.aantal||"",prijs:r.prijs||"",opmerking:r.opmerking||"",notitie:r.notitie||"",besteld:!!r.besteld,created_at:r.created_at||null}));
+    if(r1.error) throw r1.error; if(r2.error) throw r2.error; if(r3.error) throw r3.error;
+    state.orders=(r1.data||[]).map(r=>({id:r.id,klas:r.klas||"",leverancier:r.leverancier||"",artikel:r.artikel||"",omschrijving:r.omschrijving||"",aantal:r.aantal||"",prijs:r.prijs||"",opmerking:r.opmerking||"",notitie:r.notitie||"",besteld:!!r.besteld,created_at:r.created_at||null,bon_id:r.bon_id||null,nietgeleverd:!!r.nietgeleverd}));
     state.archief=(r2.data||[]).map(r=>({id:r.id,datum:r.datum,lijnen:r.lijnen||[]}));
-    lastSig=dataSig(state.orders,state.archief);
+    state.bons=(r3.data||[]).map(r=>({id:r.id,nummer:r.nummer||"",leverancier:r.leverancier||"",datum:r.datum,factuur_ontvangen:!!r.factuur_ontvangen,opmerking:r.opmerking||"",lijnen:r.lijnen||[]}));
+    lastSig=dataSig(state.orders,state.archief,state.bons);
     setStatus(true);
   }catch(e){ console.error("fetch",e); setStatus(false); toast("Kon de gegevens niet laden — controleer je verbinding","err"); }
 }
@@ -510,6 +628,7 @@ document.querySelectorAll(".tab").forEach(tab=>{
     document.getElementById("view-"+tab.dataset.view).classList.add("active");
     if(tab.dataset.view==="overzicht"){ await fetchAll(); refreshSupplierList(); renderGroups(); }
     if(tab.dataset.view==="archief"){ await fetchAll(); renderArchive(); }
+    if(tab.dataset.view==="bestelbons"){ await fetchAll(); renderBons(); }
   };
 });
 
@@ -641,7 +760,7 @@ function orderRow(o){
       ${locked?`<span></span>`:`<button class="note-btn ${hasNote?"has":""}" data-act="note" data-id="${o.id}" title="Mijn opmerking">${NOTE_ICON}</button>`}
       ${locked?`<span class="lockicon" title="Deze regel is besteld en vergrendeld">🔒</span>`:`<button class="del" data-act="del" data-id="${o.id}" title="Verwijder regel">✕</button>`}
     </div>
-    ${o.created_at?`<div class="row-date" title="${esc(datumTitel(o.created_at))}">${esc(datumLabel(o.created_at))}</div>`:""}
+    ${(o.created_at||bonTagFor(o))?`<div class="row-date" title="${esc(datumTitel(o.created_at))}">${esc(datumLabel(o.created_at))}${bonTagFor(o)}</div>`:""}
     ${teacherNote?`<div class="oms-note"><span class="oms-note-lbl">Opmerking leerkracht</span><input class="oms-note-input" data-omsid="${o.id}" value="${esc(o.opmerking)}" readonly>${locked?"":`<button class="oms-edit" data-act="editoms" data-id="${o.id}" title="Opmerking aanpassen">${PENCIL_ICON}</button>`}</div>`:""}
     ${locked?"":`<div class="note-editor" data-id="${o.id}">
       <div class="nlabel"><span>📝 Mijn extra opmerking</span><button class="nclear" data-act="note-clear" data-id="${o.id}">wissen</button></div>
@@ -713,7 +832,10 @@ document.getElementById("groups").addEventListener("click",e=>{
   if(act==="del"){
     const o=state.orders.find(x=>x.id===id);
     if(!isAdmin && o && o.besteld){ toast("Deze regel is al besteld en kan niet meer verwijderd worden","err"); return; }
+    if(o && o.bon_id && !confirm("Deze regel hoort bij een bestelbon. Toch verwijderen?")) return;
+    const bon = o && o.bon_id ? state.bons.find(x=>x.id===o.bon_id) : null;
     state.orders=state.orders.filter(x=>x.id!==id); renderGroups(); refreshSupplierList(); toast("Regel verwijderd"); dbDeleteOrder(id);
+    if(bon){ syncBonSnapshot(bon); dbUpsertBon(bon); }
   } else if(act==="besteld"){
     if(!isAdmin){ toast("Alleen de beheerder kan de besteld-status wijzigen","err"); return; }
     const o=state.orders.find(x=>x.id===id); if(o){ o.besteld=!o.besteld; renderGroups(); dbUpsertOrders([o]); }
@@ -746,6 +868,9 @@ document.getElementById("afrondBtn").onclick=()=>{
   if(!confirm(msg)) return;
   const round={ id:uid(), datum:new Date().toISOString(), lijnen: state.orders.map(o=>({...o})) };
   const besteldIds=besteld.map(o=>o.id);
+  // bestelbons: momentopname vastzetten vóór de regels verdwijnen
+  const touched=state.bons.filter(b=>state.orders.some(o=>o.bon_id===b.id));
+  touched.forEach(b=>{ syncBonSnapshot(b); dbUpsertBon(b); });
   state.archief.unshift(round);
   state.orders = rest;
   renderGroups(); renderArchive(); updateArchCount(); refreshSupplierList();
@@ -917,19 +1042,288 @@ function updateAdminUI(){
 }
 document.getElementById("adminBtn").onclick=()=>{
   if(isAdmin){
-    isAdmin=false; localStorage.removeItem(LS_ADMIN); updateAdminUI(); renderGroups(); toast("Beheerdersmodus uit");
+    isAdmin=false; lsDel(LS_ADMIN); updateAdminUI(); renderGroups(); toast("Beheerdersmodus uit");
   } else {
     const code=prompt("Voer de beheerderscode in:");
     if(code===null) return;
-    if(code===ADMIN_PIN){ isAdmin=true; localStorage.setItem(LS_ADMIN,"1"); updateAdminUI(); renderGroups(); toast("Beheerdersmodus aan ✓"); }
+    if(code===ADMIN_PIN){ isAdmin=true; lsSet(LS_ADMIN,"1"); updateAdminUI(); renderGroups(); toast("Beheerdersmodus aan ✓"); }
     else toast("Onjuiste code","err");
   }
 };
 
+/* ---------- Bestelbons ---------- */
+function updateBonCount(){ const e=document.getElementById("bonCount"); if(e) e.textContent=state.bons.length; }
+function bonLines(b){
+  const live=state.orders.filter(o=>o.bon_id===b.id);
+  return live.length ? live : (b.lijnen||[]);
+}
+function bonTotal(b){ return bonLines(b).filter(o=>!o.nietgeleverd).reduce((s,o)=>s+rowTotal(o),0); }
+function syncBonSnapshot(b){ b.lijnen=state.orders.filter(o=>o.bon_id===b.id).map(o=>({...o})); }
+function bonLabel(b){ return b.nummer || "(zonder nummer)"; }
+function bonTagFor(o){
+  if(!isAdmin || !o.bon_id) return "";
+  const b=state.bons.find(x=>x.id===o.bon_id); if(!b) return "";
+  return `<span class="bon-tag">🧾 ${esc(bonLabel(b))}</span>`+(o.nietgeleverd?`<span class="bon-tag" style="background:var(--coral-soft);color:var(--coral-dark)">niet geleverd</span>`:"");
+}
+
+/* --- aanmaken --- */
+function pendingRows(){ return state.orders.filter(o=>o.besteld && !o.bon_id); }
+document.getElementById("makeBonBtn").onclick=()=>{
+  if(!isAdmin){ toast("Alleen de beheerder kan bestelbons aanmaken","err"); return; }
+  const rows=pendingRows();
+  if(!rows.length){ toast("Geen aangevinkte regels zonder bestelbon","err"); return; }
+  const supps=[...new Set(rows.map(o=>o.leverancier||"—"))];
+  const tot=rows.reduce((s,o)=>s+rowTotal(o),0);
+  const info=document.getElementById("mkBonInfo");
+  if(supps.length>1){
+    info.innerHTML=`<p><b>⚠️ Opgelet:</b> de aangevinkte regels komen van <b>meerdere leveranciers</b> (${supps.map(esc).join(", ")}).</p><p>Vink eerst enkel de regels van één leverancier aan, of maak de bon toch aan als dit klopt.</p>`;
+    info.style.background="var(--coral-soft)"; info.style.borderColor="var(--coral)";
+  } else {
+    info.innerHTML=`<p><b>${rows.length} regel(s)</b> worden toegewezen aan deze bon.</p><p>Leverancier: <b>${esc(supps[0])}</b> · Totaal: <b>${euro(tot)}</b></p>`;
+    info.style.background="var(--teal-soft)"; info.style.borderColor="var(--teal)";
+  }
+  document.getElementById("mkBonNum").value="";
+  document.getElementById("mkBonNote").value="";
+  document.getElementById("mkBonDate").value=new Date().toISOString().slice(0,10);
+  document.getElementById("mkBonOverlay").classList.add("open");
+  setTimeout(()=>document.getElementById("mkBonNum").focus(),60);
+};
+function closeMkBon(){ document.getElementById("mkBonOverlay").classList.remove("open"); }
+document.getElementById("mkBonClose").onclick=closeMkBon;
+document.getElementById("mkBonCancel").onclick=closeMkBon;
+document.getElementById("mkBonOverlay").addEventListener("click",e=>{ if(e.target.id==="mkBonOverlay") closeMkBon(); });
+document.getElementById("mkBonDo").onclick=()=>{
+  const nummer=document.getElementById("mkBonNum").value.trim();
+  if(!nummer){ toast("Vul een bestelbonnummer in","err"); return; }
+  const rows=pendingRows();
+  if(!rows.length){ toast("Geen aangevinkte regels zonder bestelbon","err"); closeMkBon(); return; }
+  if(state.bons.some(b=>b.nummer.toLowerCase()===nummer.toLowerCase())
+     && !confirm(`Er bestaat al een bon met nummer "${nummer}". Toch aanmaken?`)) return;
+  const dv=document.getElementById("mkBonDate").value;
+  const bon={ id:uid(), nummer,
+    leverancier:[...new Set(rows.map(o=>o.leverancier||"—"))].join(" + "),
+    datum: dv ? new Date(dv+"T12:00:00").toISOString() : new Date().toISOString(),
+    factuur_ontvangen:false,
+    opmerking:document.getElementById("mkBonNote").value.trim(),
+    lijnen: rows.map(o=>({...o, bon_id:null}))
+  };
+  rows.forEach(o=>o.bon_id=bon.id);
+  bon.lijnen=rows.map(o=>({...o}));
+  state.bons.unshift(bon);
+  closeMkBon(); renderGroups(); updateBonCount();
+  toast(`Bestelbon ${nummer} aangemaakt (${rows.length} regels) ✓`);
+  dbUpsertBon(bon); dbUpsertOrders(rows);
+};
+
+/* --- lijst --- */
+function refreshBonFilters(){
+  const sel=document.getElementById("bonFilterSupp"); if(!sel) return;
+  const cur=sel.value;
+  const supps=[...new Set(state.bons.map(b=>b.leverancier).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"nl"));
+  sel.innerHTML=`<option value="">Alle leveranciers</option>`+supps.map(s=>`<option value="${esc(s)}">${esc(s)}</option>`).join("");
+  if(supps.includes(cur)) sel.value=cur;
+}
+function bonMatches(b,q){
+  if(!q) return true;
+  const hay=[b.nummer,b.leverancier,b.opmerking,datumLabel(b.datum),
+    ...bonLines(b).map(o=>[o.klas,o.leverancier,o.artikel,o.omschrijving,o.aantal,o.prijs,rowTotal(o).toFixed(2),o.opmerking,o.notitie].join(" "))
+  ].join(" ").toLowerCase();
+  return hay.includes(q);
+}
+function renderBons(){
+  updateBonCount(); refreshBonFilters();
+  const w=document.getElementById("bonList"); if(!w) return;
+  const q=(document.getElementById("bonSearch").value||"").trim().toLowerCase();
+  const fs=document.getElementById("bonFilterSupp").value;
+  const fi=document.getElementById("bonFilterInv").value;
+  const sort=document.getElementById("bonSort").value;
+
+  document.getElementById("bonOpenTotal").textContent=euro(
+    state.bons.filter(b=>!b.factuur_ontvangen).reduce((s,b)=>s+bonTotal(b),0));
+
+  let list=state.bons.filter(b=>bonMatches(b,q))
+    .filter(b=>!fs||b.leverancier===fs)
+    .filter(b=>!fi||(fi==="paid"?b.factuur_ontvangen:!b.factuur_ontvangen));
+
+  list.sort((a,b)=>{
+    if(sort==="datum-asc") return new Date(a.datum)-new Date(b.datum);
+    if(sort==="lev") return (a.leverancier||"").localeCompare(b.leverancier||"","nl") || new Date(b.datum)-new Date(a.datum);
+    if(sort==="nummer") return (a.nummer||"").localeCompare(b.nummer||"","nl",{numeric:true});
+    if(sort==="bedrag-desc") return bonTotal(b)-bonTotal(a);
+    return new Date(b.datum)-new Date(a.datum);
+  });
+
+  if(!state.bons.length){
+    w.innerHTML=`<div class="card empty-state"><div class="big">🧾</div><div style="font-weight:600;font-size:16px;color:var(--ink)">Nog geen bestelbons</div><div style="margin-top:6px">Vink in het overzicht de bestelde regels aan en klik op <b>Bestelbon aanmaken</b>.</div></div>`;
+    return;
+  }
+  if(!list.length){ w.innerHTML=`<div class="card empty-state"><div class="big">🔍</div><div style="font-weight:600;font-size:16px;color:var(--ink)">Geen bestelbons gevonden</div><div style="margin-top:6px">Pas je zoekterm of filters aan.</div></div>`; return; }
+
+  w.innerHTML=list.map(b=>{
+    const lines=bonLines(b); const nd=lines.filter(o=>o.nietgeleverd).length;
+    return `<div class="bon-card ${b.factuur_ontvangen?"paid":""}" data-bon="${b.id}" title="Klik voor de details">
+      <div class="bon-num"><small>Bestelbon</small>${esc(bonLabel(b))}</div>
+      <span class="bon-supp">${esc(b.leverancier||"—")}</span>
+      <div class="bon-meta">
+        <span>📅 <b>${esc(datumLabel(b.datum))}</b></span>
+        <span><b>${lines.length}</b> regel${lines.length===1?"":"s"}</span>
+        <span>💶 <b>${euro(bonTotal(b))}</b></span>
+        ${nd?`<span style="color:var(--coral-dark)">⚠️ ${nd} niet geleverd</span>`:""}
+      </div>
+      <div class="bon-actions">
+        <button class="inv-toggle ${b.factuur_ontvangen?"paid":"open"}" data-inv="${b.id}" title="Klik om de factuurstatus te wijzigen">${b.factuur_ontvangen?"✓ Factuur ontvangen":"⏳ Factuur openstaand"}</button>
+        <button class="icon-btn" data-bondet="${b.id}" title="Details bekijken">🔍</button>
+        <button class="icon-btn" data-bonprint="${b.id}" title="Afdrukken">🖨️</button>
+      </div>
+      ${b.opmerking?`<div class="bon-note">📝 ${esc(b.opmerking)}</div>`:""}
+    </div>`;
+  }).join("");
+}
+["bonSearch","bonFilterSupp","bonFilterInv","bonSort"].forEach(id=>{
+  const el=document.getElementById(id); if(el) el.addEventListener("input",renderBons);
+});
+document.getElementById("bonList").addEventListener("click",e=>{
+  const inv=e.target.closest("[data-inv]");
+  if(inv){
+    e.stopPropagation();
+    if(!isAdmin){ toast("Alleen de beheerder kan dit wijzigen","err"); return; }
+    const b=state.bons.find(x=>x.id===inv.dataset.inv); if(!b) return;
+    b.factuur_ontvangen=!b.factuur_ontvangen; renderBons();
+    toast(b.factuur_ontvangen?"Factuur gemarkeerd als ontvangen ✓":"Factuur terug op openstaand");
+    dbUpsertBon(b); return;
+  }
+  const pr=e.target.closest("[data-bonprint]");
+  if(pr){ e.stopPropagation(); const b=state.bons.find(x=>x.id===pr.dataset.bonprint); if(b){ buildBonPrint(b); window.print(); } return; }
+  const card=e.target.closest("[data-bon],[data-bondet]");
+  if(card){ const id=card.dataset.bondet||card.dataset.bon; openBonDetail(id); }
+});
+
+/* --- detail pop-up --- */
+let curBon=null;
+function openBonDetail(id){
+  const b=state.bons.find(x=>x.id===id); if(!b) return;
+  curBon=b;
+  document.getElementById("bonDetTitle").textContent="🧾 Bestelbon "+bonLabel(b);
+  renderBonDetail();
+  document.getElementById("bonDetOverlay").classList.add("open");
+}
+function renderBonDetail(){
+  const b=curBon; if(!b) return;
+  const lines=bonLines(b);
+  const live=state.orders.some(o=>o.bon_id===b.id);
+  const others=state.bons.filter(x=>x.id!==b.id);
+  const body=document.getElementById("bonDetBody");
+  body.innerHTML=`
+    <div class="bd-head">
+      <span class="bon-supp">${esc(b.leverancier||"—")}</span>
+      <span style="font-size:13px;color:var(--muted)">📅 <b style="color:var(--ink)">${esc(datumLabel(b.datum))}</b></span>
+      <span style="font-size:13px;color:var(--muted)"><b style="color:var(--ink)">${lines.length}</b> regels</span>
+      <button class="inv-toggle ${b.factuur_ontvangen?"paid":"open"}" data-dinv="1" style="margin-left:auto">${b.factuur_ontvangen?"✓ Factuur ontvangen":"⏳ Factuur openstaand"}</button>
+    </div>
+    ${b.opmerking?`<div style="font-size:12.5px;color:var(--muted);font-style:italic">📝 ${esc(b.opmerking)}</div>`:""}
+    ${live?"":`<div class="lockpill" style="align-self:flex-start">🔒 gearchiveerd — momentopname</div>`}
+    <div>
+      <div class="bd-line head"><span>Klas</span><span>Art.nr</span><span>Omschrijving</span><span class="r">Aant.</span><span class="r">Prijs/st</span><span class="r">Totaal</span><span></span></div>
+      ${lines.map(o=>`<div class="bd-line ${o.nietgeleverd?"nd":""}">
+        <span class="bd-klas">${esc(o.klas)}</span>
+        <span>${esc(o.artikel)||"—"}</span>
+        <span class="bd-oms">${esc(o.omschrijving)}${o.opmerking?`<small>${esc(o.opmerking)}</small>`:""}</span>
+        <span class="r">${esc(o.aantal)}</span>
+        <span class="r">${o.prijs?euro(o.prijs):"—"}</span>
+        <span class="r"><b>${euro(rowTotal(o))}</b></span>
+        <span class="bd-tools">${(isAdmin&&live)?`
+          <button class="bd-nd ${o.nietgeleverd?"on":""}" data-nd="${o.id}" title="${o.nietgeleverd?"Terug als geleverd":"Markeer als niet geleverd"}">⚠</button>
+          <select class="bd-sel" data-move="${o.id}" title="Verplaats of haal uit deze bon">
+            <option value="">in deze bon</option>
+            ${others.map(x=>`<option value="${x.id}">→ ${esc(bonLabel(x))}</option>`).join("")}
+            <option value="__none">✕ uit bon halen</option>
+          </select>`:""}</span>
+      </div>`).join("")}
+      <div class="bd-tot"><span>Totaal (excl. niet geleverd)</span>${euro(bonTotal(b))}</div>
+    </div>`;
+}
+function closeBonDet(){ document.getElementById("bonDetOverlay").classList.remove("open"); curBon=null; }
+document.getElementById("bonDetClose").onclick=closeBonDet;
+document.getElementById("bonDetOk").onclick=closeBonDet;
+document.getElementById("bonDetOverlay").addEventListener("click",e=>{ if(e.target.id==="bonDetOverlay") closeBonDet(); });
+document.getElementById("bonDetPrint").onclick=()=>{ if(curBon){ buildBonPrint(curBon); window.print(); } };
+document.getElementById("bonDetCsv").onclick=()=>{ if(curBon) exportRows(bonLines(curBon),"Bestelbon_"+(curBon.nummer||"").replace(/[^\w-]/g,"_")); };
+document.getElementById("bonDetDel").onclick=()=>{
+  if(!isAdmin||!curBon) return;
+  if(!confirm(`Bestelbon ${bonLabel(curBon)} verwijderen?\n\nDe regels blijven bestaan en komen terug vrij om aan een andere bon toe te wijzen.`)) return;
+  const b=curBon, freed=state.orders.filter(o=>o.bon_id===b.id);
+  freed.forEach(o=>o.bon_id=null);
+  state.bons=state.bons.filter(x=>x.id!==b.id);
+  closeBonDet(); renderBons(); renderGroups();
+  toast("Bestelbon verwijderd");
+  dbDeleteBon(b.id); if(freed.length) dbUpsertOrders(freed);
+};
+document.getElementById("bonDetBody").addEventListener("click",e=>{
+  if(e.target.closest("[data-dinv]")){
+    if(!isAdmin){ toast("Alleen de beheerder kan dit wijzigen","err"); return; }
+    curBon.factuur_ontvangen=!curBon.factuur_ontvangen;
+    renderBonDetail(); renderBons(); dbUpsertBon(curBon); return;
+  }
+  const nd=e.target.closest("[data-nd]");
+  if(nd){
+    const o=state.orders.find(x=>x.id===nd.dataset.nd); if(!o) return;
+    o.nietgeleverd=!o.nietgeleverd;
+    syncBonSnapshot(curBon); renderBonDetail(); renderBons();
+    dbUpsertOrders([o]); dbUpsertBon(curBon);
+  }
+});
+document.getElementById("bonDetBody").addEventListener("change",e=>{
+  const sel=e.target.closest("[data-move]"); if(!sel) return;
+  const o=state.orders.find(x=>x.id===sel.dataset.move); if(!o) return;
+  const v=sel.value; if(!v) return;
+  const from=curBon;
+  if(v==="__none"){ o.bon_id=null; toast("Regel uit de bon gehaald"); }
+  else { o.bon_id=v; const t=state.bons.find(x=>x.id===v); toast("Regel verplaatst naar bon "+(t?bonLabel(t):"")); }
+  syncBonSnapshot(from); dbUpsertBon(from);
+  if(v!=="__none"){ const t=state.bons.find(x=>x.id===v); if(t){ syncBonSnapshot(t); dbUpsertBon(t); } }
+  dbUpsertOrders([o]);
+  renderBonDetail(); renderBons(); renderGroups();
+});
+
+/* --- afdrukken per bon --- */
+function buildBonPrint(b){
+  const lines=bonLines(b);
+  const logo=document.querySelector(".logo-img") ? document.querySelector(".logo-img").src : "";
+  const today=new Date().toLocaleDateString("nl-BE",{day:"numeric",month:"long",year:"numeric"});
+  const rows=lines.map(o=>{
+    const notes=[o.opmerking,o.notitie].filter(x=>x&&x.trim()).join(" — ");
+    return `<tr class="${o.nietgeleverd?"":"pb"}"><td class="tick"></td><td>${esc(o.klas)}</td><td>${esc(o.artikel)}</td><td>${esc(o.omschrijving)}${o.nietgeleverd?`<div class="pnote">NIET GELEVERD</div>`:""}${notes?`<div class="pnote">${esc(notes)}</div>`:""}</td><td class="r">${esc(o.aantal)}</td><td class="r">${o.prijs?euro(o.prijs):""}</td><td class="r">${euro(rowTotal(o))}</td></tr>`;
+  }).join("");
+  document.getElementById("printArea").innerHTML=`
+    <div class="print-head">
+      ${logo?`<img src="${logo}" alt="Klim-Op">`:""}
+      <div class="ph-txt"><h1>Bestelbon ${esc(bonLabel(b))}</h1><p>GO! basisschool Klim-Op · Vilvoorde · Schooljaar ${esc(state.settings.year)}</p></div>
+      <div class="ph-meta">Leverancier: <b>${esc(b.leverancier||"—")}</b><br>Besteld op ${esc(datumLabel(b.datum))}<br>Factuur: ${b.factuur_ontvangen?"ontvangen":"openstaand"}<br>Afgedrukt op ${today}</div>
+    </div>
+    ${b.opmerking?`<p style="font-size:10.5px;font-style:italic;margin-bottom:8px">${esc(b.opmerking)}</p>`:""}
+    <section class="print-block">
+      <h2>${lines.length} artikel${lines.length===1?"":"en"}<span class="pcount">Kruis aan ✓ bij levering</span></h2>
+      <table><thead><tr><th class="tick">✓</th><th>Klas</th><th>Art.nr</th><th>Omschrijving</th><th class="r">Aantal</th><th class="r">Prijs/st</th><th class="r">Totaal</th></tr></thead><tbody>${rows}</tbody></table>
+    </section>
+    <div class="print-grand">Totaal bestelbon: ${euro(bonTotal(b))}</div>`;
+}
+
+document.getElementById("bonExportAll").onclick=()=>{
+  if(!state.bons.length){ toast("Geen bestelbons om te exporteren","err"); return; }
+  const head=["Bestelbon","Leverancier","Besteldatum","Factuur ontvangen","Klas","Artikelnummer","Omschrijving","Aantal","Prijs per stuk","Totaal","Niet geleverd","Opmerking"];
+  const data=[];
+  state.bons.forEach(b=>bonLines(b).forEach(o=>data.push([b.nummer,b.leverancier,datumLabel(b.datum),b.factuur_ontvangen?"ja":"nee",o.klas,o.artikel,o.omschrijving,o.aantal,o.prijs,rowTotal(o).toFixed(2),o.nietgeleverd?"ja":"nee",[o.opmerking,o.notitie].filter(Boolean).join(" — ")])));
+  const csv=[head,...data].map(r=>r.map(c=>`"${String(c??"").replace(/"/g,'""')}"`).join(";")).join("\n");
+  const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="Bestelbons_"+state.settings.year+".csv"; a.click();
+  toast("CSV gedownload ✓");
+};
+
 /* ---------- Silent background refresh (every 20s, never while busy) ---------- */
-function dataSig(orders,arch){
-  return orders.map(o=>[o.id,o.klas,o.leverancier,o.artikel,o.omschrijving,o.aantal,o.prijs,o.opmerking,o.notitie,o.besteld?1:0].join("\u0001")).join("\u0002")
-    + "||" + arch.map(r=>r.id+":"+((r.lijnen&&r.lijnen.length)||0)).join(",");
+function dataSig(orders,arch,bons){
+  return orders.map(o=>[o.id,o.klas,o.leverancier,o.artikel,o.omschrijving,o.aantal,o.prijs,o.opmerking,o.notitie,o.besteld?1:0,o.bon_id||"",o.nietgeleverd?1:0].join("\u0001")).join("\u0002")
+    + "||" + arch.map(r=>r.id+":"+((r.lijnen&&r.lijnen.length)||0)).join(",")
+    + "||" + (bons||[]).map(b=>[b.id,b.nummer,b.factuur_ontvangen?1:0,(b.lijnen&&b.lijnen.length)||0].join("\u0001")).join(",");
 }
 function isBusy(){
   if(document.hidden) return true;
@@ -949,27 +1343,30 @@ async function silentRefresh(){
   if(!sb) return;
   const active=document.querySelector(".tab.active");
   const view=active?active.dataset.view:"";
-  if(view!=="overzicht" && view!=="archief") return;
+  if(view!=="overzicht" && view!=="archief" && view!=="bestelbons") return;
   if(isBusy()) return;
-  let od,ad;
+  let od,ad,bd;
   try{
-    const [r1,r2]=await Promise.all([
+    const [r1,r2,r3]=await Promise.all([
       sb.from(T_ORD).select("*").order("created_at",{ascending:true}),
-      sb.from(T_ARCH).select("*").order("datum",{ascending:false})
+      sb.from(T_ARCH).select("*").order("datum",{ascending:false}),
+      sb.from(T_BON).select("*").order("datum",{ascending:false})
     ]);
-    if(r1.error||r2.error) throw (r1.error||r2.error);
-    od=r1.data||[]; ad=r2.data||[]; setStatus(true);
+    if(r1.error||r2.error||r3.error) throw (r1.error||r2.error||r3.error);
+    od=r1.data||[]; ad=r2.data||[]; bd=r3.data||[]; setStatus(true);
   }catch(e){ setStatus(false); return; }
   if(isBusy()) return;
-  const newOrders=od.map(r=>({id:r.id,klas:r.klas||"",leverancier:r.leverancier||"",artikel:r.artikel||"",omschrijving:r.omschrijving||"",aantal:r.aantal||"",prijs:r.prijs||"",opmerking:r.opmerking||"",notitie:r.notitie||"",besteld:!!r.besteld,created_at:r.created_at||null}));
+  const newOrders=od.map(r=>({id:r.id,klas:r.klas||"",leverancier:r.leverancier||"",artikel:r.artikel||"",omschrijving:r.omschrijving||"",aantal:r.aantal||"",prijs:r.prijs||"",opmerking:r.opmerking||"",notitie:r.notitie||"",besteld:!!r.besteld,created_at:r.created_at||null,bon_id:r.bon_id||null,nietgeleverd:!!r.nietgeleverd}));
   const newArch=ad.map(r=>({id:r.id,datum:r.datum,lijnen:r.lijnen||[]}));
-  const sig=dataSig(newOrders,newArch);
+  const newBons=bd.map(r=>({id:r.id,nummer:r.nummer||"",leverancier:r.leverancier||"",datum:r.datum,factuur_ontvangen:!!r.factuur_ontvangen,opmerking:r.opmerking||"",lijnen:r.lijnen||[]}));
+  const sig=dataSig(newOrders,newArch,newBons);
   if(sig===lastSig) return;
   lastSig=sig;
-  state.orders=newOrders; state.archief=newArch;
-  refreshSupplierList(); updateCount(); updateArchCount();
+  state.orders=newOrders; state.archief=newArch; state.bons=newBons;
+  refreshSupplierList(); updateCount(); updateArchCount(); updateBonCount();
   if(view==="overzicht") rerenderPreserving();
-  else renderArchive();
+  else if(view==="archief") renderArchive();
+  else renderBons();
 }
 
 /* ---------- Boot ---------- */
@@ -983,7 +1380,7 @@ async function boot(){
   document.getElementById("f-klas").value="";
   document.getElementById("yearLabel").textContent=state.settings.year;
   await fetchAll();
-  refreshSupplierList(); updateCount(); updateArchCount(); renderGroups();
+  refreshSupplierList(); updateCount(); updateArchCount(); updateBonCount(); renderGroups();
   setInterval(silentRefresh, 20000);
 }
 boot();
