@@ -398,7 +398,7 @@
       </div>
       <button class="btn btn-ghost btn-sm" id="refreshBtn">🔄 Vernieuwen</button>
       <button class="btn btn-ghost btn-sm" id="exportBtn">⬇️ CSV</button>
-      <button class="btn btn-primary btn-sm admin-only" id="makeBonBtn">🧾 Bestelbon aanmaken</button>
+      <button class="btn btn-primary btn-sm admin-only" id="makeBonBtn">Bestelbon aanmaken</button>
       <button class="btn btn-coral btn-sm admin-only" id="afrondBtn">✅ Bestelronde afronden</button>
       <div class="grand-total">Totaal: <b id="grandTotal">€ 0,00</b></div>
     </div>
@@ -420,8 +420,8 @@
   <section class="view" id="view-archief">
     <div class="ov-controls">
       <div class="toggle">
-        <button id="archTabRondes" class="active">📦 Bestelrondes</button>
-        <button id="archTabBons">🧾 Bestelbons</button>
+        <button id="archTabRondes" class="active">Bestelrondes</button>
+        <button id="archTabBons">Bestelbons</button>
       </div>
       <div class="search" style="min-width:220px">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
@@ -480,14 +480,11 @@
 
 <div class="overlay" id="wipeOverlay">
   <div class="modal">
-    <div class="modal-head"><h3>⚠️ Volledig archief wissen</h3><button class="del" id="wipeClose" style="font-size:22px">×</button></div>
+    <div class="modal-head"><h3 id="wipeTitle">⚠️ Archief wissen</h3><button class="del" id="wipeClose" style="font-size:22px">×</button></div>
     <div class="modal-body">
-      <div class="warnbox">
-        <p><b>Let op — dit verwijdert het volledige archief (<span id="wipeCount">0</span> bestelronde(s)) definitief.</b> Deze actie kan niet ongedaan gemaakt worden.</p>
-        <p>Het archief dient als spoor en bewijs bij betwisting. <b>Heb je het volledige archief gedownload via CSV?</b> Zo niet: <b>wis het archief dan NIET</b> en download het eerst met de knop hieronder.</p>
-      </div>
-      <button class="btn btn-ghost" id="wipeDownload">⬇️ Eerst het volledige archief downloaden (CSV)</button>
-      <label class="confirm-check"><input type="checkbox" id="wipeConfirm"> Ik heb het volledige archief gedownload (of wil het bewust niet bewaren) en begrijp dat dit definitief is.</label>
+      <div class="warnbox" id="wipeBox"></div>
+      <button class="btn btn-ghost" id="wipeDownload">⬇️ Eerst downloaden als CSV</button>
+      <label class="confirm-check"><input type="checkbox" id="wipeConfirm"> Ik heb dit gedownload (of wil het bewust niet bewaren) en begrijp dat dit definitief is.</label>
     </div>
     <div class="modal-foot">
       <button class="btn btn-ghost" id="wipeCancel">Annuleren</button>
@@ -498,7 +495,7 @@
 
 <div class="overlay" id="mkBonOverlay">
   <div class="modal">
-    <div class="modal-head"><h3>🧾 Bestelbon aanmaken</h3><button class="del" id="mkBonClose" style="font-size:22px">×</button></div>
+    <div class="modal-head"><h3>Bestelbon aanmaken</h3><button class="del" id="mkBonClose" style="font-size:22px">×</button></div>
     <div class="modal-body">
       <div class="field" id="mkBonSuppWrap"><label>Leverancier voor deze bon <span class="req">*</span></label><select class="ctrl" id="mkBonSupp"></select></div>
       <div class="warnbox" id="mkBonInfo" style="background:var(--teal-soft);border-color:var(--teal)"></div>
@@ -508,7 +505,7 @@
     </div>
     <div class="modal-foot">
       <button class="btn btn-ghost" id="mkBonCancel">Annuleren</button>
-      <button class="btn btn-primary" id="mkBonDo">🧾 Bon aanmaken</button>
+      <button class="btn btn-primary" id="mkBonDo">Bon aanmaken</button>
     </div>
   </div>
 </div>
@@ -933,7 +930,7 @@ function renderArchive(){
     const tm=new Date(r.datum).toLocaleTimeString("nl-BE",{hour:"2-digit",minute:"2-digit"});
     return `<div class="card group">
       <div class="group-head">
-        <span class="group-name">📦 ${d}</span>
+        <span class="group-name">${d}</span>
         <span class="group-meta"><span>om ${tm}</span><span><b>${r.lijnen.length}</b> regels</span><span class="group-tot">${euro(tot)}</span><span class="bpill">${b} besteld</span></span>
         <div class="group-actions">
           <span class="lockpill">🔒 alleen-lezen</span>
@@ -1028,9 +1025,18 @@ document.getElementById("archDownloadAll").onclick=()=>{
   else exportArchiveAll();
 };
 function openWipe(){
-  if(!isAdmin){ toast("Alleen de beheerder kan het archief wissen","err"); return; }
-  if(!state.archief.length){ toast("Het archief is al leeg","err"); return; }
-  document.getElementById("wipeCount").textContent=state.archief.length;
+  if(!isAdmin){ toast("Alleen de beheerder kan dit wissen","err"); return; }
+  const bons = archTab==="bons";
+  const n = bons ? archivedBons().length : state.archief.length;
+  if(!n){ toast(bons?"Er staan geen bestelbons in het archief":"Het archief is al leeg","err"); return; }
+  document.getElementById("wipeTitle").textContent = bons ? "\u26a0\ufe0f Gearchiveerde bestelbons wissen" : "\u26a0\ufe0f Gearchiveerde bestelrondes wissen";
+  document.getElementById("wipeBox").innerHTML = bons
+    ? `<p><b>Let op \u2014 dit verwijdert ${n} gearchiveerde bestelbon(s) definitief.</b> Deze actie kan niet ongedaan gemaakt worden.</p>
+       <p>De bestelbons in je werktabblad blijven staan; enkel de gearchiveerde verdwijnen.</p>
+       <p>Bestelbons dienen als spoor en bewijs bij betwisting. <b>Heb je ze gedownload via CSV?</b> Zo niet: <b>wis ze dan NIET</b> en download ze eerst met de knop hieronder.</p>`
+    : `<p><b>Let op \u2014 dit verwijdert ${n} gearchiveerde bestelronde(s) definitief.</b> Deze actie kan niet ongedaan gemaakt worden.</p>
+       <p>Je bestelbons blijven onaangeroerd \u2014 die staan onder <b>Bestelbons</b>.</p>
+       <p>Het archief dient als spoor en bewijs bij betwisting. <b>Heb je het gedownload via CSV?</b> Zo niet: <b>wis het dan NIET</b> en download het eerst met de knop hieronder.</p>`;
   document.getElementById("wipeConfirm").checked=false;
   document.getElementById("wipeDo").disabled=true;
   document.getElementById("wipeOverlay").classList.add("open");
@@ -1039,9 +1045,23 @@ function closeWipe(){ document.getElementById("wipeOverlay").classList.remove("o
 document.getElementById("archWipe").onclick=openWipe;
 document.getElementById("wipeClose").onclick=closeWipe;
 document.getElementById("wipeCancel").onclick=closeWipe;
-document.getElementById("wipeDownload").onclick=exportArchiveAll;
+document.getElementById("wipeDownload").onclick=()=>{
+  if(archTab==="bons") exportBonsCsv(archivedBons(),"Archief_bestelbons_"+new Date().toISOString().slice(0,10));
+  else exportArchiveAll();
+};
 document.getElementById("wipeConfirm").onchange=e=>{ document.getElementById("wipeDo").disabled=!e.target.checked; };
-document.getElementById("wipeDo").onclick=()=>{ state.archief=[]; renderArchive(); updateArchCount(); closeWipe(); toast("Archief volledig gewist"); dbDeleteAllArch(); };
+document.getElementById("wipeDo").onclick=()=>{
+  if(archTab==="bons"){
+    const ids=archivedBons().map(b=>b.id);
+    state.bons=state.bons.filter(b=>!b.gearchiveerd);
+    renderArchiveBons(); updateBonCount(); closeWipe();
+    toast(`${ids.length} gearchiveerde bestelbon(s) gewist`);
+    ids.forEach(id=>dbDeleteBon(id));
+  } else {
+    state.archief=[]; renderArchive(); updateArchCount(); closeWipe();
+    toast("Gearchiveerde bestelrondes gewist"); dbDeleteAllArch();
+  }
+};
 document.getElementById("wipeOverlay").addEventListener("click",e=>{ if(e.target.id==="wipeOverlay") closeWipe(); });
 
 /* ---------- Settings ---------- */
@@ -1112,7 +1132,7 @@ function bonLabel(b){ return b.nummer || "(zonder nummer)"; }
 function bonTagFor(o){
   if(!isAdmin || !o.bon_id) return "";
   const b=state.bons.find(x=>x.id===o.bon_id); if(!b) return "";
-  return `<span class="bon-tag">🧾 ${esc(bonLabel(b))}</span>`+(o.nietgeleverd?`<span class="bon-tag" style="background:var(--coral-soft);color:var(--coral-dark)">niet geleverd</span>`:"");
+  return `<span class="bon-tag">${esc(bonLabel(b))}</span>`+(o.nietgeleverd?`<span class="bon-tag" style="background:var(--coral-soft);color:var(--coral-dark)">niet geleverd</span>`:"");
 }
 
 /* --- aanmaken --- */
@@ -1314,7 +1334,7 @@ function renderArchiveBons(){
   const all=archivedBons();
   const list=all.filter(b=>bonMatches(b,q));
   if(!all.length){
-    w.innerHTML=`<div class="card empty-state"><div class="big">🧾</div><div style="font-weight:600;font-size:16px;color:var(--ink)">Nog geen gearchiveerde bestelbons</div><div style="margin-top:6px">Verplaats een bon vanuit het tabblad <b>Bestelbons</b> met de knop 📥.</div></div>`;
+    w.innerHTML=`<div class="card empty-state"><div class="big">🧾</div><div style="font-weight:600;font-size:16px;color:var(--ink)">Nog geen gearchiveerde bestelbons</div><div style="margin-top:6px">Verplaats een bon vanuit het tabblad <b>Bestelbons</b> met de archiveerknop.</div></div>`;
     return;
   }
   if(!list.length){ w.innerHTML=`<div class="card empty-state"><div class="big">🔍</div><div style="font-weight:600;font-size:16px;color:var(--ink)">Geen bestelbons gevonden</div><div style="margin-top:6px">Pas je zoekterm aan.</div></div>`; return; }
@@ -1333,13 +1353,23 @@ function renderArchiveBons(){
         <span class="inv-toggle ${b.factuur_ontvangen?"paid":"open"}" style="cursor:default">${b.factuur_ontvangen?"✓ Factuur ontvangen":"⏳ Factuur openstaand"}</span>
         <button class="icon-btn" data-bondet="${b.id}" title="Details bekijken">🔍</button>
         <button class="icon-btn" data-bonprint="${b.id}" title="Afdrukken">🖨️</button>
-        ${isAdmin?`<button class="icon-btn" data-bonunarch="${b.id}" title="Terugzetten naar het werktabblad">↩︎</button>`:""}
+        ${isAdmin?`<button class="icon-btn" data-bonunarch="${b.id}" title="Terugzetten naar het werktabblad">↩︎</button>
+        <button class="icon-btn" data-bondelarch="${b.id}" title="Deze bestelbon definitief verwijderen" style="color:var(--coral-dark)">🗑️</button>`:""}
       </div>
       ${b.opmerking?`<div class="bon-note">📝 ${esc(b.opmerking)}</div>`:""}
     </div>`;
   }).join("");
 }
 document.getElementById("archiveBons").addEventListener("click",e=>{
+  const dl=e.target.closest("[data-bondelarch]");
+  if(dl){ e.stopPropagation();
+    if(!isAdmin){ toast("Alleen de beheerder kan dit","err"); return; }
+    const b=state.bons.find(x=>x.id===dl.dataset.bondelarch); if(!b) return;
+    if(!confirm(`Bestelbon ${bonLabel(b)} definitief verwijderen uit het archief?\n\nDit kan niet ongedaan gemaakt worden. Download hem eerst als CSV als je hem wil bewaren.`)) return;
+    state.bons=state.bons.filter(x=>x.id!==b.id);
+    renderArchiveBons(); updateBonCount();
+    toast(`Bestelbon ${bonLabel(b)} verwijderd`);
+    dbDeleteBon(b.id); return; }
   const un=e.target.closest("[data-bonunarch]");
   if(un){ e.stopPropagation();
     if(!isAdmin){ toast("Alleen de beheerder kan dit","err"); return; }
@@ -1355,6 +1385,10 @@ function setArchTab(t){
   document.getElementById("archTabBons").classList.toggle("active",t==="bons");
   document.getElementById("archive").style.display = t==="rondes" ? "" : "none";
   document.getElementById("archiveBons").style.display = t==="bons" ? "" : "none";
+  const wb=document.getElementById("archWipe");
+  if(wb) wb.textContent = t==="bons" ? "\ud83d\uddd1\ufe0f Bestelbons wissen" : "\ud83d\uddd1\ufe0f Bestelrondes wissen";
+  const db=document.getElementById("archDownloadAll");
+  if(db) db.textContent = t==="bons" ? "\u2b07\ufe0f Bestelbons downloaden" : "\u2b07\ufe0f Bestelrondes downloaden";
   if(t==="rondes") renderArchive(); else renderArchiveBons();
 }
 document.getElementById("archTabRondes").onclick=()=>setArchTab("rondes");
@@ -1366,7 +1400,7 @@ let curBon=null;
 function openBonDetail(id){
   const b=state.bons.find(x=>x.id===id); if(!b) return;
   curBon=b;
-  document.getElementById("bonDetTitle").textContent="🧾 Bestelbon "+bonLabel(b);
+  document.getElementById("bonDetTitle").textContent="Bestelbon "+bonLabel(b);
   renderBonDetail();
   document.getElementById("bonDetOverlay").classList.add("open");
 }
@@ -1416,7 +1450,13 @@ document.getElementById("bonDetPrint").onclick=()=>{ if(curBon){ buildBonPrint(c
 document.getElementById("bonDetCsv").onclick=()=>{ if(curBon) exportRows(bonLines(curBon),"Bestelbon_"+(curBon.nummer||"").replace(/[^\w-]/g,"_")); };
 document.getElementById("bonDetDel").onclick=()=>{
   if(!isAdmin||!curBon) return;
-  if(curBon.gearchiveerd){ toast("Gearchiveerde bons kunnen niet gewist worden \u2014 zet hem eerst terug","err"); return; }
+  if(curBon.gearchiveerd){
+    if(!confirm(`Bestelbon ${bonLabel(curBon)} definitief verwijderen uit het archief?\n\nDit kan niet ongedaan gemaakt worden.`)) return;
+    const id=curBon.id, lbl=bonLabel(curBon);
+    state.bons=state.bons.filter(x=>x.id!==id);
+    closeBonDet(); renderArchiveBons(); updateBonCount();
+    toast(`Bestelbon ${lbl} verwijderd`); dbDeleteBon(id); return;
+  }
   if(!confirm(`Bestelbon ${bonLabel(curBon)} verwijderen?\n\nDe regels blijven bestaan en komen terug vrij om aan een andere bon toe te wijzen.`)) return;
   const b=curBon, freed=state.orders.filter(o=>o.bon_id===b.id);
   freed.forEach(o=>o.bon_id=null);
