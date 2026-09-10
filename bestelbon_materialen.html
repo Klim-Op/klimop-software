@@ -83,13 +83,24 @@
   .btn-green:hover{background:var(--green-dark)}
   .note{font-size:12.5px;color:var(--muted);background:#FFF8E8;border:1px solid #F3E2B5;border-radius:10px;padding:10px 13px;display:flex;gap:8px;align-items:flex-start}
 
-  .ov-controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;
-    position:sticky;top:0;z-index:30;
-    background:var(--bg);
-    margin:-14px -28px 20px;padding:14px 28px;
-    box-shadow:0 6px 14px -8px rgba(35,48,58,.22);
-    border-bottom:1px solid var(--line)}
-  @supports not (position:sticky){ .ov-controls{position:static;margin:0 0 20px;padding:0;box-shadow:none;border:none} }
+  /* zwevende balk: vlak bovenaan, komt los zodra je scrolt */
+  .ov-controls,.bon-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;
+    position:sticky;top:12px;z-index:30;
+    margin:0 0 18px;padding:12px 16px;
+    border:1px solid transparent;border-radius:16px;background:transparent;
+    transition:background .28s ease,box-shadow .28s ease,border-color .28s ease,transform .28s ease}
+  .ov-controls::before,.bon-toolbar::before{content:"";position:absolute;left:-28px;right:-28px;top:-13px;height:13px;background:var(--bg);opacity:0;transition:opacity .2s;pointer-events:none}
+  body.scrolled .ov-controls,body.scrolled .bon-toolbar{
+    background:rgba(255,255,255,.72);
+    -webkit-backdrop-filter:blur(16px) saturate(165%);backdrop-filter:blur(16px) saturate(165%);
+    border-color:rgba(255,255,255,.8);
+    box-shadow:0 12px 30px -10px rgba(31,158,146,.32),0 2px 8px rgba(35,48,58,.07)}
+  body.scrolled .ov-controls::before,body.scrolled .bon-toolbar::before{opacity:1}
+  @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+    body.scrolled .ov-controls,body.scrolled .bon-toolbar{background:rgba(255,255,255,.96)}
+  }
+  @supports not (position:sticky){ .ov-controls,.bon-toolbar{position:static} }
+  @media (prefers-reduced-motion:reduce){ .ov-controls,.bon-toolbar{transition:none} }
   .search{flex:1;min-width:200px;position:relative}
   .search input{width:100%;padding:11px 13px 11px 38px;border:1.5px solid var(--line);border-radius:11px;background:#fff}
   .search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted)}
@@ -163,13 +174,7 @@
   .arch-date{display:block;font-size:10px;color:var(--muted);opacity:.55;margin-top:1px}
 
   /* ---- Bestelbons ---- */
-  .bon-toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
-    position:sticky;top:0;z-index:30;
-    background:var(--bg);
-    margin:-14px -28px 18px;padding:14px 28px;
-    box-shadow:0 6px 14px -8px rgba(35,48,58,.22);
-    border-bottom:1px solid var(--line)}
-  @supports not (position:sticky){ .bon-toolbar{position:static;margin:0 0 18px;padding:0;box-shadow:none;border:none} }
+
   .sel-ctrl{padding:10px 12px;border:1.5px solid var(--line);border-radius:11px;background:#fff;font-weight:600;font-size:13px;color:var(--ink);cursor:pointer}
   .sel-ctrl:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-soft)}
   .bon-card{display:flex;align-items:center;gap:16px;padding:15px 18px;margin-bottom:11px;background:var(--card);border:1px solid var(--line);border-left:5px solid var(--teal);border-radius:14px;box-shadow:var(--shadow);transition:.15s;cursor:pointer;flex-wrap:wrap}
@@ -1357,6 +1362,14 @@ document.getElementById("bonExportAll").onclick=()=>{
   const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="Bestelbons_"+state.settings.year+".csv"; a.click();
   toast("CSV gedownload ✓");
 };
+
+/* ---------- Zwevende balk bij scrollen ---------- */
+(function(){
+  let ticking=false;
+  const apply=()=>{ document.body.classList.toggle("scrolled", window.scrollY>8); ticking=false; };
+  window.addEventListener("scroll",()=>{ if(!ticking){ ticking=true; requestAnimationFrame(apply); } },{passive:true});
+  apply();
+})();
 
 /* ---------- Silent background refresh (every 20s, never while busy) ---------- */
 function dataSig(orders,arch,bons){
