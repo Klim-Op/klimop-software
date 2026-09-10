@@ -474,6 +474,7 @@
   <div class="modal">
     <div class="modal-head"><h3>🧾 Bestelbon aanmaken</h3><button class="del" id="mkBonClose" style="font-size:22px">×</button></div>
     <div class="modal-body">
+      <div class="field" id="mkBonSuppWrap"><label>Leverancier voor deze bon <span class="req">*</span></label><select class="ctrl" id="mkBonSupp"></select></div>
       <div class="warnbox" id="mkBonInfo" style="background:var(--teal-soft);border-color:var(--teal)"></div>
       <div class="field"><label>Bestelbonnummer <span class="req">*</span></label><input class="ctrl" id="mkBonNum" placeholder="bv. 2026-0142"></div>
       <div class="field"><label>Datum bestelling</label><input class="ctrl" id="mkBonDate" type="date"></div>
@@ -1068,26 +1069,51 @@ function bonTagFor(o){
 
 /* --- aanmaken --- */
 function pendingRows(){ return state.orders.filter(o=>o.besteld && !o.bon_id); }
+const MK_ALL="__all__";
+function mkSelectedRows(){
+  const v=document.getElementById("mkBonSupp").value;
+  const rows=pendingRows();
+  return v===MK_ALL ? rows : rows.filter(o=>(o.leverancier||"\u2014")===v);
+}
+function updateMkInfo(){
+  const all=pendingRows();
+  const supps=[...new Set(all.map(o=>o.leverancier||"\u2014"))];
+  const rows=mkSelectedRows();
+  const tot=rows.reduce((s,o)=>s+rowTotal(o),0);
+  const v=document.getElementById("mkBonSupp").value;
+  const info=document.getElementById("mkBonInfo");
+  const rest=all.length-rows.length;
+  if(v===MK_ALL && supps.length>1){
+    info.innerHTML=`<p><b>\u26a0\ufe0f Opgelet:</b> je zet regels van <b>meerdere leveranciers</b> (${supps.map(esc).join(", ")}) samen op \u00e9\u00e9n bon.</p><p>Kies hierboven een leverancier als dat niet de bedoeling is.</p><p><b>${rows.length} regel(s)</b> \u00b7 Totaal <b>${euro(tot)}</b></p>`;
+    info.style.background="var(--coral-soft)"; info.style.borderColor="var(--coral)";
+  } else {
+    info.innerHTML=`<p><b>${rows.length} regel(s)</b> worden toegewezen aan deze bon.</p>`
+      +`<p>Leverancier: <b>${esc(v===MK_ALL?supps[0]||"\u2014":v)}</b> \u00b7 Totaal: <b>${euro(tot)}</b></p>`
+      +(rest>0?`<p style="opacity:.8">${rest} andere aangevinkte regel(s) blijven staan voor een volgende bon.</p>`:"");
+    info.style.background="var(--teal-soft)"; info.style.borderColor="var(--teal)";
+  }
+  document.getElementById("mkBonDo").disabled = rows.length===0;
+}
 document.getElementById("makeBonBtn").onclick=()=>{
   if(!isAdmin){ toast("Alleen de beheerder kan bestelbons aanmaken","err"); return; }
   const rows=pendingRows();
   if(!rows.length){ toast("Geen aangevinkte regels zonder bestelbon","err"); return; }
-  const supps=[...new Set(rows.map(o=>o.leverancier||"—"))];
-  const tot=rows.reduce((s,o)=>s+rowTotal(o),0);
-  const info=document.getElementById("mkBonInfo");
-  if(supps.length>1){
-    info.innerHTML=`<p><b>⚠️ Opgelet:</b> de aangevinkte regels komen van <b>meerdere leveranciers</b> (${supps.map(esc).join(", ")}).</p><p>Vink eerst enkel de regels van één leverancier aan, of maak de bon toch aan als dit klopt.</p>`;
-    info.style.background="var(--coral-soft)"; info.style.borderColor="var(--coral)";
-  } else {
-    info.innerHTML=`<p><b>${rows.length} regel(s)</b> worden toegewezen aan deze bon.</p><p>Leverancier: <b>${esc(supps[0])}</b> · Totaal: <b>${euro(tot)}</b></p>`;
-    info.style.background="var(--teal-soft)"; info.style.borderColor="var(--teal)";
-  }
+  const supps=[...new Set(rows.map(o=>o.leverancier||"\u2014"))].sort((a,b)=>a.localeCompare(b,"nl"));
+  const sel=document.getElementById("mkBonSupp");
+  sel.innerHTML=supps.map(sp=>{
+    const n=rows.filter(o=>(o.leverancier||"\u2014")===sp).length;
+    return `<option value="${esc(sp)}">${esc(sp)} \u2014 ${n} regel${n===1?"":"s"}</option>`;
+  }).join("") + (supps.length>1?`<option value="${MK_ALL}">\u26a0\ufe0f Alle aangevinkte regels samen (${rows.length})</option>`:"");
+  sel.value=supps[0];
+  document.getElementById("mkBonSuppWrap").style.display = supps.length>1 ? "" : "none";
   document.getElementById("mkBonNum").value="";
   document.getElementById("mkBonNote").value="";
   document.getElementById("mkBonDate").value=new Date().toISOString().slice(0,10);
+  updateMkInfo();
   document.getElementById("mkBonOverlay").classList.add("open");
   setTimeout(()=>document.getElementById("mkBonNum").focus(),60);
 };
+document.getElementById("mkBonSupp").addEventListener("change",updateMkInfo);
 function closeMkBon(){ document.getElementById("mkBonOverlay").classList.remove("open"); }
 document.getElementById("mkBonClose").onclick=closeMkBon;
 document.getElementById("mkBonCancel").onclick=closeMkBon;
@@ -1095,23 +1121,24 @@ document.getElementById("mkBonOverlay").addEventListener("click",e=>{ if(e.targe
 document.getElementById("mkBonDo").onclick=()=>{
   const nummer=document.getElementById("mkBonNum").value.trim();
   if(!nummer){ toast("Vul een bestelbonnummer in","err"); return; }
-  const rows=pendingRows();
-  if(!rows.length){ toast("Geen aangevinkte regels zonder bestelbon","err"); closeMkBon(); return; }
+  const rows=mkSelectedRows();
+  if(!rows.length){ toast("Geen regels geselecteerd voor deze bon","err"); return; }
   if(state.bons.some(b=>b.nummer.toLowerCase()===nummer.toLowerCase())
      && !confirm(`Er bestaat al een bon met nummer "${nummer}". Toch aanmaken?`)) return;
   const dv=document.getElementById("mkBonDate").value;
   const bon={ id:uid(), nummer,
-    leverancier:[...new Set(rows.map(o=>o.leverancier||"—"))].join(" + "),
+    leverancier:[...new Set(rows.map(o=>o.leverancier||"\u2014"))].join(" + "),
     datum: dv ? new Date(dv+"T12:00:00").toISOString() : new Date().toISOString(),
     factuur_ontvangen:false,
     opmerking:document.getElementById("mkBonNote").value.trim(),
-    lijnen: rows.map(o=>({...o, bon_id:null}))
+    lijnen: []
   };
   rows.forEach(o=>o.bon_id=bon.id);
   bon.lijnen=rows.map(o=>({...o}));
   state.bons.unshift(bon);
+  const rest=pendingRows().length;
   closeMkBon(); renderGroups(); updateBonCount();
-  toast(`Bestelbon ${nummer} aangemaakt (${rows.length} regels) ✓`);
+  toast(`Bestelbon ${nummer} aangemaakt (${rows.length} regels) \u2713`+(rest?` \u00b7 ${rest} regel(s) nog zonder bon`:""));
   dbUpsertBon(bon); dbUpsertOrders(rows);
 };
 
