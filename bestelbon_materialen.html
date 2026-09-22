@@ -1432,6 +1432,7 @@ function renderBonDetail(){
   const b=curBon; if(!b) return;
   const lines=bonLines(b);
   const live=state.orders.some(o=>o.bon_id===b.id) && !b.gearchiveerd;
+  const editable=isAdmin && !b.gearchiveerd;
   const others=state.bons.filter(x=>x.id!==b.id && !x.gearchiveerd);
   const body=document.getElementById("bonDetBody");
   body.innerHTML=`
@@ -1445,7 +1446,7 @@ function renderBonDetail(){
     </div>
     ${b.opmerking?`<div style="font-size:12.5px;color:var(--muted);font-style:italic">📝 ${esc(b.opmerking)}</div>`:""}
     ${b.gearchiveerd?`<div class="lockpill" style="align-self:flex-start">🗂️ gearchiveerd — alleen-lezen (terugzetten kan met ↩︎)</div>`
-      :(live?"":`<div class="lockpill" style="align-self:flex-start">🔒 momentopname — de regels staan in het archief</div>`)}
+      :(live?"":`<div class="lockpill" style="align-self:flex-start">${editable?"📋 Bestelronde afgerond — bonregels blijven bewerkbaar":"🔒 momentopname — de regels staan in het archief"}</div>`)}
     <div>
       <div class="bd-line head"><span>Klas</span><span>Art.nr</span><span>Omschrijving</span><span class="r">Aant.</span><span class="r">Prijs/st</span><span class="r">Totaal</span><span></span></div>
       ${lines.map(o=>`<div class="bd-line ${o.nietgeleverd?"nd":""}">
@@ -1455,7 +1456,7 @@ function renderBonDetail(){
         <span class="r">${esc(o.aantal)}</span>
         <span class="r">${o.prijs?euro(o.prijs):"—"}</span>
         <span class="r"><b>${euro(rowTotal(o))}</b></span>
-        <span class="bd-tools">${(isAdmin&&live&&state.orders.some(x=>x.id===o.id&&x.bon_id===b.id))?`
+        <span class="bd-tools">${editable?`
           <button class="bd-nd ${o.nietgeleverd?"on":""}" data-nd="${o.id}" title="${o.nietgeleverd?"Terug als geleverd":"Markeer als niet geleverd"}">⚠</button>
           <select class="bd-sel" data-move="${o.id}" title="Verplaats of haal uit deze bon">
             <option value="">in deze bon</option>
@@ -1497,23 +1498,36 @@ document.getElementById("bonDetBody").addEventListener("click",e=>{
   }
   const nd=e.target.closest("[data-nd]");
   if(nd){
-    const o=state.orders.find(x=>x.id===nd.dataset.nd); if(!o) return;
+    const b=curBon; if(!isAdmin || !b || b.gearchiveerd) return;
+    const o=bonLines(b).find(x=>x.id===nd.dataset.nd); if(!o) return;
     o.nietgeleverd=!o.nietgeleverd;
-    syncBonSnapshot(curBon); renderBonDetail(); renderBons();
-    dbUpsertOrders([o]); dbUpsertBon(curBon);
+    const activeRow=state.orders.find(x=>x.id===o.id && x.bon_id===b.id);
+    if(activeRow){ activeRow.nietgeleverd=o.nietgeleverd; dbUpsertOrders([activeRow]); }
+    syncBonSnapshot(b); renderBonDetail(); renderBons();
+    dbUpsertBon(b);
   }
 });
 document.getElementById("bonDetBody").addEventListener("change",e=>{
   const sel=e.target.closest("[data-move]"); if(!sel) return;
-  const o=state.orders.find(x=>x.id===sel.dataset.move); if(!o) return;
-  const v=sel.value; if(!v) return;
-  const from=curBon;
-  if(v==="__none"){ o.bon_id=null; toast("Regel uit de bon gehaald"); }
-  else { o.bon_id=v; const t=state.bons.find(x=>x.id===v); toast("Regel verplaatst naar bon "+(t?bonLabel(t):"")); }
-  syncBonSnapshot(from,[o.id]); dbUpsertBon(from);
-  if(v!=="__none"){ const t=state.bons.find(x=>x.id===v); if(t){ syncBonSnapshot(t); dbUpsertBon(t); } }
-  dbUpsertOrders([o]);
-  renderBonDetail(); renderBons(); renderGroups();
+  const from=curBon; if(!isAdmin || !from || from.gearchiveerd) return;
+  const v=sel.value; if(!v || v===from.id) return;
+  const sourceLines=bonLines(from);
+  const o=sourceLines.find(x=>x.id===sel.dataset.move); if(!o) return;
+  const to=v==="__none"?null:state.bons.find(x=>x.id===v && !x.gearchiveerd);
+  if(v!=="__none" && !to){ toast("De gekozen bestelbon is niet meer actief of bestaat niet meer","err"); renderBonDetail(); return; }
+
+  // Werk de bonkopieën rechtstreeks bij: dit werkt ook na het afronden van de ronde.
+  // Een historische regel wordt daarbij niet opnieuw in het actieve overzicht gezet.
+  const targetLines=new Map((to?bonLines(to):[]).map(x=>[x.id,{...x}]));
+  const activeRow=state.orders.find(x=>x.id===o.id && x.bon_id===from.id);
+  const moved={...o,bon_id:to?to.id:null};
+  if(activeRow) activeRow.bon_id=moved.bon_id;
+  from.lijnen=sourceLines.filter(x=>x.id!==o.id).map(x=>({...x}));
+  if(to){ targetLines.set(o.id,moved); to.lijnen=[...targetLines.values()]; dbUpsertBon(to); }
+  dbUpsertBon(from);
+  if(activeRow) dbUpsertOrders([activeRow]);
+  toast(to?"Regel verplaatst naar bon "+bonLabel(to):"Regel uit de bon gehaald");
+  renderBonDetail(); renderBons(); renderGroups(); renderArchiveBons();
 });
 
 /* --- afdrukken per bon --- */
