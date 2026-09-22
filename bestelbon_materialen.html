@@ -177,15 +177,15 @@
 
   .sel-ctrl{padding:10px 12px;border:1.5px solid var(--line);border-radius:11px;background:#fff;font-weight:600;font-size:13px;color:var(--ink);cursor:pointer}
   .sel-ctrl:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-soft)}
-  .bon-card{display:flex;align-items:center;gap:16px;padding:15px 18px;margin-bottom:11px;background:var(--card);border:1px solid var(--line);border-left:5px solid var(--teal);border-radius:14px;box-shadow:var(--shadow);transition:.15s;cursor:pointer;flex-wrap:wrap}
+  .bon-card{display:flex;align-items:center;gap:7px 12px;padding:8px 14px;margin-bottom:7px;background:var(--card);border:1px solid var(--line);border-left:3px solid var(--teal);border-radius:12px;box-shadow:var(--shadow);transition:.15s;cursor:pointer;flex-wrap:wrap}
   .bon-card:hover{transform:translateY(-1px);box-shadow:0 10px 26px rgba(31,158,146,.14)}
   .bon-card.paid{border-left-color:var(--green)}
-  .bon-num{font-size:17px;font-weight:800;color:var(--ink);letter-spacing:-.2px;white-space:nowrap}
-  .bon-num small{display:block;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+  .bon-num{font-size:13.5px;font-weight:600;color:var(--ink);line-height:1.4;letter-spacing:0;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .bon-num small{display:block;font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;line-height:1.2}
   .bon-supp{background:var(--teal-soft);color:var(--teal-dark);font-weight:700;font-size:13px;padding:5px 13px;border-radius:999px;white-space:nowrap}
-  .bon-meta{display:flex;gap:16px;align-items:center;font-size:13px;color:var(--muted);flex-wrap:wrap}
-  .bon-meta b{color:var(--ink)}
-  .bon-actions{margin-left:auto;display:flex;gap:8px;align-items:center}
+  .bon-meta{display:flex;gap:10px;align-items:center;font-size:12px;color:var(--muted);flex-wrap:wrap}
+  .bon-meta b{color:var(--ink);font-weight:600}
+  .bon-actions{margin-left:auto;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
   .inv-toggle{display:inline-flex;align-items:center;gap:7px;padding:6px 13px;border-radius:999px;font-size:12px;font-weight:700;border:1.5px solid;transition:.15s;white-space:nowrap}
   .inv-toggle.open{background:#FFF6E3;border-color:var(--yellow);color:#9a6b06}
   .inv-toggle.paid{background:var(--green-soft);border-color:var(--green);color:var(--green-dark)}
@@ -193,6 +193,10 @@
   .icon-btn{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;border:1.5px solid var(--line);background:#fff;color:var(--muted);transition:.15s}
   .icon-btn:hover{border-color:var(--teal);color:var(--teal-dark);background:var(--teal-soft)}
   .bon-note{width:100%;font-size:12px;color:var(--muted);font-style:italic;padding-left:2px}
+  /* Alleen de lijst verdichten; de detail-pop-up behoudt zijn afmetingen. */
+  .bon-card .bon-supp{font-size:12px;font-weight:600;padding:4px 10px}
+  .bon-card .inv-toggle{font-size:11.5px;font-weight:600;padding:5px 10px;gap:5px}
+  .bon-card .icon-btn{width:32px;height:32px;border-radius:9px}
 
   /* bon detail modal */
   .modal.wide{max-width:900px}
@@ -862,7 +866,7 @@ document.getElementById("groups").addEventListener("click",e=>{
     if(o && o.bon_id && !confirm("Deze regel hoort bij een bestelbon. Toch verwijderen?")) return;
     const bon = o && o.bon_id ? state.bons.find(x=>x.id===o.bon_id) : null;
     state.orders=state.orders.filter(x=>x.id!==id); renderGroups(); refreshSupplierList(); toast("Regel verwijderd"); dbDeleteOrder(id);
-    if(bon){ syncBonSnapshot(bon); dbUpsertBon(bon); }
+    if(bon && !bon.gearchiveerd){ syncBonSnapshot(bon,[id]); dbUpsertBon(bon); }
   } else if(act==="besteld"){
     if(!isAdmin){ toast("Alleen de beheerder kan de besteld-status wijzigen","err"); return; }
     const o=state.orders.find(x=>x.id===id); if(o){ o.besteld=!o.besteld; renderGroups(); dbUpsertOrders([o]); }
@@ -896,7 +900,7 @@ document.getElementById("afrondBtn").onclick=()=>{
   const round={ id:uid(), datum:new Date().toISOString(), lijnen: state.orders.map(o=>({...o})) };
   const besteldIds=besteld.map(o=>o.id);
   // bestelbons: momentopname vastzetten vóór de regels verdwijnen
-  const touched=state.bons.filter(b=>state.orders.some(o=>o.bon_id===b.id));
+  const touched=state.bons.filter(b=>!b.gearchiveerd && state.orders.some(o=>o.bon_id===b.id));
   touched.forEach(b=>{ syncBonSnapshot(b); dbUpsertBon(b); });
   state.archief.unshift(round);
   state.orders = rest;
@@ -908,16 +912,28 @@ document.getElementById("afrondBtn").onclick=()=>{
 
 /* ---------- Archive ---------- */
 let archTab="rondes";
-function archQuery(){ const e=document.getElementById("archSearch"); return e?(e.value||"").trim().toLowerCase():""; }
-function roundMatches(r,q){
-  if(!q) return true;
-  return (datumLabel(r.datum)+" "+r.lijnen.map(o=>[o.klas,o.leverancier,o.artikel,o.omschrijving,o.aantal,o.prijs,rowTotal(o).toFixed(2),o.opmerking,o.notitie].join(" ")).join(" ")).toLowerCase().includes(q);
+function searchText(v){
+  return String(v??"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/\s+/g," ").trim();
+}
+function matchesSearch(q,...values){ return !q || searchText(values.join(" ")).includes(searchText(q)); }
+function archQuery(){ const e=document.getElementById("archSearch"); return e?searchText(e.value):""; }
+function orderMatches(o,q){
+  const bon=o.bon_id?state.bons.find(b=>b.id===o.bon_id):null;
+  return matchesSearch(q,o.klas,o.leverancier,o.artikel,o.omschrijving,o.aantal,o.prijs,
+    rowTotal(o).toFixed(2),euro(rowTotal(o)),euro(o.prijs),o.opmerking,o.notitie,
+    datumLabel(o.created_at),bon?bon.nummer:"");
+}
+function matchingRoundRows(r,q){
+  const lines=r.lijnen||[];
+  if(!q || matchesSearch(q,datumLabel(r.datum))) return lines;
+  return lines.filter(o=>orderMatches(o,q));
 }
 function renderArchive(){
   updateArchCount();
   const w=document.getElementById("archive");
   const q=archQuery();
-  const rondes=state.archief.filter(r=>roundMatches(r,q));
+  const rondes=state.archief.map(r=>({round:r,lines:matchingRoundRows(r,q)}))
+    .filter(result=>!q || result.lines.length>0);
   if(state.archief.length && !rondes.length){
     w.innerHTML=`<div class="card empty-state"><div class="big">\ud83d\udd0d</div><div style="font-weight:600;font-size:16px;color:var(--ink)">Geen bestelrondes gevonden</div><div style="margin-top:6px">Pas je zoekterm aan.</div></div>`;
     return;
@@ -926,23 +942,23 @@ function renderArchive(){
     w.innerHTML=`<div class="card empty-state"><div class="big">🗂️</div><div style="font-weight:600;font-size:16px;color:var(--ink)">Nog geen gearchiveerde rondes</div><div style="margin-top:6px">Rond een bestelronde af in het overzicht om hier een momentopname te bewaren.</div></div>`;
     return;
   }
-  w.innerHTML=rondes.map(r=>{
-    const tot=r.lijnen.reduce((s,o)=>s+rowTotal(o),0);
-    const b=r.lijnen.filter(o=>o.besteld).length;
+  w.innerHTML=rondes.map(({round:r,lines})=>{
+    const tot=lines.reduce((s,o)=>s+rowTotal(o),0);
+    const b=lines.filter(o=>o.besteld).length;
     const d=new Date(r.datum).toLocaleDateString("nl-BE",{day:"numeric",month:"long",year:"numeric"});
     const tm=new Date(r.datum).toLocaleTimeString("nl-BE",{hour:"2-digit",minute:"2-digit"});
     return `<div class="card group">
       <div class="group-head">
         <span class="group-name">${d}</span>
-        <span class="group-meta"><span>om ${tm}</span><span><b>${r.lijnen.length}</b> regels</span><span class="group-tot">${euro(tot)}</span><span class="bpill">${b} besteld</span></span>
+        <span class="group-meta"><span>om ${tm}</span><span><b>${lines.length}</b>${lines.length!==r.lijnen.length?` van ${r.lijnen.length}`:""} regels</span><span class="group-tot" title="Totaal van de zichtbare regels">${euro(tot)}</span><span class="bpill">${b} besteld</span></span>
         <div class="group-actions">
           <span class="lockpill">🔒 alleen-lezen</span>
-          <button class="btn btn-ghost btn-sm" data-arch="csv" data-id="${r.id}">⬇️ CSV</button>
+          <button class="btn btn-ghost btn-sm" data-arch="csv" data-id="${r.id}" title="Volledige bestelronde downloaden">⬇️ CSV</button>
         </div>
       </div>
       <div class="rows">
         <div class="arch-row arch-head"><span>Klas</span><span>Leverancier</span><span>Art.nr</span><span>Omschrijving</span><span class="num">Aantal</span><span class="num">Totaal</span><span>Opmerking</span></div>
-        ${r.lijnen.map(o=>`<div class="arch-row ${o.besteld?"b":""}"><span>${esc(o.klas)}</span><span>${esc(o.leverancier)}</span><span>${esc(o.artikel)}</span><span>${esc(o.omschrijving)}${o.created_at?`<span class="arch-date">${esc(datumLabel(o.created_at))}</span>`:""}</span><span class="num">${esc(o.aantal)}</span><span class="num">${euro(rowTotal(o))}</span><span>${esc([o.opmerking,o.notitie].filter(x=>x&&x.trim()).join(" — "))}</span></div>`).join("")}
+        ${lines.map(o=>`<div class="arch-row ${o.besteld?"b":""}"><span>${esc(o.klas)}</span><span>${esc(o.leverancier)}</span><span>${esc(o.artikel)}</span><span>${esc(o.omschrijving)}${o.created_at?`<span class="arch-date">${esc(datumLabel(o.created_at))}</span>`:""}</span><span class="num">${esc(o.aantal)}</span><span class="num">${euro(rowTotal(o))}</span><span>${esc([o.opmerking,o.notitie].filter(x=>x&&x.trim()).join(" — "))}</span></div>`).join("")}
       </div>
     </div>`;
   }).join("");
@@ -1126,11 +1142,20 @@ function updateBonCount(){
     btn.textContent=`\ud83d\uddc2\ufe0f Afgehandelde archiveren${n?` (${n})`:""}`; btn.disabled=!n; }
 }
 function bonLines(b){
-  const live=state.orders.filter(o=>o.bon_id===b.id);
-  return live.length ? live : (b.lijnen||[]);
+  // Een gearchiveerde bon is een vaste momentopname, ook als regels nog actief zijn.
+  if(b.gearchiveerd) return b.lijnen||[];
+  // Bewaar ook regels uit eerdere bestelrondes; actuele regels werken hun kopie bij.
+  const lines=new Map((b.lijnen||[]).map(o=>[o.id,o]));
+  state.orders.filter(o=>o.bon_id===b.id).forEach(o=>lines.set(o.id,o));
+  return [...lines.values()];
 }
 function bonTotal(b){ return bonLines(b).filter(o=>!o.nietgeleverd).reduce((s,o)=>s+rowTotal(o),0); }
-function syncBonSnapshot(b){ b.lijnen=state.orders.filter(o=>o.bon_id===b.id).map(o=>({...o})); }
+function syncBonSnapshot(b,removedIds=[]){
+  if(b.gearchiveerd) return;
+  // Alleen een expliciet verwijderde/verplaatste regel mag uit de kopie verdwijnen.
+  const removed=new Set(removedIds);
+  b.lijnen=bonLines(b).filter(o=>!removed.has(o.id)).map(o=>({...o}));
+}
 function bonLabel(b){ return b.nummer || "(zonder nummer)"; }
 function bonTagFor(o){
   if(!isAdmin || !o.bon_id) return "";
@@ -1222,11 +1247,8 @@ function refreshBonFilters(){
   if(supps.includes(cur)) sel.value=cur;
 }
 function bonMatches(b,q){
-  if(!q) return true;
-  const hay=[b.nummer,b.leverancier,b.opmerking,datumLabel(b.datum),
-    ...bonLines(b).map(o=>[o.klas,o.leverancier,o.artikel,o.omschrijving,o.aantal,o.prijs,rowTotal(o).toFixed(2),o.opmerking,o.notitie].join(" "))
-  ].join(" ").toLowerCase();
-  return hay.includes(q);
+  return matchesSearch(q,b.nummer,b.leverancier,b.opmerking,datumLabel(b.datum))
+    || bonLines(b).some(o=>orderMatches(o,q));
 }
 function renderBons(){
   updateBonCount(); refreshBonFilters();
@@ -1308,7 +1330,6 @@ document.getElementById("bonList").addEventListener("click",e=>{
 /* --- archiveren van bons --- */
 function archiveBon(b){
   syncBonSnapshot(b);                       // momentopname vastzetten
-  if(!b.lijnen || !b.lijnen.length) b.lijnen=b.lijnen||[];
   b.gearchiveerd=true;
   renderBons(); updateBonCount();
   toast(`Bestelbon ${bonLabel(b)} naar het archief verplaatst ✓`);
@@ -1411,7 +1432,7 @@ function renderBonDetail(){
   const b=curBon; if(!b) return;
   const lines=bonLines(b);
   const live=state.orders.some(o=>o.bon_id===b.id) && !b.gearchiveerd;
-  const others=state.bons.filter(x=>x.id!==b.id);
+  const others=state.bons.filter(x=>x.id!==b.id && !x.gearchiveerd);
   const body=document.getElementById("bonDetBody");
   body.innerHTML=`
     <div class="bd-head">
@@ -1434,7 +1455,7 @@ function renderBonDetail(){
         <span class="r">${esc(o.aantal)}</span>
         <span class="r">${o.prijs?euro(o.prijs):"—"}</span>
         <span class="r"><b>${euro(rowTotal(o))}</b></span>
-        <span class="bd-tools">${(isAdmin&&live)?`
+        <span class="bd-tools">${(isAdmin&&live&&state.orders.some(x=>x.id===o.id&&x.bon_id===b.id))?`
           <button class="bd-nd ${o.nietgeleverd?"on":""}" data-nd="${o.id}" title="${o.nietgeleverd?"Terug als geleverd":"Markeer als niet geleverd"}">⚠</button>
           <select class="bd-sel" data-move="${o.id}" title="Verplaats of haal uit deze bon">
             <option value="">in deze bon</option>
@@ -1489,7 +1510,7 @@ document.getElementById("bonDetBody").addEventListener("change",e=>{
   const from=curBon;
   if(v==="__none"){ o.bon_id=null; toast("Regel uit de bon gehaald"); }
   else { o.bon_id=v; const t=state.bons.find(x=>x.id===v); toast("Regel verplaatst naar bon "+(t?bonLabel(t):"")); }
-  syncBonSnapshot(from); dbUpsertBon(from);
+  syncBonSnapshot(from,[o.id]); dbUpsertBon(from);
   if(v!=="__none"){ const t=state.bons.find(x=>x.id===v); if(t){ syncBonSnapshot(t); dbUpsertBon(t); } }
   dbUpsertOrders([o]);
   renderBonDetail(); renderBons(); renderGroups();
