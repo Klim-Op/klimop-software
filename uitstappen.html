@@ -49,12 +49,6 @@ mark{background:var(--amber-l);color:inherit;border-radius:3px;box-shadow:0 0 0 
 .muted{color:var(--slate)}
 [hidden]{display:none !important}
 
-/* ---------- Testband (enkel in de testversie) ---------- */
-.test-band{background:var(--ink);color:#fff;font-size:13px;display:flex;align-items:center;justify-content:center;gap:12px;padding:7px 16px;flex-wrap:wrap}
-.test-band b{color:#fff}
-.test-band button{background:rgba(255,255,255,.14);color:#fff;border-radius:999px;padding:4px 12px;font-weight:600;font-size:12.5px;display:inline-flex;align-items:center;gap:6px}
-.test-band button:hover{background:rgba(255,255,255,.24)}
-
 /* ---------- Hoofding (variant A) ---------- */
 header{background:var(--paper);box-shadow:0 1px 0 var(--line),0 8px 24px rgba(8,83,79,.06);padding:18px 28px 12px;position:relative;z-index:40}
 .wrap{max-width:1180px;margin:0 auto}
@@ -177,9 +171,8 @@ select.ctrl,.sel{appearance:none;-webkit-appearance:none;cursor:pointer;padding-
 /* klastegels */
 .klas-groups{display:flex;flex-direction:column;gap:12px}
 .klas-grp-h{font-size:11.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--slate);margin-bottom:7px}
-.klas-grid{gap:8px !important}
 .klas-count{font-size:13px;font-weight:600;color:var(--teal-xd)}
-.klas-grid{display:flex;flex-wrap:wrap;gap:6px}
+.klas-grid{display:flex;flex-wrap:wrap;gap:8px}
 .klas-tile{position:relative;min-width:58px;padding:9px 12px;border:1.5px solid var(--line-d);border-radius:11px;background:var(--field);font-weight:700;font-size:13px;color:var(--ink);text-align:center;transition:.13s;white-space:nowrap}
 .klas-tile:hover{border-color:var(--teal);color:var(--teal-d);background:var(--paper)}
 .klas-tile.is-sel{background:var(--btn);border-color:var(--btn);color:#fff;box-shadow:0 2px 8px rgba(14,158,150,.25)}
@@ -525,7 +518,6 @@ body.is-admin .wd.click:hover{box-shadow:inset 0 0 0 2px var(--teal-l)}
 .pin-modal .lk{width:54px;height:54px;border-radius:16px;background:var(--teal-l);display:grid;place-items:center;margin:0 auto 14px;color:var(--teal-d)}
 .pin-modal h2{font-size:19px;margin-bottom:5px}
 .pin-modal p{color:var(--slate);font-size:14px;margin-bottom:16px}
-.pin-in{text-align:center;letter-spacing:6px;font-size:20px;font-weight:700;padding:12px}
 .pin-err{color:var(--coral-t);font-size:13px;font-weight:600;margin-top:10px;min-height:18px}
 .pin-modal .mf{display:flex;gap:10px;justify-content:center;margin-top:14px}
 .login-fields{display:flex;flex-direction:column;gap:10px;text-align:left}
@@ -534,24 +526,6 @@ body.is-admin .wd.click:hover{box-shadow:inset 0 0 0 2px var(--teal-l)}
 .warnbox{background:var(--coral-soft);border:1.5px solid var(--coral-line);border-radius:12px;padding:13px 15px;font-size:13.5px;line-height:1.5}
 .confirm-check{display:flex;gap:10px;align-items:flex-start;font-size:13px;cursor:pointer;background:var(--bg-2);border:1px solid var(--line);padding:11px 13px;border-radius:12px}
 .confirm-check input{margin-top:2px;width:17px;height:17px;accent-color:var(--coral-d);flex-shrink:0}
-
-/* ---------- Testpaneel ---------- */
-.tp{position:fixed;right:16px;bottom:16px;z-index:250;width:320px;max-width:calc(100vw - 32px);background:var(--ink);color:#fff;border-radius:16px;box-shadow:var(--shadow-lg);
-  font-size:13px;display:none;flex-direction:column;max-height:80vh;overflow:auto}
-.tp.open{display:flex}
-.tp-h{display:flex;align-items:center;justify-content:space-between;padding:12px 14px 8px;font-weight:700;font-size:14px}
-.tp-h button{color:#fff;opacity:.8;width:28px;height:28px;border-radius:8px;display:grid;place-items:center}
-.tp-h button:hover{background:rgba(255,255,255,.12)}
-.tp-s{padding:8px 14px 12px;border-top:1px solid rgba(255,255,255,.12);display:flex;flex-direction:column;gap:7px}
-.tp-s .tl{font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;opacity:.7}
-.tp-s .row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-.tp button.tb{background:rgba(255,255,255,.12);color:#fff;border-radius:8px;padding:5px 10px;font-weight:600;font-size:12.5px}
-.tp button.tb:hover{background:rgba(255,255,255,.22)}
-.tp button.tb.on{background:#fff;color:var(--ink)}
-.tp input[type=date]{background:rgba(255,255,255,.12);color:#fff;border:none;border-radius:8px;padding:5px 8px;color-scheme:dark}
-.tp .note{font-size:12px;opacity:.75;line-height:1.4}
-.tp-log{font-family:ui-monospace,Menlo,monospace;font-size:11px;opacity:.85;display:flex;flex-direction:column;gap:2px;max-height:120px;overflow:auto}
-.tp-log .f{color:#ffb4aa}
 
 /* ---------- Toegankelijkheid ---------- */
 .tab:focus-visible,.btn:focus-visible,.btn-txt-del:focus-visible,.btn-link:focus-visible,.seg button:focus-visible,.admin-toggle:focus-visible,
@@ -760,16 +734,8 @@ body.is-admin .wd.click:hover{box-shadow:inset 0 0 0 2px var(--teal-l)}
 .back-link{margin:-2px 0 6px;font-size:12.5px}
 .login-rem{font-size:13.5px;margin-top:2px}
 .pin-modal .login-fields .hint{margin-top:-4px}
-/* Beveiligingstest (testbestand) */
-.st-list{display:flex;flex-direction:column;gap:6px}
-.st-row{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:10px;border:1px solid var(--line);font-size:13px}
-.st-row.ok{background:var(--green-l);border-color:var(--green-line)}
-.st-row.nok{background:#ffecea;border-color:var(--coral-line)}
-.st-ic{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;color:#fff}
-.st-row.ok .st-ic{background:var(--green-t)} .st-row.nok .st-ic{background:var(--coral-t)}
-.st-w{font-weight:600}
-.st-d{font-size:12px;color:var(--slate)}
 .verv-st{margin-top:3px}
+.datum-fout{color:var(--coral-t)}
 
 </style>
 </head>
@@ -954,7 +920,6 @@ function ssSet(k,v){ try{ sessionStorage.setItem(k,JSON.stringify(v)); }catch(e)
 function ssDel(k){ try{ sessionStorage.removeItem(k); }catch(e){} }
 function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
 function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
-function lsDel(k){ try{ localStorage.removeItem(k); }catch(e){} }
 const uid = () => "u"+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 function esc(s){ return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;"); }
 const plural = (n,ev,mv) => `${n} ${n===1?ev:mv}`;
@@ -965,18 +930,22 @@ function isInt(v){ return /^\d+$/.test(String(v??"").trim()); }
 function intOr(v,d=0){ return isInt(v) ? parseInt(String(v).trim(),10) : d; }
 
 /* ---------- Bedragen ----------
-   Aanvaardt 12,50 · 12.50 · € 12,5 · 1.250 · 1.250,00 · 9.600 (= negenduizend zeshonderd).
-   Leeg → null. Ongeldig of negatief → NaN (wordt een foutmelding, nooit stilletjes 0). */
+   Aanvaardt enkel geldige schrijfwijzen: 12 · 12,5 · 12,50 · 12.50 · € 12,5 · 1.250 · 9.600 (= negenduizend zeshonderd)
+   · 1.250,00 · 1 250,00 · 1,250.00. Ongeldige groepering (1.2.3,45 of 1.00,00), meer dan 2 decimalen,
+   negatieve of onrealistisch grote bedragen → NaN (wordt een foutmelding, nooit stilletjes 0). Leeg → null. */
 function parseEuro(v){
-  let s=String(v??"").replace(/[\s€\u00a0]/g,"");
+  let s=String(v??"").replace(/[\s€\u00a0\u202f]/g,"");
   if(!s) return null;
-  if(!/^[0-9.,]+$/.test(s)) return NaN;
-  const c=s.lastIndexOf(","), d=s.lastIndexOf(".");
-  if(c>-1 && d>-1){ s = c>d ? s.replace(/\./g,"").replace(",",".") : s.replace(/,/g,""); }
-  else if(c>-1){ if((s.match(/,/g)||[]).length>1) return NaN; s=s.replace(",","."); }
-  else if(d>-1 && /^[1-9]\d{0,2}(\.\d{3})+$/.test(s)){ s=s.replace(/\./g,""); }
-  else if((s.match(/\./g)||[]).length>1) return NaN;
-  const n=Number(s); return isNaN(n) ? NaN : Math.round(n*100)/100;
+  let norm;
+  if(/^\d+$/.test(s)) norm=s;                                                  // 12 · 1250
+  else if(/^\d+,\d{1,2}$/.test(s)) norm=s.replace(",",".");                   // 12,5 · 12,50 · 1250,00
+  else if(/^[1-9]\d{0,2}(\.\d{3})+$/.test(s)) norm=s.replace(/\./g,"");      // 1.250 · 9.600 (duizendtallen)
+  else if(/^\d+\.\d{1,2}$/.test(s)) norm=s;                                   // 12.5 · 12.50
+  else if(/^[1-9]\d{0,2}(\.\d{3})+,\d{1,2}$/.test(s)) norm=s.replace(/\./g,"").replace(",",".");   // 1.250,00
+  else if(/^[1-9]\d{0,2}(,\d{3})+\.\d{1,2}$/.test(s)) norm=s.replace(/,/g,"");                      // 1,250.00
+  else return NaN;
+  if(norm.replace(".","").length>12) return NaN;
+  const n=Number(norm); return Number.isFinite(n) ? Math.round(n*100)/100 : NaN;
 }
 const NF2 = new Intl.NumberFormat("nl-BE",{minimumFractionDigits:2,maximumFractionDigits:2});
 const euro = n => (n==null||isNaN(n)) ? "" : "€ "+NF2.format(n);
@@ -987,7 +956,8 @@ const r2 = n => Math.round(n*100)/100;
 function todayISO(){ const t=window.__TODAY; if(t) return t; return toISO(new Date()); }
 function toISO(d){ const p=n=>String(n).padStart(2,"0"); return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`; }
 function parseISO(s){ if(!s||!/^\d{4}-\d{2}-\d{2}$/.test(s)) return null; const [y,m,d]=s.split("-").map(Number); const x=new Date(y,m-1,d); return (x.getMonth()===m-1&&x.getDate()===d)?x:null; }
-function addDays(s,n){ const d=parseISO(s); d.setDate(d.getDate()+n); return toISO(d); }
+function addDays(s,n){ const d=parseISO(s); if(!d) return ""; d.setDate(d.getDate()+n); return toISO(d); }
+const jaarVan = s => { const d=parseISO(s); return d ? d.getFullYear() : ""; };
 function daysBetween(a,b){ return Math.round((parseISO(b)-parseISO(a))/86400000); }
 const dow = s => parseISO(s).getDay();
 const fmtD  = s => { const d=parseISO(s); return d ? `${DG[d.getDay()]} ${d.getDate()} ${MND[d.getMonth()]}` : ""; };
@@ -1013,17 +983,24 @@ function wettelijkeDagen(sj){
   const herfst = dow(n1)===0 ? `${y}-11-02` : addDays(n1,-(dow(n1)-1));
   const kd=dow(k), kerst = (kd===6||kd===0) ? addDays(k,kd===6?2:1) : addDays(k,-(kd-1));
   const krokus = addDays(P,-48);
-  let pasen; if(parseISO(P).getMonth()===2) pasen=addDays(P,1); else { const a1=`${y+1}-04-01`, w=dow(a1); pasen=addDays(a1,(8-w)%7); }
+  /* Paasvakantie (2 weken): eerste maandag van april; valt Pasen in maart: de maandag na Pasen;
+     valt Pasen na 15 april: de tweede maandag vóór Pasen. Paasmaandag is altijd vrij (wettelijke feestdag). */
+  let pasen;
+  if(parseISO(P).getMonth()===2) pasen=addDays(P,1);
+  else if(P>`${y+1}-04-15`) pasen=addDays(P,-13);
+  else { const a1=`${y+1}-04-01`, w=dow(a1); pasen=addDays(a1,(8-w)%7); }
+  const paasma=addDays(P,1), paasTot=addDays(pasen,13);
   return {
     vakanties:[
       {naam:"Herfstvakantie",van:herfst,tot:addDays(herfst,6)},
       {naam:"Kerstvakantie",van:kerst,tot:addDays(kerst,13)},
       {naam:"Krokusvakantie",van:krokus,tot:addDays(krokus,6)},
-      {naam:"Paasvakantie",van:pasen,tot:addDays(pasen,13)},
+      {naam:"Paasvakantie",van:pasen,tot:paasTot},
       {naam:"Zomervakantie",van:`${y+1}-07-01`,tot:`${y+1}-08-31`}
     ],
     vrijedagen:[
       {naam:"Wapenstilstand",datum:`${y}-11-11`},
+      ...((paasma<pasen||paasma>paasTot) ? [{naam:"Paasmaandag",datum:paasma}] : []),
       {naam:"Dag van de Arbeid",datum:`${y+1}-05-01`},
       {naam:"O.L.H.-Hemelvaart",datum:addDays(P,39)},
       {naam:"Vrijdag na Hemelvaart",datum:addDays(P,40)},
@@ -1095,8 +1072,11 @@ function norm(src){
   t.factuurBus = t.factuurStatusBus==="ontvangen";
   t.voorschot = !!t.voorschot || (t.voorschotBedrag!=null && t.voorschotBedrag>0);
   if(!t.voorschot){ t.voorschotBedrag=null; t.voorschotInclusief=null; t.voorschotVervalt=null; t.voorschotBetaaldOp=null; }
+  if(t.busStatus!=="bevestigd") t.busBevestigdOp=null;
   t.log = Array.isArray(t.log) ? t.log : [];
   t.v = SCHEMA;
+  /* Een rij met een ongeldige datum (oud, geïmporteerd of rechtstreeks bewaard) mag de weergave niet laten vastlopen */
+  t._datumFout = !parseISO(t.datumStart) || (t.type==="meerdaags" && !parseISO(t.datumEind));
   return t;
 }
 /* Velden die enkel de beheerder mag zien. Ze staan in de afgeschermde tabel uitstap_beheer,
@@ -1105,7 +1085,7 @@ const BEHEER_FIELDS = ["interneNotitie","busOfferteOpm","busKm"];
 /* Wat naar de database gaat: zonder hulpvelden (die beginnen met _) en zonder beheergegevens */
 function storable(t){ const o={}; Object.keys(t).forEach(k=>{ if(k[0]!=="_" && !BEHEER_FIELDS.includes(k)) o[k]=t[k]; }); return o; }
 
-const tripEnd  = t => (t.type==="meerdaags"&&t.datumEind) ? t.datumEind : t.datumStart;
+const tripEnd  = t => (t.type==="meerdaags"&&t.datumEind) ? t.datumEind : (t.datumStart||"");
 const vervoer  = t => t.busNodig ? "bus" : (t.vervoerwijze||"");
 const isCancel = t => t.planStatus==="geannuleerd";
 const isPast   = t => tripEnd(t) < todayISO();
@@ -1138,9 +1118,13 @@ function kosten(t){
   const vs = t.voorschot ? t.voorschotBedrag : null;
   let actTot=act, saldo=null;
   if(act!=null && vs!=null){ if(t.voorschotInclusief==="excl") actTot=r2(act+vs); saldo = t.voorschotInclusief==="excl" ? act : r2(act-vs); }
-  const tot = (actTot!=null || verv!=null) ? r2((actTot||0)+(verv||0)) : null;
+  /* Een totaal enkel als alles gekend is: de activiteit (of gratis) én het vervoer als dat iets kost.
+     Anders zou een onbekend deel als 0 meetellen en lijkt een gedeeltelijke prijs de volledige. */
+  const vervNodig = t.busNodig || t.vervoerwijze==="openbaar";
+  const volledig = act!=null && (!vervNodig || verv!=null);
+  const tot = volledig ? r2((actTot||0)+(verv||0)) : null;
   const perAll = (tot!=null && lln>0) ? r2(tot/lln) : null;
-  return {act,per,actTot,verv,vs,saldo,tot,perAll};
+  return {act,per,actTot,verv,vs,saldo,tot,perAll,volledig};
 }
 
 /* Status zoals de leerkracht die ziet */
@@ -1154,15 +1138,37 @@ function statusPills(t,sm){ const st=lkStatus(t); return pill(st[0],st[1],sm)+(o
 function busPill(t,sm){ return t.busNodig&&!isCancel(t) ? pill((BUS_ST[t.busStatus]||[""])[0],(BUS_ST[t.busStatus]||["",""])[1],sm) : ""; }
 
 /* Smartschool: welke velden zien ouders? */
-const SS_FIELDS = ["activiteit","datumStart","datumEind","vertrekSchool","terug","terugSchool","klassen","kostPerLln","planStatus","stad"];
-function ssSnap(t){ const k=kosten(t); return {activiteit:t.activiteit,datumStart:t.datumStart,datumEind:t.datumEind||"",vertrekSchool:t.vertrekSchool,terug:t.terug,
-  terugSchool:t.terugSchool,klassen:(t.klassen||[]).slice().sort().join(", "),kostPerLln:k.per==null?"":euro(k.per),planStatus:t.planStatus,stad:bestemmingStad(t)}; }
+/* Smartschool: enkel wat ouders moeten weten, doet een overgenomen uitstap terugvallen naar "opnieuw doorgeven":
+   datum, naam van de activiteit/organisatie, adres of locatie (enkel een bestaand gegeven dat wijzigt,
+   niet een leeg veld dat ingevuld wordt; wel het overschakelen naar of van een andere locatie) en annulering.
+   Status (bevestigd), uren, klassen, prijs, bus, bestelbons … veranderen de Smartschool-status niet. */
+const SS_FIELDS = ["activiteit","datumStart","datumEind","straat","nummer","postcode","stad","locatieAnders","locNaam","locStraat","locNummer","locPostcode","locStad","geannuleerd"];
+const SS_ADRES  = ["straat","nummer","postcode","stad","locNaam","locStraat","locNummer","locPostcode","locStad"];
+function ssSnap(t){
+  const o={v:2}; ["activiteit","datumStart","straat","nummer","postcode","stad","locNaam","locStraat","locNummer","locPostcode","locStad"].forEach(f=>o[f]=String(t[f]??"").trim());
+  o.datumEind = t.type==="meerdaags" ? String(t.datumEind||"") : "";
+  o.locatieAnders = t.locatieAnders ? "ja" : "";
+  o.geannuleerd = isCancel(t) ? "ja" : "";
+  return o;
+}
 function ssChanged(t){
   if(!t.smartschool||!t.smartschool.op||!t.smartschool.snap) return [];
-  const now=ssSnap(t), was=t.smartschool.snap;
-  return SS_FIELDS.filter(f=>String(now[f]??"")!==String(was[f]??""));
+  const now=ssSnap(t), was=Object.assign({},t.smartschool.snap);
+  /* Momentopnames van vóór deze regel (zonder v): zelfde betekenis afleiden, niets onterecht laten afgaan */
+  if(!was.v){
+    was.geannuleerd = was.planStatus==="geannuleerd" ? "ja" : "";
+    if(t.locatieAnders) delete was.stad;       // oude opname bewaarde toen de stad van de locatie
+    ["straat","nummer","postcode","locatieAnders","locNaam","locStraat","locNummer","locPostcode","locStad"].forEach(f=>{ if(was[f]==null) was[f]=now[f]; });
+  }
+  return SS_FIELDS.filter(f=>{
+    if(!(f in was)) return false;
+    const a=String(was[f]??"").trim(), b=String(now[f]??"").trim();
+    if(a===b) return false;
+    if(SS_ADRES.includes(f) && a==="") return false;   // leeg adresgegeven aanvullen telt niet
+    return true;
+  });
 }
-const FIELD_LBL = {activiteit:"Activiteit",datumStart:"Datum",datumEind:"Einddatum",vertrekSchool:"Uur vertrek school",terug:"Uur vertrek op locatie",terugSchool:"Verwacht uur terug op school",
+const FIELD_LBL = {geannuleerd:"Annulering",smartschool:"Smartschool",verwijderdOp:"Prullenbak",activiteit:"Activiteit",datumStart:"Datum",datumEind:"Einddatum",vertrekSchool:"Uur vertrek school",terug:"Uur vertrek op locatie",terugSchool:"Verwacht uur terug op school",
   klassen:"Klassen",kostPerLln:"Prijs per leerling",planStatus:"Status",stad:"Stad/Gemeente",aantalLln:"Aantal leerlingen",aantalBegeleiders:"Aantal begeleiders",
   begeleidersNamen:"Begeleiders",leerkracht:"Leerkracht",type:"Soort",straat:"Straat",nummer:"Nummer",postcode:"Postcode",contactTel:"Tel of GSM organisatie",contactEmail:"E-mail organisatie",
   busNodig:"Vervoer",vervoerwijze:"Vervoer",openbaarVervoerder:"Vervoerder",kostOpenbaar:"Kostprijs openbaar vervoer",kostOpenbaarBasis:"Basis kostprijs openbaar vervoer",kostOpenbaarPerLln:"Openbaar vervoer per leerling",prijsStatus:"Prijs",kostprijs:"Kostprijs",
@@ -1175,6 +1181,10 @@ const FIELD_LBL = {activiteit:"Activiteit",datumStart:"Datum",datumEind:"Einddat
 
 /* Leesbare waarde voor historiek en wijzigingsaanvragen */
 function showVal(f,v){
+  if(f==="smartschool") return v&&v.op ? "overgenomen op "+fmtStamp(v.op) : "niet overgenomen";
+  if(f==="verwijderdOp") return v ? "in de prullenbak" : "niet verwijderd";
+  if(f==="annulering") return v ? "geannuleerd"+(v.reden?": "+v.reden:"") : "niet geannuleerd";
+  if(f==="locatieAnders") return v ? "andere locatie" : "adres van de organisatie";
   if(v==null||v===""||(Array.isArray(v)&&!v.length)) return "leeg";
   if(Array.isArray(v)) return v.join(", ");
   if(["datumStart","datumEind","voorschotVervalt","voorschotBetaaldOp","busBevestigdOp","busOfferteOp"].includes(f)) return fmtDY(v);
@@ -1193,6 +1203,15 @@ function showVal(f,v){
   return String(v);
 }
 const LOG_SKIP = ["log","v","smartschool","verwijderdOp","factuurUitstap","factuurBus","id","ingevoerdOp"];
+/* Voor bewaren en samenvoegen: élk veld telt, ook wat niet in de historiek komt (Smartschool, prullenbak).
+   Enkel afgeleide of beheerde velden vallen weg: de historiek zelf wordt apart samengevoegd. */
+const DATA_SKIP = ["log","v","id","ingevoerdOp","factuurUitstap","factuurBus"];
+function diffData(a,b){
+  const keys=new Set([...Object.keys(a),...Object.keys(b)]); const out=[];
+  keys.forEach(k=>{ if(k[0]==="_"||DATA_SKIP.includes(k)||BEHEER_FIELDS.includes(k)) return; if(JSON.stringify(a[k]??null)!==JSON.stringify(b[k]??null)) out.push(k); });
+  return out;
+}
+/* Voor de historiek: enkel wat een mens als wijziging leest */
 function diffTrips(a,b){
   const keys=new Set([...Object.keys(a),...Object.keys(b)]); const out=[];
   keys.forEach(k=>{ if(k[0]==="_"||LOG_SKIP.includes(k)) return; if(JSON.stringify(a[k]??null)!==JSON.stringify(b[k]??null)) out.push(k); });
@@ -1227,7 +1246,9 @@ function validateModel(M,{admin=false}={}){
   if(M.locatieAnders && !String(M.locStad||"").trim()) e.locStad="Vul de stad of gemeente van de locatie in.";
   if(!M.vervoer) e.vervoer="Kies hoe jullie je verplaatsen.";
   if(M.vervoer==="openbaar" && !M.openbaarVervoerder) e.openbaarVervoerder="Kies De Lijn of NMBS.";
-  if(M.vervoer==="openbaar" && String(M.kostOpenbaarIn||"").trim()!==""){ const n=parseEuro(M.kostOpenbaarIn); if(n==null||isNaN(n)) e.kostOpenbaarIn="Geen geldig bedrag."; }
+  if(M.vervoer==="openbaar" && String(M.kostOpenbaarIn||"").trim()!==""){ const n=parseEuro(M.kostOpenbaarIn); if(n==null||isNaN(n)) e.kostOpenbaarIn="Geen geldig bedrag.";
+    /* zelfde bewuste keuze als bij de kostprijs van de uitstap (enkel als er een bedrag is) */
+    else if(!M.kostOpenbaarBasis) e.kostOpenbaarBasis="Duid aan of het bedrag het totaal voor de groep is of de prijs per leerling."; }
   if(M.vervoer==="bus"){
     if(!String(M.stad||"").trim()) e.stad="Voor de bus is de stad of gemeente nodig.";
     if(!M.vertrekSchool) e.vertrekSchool="Voor de bus is het vertrekuur nodig.";
@@ -1260,7 +1281,7 @@ function validateModel(M,{admin=false}={}){
   return e;
 }
 const FIELD_ORDER = ["planStatus","annuleringReden","annuleringKostenIn","activiteit","datumStart","datumEind","leerkracht","stad","contactEmail","locStad","klassen","aantalLln","aantalBegeleiders",
-  "vervoer","openbaarVervoerder","kostOpenbaarIn","vertrekSchool","terug","terugSchool","prijsStatus","kostIn","kostprijsBasis","betaalKeuze","betaalAnder","voorschotIn","voorschotInclusief","voorschotVervalt",
+  "vervoer","openbaarVervoerder","kostOpenbaarIn","kostOpenbaarBasis","vertrekSchool","terug","terugSchool","prijsStatus","kostIn","kostprijsBasis","betaalKeuze","betaalAnder","voorschotIn","voorschotInclusief","voorschotVervalt",
   "prijsVervoerIn"];
 /* In welk tabblad van het beheervenster staat een veld? */
 const FIELD_TAB = {planStatus:"alg",annuleringReden:"alg",annuleringKostenIn:"alg",activiteit:"alg",datumStart:"alg",datumEind:"alg",leerkracht:"alg",klassen:"alg",aantalLln:"alg",aantalBegeleiders:"alg",opmerking:"alg",
@@ -1271,13 +1292,13 @@ const tabOf = f => FIELD_TAB[f] || "fact";
 function emptyModel(){
   return {type:"dag",activiteit:"",leerkracht:"",datumStart:"",datumEind:"",klassen:[],aantalLln:"",aantalBegeleiders:"",begeleidersNamen:"",
     locatieAnders:false,locNaam:"",locStraat:"",locNummer:"",locPostcode:"",locStad:"",
-    vervoer:"",openbaarVervoerder:"",kostOpenbaarIn:"",kostOpenbaarBasis:"totaal",straat:"",nummer:"",postcode:"",stad:"",contactTel:"",contactEmail:"",vertrekSchool:"",terug:"",terugSchool:"",
+    vervoer:"",openbaarVervoerder:"",kostOpenbaarIn:"",kostOpenbaarBasis:"",straat:"",nummer:"",postcode:"",stad:"",contactTel:"",contactEmail:"",vertrekSchool:"",terug:"",terugSchool:"",
     prijsStatus:"",kostIn:"",kostprijsBasis:"",betaalKeuze:"",betaalAnder:"",voorschot:false,voorschotIn:"",voorschotInclusief:"",voorschotVervalt:"",opmerking:"",
     planStatus:"aangevraagd",busStatus:"teregelen",busmaatschappij:"",busReferentie:"",busBevestigdOp:"",prijsVervoerIn:"",internBestelbonUitstap:"",internBestelbonBus:"",
     factuurStatus:"",factuurStatusBus:"",voorschotBetaaldOp:"",adminNotitie:"",interneNotitie:"",annuleringReden:"",annuleringKostenIn:""};
 }
 function toModel(t){
-  const M=emptyModel(), k=kosten(t);
+  const M=emptyModel();
   ["type","activiteit","leerkracht","datumStart","straat","nummer","postcode","stad","contactTel","contactEmail","vertrekSchool","terug","terugSchool","begeleidersNamen",
    "prijsStatus","opmerking","planStatus","busmaatschappij","busReferentie","internBestelbonUitstap","internBestelbonBus","factuurStatus","adminNotitie","interneNotitie"]
     .forEach(f=>M[f]=t[f]??"");
@@ -1331,6 +1352,8 @@ function fromModel(M,base,{admin=false}={}){
       ? (M.busBevestigdOp || (base && base.busStatus==="bevestigd" ? (base.busBevestigdOp||null) : todayISO())) : null;
     t.prijsVervoer = t.busNodig ? parseEuro(M.prijsVervoerIn) : null;
     t.factuurStatus = M.factuurStatus||null; t.factuurStatusBus = t.busNodig ? (M.factuurStatusBus||null) : null;
+    /* Van gratis naar betalend (ook via een verwerkte aanvraag): "niet van toepassing" was opgelegd door gratis */
+    if(base && base.prijsStatus==="gratis" && t.prijsStatus!=="gratis" && t.factuurStatus==="nvt") t.factuurStatus="teontvangen";
     t.voorschotBetaaldOp = M.voorschot ? (M.voorschotBetaaldOp||null) : null;
     t.annulering = t.planStatus==="geannuleerd" ? {reden:String(M.annuleringReden||"").trim(),op:(base&&base.annulering&&base.annulering.op)||todayISO(),kosten:parseEuro(M.annuleringKostenIn)} : null;
   }
@@ -1348,7 +1371,7 @@ const PFX = "";
 const T_TRIP=PFX+"uitstappen", T_REQ=PFX+"uitstap_aanvragen", T_SET=PFX+"instellingen", T_BEH=PFX+"uitstap_beheer", SET_ID="klimop", OFF_ID="offerte";
 
 /* conflict: iemand anders wijzigde intussen · rechten: geweigerd door de beveiliging · network: geen verbinding */
-class DbError extends Error{ constructor(msg,{conflict=false,network=false,rechten=false}={}){ super(msg); this.conflict=conflict; this.network=network; this.rechten=rechten; } }
+class DbError extends Error{ constructor(msg,{conflict=false,network=false,rechten=false,status=0,partial=false}={}){ super(msg); this.conflict=conflict; this.network=network; this.rechten=rechten; this.status=status; this.partial=partial; } }
 
 /* ---------- Aanmelding (supabase-js, enkel hiervoor) ----------
    Eigen storageKey, zodat de materialentool (zelfde domein, zelfde project) deze sessie niet oppikt.
@@ -1392,9 +1415,26 @@ function supabaseAPI(){
       let j=null, t=""; try{ t=await r.text(); j=JSON.parse(t); }catch(e){}
       const code=j&&j.code, msg=(j&&(j.message||j.msg))||t;
       const rechten = r.status===401 || r.status===403 || code==="42501" || code==="PGRST301";
-      throw new DbError(rechten ? "Geweigerd: geen beheerrechten of sessie verlopen." : "Database gaf fout "+r.status+" "+String(msg).slice(0,160),{rechten});
+      throw new DbError(rechten ? "Geweigerd: geen beheerrechten of sessie verlopen." : "Database gaf fout "+r.status+" "+String(msg).slice(0,160),{rechten,status:r.status});
     }
-    const txt=await r.text(); return txt ? JSON.parse(txt) : null;
+    const txt=await r.text(), json=txt ? JSON.parse(txt) : null;
+    /* Totaal aantal rijen (bij Prefer: count=exact), om te controleren dat alles opgehaald is */
+    const cr=r.headers.get("content-range"), tot=cr&&cr.split("/")[1];
+    if(Array.isArray(json) && tot && tot!=="*") Object.defineProperty(json,"_total",{value:+tot});
+    return json;
+  }
+  /* Alle rijen ophalen, in pagina's: de server geeft per oproep een beperkt aantal rijen terug (standaard 1000).
+     Het pad moet een vaste volgorde (order=…) hebben. Stopt pas als het totaal bereikt is of een pagina leeg is. */
+  async function callAll(path,opt={}){
+    const size=1000, out=[];
+    for(let n=0;n<500;n++){
+      const page=await call(`${path}&limit=${size}&offset=${out.length}`,Object.assign({},opt,{headers:Object.assign({Prefer:"count=exact"},opt.headers||{})}))||[];
+      out.push(...page);
+      if(!page.length) break;
+      if(page._total!=null){ if(out.length>=page._total) break; }
+      else if(page.length<size) break;
+    }
+    return out;
   }
   const enc=encodeURIComponent, ret={Prefer:"return=representation"};
   /* Nul gewijzigde rijen: weigering door de beveiliging of echt conflict? Opnieuw ophalen beslist. */
@@ -1405,20 +1445,24 @@ function supabaseAPI(){
     throw new DbError("Intussen gewijzigd",{conflict:true});
   }
   const api = {
-    live:true, call,
+    live:true, call, callAll,
     async load(vanafSJ,{beheer=false}={}){
       const [trips,reqs,set,beh]=await Promise.all([
-        call(`${T_TRIP}?select=id,nr,schooljaar,trip,updated_at&schooljaar=gte.${enc(vanafSJ)}&order=nr.asc`),
-        call(`${T_REQ}?select=id,uitstap_id,data,updated_at&order=created_at.asc`),
+        callAll(`${T_TRIP}?select=id,nr,schooljaar,trip,updated_at&schooljaar=gte.${enc(vanafSJ)}&order=nr.asc,id.asc`),
+        callAll(`${T_REQ}?select=id,uitstap_id,data,updated_at&order=created_at.asc,id.asc`),
         call(`${T_SET}?select=data,updated_at&id=eq.${SET_ID}`),
-        beheer ? call(`${T_BEH}?select=id,data,updated_at`).catch(e=>{ if(e.rechten) return null; throw e; }) : Promise.resolve(null)
+        beheer ? callAll(`${T_BEH}?select=id,data,updated_at&order=id.asc`).catch(e=>{ if(e.rechten) return null; throw e; }) : Promise.resolve(null)
       ]);
       return {trips,reqs,settings:(set&&set[0])||null,beheer:beh};
     },
-    async loadYear(sj){ return call(`${T_TRIP}?select=id,nr,schooljaar,trip,updated_at&schooljaar=eq.${enc(sj)}&order=nr.asc`); },
-    async years(){ const r=await call(`${T_TRIP}?select=schooljaar`); return [...new Set((r||[]).map(x=>x.schooljaar))]; },
-    /* Nieuwe uitstap: gewone insert (geen upsert), zodat het ook zonder aanmelding mag */
-    async insertTrip(t,sj){ const r=await call(T_TRIP,{method:"POST",headers:ret,body:JSON.stringify({id:t.id,schooljaar:sj,trip:t})}); return r[0]; },
+    async loadYear(sj){ return callAll(`${T_TRIP}?select=id,nr,schooljaar,trip,updated_at&schooljaar=eq.${enc(sj)}&order=nr.asc,id.asc`); },
+    async years(){ const r=await callAll(`${T_TRIP}?select=schooljaar&order=schooljaar.asc,id.asc`); return [...new Set((r||[]).map(x=>x.schooljaar))]; },
+    /* Nieuwe uitstap: gewone insert (geen upsert), zodat het ook zonder aanmelding mag.
+       Bestaat de id al (een eerdere poging kwam aan, maar het antwoord ging verloren), dan geldt die als bewaard. */
+    async insertTrip(t,sj){
+      try{ const r=await call(T_TRIP,{method:"POST",headers:ret,body:JSON.stringify({id:t.id,schooljaar:sj,trip:t})}); return r[0]; }
+      catch(e){ if(e.status===409){ const cur=await api.getTrip(t.id); if(cur) return cur; } throw e; }
+    },
     async getTrip(id){ const r=await call(`${T_TRIP}?select=id,nr,schooljaar,trip,updated_at&id=eq.${enc(id)}`); return r&&r[0]; },
     async updateTrip(t,sj,upd){
       const r=await call(`${T_TRIP}?id=eq.${enc(t.id)}&updated_at=eq.${enc(upd)}`,{method:"PATCH",headers:ret,body:JSON.stringify({schooljaar:sj,trip:t})});
@@ -1431,7 +1475,10 @@ function supabaseAPI(){
       if(await api.getTrip(id)) throw new DbError("Geweigerd: geen beheerrechten of sessie verlopen.",{rechten:true});
       return true;
     },
-    async insertReq(a){ const r=await call(T_REQ,{method:"POST",headers:ret,body:JSON.stringify({id:a.id,uitstap_id:a.uitstapId,data:a})}); return r[0]; },
+    async insertReq(a){
+      try{ const r=await call(T_REQ,{method:"POST",headers:ret,body:JSON.stringify({id:a.id,uitstap_id:a.uitstapId,data:a})}); return r[0]; }
+      catch(e){ if(e.status===409){ const cur=await api.getReq(a.id); if(cur) return cur; } throw e; }
+    },
     async getReq(id){ const r=await call(`${T_REQ}?select=id,uitstap_id,data,updated_at&id=eq.${enc(id)}`); return r&&r[0]; },
     async updateReq(a,upd){
       const r=await call(`${T_REQ}?id=eq.${enc(a.id)}&updated_at=eq.${enc(upd)}`,{method:"PATCH",headers:ret,body:JSON.stringify({data:a})});
@@ -1517,8 +1564,16 @@ async function guarded(fn){
 
 /* ---------- Laden ---------- */
 function dataSig(){ return JSON.stringify([D.trips.map(t=>t.id+t._upd),D.reqs.map(a=>a.id+a._upd),D.setUpd,Object.entries(D.beheer).map(([k,v])=>k+v._upd)]); }
-async function loadAll(){
-  const res = await guarded(()=>API.load(sjShift(huidigSJ(),-1),{beheer:isAdmin}));
+/* Generaties: een laadantwoord dat ouder is dan een nieuwer laadverzoek, een bewaring of een aan-/afmelding,
+   mag die recentere toestand niet terugdraaien (en mag na afmelden geen beheergegevens terugzetten). */
+let loadGen=0, writeGen=0, authGen=0;
+const markWrite = () => { writeGen++; };
+async function loadAll(poging=0){
+  const my=++loadGen, w=writeGen, a=authGen, admin=isAdmin;
+  const res = await guarded(()=>API.load(sjShift(huidigSJ(),-1),{beheer:admin}));
+  if(my!==loadGen) return false;                                        // een nieuwer laadverzoek neemt het over
+  if(a!==authGen || w!==writeGen){ if(poging<3) return loadAll(poging+1); return false; }
+  if(!isAdmin) res.beheer=null;                                         // nooit beheergegevens zonder aanmelding
   D.beheer={}; (res.beheer||[]).forEach(r=>{ D.beheer[r.id]={data:r.data||{},_upd:r.updated_at}; });
   D.trips=(res.trips||[]).map(fromRow);
   D.arch=D.arch.map(t=>mergeBeheer(t));
@@ -1533,17 +1588,27 @@ async function loadAll(){
 async function insertTrip(t){
   const clean=storable(norm(t));
   const row=await guarded(()=>API.insertTrip(clean,schooljaarVan(clean.datumStart)));
-  const nt=fromRow(row); D.trips.push(nt); D.sig=dataSig(); return nt;
+  markWrite(); const nt=fromRow(row), i=D.trips.findIndex(x=>x.id===nt.id); if(i>=0) D.trips[i]=nt; else D.trips.push(nt); D.sig=dataSig(); return nt;
 }
 /* Bewaart met controle op de versie. Heeft iemand anders intussen gewijzigd,
    dan voegen we samen per veld; enkel bij hetzelfde veld beslist de gebruiker. */
 async function saveTrip(next,base,{log}={}){
   let t=norm(next);
-  const pub=diffTrips(base,t).filter(f=>!BEHEER_FIELDS.includes(f)), beh=BEHEER_FIELDS.filter(f=>JSON.stringify(base[f]??null)!==JSON.stringify(t[f]??null));
+  /* Elke echte wijziging aan de openbare gegevens telt (ook velden die niet in de historiek komen, zoals Smartschool of de prullenbak) */
+  const pub=Object.keys(Object.assign({},base,t)).filter(k=>k[0]!=="_" && !BEHEER_FIELDS.includes(k) && JSON.stringify(base[k]??null)!==JSON.stringify(t[k]??null));
+  const beh=BEHEER_FIELDS.filter(f=>JSON.stringify(base[f]??null)!==JSON.stringify(t[f]??null));
   if(log) t.log=[...(t.log||[]),{op:new Date().toISOString(),tekst:log}].slice(-40);
   let saved=base;
   if(pub.length || log) saved = await savePublic(t,base);
-  if(beh.length){ await beheerPatch(t.id,Object.fromEntries(beh.map(f=>[f,t[f]]))); saved=replaceTrip(null,saved.id); }
+  if(beh.length){
+    try{ await beheerPatch(t.id,Object.fromEntries(beh.map(f=>[f,t[f]]))); saved=replaceTrip(null,saved.id); }
+    catch(e){
+      if(saved===base) throw e;
+      /* De openbare gegevens staan al in de database: meld precies wat wel en niet lukte */
+      const x=new DbError(`De uitstap is bewaard, maar de interne gegevens (interne notitie, afstand of opmerking voor de busmaatschappij) niet${e.rechten?": je bent niet (meer) aangemeld als beheerder":e.network?": geen verbinding":""}. Klik opnieuw op Opslaan om ze nog te bewaren.`,{partial:true,rechten:e.rechten,network:e.network});
+      x.saved=saved; throw x;
+    }
+  }
   return saved;
 }
 async function savePublic(t,base){
@@ -1554,7 +1619,7 @@ async function savePublic(t,base){
     if(!e.conflict) throw e;
     const cur=await guarded(()=>API.getTrip(base.id));
     if(!cur) throw new DbError("Deze uitstap bestaat niet meer.");
-    const theirs=mergeBeheer(norm(cur.trip)), mine=diffTrips(base,t).filter(f=>!BEHEER_FIELDS.includes(f)), their=diffTrips(base,theirs).filter(f=>!BEHEER_FIELDS.includes(f));
+    const theirs=mergeBeheer(norm(cur.trip)), mine=diffData(norm(base),t), their=diffData(norm(base),theirs);
     const clash=mine.filter(f=>their.includes(f)&&JSON.stringify(t[f])!==JSON.stringify(theirs[f]));
     let keepMine=true;
     if(clash.length){
@@ -1579,7 +1644,7 @@ async function beheerPatch(id,patch){
     const cur=D.beheer[id], data=Object.assign({},cur?cur.data:{},patch);
     try{
       const row=await guarded(()=>API.saveBeheer(id,data,cur?cur._upd:null));
-      D.beheer[id]={data:row.data||{},_upd:row.updated_at}; D.sig=dataSig(); return true;
+      D.beheer[id]={data:row.data||{},_upd:row.updated_at}; markWrite(); D.sig=dataSig(); return true;
     }catch(e){
       if(!e.conflict) throw e;
       const fresh=await guarded(()=>API.getBeheer(id));
@@ -1592,7 +1657,7 @@ function replaceTrip(row,idOnly){
   const cur=idOnly?tripById(idOnly):null;
   const nt=row?fromRow(row):mergeBeheer(Object.assign({},cur)), i=D.trips.findIndex(x=>x.id===nt.id), j=D.arch.findIndex(x=>x.id===nt.id);
   if(i>=0) D.trips[i]=nt; else if(j>=0) D.arch[j]=nt; else D.trips.push(nt);
-  D.sig=dataSig(); return nt;
+  markWrite(); D.sig=dataSig(); return nt;
 }
 /* Kleine, directe wijziging (statustegel, vinkje) */
 async function patchTrip(id,fn,logTxt){
@@ -1602,11 +1667,25 @@ async function patchTrip(id,fn,logTxt){
 }
 
 /* ---------- Wijzigingsaanvragen ---------- */
-async function insertReq(a){ const row=await guarded(()=>API.insertReq(a)); const n=fromReq(row); D.reqs.push(n); D.sig=dataSig(); return n; }
+async function insertReq(a){
+  const row=await guarded(()=>API.insertReq(a)); markWrite();
+  const n=fromReq(row), i=D.reqs.findIndex(x=>x.id===n.id); if(i>=0) D.reqs[i]=n; else D.reqs.push(n); D.sig=dataSig(); return n;
+}
+/* Bewaart met de versie van het object dat je voor je had (niet die van een latere verversing):
+   heeft iemand anders de aanvraag intussen behandeld, dan wordt die beslissing niet overschreven. */
 async function updateReq(a){
-  const base=D.reqs.find(x=>x.id===a.id);
-  const row=await guarded(()=>API.updateReq(Object.fromEntries(Object.entries(a).filter(([k])=>k[0]!=="_")),base._upd));
-  const n=fromReq(row), i=D.reqs.findIndex(x=>x.id===n.id); D.reqs[i]=n; D.sig=dataSig(); return n;
+  const upd = a._upd ?? (D.reqs.find(x=>x.id===a.id)||{})._upd;
+  try{
+    const row=await guarded(()=>API.updateReq(Object.fromEntries(Object.entries(a).filter(([k])=>k[0]!=="_")),upd));
+    markWrite(); const n=fromReq(row), i=D.reqs.findIndex(x=>x.id===n.id); if(i>=0) D.reqs[i]=n; else D.reqs.push(n); D.sig=dataSig(); return n;
+  }catch(e){
+    if(!e.conflict) throw e;
+    const cur=await guarded(()=>API.getReq(a.id)).catch(()=>null);
+    if(cur){ const n=fromReq(cur), i=D.reqs.findIndex(x=>x.id===n.id); if(i>=0) D.reqs[i]=n; else D.reqs.push(n); D.sig=dataSig(); }
+    const st=cur&&cur.data&&cur.data.status;
+    if(st && st!=="open"){ const x=new DbError(`Deze aanvraag werd intussen al ${st==="verwerkt"?"verwerkt":"afgewezen"} door iemand anders. Er werd niets overschreven.`,{conflict:true}); x.afgehandeld=true; throw x; }
+    throw new DbError("Deze aanvraag werd intussen gewijzigd. Open ze opnieuw en probeer nog eens.",{conflict:true});
+  }
 }
 
 /* ---------- Instellingen: wijziging als functie, zodat ze na een conflict opnieuw toegepast kan worden ---------- */
@@ -1615,7 +1694,7 @@ async function mutateSettings(fn){
     const next=normSettings(clone(S())); fn(next);
     try{
       const row=await guarded(()=>API.saveSettings(next,D.setUpd));
-      D.settings=normSettings(row.data); D.setUpd=row.updated_at; D.sig=dataSig(); return true;
+      D.settings=normSettings(row.data); D.setUpd=row.updated_at; markWrite(); D.sig=dataSig(); return true;
     }catch(e){
       if(!e.conflict) throw e;
       const cur=await guarded(()=>API.getSettings());
@@ -1625,7 +1704,9 @@ async function mutateSettings(fn){
   throw new DbError("De instellingen werden tegelijk elders gewijzigd. Probeer opnieuw.");
 }
 
-/* ---------- Stille verversing (elke 20 s, nooit tijdens werk) ---------- */
+/* ---------- Stille verversing (elke 20 s) ----------
+   De gegevens worden op de achtergrond vernieuwd; het hertekenen wacht tot je niet meer bezig bent
+   (invoer, open venster, muis op een lijstrij). Open bewerkingen houden hun eigen versie bij. */
 let refreshWaiting=false;
 function isBusy(){
   if(ovStack.length || (typeof WPOP!=="undefined" && WPOP.open)) return true;
@@ -1637,6 +1718,7 @@ function isBusy(){
 async function refresh({manual=false}={}){
   if(!manual && (document.hidden)) return;
   try{
+    if(manual){ D.archYears.clear(); if(typeof AR!=="undefined") AR.years=null; }   // ook het archief opnieuw ophalen
     const changed=await loadAll();
     if(changed || manual){ if(isBusy() && !manual){ refreshWaiting=true; } else { refreshWaiting=false; renderAll(); } }
     if(manual) toast("Vernieuwd");
@@ -1667,11 +1749,17 @@ function toast(msg,type="ok",action){
   w.appendChild(t); while(w.children.length>3) w.firstChild.remove();
   setTimeout(()=>{ t.classList.add("out"); setTimeout(()=>t.remove(),260); }, action?6500:(type==="err"?5200:2800));
 }
+/* Foutmelding volgens de echte oorzaak: gedeeltelijk bewaard, geweigerd, conflict, geen verbinding,
+   een weigering van de database, of een fout in de tool zelf. */
 function dbFail(e,wat){
   console.error(e);
-  if(e && e.rechten){ toast((wat?wat+" lukte niet: ":"Niet bewaard: ")+"je bent niet (meer) aangemeld als beheerder. Je invoer blijft staan.","err",{label:"Aanmelden",fn:()=>openLogin()}); return; }
-  if(e && e.conflict) toast(e.message,"err");
-  else toast((wat?wat+" lukte niet: ":"")+"geen verbinding met de database. Er is niets verloren; probeer opnieuw.","err");
+  const w = wat ? wat+" lukte niet: " : "Niet gelukt: ";
+  if(e && e.partial){ toast(e.message,"err",e.rechten?{label:"Aanmelden",fn:()=>openLogin()}:undefined); return; }
+  if(e && e.rechten){ toast(w+"je bent niet (meer) aangemeld als beheerder. Je invoer blijft staan.","err",{label:"Aanmelden",fn:()=>openLogin()}); return; }
+  if(e && e.conflict){ toast(e.message,"err"); return; }
+  if(e && e.network){ toast(w+"geen verbinding met de database. Er is niets verloren; probeer opnieuw.","err"); return; }
+  if(e instanceof DbError){ toast(w+"de database weigerde de gegevens"+(e.status?` (fout ${e.status})`:"")+". Je invoer blijft staan.","err"); return; }
+  toast(w+"er liep iets mis in de tool. Je invoer blijft staan; probeer opnieuw of laad de pagina opnieuw.","err");
 }
 
 /* ---------- Vensters: focus vasthouden, Escape, stapelen ---------- */
@@ -1806,7 +1894,7 @@ async function tryLogin(){
     await AUTH.signIn(mail,pw,rem);
     const ok=await API.isBeheerder();
     if(!ok){ await AUTH.signOut(); loginFout("Dit account heeft geen beheerrechten voor de uitstappentool."); return; }
-    isAdmin=true; closeOverlay("pinOverlay");
+    isAdmin=true; authGen++; closeOverlay("pinOverlay");
     try{ await loadAll(); }catch(e){}
     renderAll(); toast("Aangemeld als beheerder");
   }catch(e){
@@ -1817,18 +1905,27 @@ async function tryLogin(){
     $("pinIn").value=""; $("pinIn").focus();
   }finally{ loginBusy=false; b.disabled=false; b.textContent="Aanmelden"; }
 }
+/* Eén plek die bij afmelden (knop of verlopen sessie) alle beheergegevens opruimt:
+   in het geheugen (uitstappen, archief, bewerkmodel) én op het scherm (bewerkvenster, beheervensters, instellingen, afdruk). */
+function wisBeheerToestand(){
+  isAdmin=false; authGen++;
+  D.beheer={}; D.trips.forEach(mergeBeheer); D.arch.forEach(mergeBeheer);
+  ED.M=null; ED.base=null; ED.reqId=null; ED.req=null; detailBack=null;
+  if(detailMode==="edit") detailMode="lees";
+  if($("dlg2Overlay").classList.contains("open")) closeDlg("dlg2");
+  if($("dlgOverlay").classList.contains("open") && !openDetailId) closeDlg("dlg");      // bv. de offertelijst
+  $("view-instellingen").innerHTML=""; $("printArea").innerHTML=""; hideHover();
+  if(ui.view==="instellingen") ui.view="overzicht";
+}
 async function logout(){
   await AUTH.signOut();
-  isAdmin=false; D.beheer={}; D.trips.forEach(mergeBeheer); D.arch.forEach(mergeBeheer);
-  if(ui.view==="instellingen") ui.view="overzicht";
-  if($("dlgOverlay").classList.contains("open") && (detailMode==="edit")){ detailMode="lees"; }
-  renderAll(); toast("Afgemeld");
+  wisBeheerToestand(); renderAll(); toast("Afgemeld");
 }
 /* Bij het opstarten: bestaande sessie? Dan nagaan of dit account beheerder is. */
 async function initAuth(){
   try{ if(await AUTH.token()) isAdmin = await API.isBeheerder(); }catch(e){ isAdmin=false; }
   AUTH.onChange(ev=>{
-    if(ev==="SIGNED_OUT" && isAdmin){ isAdmin=false; D.beheer={}; D.trips.forEach(mergeBeheer); renderAll();
+    if(ev==="SIGNED_OUT" && isAdmin){ wisBeheerToestand(); renderAll();
       toast("Je bent afgemeld. Meld opnieuw aan om verder te beheren.","err",{label:"Aanmelden",fn:()=>openLogin()}); }
   });
 }
@@ -1865,10 +1962,11 @@ function renderAll(){
 }
 
 /* ---------- Downloaden ---------- */
-function download(name,content,type){
-  const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([content],{type})); a.download=name;
-  document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },500);
+function downloadBlob(name,blob){
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=name;
+  document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },800);
 }
+function download(name,content,type){ downloadBlob(name,new Blob([content],{type})); }
 async function copyText(txt){
   try{ await navigator.clipboard.writeText(txt); return true; }
   catch(e){ const ta=document.createElement("textarea"); ta.value=txt; ta.style.position="fixed"; ta.style.opacity="0"; document.body.appendChild(ta); ta.select();
@@ -2026,7 +2124,7 @@ function secVervoer(M,E,px,W,pend){
   let p="";
   if(v==="openbaar"){
     p+=rcards(M,E,"openbaarVervoerder",[["De Lijn","bus","De Lijn",""],["NMBS","train","NMBS",""]],{n:2,nm:2,span:5,label:"Vervoerder",req:true,px,cls:"small"});
-    p+=fld(M,E,px,"kostOpenbaarIn","Kostprijs openbaar vervoer",{span:7,euro:true,im:"decimal",ph:"0,00",opt:true,after:basisToggle(M,"kostOpenbaarBasis",E,px,`<div class="calc" data-live="calcOv">${ovCalcTxt(M)}</div>`)});
+    p+=fld(M,E,px,"kostOpenbaarIn","Kostprijs openbaar vervoer",{span:7,euro:true,im:"decimal",ph:"0,00",opt:true,after:basisToggle(M,"kostOpenbaarBasis",E,px,`<div class="calc" data-live="calcOv">${ovCalcTxt(M)}</div><div class="hint">Duid aan of dit het totaalbedrag is of de prijs per leerling. Bij prijs per leerling rekent de tool het totaal automatisch uit.</div>`)});
   }
   if(v==="school"){
     p+=fld(M,E,px,"vertrekSchool","Uur begin activiteit",{type:"time",span:4,opt:true,cls:"half-m"})+fld(M,E,px,"terugSchool","Uur einde activiteit",{type:"time",span:4,opt:true,cls:"half-m"});
@@ -2106,7 +2204,7 @@ function secNotities(M,E,px){
   return fld(M,E,px,"adminNotitie","Mededeling voor de leerkracht",{span:6,area:true,opt:true,hint:"Leerkrachten zien dit in het detail van de uitstap."})
     +fld(M,E,px,"interneNotitie","Interne notitie",{span:6,area:true,opt:true,hint:"Enkel zichtbaar in beheermodus."});
 }
-function vorigeHTML(v){ return v ? `<div class="finfo">${ic("info",16)}<div>Deze uitstap ging al eerder door (${esc(fmtDY(v.datumStart))}${v.stad?", "+esc(v.stad):""}). <button type="button" class="btn-link" data-act="vorige" data-id="${v.id}">Adres en contact overnemen</button></div></div>` : ""; }
+function vorigeHTML(v){ return v ? `<div class="finfo">${ic("info",16)}<div>Deze uitstap ging al eerder door (${esc(fmtDY(v.datumStart))}${v.stad?", "+esc(v.stad):""}). <button type="button" class="btn-link" data-act="vorige" data-id="${esc(v.id)}">Adres en contact overnemen</button></div></div>` : ""; }
 function vorigeKeer(M){
   const q=fold(M.activiteit).trim(); if(q.length<3) return null;
   const hits=D.trips.filter(t=>fold(t.activiteit).trim()===q && (t.stad||t.straat||t.contactTel)).sort((a,b)=>b.datumStart.localeCompare(a.datumStart));
@@ -2236,14 +2334,19 @@ function showWarnPopup(){
 /* ============================================================
    TABBLAD "NIEUWE UITSTAP / ACTIVITEIT"
    ============================================================ */
-const NF = { M:null, state:{E:{}}, confirmId:null, busy:false, err:null, note:"", ack:[] };
+const NF = { M:null, state:{E:{}}, confirmId:null, busy:false, err:null, note:"", ack:[], pendingId:null };
 function nfInit(){
   const c=ssGet(SS_CONCEPT);
   NF.M = c && c.M ? Object.assign(emptyModel(),c.M) : emptyModel();
   NF.ack = c && Array.isArray(c.ack) ? c.ack : [];
   if(!NF.M.leerkracht){ const p=ssGet(SS_PREFS)||{}; if(p.naam) NF.M.leerkracht=p.naam; }
 }
-const saveConcept = debounce(()=>{ if(NF.M && hasContent(NF.M)) ssSet(SS_CONCEPT,{M:Object.fromEntries(Object.entries(NF.M).filter(([k])=>k[0]!=="_")),ack:NF.ack,op:Date.now()}); },250);
+/* Concept bewaren zolang er iets ingevuld is; is alles gewist, dan ook het bewaarde concept weg */
+const saveConcept = debounce(()=>{
+  if(!NF.M) return;
+  if(hasContent(NF.M)) ssSet(SS_CONCEPT,{M:Object.fromEntries(Object.entries(NF.M).filter(([k])=>k[0]!=="_")),ack:NF.ack,op:Date.now()});
+  else ssDel(SS_CONCEPT);
+},250);
 function hasContent(M){ return !!(M.activiteit||M.datumStart||M.klassen.length||M.aantalLln||M.vervoer||M.prijsStatus||M.straat||M.stad||M.opmerking); }
 const nfPend = id => !NF.ack.includes(id);
 function nfFormHTML(){
@@ -2269,7 +2372,7 @@ function renderNieuw(){
       <datalist id="actList"></datalist>`;
     $("nfSend").onclick=submitNieuw;
     $("nfClear").onclick=async()=>{ if(hasContent(NF.M) && !(await confirmDialog({title:"Formulier leegmaken?",html:"<p>Alles wat je in dit formulier invulde, wordt gewist.</p>",ok:"Leegmaken",tone:"danger"}))) return;
-      const naam=NF.M.leerkracht; NF.M=emptyModel(); NF.M.leerkracht=naam; NF.ack=[]; NF.state.E={}; NF.err=null; NF.note=""; ssDel(SS_CONCEPT); renderNieuw(); window.scrollTo({top:0}); };
+      const naam=NF.M.leerkracht; NF.M=emptyModel(); NF.M.leerkracht=naam; NF.ack=[]; NF.state.E={}; NF.err=null; NF.note=""; NF.pendingId=null; ssDel(SS_CONCEPT); renderNieuw(); window.scrollTo({top:0}); };
   }
   $("actList").innerHTML=[...new Set(D.trips.map(t=>t.activiteit).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"nl")).map(a=>`<option value="${esc(a)}">`).join("");
   o.paint(); bindForm($("nfForm"),()=>NF.M,o);
@@ -2315,8 +2418,11 @@ async function submitNieuw(){
   if(Object.keys(NF.state.E).length){ nfOpts().paint(); paintAlert(); paintSummary(); focusFirstError($("nfForm"),NF.state.E); return; }
   NF.busy=true; const b=$("nfSend"); b.classList.add("busy"); b.innerHTML=`<span class="spin"></span>Bezig met versturen…`;
   try{
-    const t=fromModel(M,{id:uid(),ingevoerdOp:new Date().toISOString(),planStatus:"aangevraagd",adminNotitie:"",log:[{op:new Date().toISOString(),tekst:"Aanvraag ingediend door "+M.leerkracht.trim()}]});
+    /* Dezelfde id bij een nieuwe poging: kwam de eerste poging toch aan, dan ontstaat er geen tweede uitstap */
+    if(!NF.pendingId) NF.pendingId=uid();
+    const t=fromModel(M,{id:NF.pendingId,ingevoerdOp:new Date().toISOString(),planStatus:"aangevraagd",adminNotitie:"",log:[{op:new Date().toISOString(),tekst:"Aanvraag ingediend door "+M.leerkracht.trim()}]});
     const saved=await insertTrip(t);
+    NF.pendingId=null;
     savePrefs({naam:M.leerkracht.trim()}); ssDel(SS_CONCEPT); qsa("#toastWrap .toast.err").forEach(x=>x.remove());
     NF.confirmId=saved.id; NF.M=null; NF.ack=[]; NF.state.E={}; NF.note="";
     renderHeader(); renderNieuw(); window.scrollTo({top:0,behavior:"smooth"});
@@ -2383,6 +2489,7 @@ function copyToForm(t,mode){
 function seenTs(){ return lsGet(LS_SEEN) || ""; }
 function issues(t){
   const out=[], c=isCancel(t), past=isPast(t);
+  if(t._datumFout) out.push({k:"onvolledig",l:"Datum ongeldig",c:"warn"});   // eerst: dit moet als eerste rechtgezet worden
   if(D.reqs.some(a=>a.uitstapId===t.id&&a.status==="open")) out.push({k:"aanvragen",l:"Wijziging aangevraagd",c:"open"});
   if(t.busNodig && t.busStatus==="teregelen" && !c && !past) out.push({k:"bus",l:"Offertes op te vragen",c:"open"});
   if(t.busNodig && t.busStatus==="offertes" && !c && !past) out.push({k:"boeken",l:"Bus nog te boeken",c:"info"});
@@ -2390,7 +2497,7 @@ function issues(t){
   const kosten0 = t.annulering && t.annulering.kosten>0;
   if((!c||kosten0) && past && (t.factuurStatus==="teontvangen"||t.factuurStatusBus==="teontvangen")) out.push({k:"factuur",l:"Factuur te ontvangen",c:"open"});
   if(t.voorschot && !t.voorschotBetaaldOp && !c) out.push({k:"voorschot",l:"Voorschot te betalen",c:"open"});
-  if(!c && !past && (t.prijsStatus==="tebevestigen" || (t.busNodig && (!bestemmingStad(t)||!t.vertrekSchool||!t.terug)))) out.push({k:"onvolledig",l:"Gegevens onvolledig",c:"muted"});
+  if(!t._datumFout && !c && !past && (t.prijsStatus==="tebevestigen" || (t.busNodig && (!bestemmingStad(t)||!t.vertrekSchool||!t.terug)))) out.push({k:"onvolledig",l:"Gegevens onvolledig",c:"muted"});
   const ch=ssChanged(t);
   if(ch.length) out.push({k:"smartschool",l:"Opnieuw naar Smartschool",c:"warn"});
   else if(!(t.smartschool&&t.smartschool.op) && !c && !past) out.push({k:"smartschool",l:"Nog niet in Smartschool",c:"muted"});
@@ -2448,7 +2555,7 @@ function colsFor(){
 }
 function rowHTML(t,ts){
   const k=kosten(t), cancel=isCancel(t);
-  const date=`<div class="c-date"><b>${esc(fmtD(t.datumStart))}</b>${t.type==="meerdaags"?`<small>t.e.m. ${esc(fmtD(t.datumEind))}</small>`:`<small>${esc(parseISO(t.datumStart).getFullYear())}</small>`}</div>`;
+  const date= t._datumFout ? `<div class="c-date"><b class="datum-fout">Datum ongeldig</b><small>${esc(t.datumStart||"leeg")}</small></div>` : `<div class="c-date"><b>${esc(fmtD(t.datumStart))}</b>${t.type==="meerdaags"?`<small>t.e.m. ${esc(fmtD(t.datumEind))}</small>`:`<small>${esc(jaarVan(t.datumStart))}</small>`}</div>`;
   const flags=[t.type==="meerdaags"?`<span class="mtag">Meerdaags</span>`:"", isAdmin&&t.ingevoerdOp>seenTs()?`<span class="mtag" style="background:var(--teal-l);color:var(--teal-xd)">Nieuw</span>`:""].join("");
   const act=`<div class="c-act"><b>${hl(t.activiteit,ts)}</b><small>${[bestemmingStad(t)?hl(bestemmingStad(t),ts):"",t.leerkracht?hl(t.leerkracht,ts):""].filter(Boolean).join(" · ")||"&nbsp;"}${flags?`<span class="flags">${flags}</span>`:""}</small></div>`;
   const klas=`<div class="c-cell c-klas klas-tags">${sortKlassen(t.klassen).map(x=>`<span class="klas-tag">${hl(x,ts)}</span>`).join("")}</div>`;
@@ -2636,7 +2743,7 @@ function printList(){
    DETAILVENSTER
    ============================================================ */
 let openDetailId=null, detailMode="lees", detailBack=null;
-const ED = { M:null, base:null, state:{E:{}}, reqId:null, hl:[], busy:false };
+const ED = { M:null, base:null, state:{E:{}}, reqId:null, req:null, hl:[], busy:false };
 
 /* back: optionele functie die na het sluiten opnieuw opent waar je vandaan kwam (bv. de offertelijst) */
 function openDetail(id,back){
@@ -2746,6 +2853,7 @@ function costBlock(t,k){
     if(t.voorschot && t.voorschotInclusief==="excl") h+=L("Voorschot",esc(euro(k.vs))); }
   if(k.verv!=null) h+=L(t.busNodig?"Bus":"Openbaar vervoer",esc(euro(k.verv)));
   if(k.tot!=null && (k.verv!=null || (t.voorschot&&t.voorschotInclusief==="excl"))) h+=L("Totaal",esc(euro(k.tot)),"tot")+(k.perAll!=null?L("Totaal per leerling",esc(euro(k.perAll)),"sub"):"");
+  else if(!k.volledig && (k.verv!=null || (t.busNodig||t.vervoerwijze==="openbaar"))) h+=L("Totaal","volgt zodra alle prijzen gekend zijn","tot");
   if(t.betaalwijze) h+=L("Betaling",esc(t.betaalwijze),"sub");
   if(t.voorschot){
     h+=`<div class="cl" style="margin-top:6px"><span><b>Voorschot</b></span><span><b>${esc(euro(t.voorschotBedrag))}</b></span></div>`;
@@ -2767,7 +2875,7 @@ function reqHTML(a,t){
     if(a.toelichting) body+=`<div style="font-size:13.5px"><span class="muted">Toelichting:</span> ${esc(a.toelichting)}</div>`;
   }
   if(a.antwoord) body+=`<div class="msg-box admin" style="padding:8px 12px"><span class="mb-h">Antwoord administratie</span>${esc(a.antwoord)}</div>`;
-  const acts = open && isAdmin ? `<div class="req-acts"><button class="btn btn-primary btn-sm" data-rq="doe" data-id="${a.id}">${ic("check",14)}${a.type==="annulering"?"Annulering verwerken":"Verwerken"}</button><button class="btn btn-ghost btn-sm" data-rq="nee" data-id="${a.id}">Afwijzen</button></div>` : "";
+  const acts = open && isAdmin ? `<div class="req-acts"><button class="btn btn-primary btn-sm" data-rq="doe" data-id="${esc(a.id)}">${ic("check",14)}${a.type==="annulering"?"Annulering verwerken":"Verwerken"}</button><button class="btn btn-ghost btn-sm" data-rq="nee" data-id="${esc(a.id)}">Afwijzen</button></div>` : "";
   return `<div class="req-box${open?"":" closed"}"><div class="req-top">${stp}<b>${a.type==="annulering"?"Annulering":"Wijziging"}</b><span class="when">door ${esc(a.door||"?")} · ${esc(fmtStamp(a.op))}${a.afgehandeldOp?" · behandeld "+esc(fmtStamp(a.afgehandeldOp)):""}</span></div>${body}${acts}</div>`;
 }
 const REQ_LBL={datumStart:"Datum",datumEind:"Einddatum",vertrekSchool:"Vertrek school",terug:"Vertrek op locatie",terugSchool:"Terug op school",aantalLln:"Aantal leerlingen",
@@ -2822,7 +2930,11 @@ function ssText(t){
   if(t.vertrekSchool) lines.push(`Vertrek aan school: ${fmtTime(t.vertrekSchool)}`);
   if(t.terugSchool) lines.push(`Terug op school: ongeveer ${fmtTime(t.terugSchool)}`);
   if(vervoer(t)==="bus") lines.push("Vervoer: met de bus"); else if(vervoer(t)==="openbaar") lines.push(`Vervoer: met ${t.openbaarVervoerder||"het openbaar vervoer"}`); else if(vervoer(t)==="actief") lines.push("Vervoer: te voet of met de fiets");
-  if(t.prijsStatus==="gratis") lines.push("Kostprijs: gratis"); else if(k.perAll!=null) lines.push(`Kostprijs: ${euro(k.perAll)} per leerling`);
+  /* Enkel een totaalprijs als alles gekend is; een gedeeltelijke prijs zo benoemen */
+  if(t.prijsStatus==="tebevestigen") lines.push("Kostprijs: nog te bevestigen");
+  else if(k.volledig) lines.push(!k.tot ? "Kostprijs: gratis" : k.perAll!=null ? `Kostprijs: ${euro(k.perAll)} per leerling` : `Kostprijs: ${euro(k.tot)}`);
+  else lines.push(t.prijsStatus==="gratis" ? "Kostprijs: de activiteit is gratis; de kostprijs van het vervoer volgt"
+    : `Kostprijs: ${k.per!=null?euro(k.per)+" per leerling":euro(k.act)} voor de activiteit; de kostprijs van het vervoer volgt`);
   if(isCancel(t)) lines.unshift("GEANNULEERD");
   return lines.join("\n");
 }
@@ -2840,6 +2952,8 @@ async function softDelete(t){
 const ED_TABS=[["alg","Algemeen"],["best","Bestemming & uren"],["fact","Vervoer & facturatie"]];
 function startEdit(t,prefill,reqId,tab){
   ED.base=clone(t); ED.M=toModel(t); ED.state={E:{}}; ED.reqId=reqId||null; ED.hl=[];
+  /* De aanvraag zoals ze was toen je ze opende (met haar versie): zo wordt een intussen genomen beslissing niet overschreven */
+  { const a=reqId?D.reqs.find(x=>x.id===reqId):null; ED.req=a?clone(a):null; }
   if(prefill){ Object.keys(prefill).forEach(f=>{ ED.M[f]=prefill[f]; ED.hl.push(f); }); }
   ED.orig=JSON.stringify(ED.M);
   ED.tab = tab || (ED.hl.length ? tabOf(ED.hl[0]==="prijs"?"kostIn":ED.hl[0]) : (ssGet("klimop_uit_edtab")||"fact"));
@@ -2911,26 +3025,50 @@ async function saveEdit(id){
   }
   const base=ED.base, next=fromModel(M,base,{admin:true});
   const ch=diffTrips(norm(base),next);
-  const req=ED.reqId?D.reqs.find(a=>a.id===ED.reqId):null;
+  let req=ED.req;
   if(!ch.length && !req){ detailMode="lees"; ED.M=null; renderDetail(id); toast("Geen wijzigingen"); return; }
   ED.busy=true; const b=$("edSave"); b.classList.add("busy"); b.innerHTML=`<span class="spin"></span>Bezig met bewaren…`;
   try{
+    /* Verwerk je een aanvraag: staat ze nog open? Anders niets overschrijven en de keuze aan jou laten. */
+    if(req){
+      const cur=await guarded(()=>API.getReq(req.id)).catch(()=>null);
+      const st=cur&&cur.data&&cur.data.status;
+      if(cur){ const n=fromReq(cur), i=D.reqs.findIndex(x=>x.id===n.id); if(i>=0) D.reqs[i]=n; }
+      if(st && st!=="open"){
+        const verder=await confirmDialog({title:"Aanvraag intussen al behandeld",html:`<p>Deze aanvraag werd intussen al <b>${st==="verwerkt"?"verwerkt":"afgewezen"}</b> door iemand anders. Die beslissing blijft staan.</p><p>Wil je je wijzigingen aan de uitstap toch bewaren, los van de aanvraag?</p>`,ok:"Wijzigingen toch bewaren",cancel:"Terug naar bewerken"});
+        if(!verder) return;
+        req=null; ED.req=null; ED.reqId=null;
+        if(!ch.length){ detailMode="lees"; ED.M=null; renderAll(); renderDetail(id); toast("Geen wijzigingen"); return; }
+      }
+    }
     /* De historiek is openbaar: wijzigingen aan beheergegevens (interne notitie, …) komen er niet in */
     const lbl=[...new Set(ch.filter(f=>!BEHEER_FIELDS.includes(f)).map(f=>FIELD_LBL[f]||f))];
     const logTxt = (lbl.length||req) ? (req?"Wijzigingsaanvraag verwerkt. ":"")+(lbl.length?"Gewijzigd: "+lbl.join(", "):"") : null;
     const saved=await saveTrip(next,base,{log:logTxt?logTxt.trim():null});
-    if(req){ try{ await updateReq(Object.assign({},req,{status:"verwerkt",afgehandeldOp:new Date().toISOString()})); }catch(e){ dbFail(e,"De aanvraag afsluiten"); } }
-    detailMode="lees"; ED.M=null; renderAll(); renderDetail(id);
+    let reqFout=null;
+    if(req){ try{ await updateReq(Object.assign({},req,{status:"verwerkt",afgehandeldOp:new Date().toISOString()})); }catch(e){ reqFout=e; } }
+    detailMode="lees"; ED.M=null; ED.req=null; renderAll(); renderDetail(id);
+    if(reqFout){
+      console.error(reqFout);
+      toast(reqFout.afgehandeld ? reqFout.message+" Je wijzigingen aan de uitstap zijn wel bewaard."
+        : "De wijzigingen aan de uitstap zijn bewaard, maar de aanvraag bleef open ("+(reqFout.network?"geen verbinding":reqFout.rechten?"niet (meer) aangemeld":"fout bij bewaren")+"). Klik bij de aanvraag opnieuw op Verwerken om ze af te sluiten.","err");
+      return;
+    }
     const ssc=ssChanged(saved);
     toast(ssc.length?"Bewaard. Let op: opnieuw doorgeven aan Smartschool.":"Wijzigingen bewaard");
-  }catch(e){ dbFail(e,"Bewaren"); }
+  }catch(e){
+    /* Gedeeltelijk bewaard: de openbare gegevens staan in de database, de interne nog niet.
+       Het bewerkvenster blijft open; opnieuw Opslaan bewaart enkel nog wat ontbrak. */
+    if(e.partial && e.saved) ED.base=clone(e.saved);
+    dbFail(e,"Bewaren");
+  }
   finally{ ED.busy=false; const b2=$("edSave"); if(b2){ b2.classList.remove("busy"); b2.innerHTML=ic("check",16)+"Opslaan"; } }
 }
 
 /* ---------- Wijziging of annulering aanvragen (leerkracht) ---------- */
-const RQ={type:"wijziging",klassen:null};
+const RQ={type:"wijziging",klassen:null,busy:false,pendingId:null};
 function openReqForm(t){
-  RQ.type="wijziging"; RQ.klassen=t.klassen.slice(); RQ.basis=t.kostprijsBasis||"totaal"; RQ.tried=false;
+  RQ.type="wijziging"; RQ.klassen=t.klassen.slice(); RQ.basis=t.kostprijsBasis||"totaal"; RQ.busy=false; RQ.pendingId=null;
   $("dlg2").innerHTML="";
   paintReq(t);
 }
@@ -2977,6 +3115,7 @@ function paintReq(t){
   };
 }
 async function sendReq(t){
+  if(RQ.busy) return;                                   // geen tweede verzending terwijl de eerste loopt
   const v=id=>($(id)?$(id).value.trim():"");
   const naam=v("rq_naam"), toel=v("rq_toel"), errs=[];
   const velden={};
@@ -2991,12 +3130,15 @@ async function sendReq(t){
   } else if(!toel) errs.push("Geef aan waarom de uitstap niet doorgaat.");
   if(!naam) errs.push("Vul je naam in.");
   if(errs.length){ $("rqErr").innerHTML=`<div class="form-alert" style="margin:0">${ic("alert",16)}<div>${errs.map(esc).join("<br>")}</div></div>`; return; }
-  const b=$("rqSend"); b.classList.add("busy"); b.innerHTML=`<span class="spin"></span>Bezig met versturen…`;
+  const b=$("rqSend"); RQ.busy=true; b.disabled=true; b.classList.add("busy"); b.innerHTML=`<span class="spin"></span>Bezig met versturen…`;
+  /* Dezelfde id bij een nieuwe poging: kwam de eerste toch aan, dan ontstaat er geen tweede aanvraag */
+  if(!RQ.pendingId) RQ.pendingId=uid();
   try{
-    await insertReq({id:uid(),uitstapId:t.id,type:RQ.type,velden,toelichting:toel,door:naam,op:new Date().toISOString(),status:"open"});
-    savePrefs({naam}); closeDlg("dlg2"); renderAll(); renderDetail(t.id,true);
+    await insertReq({id:RQ.pendingId,uitstapId:t.id,type:RQ.type,velden,toelichting:toel,door:naam,op:new Date().toISOString(),status:"open"});
+    RQ.pendingId=null; savePrefs({naam}); closeDlg("dlg2"); renderAll(); renderDetail(t.id,true);
     toast("Aanvraag verstuurd. De administratie verwerkt ze.");
-  }catch(e){ dbFail(e,"Versturen"); b.classList.remove("busy"); b.innerHTML=ic("send",16)+"Aanvraag versturen"; }
+  }catch(e){ dbFail(e,"Versturen"); b.disabled=false; b.classList.remove("busy"); b.innerHTML=ic("send",16)+"Aanvraag versturen"; }
+  finally{ RQ.busy=false; }
 }
 function processReq(t,a){
   if(a.type==="annulering"){ startEdit(t,{planStatus:"geannuleerd",annuleringReden:a.toelichting||""},a.id); return; }
@@ -3016,8 +3158,9 @@ function rejectReq(t,a){
   $("dlg2").onclick=async e=>{
     if(!e.target.closest("#rjDo")) return;
     const r=$("rjReden").value.trim(); if(!r){ $("rjErr").innerHTML=`<div class="ferr">${ic("alert",14)}<span>Geef een reden.</span></div>`; return; }
+    const knop=$("rjDo"); if(knop.disabled) return; knop.disabled=true;
     try{ await updateReq(Object.assign({},a,{status:"afgewezen",antwoord:r,afgehandeldOp:new Date().toISOString()})); closeDlg("dlg2"); renderAll(); renderDetail(t.id,true); toast("Aanvraag afgewezen"); }
-    catch(err){ dbFail(err,"Afwijzen"); }
+    catch(err){ if(err.afgehandeld){ closeDlg("dlg2"); renderAll(); renderDetail(t.id,true); } else knop.disabled=false; dbFail(err,"Afwijzen"); }
   };
 }
 
@@ -3044,21 +3187,33 @@ function busMail(t){
 
 /* ---------- Agenda (.ics) ---------- */
 function icsEsc(s){ return String(s||"").replace(/\\/g,"\\\\").replace(/;/g,"\\;").replace(/,/g,"\\,").replace(/\r?\n/g,"\\n"); }
+/* Regels afbreken op 75 bytes (UTF-8), nooit midden in een teken; vervolgregels beginnen met een spatie */
+function icsFold(line){
+  const enc=new TextEncoder(); let out="", cur="", n=0;
+  for(const ch of line){ const b=enc.encode(ch).length; if(n+b>75){ out+=cur+"\r\n "; cur=""; n=1; } cur+=ch; n+=b; }
+  return out+cur;
+}
+/* Einde van een daguitstap: het opgegeven uur als dat na het vertrek ligt, anders één uur later (ook over middernacht) */
+function icsEinde(t){
+  const e=t.terugSchool||t.terug;
+  if(e && e>t.vertrekSchool) return {d:t.datumStart,t:e};
+  const [h,m]=t.vertrekSchool.split(":").map(Number), s=parseISO(t.datumStart), x=new Date(s.getFullYear(),s.getMonth(),s.getDate(),h+1,m);
+  return {d:toISO(x),t:`${String(x.getHours()).padStart(2,"0")}:${String(x.getMinutes()).padStart(2,"0")}`};
+}
 function downloadIcs(t){
+  if(t._datumFout){ toast("Deze uitstap heeft geen geldige datum. Pas eerst de datum aan.","err"); return; }
   const d=s=>s.replace(/-/g,""), tm=x=>x.replace(":","")+"00";
   const L=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//GO! basisschool Klim-Op//Uitstappen//NL","CALSCALE:GREGORIAN","BEGIN:VEVENT",
     `UID:${t.id}@uitstappen.klimop`,`DTSTAMP:${new Date().toISOString().replace(/[-:]/g,"").slice(0,15)}Z`];
-  if(t.type==="dag" && t.vertrekSchool){ L.push(`DTSTART:${d(t.datumStart)}T${tm(t.vertrekSchool)}`); L.push(`DTEND:${d(t.datumStart)}T${tm(t.terugSchool||t.terug||addHour(t.vertrekSchool))}`); }
+  if(t.type==="dag" && t.vertrekSchool){ const e=icsEinde(t); L.push(`DTSTART:${d(t.datumStart)}T${tm(t.vertrekSchool)}`); L.push(`DTEND:${d(e.d)}T${tm(e.t)}`); }
   else { L.push(`DTSTART;VALUE=DATE:${d(t.datumStart)}`); L.push(`DTEND;VALUE=DATE:${d(addDays(tripEnd(t),1))}`); }
   L.push(`SUMMARY:${icsEsc(t.activiteit+" ("+sortKlassen(t.klassen).join(", ")+")")}`);
   if(bestemming(t)) L.push(`LOCATION:${icsEsc(bestemming(t))}`);
   L.push(`DESCRIPTION:${icsEsc(ssText(t)+(t.contactTel?"\nTelefoon: "+t.contactTel:""))}`);
   L.push("END:VEVENT","END:VCALENDAR");
-  const fold=l=>{ let o="",s=l; while(s.length>73){ o+=s.slice(0,73)+"\r\n "; s=s.slice(73); } return o+s; };
-  download(`uitstap_${t.datumStart}_${t.activiteit.replace(/[^\w-]+/g,"_").slice(0,30)}.ics`,L.map(fold).join("\r\n"),"text/calendar;charset=utf-8");
+  download(`uitstap_${t.datumStart}_${t.activiteit.replace(/[^\w-]+/g,"_").slice(0,30)}.ics`,L.map(icsFold).join("\r\n"),"text/calendar;charset=utf-8");
   toast("Agenda-bestand gedownload");
 }
-function addHour(t){ const [h,m]=t.split(":").map(Number); return `${String(Math.min(23,h+1)).padStart(2,"0")}:${String(m).padStart(2,"0")}`; }
 
 /* ---------- Uitstapfiche (A4) ---------- */
 function printFiche(t){
@@ -3085,7 +3240,7 @@ function calItems(from,to){
   set.vakanties.forEach(v=>{ if(v.van<=to && v.tot>=from) items.push({kind:"vak",s:v.van,e:v.tot,naam:v.naam}); });
   set.vrijedagen.forEach(v=>{ if(v.datum>=from && v.datum<=to) items.push({kind:"vak",s:v.datum,e:v.datum,naam:v.naam}); });
   set.meldingen.forEach(m=>{ const e=m.datumEind||m.datum; if(m.datum<=to && e>=from) items.push({kind:"melding",s:m.datum,e,naam:m.naam,m}); });
-  liveTrips().forEach(t=>{ const e=tripEnd(t); if(t.datumStart<=to && e>=from && (!ui.klas||t.klassen.includes(ui.klas))) items.push({kind:t.type==="meerdaags"?"meer":"dag",s:t.datumStart,e,naam:t.activiteit,t}); });
+  liveTrips().forEach(t=>{ if(t._datumFout) return; const e=tripEnd(t); if(t.datumStart<=to && e>=from && (!ui.klas||t.klassen.includes(ui.klas))) items.push({kind:t.type==="meerdaags"?"meer":"dag",s:t.datumStart,e,naam:t.activiteit,t}); });
   const rank={vak:0,meer:1,melding:2,dag:3};
   return items.sort((a,b)=>(a.kind==="vak"?0:1)-(b.kind==="vak"?0:1)||a.s.localeCompare(b.s)||daysBetween(b.s,b.e)-daysBetween(a.s,a.e)||rank[a.kind]-rank[b.kind]);
 }
@@ -3254,7 +3409,7 @@ const xlUur = v => v ? `${+v.slice(0,2)}u${v.slice(3,5)}` : "";
 const kmTxt = n => n==null ? "" : String(n).replace(".",",");
 function parseKm(v){ const s=String(v??"").trim(); if(!s) return null; const n=parseEuro(s); return (n==null||isNaN(n)) ? NaN : n; }
 function offerteMist(t){
-  const m=[]; if(!t.vertrekSchool) m.push("vertrekuur"); if(!t.terug) m.push(t.type==="meerdaags"?"uur terugrit":"uur terugrit");
+  const m=[]; if(!t.vertrekSchool) m.push("vertrekuur"); if(!t.terug) m.push("uur terugrit");
   if(!bestemmingStad(t)) m.push("adres"); return m;
 }
 
@@ -3356,10 +3511,6 @@ async function offerteDownload(){
   closeDlg("dlg"); renderAll();
   if(fout) toast(`Excel gedownload, maar ${plural(fout,"rit kon","ritten konden")} niet bijgewerkt worden (geen verbinding). Probeer opnieuw.`,"err");
   else toast(gedaan ? `Excel gedownload · ${plural(gedaan,"rit","ritten")} op Offertes opgevraagd` : "Excel gedownload");
-}
-function downloadBlob(name,blob){
-  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=name;
-  document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },800);
 }
 
 /* ---------- Excel (.xlsx) zonder externe bibliotheek ---------- */
@@ -3474,7 +3625,7 @@ function buildBusXlsx(set,rows){
 /* ============================================================
    ARCHIEF: vorige schooljaren (alleen lezen) en de prullenbak
    ============================================================ */
-const AR = { years:null, loading:false, err:false };
+const AR = { years:null };
 async function archYears(){
   if(AR.years) return AR.years;
   const ys=await API.years(); AR.years=[...new Set(ys)].filter(Boolean).sort().reverse(); return AR.years;
@@ -3509,7 +3660,7 @@ async function renderArchief(){
     ${isAdmin&&open.length?`<div class="fwarn" style="margin-bottom:12px">${ic("alert",16)}<div><b>${plural(open.length,"uitstap wacht","uitstappen wachten")} nog op een factuur</b> in ${esc(ui.archSJ)}. Je vindt ze ook bij Te doen in het overzicht.</div></div>`:""}
     <div class="bl-card" id="arList" style="--cols:${cols}"><div class="bl-head"><span>Datum</span><span>Activiteit</span><span>Klassen</span><span>Vervoer</span><span class="r">Kostprijs</span><span>Status</span></div>
       ${rows.length?rows.map(t=>{ const k=kosten(t); return `<div class="bl-item" data-id="${esc(t.id)}"><div class="bl-row${isCancel(t)?" cancel":""}" tabindex="0" role="button">
-        <div class="c-date"><b>${esc(fmtD(t.datumStart))}</b><small>${parseISO(t.datumStart).getFullYear()}</small></div>
+        <div class="c-date"><b>${esc(fmtD(t.datumStart))}</b><small>${esc(jaarVan(t.datumStart))}</small></div>
         <div class="c-act"><b>${hl(t.activiteit,ts)}</b><small>${[bestemmingStad(t)?hl(bestemmingStad(t),ts):"",t.leerkracht?hl(t.leerkracht,ts):""].filter(Boolean).join(" · ")||"&nbsp;"}</small></div>
         <div class="c-cell c-klas klas-tags">${sortKlassen(t.klassen).map(x=>`<span class="klas-tag">${hl(x,ts)}</span>`).join("")}</div>
         <div class="c-cell c-verv"><span class="vi">${VERVOER[vervoer(t)]?ic(VERVOER[vervoer(t)].ic,16):""}</span>${esc(t.busNodig?"Bus":vervoerTxt(t))}</div>
@@ -3519,7 +3670,7 @@ async function renderArchief(){
     </div>
     ${isAdmin?`<div class="page-head" style="margin-top:28px"><div><h2 style="font-size:17px">Prullenbak</h2><p>Verwijderde uitstappen. Zet ze terug of verwijder ze definitief.</p></div></div>
       <div class="bl-card" style="--cols:118px minmax(0,1.4fr) minmax(0,.8fr) 190px 250px">${trash.length?trash.map(t=>`<div class="bl-item"><div class="bl-row" style="cursor:default">
-        <div class="c-date"><b>${esc(fmtD(t.datumStart))}</b><small>${parseISO(t.datumStart).getFullYear()}</small></div>
+        <div class="c-date"><b>${esc(fmtD(t.datumStart))}</b><small>${esc(jaarVan(t.datumStart))}</small></div>
         <div class="c-act"><b>${esc(t.activiteit)}</b><small>${esc(t.leerkracht||"")}</small></div>
         <div class="c-cell klas-tags">${sortKlassen(t.klassen).map(x=>`<span class="klas-tag">${esc(x)}</span>`).join("")}</div>
         <div class="c-cell m-hide"><small>verwijderd ${esc(fmtStamp(t.verwijderdOp))}</small></div>
@@ -3537,7 +3688,7 @@ async function renderArchief(){
       const ok=await wipeDialog({title:"Definitief verwijderen?",html:`<b>${esc(t.activiteit)}</b> (${esc(fmtDY(t.datumStart))}) wordt definitief uit de database verwijderd, samen met de wijzigingsaanvragen. Dit kan niet ongedaan gemaakt worden.`,
         exportFn:()=>exportCSV([t],"verwijderd",`uitstap_${t.datumStart}_verwijderd.csv`)});
       if(!ok) return;
-      try{ await guarded(()=>API.deleteTrip(t.id)); if(D.beheer[t.id]){ try{ await guarded(()=>API.deleteBeheer(t.id)); }catch(x){} delete D.beheer[t.id]; } D.trips=D.trips.filter(x=>x.id!==t.id); D.arch=D.arch.filter(x=>x.id!==t.id); D.reqs=D.reqs.filter(a=>a.uitstapId!==t.id); renderAll(); toast("Definitief verwijderd"); }
+      try{ await guarded(()=>API.deleteTrip(t.id)); markWrite(); if(D.beheer[t.id]){ try{ await guarded(()=>API.deleteBeheer(t.id)); }catch(x){} delete D.beheer[t.id]; } D.trips=D.trips.filter(x=>x.id!==t.id); D.arch=D.arch.filter(x=>x.id!==t.id); D.reqs=D.reqs.filter(a=>a.uitstapId!==t.id); renderAll(); toast("Definitief verwijderd"); }
       catch(er){ dbFail(er,"Verwijderen"); } return; }
     const row=e.target.closest("#arList .bl-item"); if(row) openDetail(row.dataset.id);
   };
@@ -3548,7 +3699,8 @@ async function renderArchief(){
    INSTELLINGEN (beheer)
    ============================================================ */
 async function removeWithUndo(coll,id,msg){
-  const arr=S()[coll], idx=arr.findIndex(x=>x.id===id), item=clone(arr[idx]); if(idx<0) return;
+  const arr=S()[coll], idx=arr.findIndex(x=>x.id===id); if(idx<0) return;
+  const item=clone(arr[idx]);
   try{
     await mutateSettings(s=>{ s[coll]=s[coll].filter(x=>x.id!==id); }); renderAll();
     toast(msg,"ok",{label:"Ongedaan maken",fn:async()=>{ try{ await mutateSettings(s=>{ if(!s[coll].some(x=>x.id===id)) s[coll].splice(Math.min(idx,s[coll].length),0,item); }); renderAll(); toast("Teruggezet"); }catch(e){ dbFail(e,"Terugzetten"); } }});
@@ -3584,11 +3736,11 @@ function renderInstellingen(){
       <div class="move-bar"><span class="hint" id="klSelTxt">${ui.selKlas?`<b>${esc((s.klassen.find(k=>k.id===ui.selKlas)||{}).naam||"")}</b> geselecteerd`:"Geen klas geselecteerd"}</span>
         <button class="btn btn-ghost btn-sm" data-kmove="-1"${ui.selKlas?"":" disabled"}>${ic("arrowUp",14)}Omhoog</button><button class="btn btn-ghost btn-sm" data-kmove="1"${ui.selKlas?"":" disabled"}>${ic("arrowDown",14)}Omlaag</button></div>
       <div class="set-grid" style="gap:12px 20px">${GROEPEN.map(g=>`<div><div class="set-sub">${g}</div><div class="set-list" style="margin-top:6px">
-        ${s.klassen.filter(k=>k.groep===g).map(k=>`<div class="srow klas${ui.selKlas===k.id?" is-sel":""}${k.actief?"":" off"}" data-ksel="${k.id}">
-          <input class="ctrl" data-kname="${k.id}" value="${esc(k.naam)}" aria-label="Naam klas ${esc(k.naam)}">
-          <select class="ctrl" data-kgroep="${k.id}" aria-label="Groep ${esc(k.naam)}">${GROEPEN.map(x=>`<option${x===k.groep?" selected":""}>${x}</option>`).join("")}</select>
-          <label class="check-row k-act" style="font-size:13px"><input type="checkbox" data-kact="${k.id}"${k.actief?" checked":""}> actief</label>
-          <button class="icon-btn" data-kdel="${k.id}" aria-label="Verwijder ${esc(k.naam)}" title="${usedBy(k.naam)?"In gebruik: zet liever op niet actief":"Verwijderen"}">${ic("trash",15)}</button></div>`).join("")||`<div class="hint">Geen klassen.</div>`}
+        ${s.klassen.filter(k=>k.groep===g).map(k=>`<div class="srow klas${ui.selKlas===k.id?" is-sel":""}${k.actief?"":" off"}" data-ksel="${esc(k.id)}">
+          <input class="ctrl" data-kname="${esc(k.id)}" value="${esc(k.naam)}" aria-label="Naam klas ${esc(k.naam)}">
+          <select class="ctrl" data-kgroep="${esc(k.id)}" aria-label="Groep ${esc(k.naam)}">${GROEPEN.map(x=>`<option${x===k.groep?" selected":""}>${x}</option>`).join("")}</select>
+          <label class="check-row k-act" style="font-size:13px"><input type="checkbox" data-kact="${esc(k.id)}"${k.actief?" checked":""}> actief</label>
+          <button class="icon-btn" data-kdel="${esc(k.id)}" aria-label="Verwijder ${esc(k.naam)}" title="${usedBy(k.naam)?"In gebruik: zet liever op niet actief":"Verwijderen"}">${ic("trash",15)}</button></div>`).join("")||`<div class="hint">Geen klassen.</div>`}
         </div></div>`).join("")}
         <div><div class="set-sub">Klas toevoegen</div><div class="srow" style="grid-template-columns:minmax(0,1fr) 120px auto;margin-top:6px">
           <input class="ctrl" id="klNew" placeholder="bv. 1KC" aria-label="Naam nieuwe klas"><select class="ctrl" id="klNewG" aria-label="Groep nieuwe klas">${GROEPEN.map(x=>`<option>${x}</option>`).join("")}</select><button class="btn btn-primary btn-sm" id="klAdd">${ic("plus",14)}Toevoegen</button></div></div>
@@ -3693,11 +3845,25 @@ async function renameKlas(id,nieuw){
   const older=D.trips.filter(t=>t.klassen.includes(oud) && t.datumStart<van).length;
   const ok=await confirmDialog({title:`Klas ${oud} hernoemen naar ${nieuw}?`,html:`<p>${affected.length?`${plural(affected.length,"uitstap","uitstappen")} van dit schooljaar en later ${affected.length===1?"krijgt":"krijgen"} de nieuwe naam.`:"Er zijn geen uitstappen van dit schooljaar met deze klas."}${older?` Uitstappen van vorige schooljaren behouden <b>${esc(oud)}</b>, zodat het archief klopt.`:""}</p>`,ok:"Hernoemen"});
   if(!ok){ renderInstellingen(); return; }
-  try{
-    await mutateSettings(s=>{ const x=s.klassen.find(y=>y.id===id); if(x) x.naam=nieuw; });
-    for(const t of affected){ await patchTrip(t.id,x=>{ x.klassen=x.klassen.map(c=>c===oud?nieuw:c); },`Klas ${oud} hernoemd naar ${nieuw}`); }
-    renderAll(); toast(`Klas hernoemd naar ${nieuw}`);
-  }catch(e){ dbFail(e,"Hernoemen"); renderAll(); }
+  try{ await mutateSettings(s=>{ const x=s.klassen.find(y=>y.id===id); if(x) x.naam=nieuw; }); }
+  catch(e){ dbFail(e,"Hernoemen"); renderAll(); return; }      // niets gewijzigd
+  await hernoemInUitstappen(oud,nieuw);
+}
+/* De uitstappen één voor één bijwerken. Lukt het bij sommige niet, dan zegt de melding hoeveel,
+   en "Opnieuw proberen" werkt enkel de uitstappen bij die nog de oude naam hebben. */
+async function hernoemInUitstappen(oud,nieuw){
+  const van=sjRange(huidigSJ())[0];
+  const todo=D.trips.filter(t=>!t.verwijderdOp && t.klassen.includes(oud) && t.datumStart>=van);
+  let fout=0, laatste=null;
+  for(const t of todo){
+    try{ await patchTrip(t.id,x=>{ x.klassen=x.klassen.map(c=>c===oud?nieuw:c); },`Klas ${oud} hernoemd naar ${nieuw}`); }
+    catch(e){ fout++; laatste=e; }
+  }
+  renderAll();
+  if(!fout){ toast(`Klas hernoemd naar ${nieuw}`); return; }
+  console.error(laatste);
+  toast(`De klas heet nu ${nieuw}, maar ${plural(fout,"uitstap heeft","uitstappen hebben")} nog de oude naam ${oud} (${laatste&&laatste.network?"geen verbinding":laatste&&laatste.rechten?"niet (meer) aangemeld":"fout bij bewaren"}).`,"err",
+    {label:"Opnieuw proberen",fn:()=>hernoemInUitstappen(oud,nieuw)});
 }
 
 /* ============================================================
