@@ -1374,7 +1374,8 @@ const T_TRIP=PFX+"uitstappen", T_REQ=PFX+"uitstap_aanvragen", T_SET=PFX+"instell
 class DbError extends Error{ constructor(msg,{conflict=false,network=false,rechten=false,status=0,partial=false}={}){ super(msg); this.conflict=conflict; this.network=network; this.rechten=rechten; this.status=status; this.partial=partial; } }
 
 /* ---------- Aanmelding (supabase-js, enkel hiervoor) ----------
-   Eigen storageKey, zodat de materialentool (zelfde domein, zelfde project) deze sessie niet oppikt.
+   GEDEELD MET DE MATERIALENTOOL: dezelfde storageKey "klimop_auth" en dezelfde vlag "klimop_auth_blijven".
+   Wie in de ene tool aanmeldt, is (in dezelfde browser) ook in de andere aangemeld. Wijzig dit enkel samen met bestelbon_materialen.html.
    "Aangemeld blijven" = sessie in localStorage; anders in sessionStorage (stopt bij sluiten browser). */
 function supabaseAuth(){
   const REM="klimop_auth_blijven";
@@ -1894,9 +1895,9 @@ async function tryLogin(){
     await AUTH.signIn(mail,pw,rem);
     const ok=await API.isBeheerder();
     if(!ok){ await AUTH.signOut(); loginFout("Dit account heeft geen beheerrechten voor de uitstappentool."); return; }
-    isAdmin=true; authGen++; closeOverlay("pinOverlay");
+    isAdmin=true; authGen++; closeOverlay("pinOverlay"); const na=naAanmelden; naAanmelden=null;
     try{ await loadAll(); }catch(e){}
-    renderAll(); toast("Aangemeld als beheerder");
+    renderAll(); toast("Aangemeld als beheerder"); if(na) na();
   }catch(e){
     const m=String(e&&e.message||"");
     loginFout(/invalid login|invalid_credentials|invalid grant/i.test(m) ? "E-mailadres of wachtwoord klopt niet."
@@ -1924,14 +1925,27 @@ async function logout(){
 /* Bij het opstarten: bestaande sessie? Dan nagaan of dit account beheerder is. */
 async function initAuth(){
   try{ if(await AUTH.token()) isAdmin = await API.isBeheerder(); }catch(e){ isAdmin=false; }
-  AUTH.onChange(ev=>{
+  AUTH.onChange(async ev=>{
+    /* Aangemeld in een andere tool (zelfde browser) terwijl deze tool openstaat */
+    if(ev==="SIGNED_IN" && !isAdmin && !loginBusy){
+      try{ if(await API.isBeheerder() && !isAdmin){ isAdmin=true; authGen++; try{ await loadAll(); }catch(e){} renderAll(); toast("Aangemeld als beheerder"); } }catch(e){}
+    }
     if(ev==="SIGNED_OUT" && isAdmin){ wisBeheerToestand(); renderAll();
       toast("Je bent afgemeld. Meld opnieuw aan om verder te beheren.","err",{label:"Aanmelden",fn:()=>openLogin()}); }
   });
 }
 $("pinOk").onclick=tryLogin;
-$("pinCancel").onclick=()=>closeOverlay("pinOverlay");
-$("adminBtn").onclick=()=>{ if(isAdmin) logout(); else openLogin(); };
+$("pinCancel").onclick=()=>{ naAanmelden=null; closeOverlay("pinOverlay"); };
+$("adminBtn").onclick=()=>{ if(isAdmin) logout(); else { naAanmelden=null; openLogin(); } };
+/* Rechtstreekse link vanuit een andere tool: uitstappen.html#klassen opent Instellingen → Klassen,
+   meteen als je al beheerder bent, anders na het aanmelden. */
+let naAanmelden=null;
+function openRechtstreeks(){
+  if(location.hash!=="#klassen") return;
+  try{ history.replaceState(null,"",location.pathname+location.search); }catch(e){}
+  const ga=()=>{ setView("instellingen"); setTimeout(()=>{ const k=$("set-klassen"); if(k) k.scrollIntoView({behavior:"smooth",block:"start"}); },80); };
+  if(isAdmin) ga(); else { naAanmelden=ga; openLogin(); }
+}
 $("conn").onclick=()=>refresh({manual:true});
 
 /* ---------- Tabbladen ---------- */
@@ -3732,7 +3746,7 @@ function renderInstellingen(){
       <div class="grid">${[["school","School",4,"text"],["contact","Contactpersoon",4,"text"],["mail","E-mail",4,"email"],["tel","Telefoon",4,"tel"],["vertrek","Vertrekadres (school)",8,"text"]]
         .map(([k,l,sp,ty])=>`<div class="field span${sp}"><label for="so_${k}">${l}</label><input class="ctrl" id="so_${k}" data-so="${k}" type="${ty}" value="${esc(OFF()[k]||"")}"></div>`).join("")}</div></div>
 
-    <div class="card set-card full"><div><div class="section-title">Klassen</div><div class="section-sub">Klik op een klas om ze te verplaatsen. Een klas die niet meer bestaat, zet je op niet actief: oude uitstappen blijven dan correct.</div></div>
+    <div class="card set-card full" id="set-klassen"><div><div class="section-title">Klassen</div><div class="section-sub">Klik op een klas om ze te verplaatsen. Een klas die niet meer bestaat, zet je op niet actief: oude uitstappen blijven dan correct.</div></div>
       <div class="move-bar"><span class="hint" id="klSelTxt">${ui.selKlas?`<b>${esc((s.klassen.find(k=>k.id===ui.selKlas)||{}).naam||"")}</b> geselecteerd`:"Geen klas geselecteerd"}</span>
         <button class="btn btn-ghost btn-sm" data-kmove="-1"${ui.selKlas?"":" disabled"}>${ic("arrowUp",14)}Omhoog</button><button class="btn btn-ghost btn-sm" data-kmove="1"${ui.selKlas?"":" disabled"}>${ic("arrowDown",14)}Omlaag</button></div>
       <div class="set-grid" style="gap:12px 20px">${GROEPEN.map(g=>`<div><div class="set-sub">${g}</div><div class="set-list" style="margin-top:6px">
@@ -3876,6 +3890,7 @@ async function boot(){
   catch(e){ console.error(e); D.failed=true; setConn("off"); renderAll(); toast("De gegevens konden niet geladen worden. Controleer je verbinding.","err"); return; }
   if(!lsGet(LS_SEEN)) lsSet(LS_SEEN, window.__SEEN_DEFAULT || new Date().toISOString());
   renderAll();
+  openRechtstreeks();
 }
 hydrateIcons();
 boot();
