@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.116.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.116.0/dist/umd/supabase.js"></script>
 <style>
 /* ============================================================
    KLIM-OP DESIGN SYSTEM — canonieke tokens (v1.2)
@@ -24,9 +24,15 @@
   --shadow:0 1px 2px rgba(8,83,79,.05),0 8px 24px rgba(8,83,79,.07);
   --shadow-lg:0 14px 50px rgba(8,83,79,.20);
   --r:14px; --r-sm:10px; --r-lg:20px;
-  /* Uitbreiding (kandidaat design system v1.3) */
-  --amber-line:#f0dcb1; --teal-l2:#d9efec; --green-line:#bfe6c5; --sand-l:#f7f3ea; --coral-line-l:rgba(255,107,92,.38); --green-hover:#dcefdf; --teal-ring:rgba(14,158,150,.14);
+  /* Sinds 1.4 — lijnen, ring, streep, contrastveilige teksttinten */
+  --amber-line:#f0dcb1; --green-line:#bfe6c5; --teal-ring:rgba(14,158,150,.14);
+  --amber-t:#8a5a10; --green-t:#24702f; --coral-t:#b8432f;
   --stripe:linear-gradient(90deg,var(--teal) 0%,var(--green) 40%,#e7c34e 66%,var(--coral) 100%);
+  /* Sinds 1.4 — knoppen en gekozen toestanden (donkerteal), getinte velden */
+  --btn:var(--teal-d); --btn-h:var(--teal-xd);
+  --field:#f3f7f6; --field-h:#fafcfc;
+  /* Eigen aan de materialentool */
+  --teal-l2:#d9efec; --sand-l:#f7f3ea; --coral-line-l:rgba(255,107,92,.38); --green-hover:#dcefdf; --line-h:#b7cdc9;
 }
 
 /* ---------- Basis ---------- */
@@ -52,32 +58,32 @@ header{background:var(--paper);box-shadow:0 1px 0 var(--line),0 8px 24px rgba(8,
 .brand p{font-size:13px;color:var(--slate)}
 .status{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .status>*{height:32px;display:inline-flex;align-items:center;gap:7px;padding:0 13px;border-radius:999px;font-size:12.5px;font-weight:600;white-space:nowrap}
-.conn{background:var(--green-l);color:var(--green-d);transition:filter .15s}
+.conn{background:var(--green-l);color:var(--green-t);transition:filter .15s}
 .conn:hover{filter:brightness(.96)}
 .conn .dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(63,163,77,.18)}
-.conn.off{background:var(--coral-soft);color:var(--coral-d)}
+.conn.off{background:var(--coral-soft);color:var(--coral-t)}
 .conn.off .dot{background:var(--coral);box-shadow:0 0 0 3px var(--coral-soft)}
 .conn.busy .dot{animation:pulse .9s ease-in-out infinite}
 @keyframes pulse{50%{opacity:.35}}
-.year-badge{background:var(--teal-l);color:var(--teal-d)}
+.year-badge{background:var(--teal-l);color:var(--teal-xd)}
 .admin-toggle{border:1px solid var(--line-d);background:var(--paper);color:var(--slate);transition:.15s}
 .admin-toggle:hover{border-color:var(--teal);color:var(--teal-d)}
-.admin-toggle.on{background:var(--teal);border-color:var(--teal);color:var(--paper)}
-.admin-toggle.on:hover{background:var(--teal-d)}
+.admin-toggle.on{background:var(--btn);border-color:var(--btn);color:var(--paper)}
+.admin-toggle.on:hover{background:var(--btn-h)}
 body:not(.is-admin) .admin-only{display:none !important}
 .stripe{height:4px;border-radius:4px;margin:16px 0 12px;background:var(--stripe)}
 nav.tabs{position:relative;display:flex;gap:6px;flex-wrap:wrap}
 .tab{position:relative;z-index:1;display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;
   font-size:14px;font-weight:600;color:var(--slate);transition:color .2s,background .2s}
 .tab:hover{color:var(--ink);background:var(--bg)}
-.tab.active{color:var(--teal-d);background:var(--teal-l)}
+.tab.active{color:var(--teal-xd);background:var(--teal-l)}
 nav.tabs.ind-ready .tab.active{background:transparent}
 .tab-ind{position:absolute;z-index:0;left:0;top:0;width:0;height:0;border-radius:999px;background:var(--teal-l);
   transition:left .3s cubic-bezier(.3,.7,.3,1),top .3s cubic-bezier(.3,.7,.3,1),width .3s cubic-bezier(.3,.7,.3,1),height .3s;pointer-events:none;opacity:0}
 nav.tabs.ind-ready .tab-ind{opacity:1}
 nav.tabs.no-anim .tab-ind{transition:none}
 .tab .n{background:var(--bg);color:var(--slate);font-size:11px;font-weight:700;padding:1px 8px;border-radius:999px;min-width:22px;text-align:center;transition:.2s}
-.tab.active .n{background:var(--teal);color:var(--paper)}
+.tab.active .n{background:var(--btn);color:var(--paper)}
 
 /* ---------- Views ---------- */
 main{max-width:1236px;margin:0 auto;padding:24px 28px 90px}
@@ -90,56 +96,68 @@ main{max-width:1236px;margin:0 auto;padding:24px 28px 90px}
 .form-card{padding:24px 26px}
 .section-title{font-size:16px;font-weight:700;margin-bottom:4px}
 .section-sub{font-size:13px;color:var(--slate);margin-bottom:18px}
+/* sectietitel (1.4): teal hoofdletters met punt */
+.legend{display:flex;align-items:center;gap:10px;font-size:12.5px;font-weight:700;letter-spacing:1.3px;text-transform:uppercase;color:var(--teal-d)}
+.legend .dot{width:7px;height:7px;border-radius:50%;background:var(--teal);flex-shrink:0}
+.legend-sub{font-size:13.5px;color:var(--slate);margin:6px 0 18px 17px;max-width:78ch}
+.legend-sub.tight{margin-bottom:0}
 .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
 .span3{grid-column:span 3}.span4{grid-column:span 4}.span6{grid-column:span 6}.span8{grid-column:span 8}.span12{grid-column:span 12}
 .field{display:flex;flex-direction:column;gap:6px;min-width:0}
-.field label,.flabel{font-size:12.5px;font-weight:600;color:var(--slate);text-transform:uppercase;letter-spacing:.4px}
+.field label,.flabel{font-size:13.5px;font-weight:600;color:var(--ink)}
+.field label .opt,.flabel .opt{color:var(--slate);font-weight:500}
 .req{color:var(--coral);font-weight:800;margin-left:1px}
-.ctrl{width:100%;padding:11px 13px;border:1.5px solid var(--line);border-radius:var(--r-sm);background:var(--paper);transition:.15s}
-.ctrl:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-ring)}
+.ctrl{width:100%;padding:11px 13px;border:1.5px solid var(--line-d);border-radius:var(--r-sm);background:var(--field);transition:border-color .15s,box-shadow .15s,background-color .15s}
+.ctrl:hover{border-color:var(--line-h);background-color:var(--field-h)}
+.ctrl:focus{outline:none;border-color:var(--teal);background-color:var(--paper);box-shadow:0 0 0 3px var(--teal-ring)}
 textarea.ctrl{resize:vertical;min-height:46px}
 select.ctrl,.tb-sel{appearance:none;-webkit-appearance:none;cursor:pointer;padding-right:34px;
   background:var(--paper) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%235d716f' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center}
+select.ctrl{background-color:var(--field)}
+select.ctrl:hover{background-color:var(--field-h)}
+select.ctrl:focus{background-color:var(--paper)}
 .euro-field{position:relative}
-.euro-field .pre{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-weight:700;color:var(--slate-l);pointer-events:none}
+.euro-field .pre{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-weight:700;color:var(--slate);pointer-events:none;z-index:1}
 .euro-field .ctrl{padding-left:30px}
 .chips{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px}
-.chip{padding:6px 15px;border-radius:999px;font-weight:600;font-size:13px;border:1.5px solid var(--line);background:var(--paper);
+.chip{padding:6px 15px;border-radius:999px;font-weight:600;font-size:13px;border:1.5px solid var(--line-d);background:var(--field);
   color:var(--slate);transition:.15s;display:inline-flex;align-items:center;gap:6px}
-.chip:hover{border-color:var(--teal);color:var(--teal-d)}
+.chip:hover{border-color:var(--teal);color:var(--teal-d);background:var(--paper)}
 .chip.lyreco{color:var(--teal-d)}
-.chip.marsival{color:var(--coral-d)}
-.chip.lyreco.on{border-color:var(--teal);color:var(--teal-d);background:var(--teal-l)}
-.chip.marsival.on{border-color:var(--coral);color:var(--coral-d);background:var(--coral-soft)}
-.hint{font-size:12px;color:var(--slate)}
+.chip.marsival{color:var(--coral-t)}
+.chip.lyreco.on{border-color:var(--teal);color:var(--teal-xd);background:var(--teal-l)}
+.chip.marsival.on{border-color:var(--coral);color:var(--coral-t);background:var(--coral-soft)}
+.hint{font-size:12.5px;color:var(--slate)}
 .total-preview{display:flex;align-items:baseline;gap:10px;height:45px;padding:0 16px;border-radius:var(--r-sm);background:var(--green-l);border:1.5px dashed var(--green);align-items:center}
-.total-preview .lbl{font-size:13px;font-weight:600;color:var(--green-d)}
-.total-preview .val{font-size:22px;font-weight:800;color:var(--green-d);font-variant-numeric:tabular-nums}
+.total-preview .lbl{font-size:13px;font-weight:600;color:var(--green-t)}
+.total-preview .val{font-size:22px;font-weight:800;color:var(--green-t);font-variant-numeric:tabular-nums}
 .form-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:4px}
-.form-error{display:none;align-items:flex-start;gap:10px;background:var(--coral-soft);border:1.5px solid var(--coral-line);color:var(--coral-d);
+.form-error{display:none;align-items:flex-start;gap:10px;background:var(--coral-soft);border:1.5px solid var(--coral-line);color:var(--coral-t);
   padding:11px 14px;border-radius:12px;font-size:13.5px;font-weight:500}
 .form-error.show{display:flex}
 
 /* ---------- Knoppen ---------- */
 .btn{padding:12px 22px;border-radius:12px;font-weight:700;font-size:14px;transition:.18s;display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
 .btn-sm{padding:8px 13px;border-radius:10px;font-size:12.5px;gap:6px}
-.btn-primary{background:var(--teal);color:var(--paper);box-shadow:0 4px 14px rgba(14,158,150,.3)}
-.btn-primary:hover{background:var(--teal-d);transform:translateY(-1px)}
+.btn-primary{background:var(--btn);color:var(--paper);box-shadow:0 4px 14px rgba(14,158,150,.28)}
+.btn-primary:hover{background:var(--btn-h);transform:translateY(-1px)}
 .btn-ghost{background:var(--paper);border:1.5px solid var(--line);color:var(--ink)}
 .btn-ghost:hover{border-color:var(--teal);color:var(--teal-d)}
-.btn-coral{background:var(--coral);color:var(--paper);box-shadow:0 4px 14px rgba(255,107,92,.28)}
-.btn-coral:hover{background:var(--coral-d);transform:translateY(-1px)}
-.btn-green{background:var(--green);color:var(--paper)}
-.btn-green:hover{background:var(--green-d)}
-.btn-txt-del{background:none;color:var(--coral-d);font-weight:600;font-size:13.5px;padding:8px 4px;display:inline-flex;align-items:center;gap:6px}
+.btn-coral{background:var(--coral-d);color:var(--paper);box-shadow:0 4px 14px rgba(216,82,63,.28)}
+.btn-coral:hover{background:var(--coral-t);transform:translateY(-1px)}
+.btn-green{background:var(--green-d);color:var(--paper)}
+.btn-green:hover{background:var(--green-t)}
+.btn-txt-del{background:none;color:var(--coral-t);font-weight:600;font-size:13.5px;padding:8px 4px;display:inline-flex;align-items:center;gap:6px}
 .btn-txt-del:hover{text-decoration:underline}
 .btn-link{color:var(--teal-d);font-weight:600;font-size:13px;display:inline-flex;align-items:center;gap:6px;padding:4px 2px}
 .btn-link:hover{text-decoration:underline}
 .btn[disabled],.btn.busy{opacity:.55;cursor:not-allowed;transform:none;box-shadow:none}
+.btn .spin{width:14px;height:14px;border-radius:50%;border:2px solid rgba(255,255,255,.45);border-top-color:var(--paper);animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 
 /* ---------- Callout / note / warnbox ---------- */
 .callout{display:flex;gap:10px;align-items:flex-start;background:var(--amber-l);border:1px solid var(--amber-line);
-  color:var(--amber-d);padding:11px 14px;border-radius:12px;font-size:13px;font-weight:500;line-height:1.45}
+  color:var(--amber-t);padding:11px 14px;border-radius:12px;font-size:13px;font-weight:500;line-height:1.45}
 .callout b{font-weight:700}
 .note{display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--slate);background:var(--bg-2);border:1px solid var(--line);border-radius:12px;padding:11px 14px;line-height:1.5}
 .note b{color:var(--ink)}
@@ -149,12 +167,13 @@ select.ctrl,.tb-sel{appearance:none;-webkit-appearance:none;cursor:pointer;paddi
 /* ---------- Pills & tags ---------- */
 .pill{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:999px;white-space:nowrap;border:1px solid transparent}
 .pill .pt{width:6px;height:6px;border-radius:50%;background:currentColor}
-.pill.done{background:var(--green-l);color:var(--green-d);border-color:var(--green-line)}
-.pill.open{background:var(--amber-l);color:var(--amber-d);border-color:var(--amber-line)}
-.pill.warn{background:var(--coral-soft);color:var(--coral-d);border-color:var(--coral-line)}
+.pill.done{background:var(--green-l);color:var(--green-t);border-color:var(--green-line)}
+.pill.open{background:var(--amber-l);color:var(--amber-t);border-color:var(--amber-line)}
+.pill.warn{background:var(--coral-soft);color:var(--coral-t);border-color:var(--coral-line)}
+.pill.info{background:var(--teal-l);color:var(--teal-xd);border-color:rgba(14,158,150,.3)}
 .pill.muted{background:var(--bg);color:var(--slate);border-color:var(--line)}
-.klas-tag{justify-self:start;display:inline-block;font-size:11px;font-weight:700;background:var(--teal-l);color:var(--teal-d);padding:2px 7px;border-radius:6px;white-space:nowrap}
-.sup-chip{display:inline-block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;background:var(--teal-l);color:var(--teal-d);font-weight:600;font-size:12.5px;padding:3px 11px;border-radius:999px;vertical-align:middle}
+.klas-tag{justify-self:start;display:inline-block;font-size:11px;font-weight:700;background:var(--teal-l);color:var(--teal-xd);padding:2px 7px;border-radius:6px;white-space:nowrap}
+.sup-chip{display:inline-block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;background:var(--teal-l);color:var(--teal-xd);font-weight:600;font-size:12.5px;padding:3px 11px;border-radius:999px;vertical-align:middle}
 
 /* ---------- Werkbalk (zwevend) ---------- */
 .toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;position:sticky;top:10px;z-index:30;
@@ -176,11 +195,11 @@ body.scrolled .toolbar::before{opacity:1}
 .search .s-clear:hover{background:var(--bg);color:var(--ink)}
 .tb-sel{height:40px;padding-left:12px;border:1.5px solid var(--line);border-radius:var(--r-sm);font-size:13.5px;font-weight:600;color:var(--ink);max-width:220px;transition:.15s}
 .tb-sel:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-ring)}
-.tb-sel.set{border-color:var(--teal);color:var(--teal-d);background-color:var(--teal-l)}
+.tb-sel.set{border-color:var(--teal);color:var(--teal-xd);background-color:var(--teal-l)}
 .seg{display:inline-flex;gap:3px;background:var(--paper);border:1.5px solid var(--line);padding:3px;border-radius:12px;height:40px;flex-shrink:0}
 .seg button{padding:0 13px;border-radius:8px;font-size:13.5px;font-weight:600;color:var(--slate);display:inline-flex;align-items:center;gap:7px;transition:.13s;white-space:nowrap}
 .seg button:hover{color:var(--ink)}
-.seg button.on{background:var(--teal);color:var(--paper)}
+.seg button.on{background:var(--btn);color:var(--paper)}
 .seg .c{font-size:11px;font-weight:700;padding:0 7px;border-radius:999px;background:var(--bg);color:var(--slate);line-height:18px}
 .seg button.on .c{background:rgba(255,255,255,.22);color:var(--paper)}
 
@@ -189,9 +208,9 @@ body.scrolled .toolbar::before{opacity:1}
   border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);font-size:13px;color:var(--slate);min-height:52px}
 .sumbar b{color:var(--ink);font-weight:700}
 .sum-sw{display:inline-block;width:11px;height:11px;border-radius:3px;background:var(--green-l);box-shadow:inset 0 0 0 1.5px var(--green);vertical-align:-1px;margin-right:7px}
-.sum-np b{color:var(--amber-d)}
+.sum-np b{color:var(--amber-t)}
 .sum-tot{color:var(--ink);font-weight:600}
-.sum-tot b{color:var(--green-d);font-size:15px;font-weight:800}
+.sum-tot b{color:var(--green-t);font-size:15px;font-weight:800}
 .sum-dot{width:3px;height:3px;border-radius:50%;background:var(--line-d)}
 .sum-print{margin-left:auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .sum-print .pb-all{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--slate);cursor:pointer;margin-right:4px}
@@ -207,7 +226,7 @@ body.scrolled .toolbar::before{opacity:1}
 .group-actions{margin-left:auto;display:flex;gap:8px}
 .rows{padding:4px 12px 12px}
 .row-head,.order-row{display:grid;gap:8px;align-items:center}
-.mode-klas .row-head,.mode-klas .order-row{grid-template-columns:34px minmax(0,1.1fr) minmax(0,.85fr) minmax(0,2.75fr) 64px 86px 94px 30px 30px}
+.mode-klas .row-head,.mode-klas .order-row,.mode-datum .row-head,.mode-datum .order-row{grid-template-columns:34px minmax(0,1.1fr) minmax(0,.85fr) minmax(0,2.75fr) 64px 86px 94px 30px 30px}
 .mode-lev .row-head,.mode-lev .order-row{grid-template-columns:34px minmax(0,.85fr) minmax(0,3.85fr) 64px 86px 94px 30px 30px}
 .row-head{padding:10px 8px 6px;font-size:11px;font-weight:700;color:var(--slate);text-transform:uppercase;letter-spacing:.4px}
 .row-head .tr{text-align:right;padding-right:9px}
@@ -222,14 +241,14 @@ body.scrolled .toolbar::before{opacity:1}
 .order-row input:focus{outline:none;background:var(--paper);border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-ring)}
 .order-row input[readonly]{cursor:default;color:var(--slate);background:transparent !important;border-color:transparent !important;box-shadow:none !important}
 .order-row input.num{text-align:right}
-.rowtotal{font-weight:700;text-align:right;color:var(--green-d);font-variant-numeric:tabular-nums;padding-right:4px;font-size:14px}
-.rowtotal.none{color:var(--slate-l);font-weight:500}
+.rowtotal{font-weight:700;text-align:right;color:var(--green-t);font-variant-numeric:tabular-nums;padding-right:4px;font-size:14px}
+.rowtotal.none{color:var(--slate);font-weight:500}
 .cell-copy{display:flex;align-items:center;min-width:0;gap:2px}
 .cell-copy input{flex:1}
 .oms-in.trunc:not(:focus){-webkit-mask-image:linear-gradient(90deg,black 80%,transparent 99%);mask-image:linear-gradient(90deg,black 80%,transparent 99%)}
 .copy-btn{width:26px;height:26px;border-radius:7px;display:grid;place-items:center;color:var(--slate-l);flex-shrink:0;opacity:.7;transition:.12s}
 .copy-btn:hover{opacity:1;background:var(--teal-l);color:var(--teal-d)}
-.copy-btn.copied{opacity:1;background:var(--green-l);color:var(--green-d)}
+.copy-btn.copied{opacity:1;background:var(--green-l);color:var(--green-t)}
 .check{width:22px;height:22px;border-radius:7px;border:2px solid var(--line-d);display:grid;place-items:center;transition:.15s;color:transparent;justify-self:center;background:var(--paper)}
 .check:hover{border-color:var(--green)}
 .besteld .check{background:var(--green);border-color:var(--green);color:var(--paper)}
@@ -242,12 +261,12 @@ body.scrolled .toolbar::before{opacity:1}
 .order-wrap:hover .note-btn,.note-btn:focus-visible{opacity:.6}
 .note-btn:hover{opacity:1;background:var(--coral-soft);color:var(--coral-d)}
 .note-btn.has{opacity:1;color:var(--coral-d);background:var(--coral-soft)}
-.row-sub{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:-4px 8px 5px 50px;font-size:11px;color:var(--slate-l);min-height:14px}
-.row-sub .bon-tag{font-size:10.5px;font-weight:700;color:var(--teal-d);background:var(--teal-l);padding:0 7px;border-radius:5px;line-height:17px}
+.row-sub{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:-4px 8px 5px 50px;font-size:11px;color:var(--slate);min-height:14px}
+.row-sub .bon-tag{font-size:10.5px;font-weight:700;color:var(--teal-xd);background:var(--teal-l);padding:0 7px;border-radius:5px;line-height:17px}
 .lev-tag{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:0 8px;border-radius:5px;line-height:18px}
-.lev-tag.wait{background:var(--amber-l);color:var(--amber-d)}
-.lev-tag.gone{background:var(--coral-soft);color:var(--coral-d)}
-.lev-tag.done{background:var(--green-l);color:var(--green-d)}
+.lev-tag.wait{background:var(--amber-l);color:var(--amber-t)}
+.lev-tag.gone{background:var(--coral-soft);color:var(--coral-t)}
+.lev-tag.done{background:var(--green-l);color:var(--green-t)}
 .oms-note{margin:0 12px 7px 50px;padding:4px 6px 4px 10px;font-size:12.5px;color:var(--ink);background:var(--bg-2);border:1px solid var(--line);border-left:3px solid var(--teal);
   border-radius:0 9px 9px 0;display:flex;gap:9px;align-items:center}
 .oms-note-lbl{font-size:10px;font-weight:700;color:var(--teal-d);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap}
@@ -257,9 +276,9 @@ body.scrolled .toolbar::before{opacity:1}
 .oms-note .icon-btn{width:24px;height:24px}
 .note-panel{display:none;margin:0 12px 10px 50px}
 .note-panel.open{display:block;animation:fade .15s}
-.nlabel{font-size:10.5px;font-weight:700;color:var(--coral-d);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px;display:flex;justify-content:space-between;align-items:center}
+.nlabel{font-size:10.5px;font-weight:700;color:var(--coral-t);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px;display:flex;justify-content:space-between;align-items:center}
 .nclear{font-size:11px;color:var(--slate);text-decoration:underline;font-weight:600;text-transform:none;letter-spacing:0}
-.nclear:hover{color:var(--coral-d)}
+.nclear:hover{color:var(--coral-t)}
 .note-panel textarea{width:100%;border:1.5px solid var(--coral-line);border-radius:10px;padding:9px 12px;background:var(--paper);min-height:42px;resize:vertical;font-size:13px}
 .note-panel textarea:focus{outline:none;border-color:var(--coral);box-shadow:0 0 0 3px var(--coral-soft)}
 .note-read{padding:9px 12px;border-radius:10px;background:var(--coral-soft);border:1px solid var(--coral-line);font-size:13px;color:var(--ink);white-space:pre-wrap}
@@ -310,8 +329,11 @@ body.scrolled .toolbar::before{opacity:1}
 .pin-modal .lk{width:54px;height:54px;border-radius:16px;background:var(--teal-l);display:grid;place-items:center;margin:0 auto 14px;color:var(--teal-d)}
 .pin-modal h2{font-size:19px;margin-bottom:5px}
 .pin-modal p{color:var(--slate);font-size:14px;margin-bottom:18px}
-.pin-in{text-align:center;letter-spacing:6px;font-size:20px;font-weight:700;padding:12px}
-.pin-err{color:var(--coral-d);font-size:13px;font-weight:600;margin-top:10px;min-height:18px}
+.pin-err{color:var(--coral-t);font-size:13px;font-weight:600;margin-top:10px;min-height:18px}
+.login-fields{display:flex;flex-direction:column;gap:10px;text-align:left}
+.pin-modal .login-fields .hint{margin-top:-4px}
+.check-row{display:flex;align-items:center;gap:9px;font-size:13.5px;cursor:pointer;margin-top:2px}
+.check-row input{width:17px;height:17px;accent-color:var(--teal);cursor:pointer;flex-shrink:0}
 .pin-modal .mf{display:flex;gap:10px;justify-content:center;margin-top:14px}
 .shake{animation:shake .35s}
 @keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
@@ -336,24 +358,24 @@ body.scrolled .toolbar::before{opacity:1}
 .bd-lev{display:flex;justify-content:flex-end}
 .lev{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border-radius:999px;font-size:12px;font-weight:600;border:1px solid var(--line);background:var(--paper);color:var(--slate);white-space:nowrap;transition:.15s}
 button.lev:hover{border-color:var(--teal);color:var(--teal-d);box-shadow:0 0 0 3px var(--teal-ring)}
-.lev.wait{background:var(--amber-l);border-color:var(--amber-line);color:var(--amber-d)}
-.lev.done{background:var(--green-l);border-color:var(--green-line);color:var(--green-d)}
-.lev.gone{background:var(--coral-soft);border-color:var(--coral-line);color:var(--coral-d)}
+.lev.wait{background:var(--amber-l);border-color:var(--amber-line);color:var(--amber-t)}
+.lev.done{background:var(--green-l);border-color:var(--green-line);color:var(--green-t)}
+.lev.gone{background:var(--coral-soft);border-color:var(--coral-line);color:var(--coral-t)}
 .bd-tot{display:flex;flex-direction:column;align-items:flex-end;gap:3px;padding-top:4px}
 .bd-tot .tl{display:flex;gap:14px;align-items:baseline;font-size:13px;color:var(--slate)}
 .bd-tot .tl b{min-width:96px;text-align:right;color:var(--ink);font-variant-numeric:tabular-nums}
-.bd-tot .tl.w b{color:var(--amber-d)}
-.bd-tot .tl.g b{color:var(--coral-d)}
+.bd-tot .tl.w b{color:var(--amber-t)}
+.bd-tot .tl.g b{color:var(--coral-t)}
 .bd-tot .tl.big{font-size:14px;font-weight:700;color:var(--ink);border-top:1px solid var(--line);padding-top:6px;margin-top:3px}
 .bd-tot .tl.big b{font-size:17px;font-weight:800}
 
 /* Leveringsvenster */
 .radio-cards{display:grid;gap:8px}
-.rcard{display:flex;align-items:center;gap:12px;text-align:left;padding:12px 14px;border:2px solid var(--line-d);border-radius:var(--r);background:var(--bg-2);transition:.16s;width:100%}
+.rcard{display:flex;align-items:center;gap:12px;text-align:left;padding:12px 14px;border:2px solid var(--line-d);border-radius:var(--r);background:var(--field);transition:.16s;width:100%}
 .rcard:hover{border-color:var(--teal);background:var(--paper)}
-.rcard.sel{border-color:var(--teal);background:var(--teal-l);box-shadow:0 0 0 3px rgba(14,158,150,.1)}
+.rcard.is-sel{border-color:var(--teal);background:var(--teal-l);box-shadow:0 0 0 3px rgba(14,158,150,.12)}
 .rc-check{width:20px;height:20px;border-radius:50%;border:2px solid var(--line-d);flex-shrink:0;display:grid;place-items:center;background:var(--paper);transition:.16s}
-.rcard.sel .rc-check{background:var(--teal);border-color:var(--teal);color:var(--paper)}
+.rcard.is-sel .rc-check{background:var(--btn);border-color:var(--btn);color:var(--paper)}
 .rc-title{display:block;font-weight:700;font-size:14px}
 .rc-sub{display:block;font-size:12.5px;color:var(--slate);font-weight:500}
 .rc-extra{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--slate)}
@@ -372,7 +394,7 @@ button.lev:hover{border-color:var(--teal);color:var(--teal-d);box-shadow:0 0 0 3
 .mk-row{display:grid;grid-template-columns:20px 56px minmax(0,1fr) 44px 86px;gap:10px;align-items:center;padding:8px 12px;border-top:1px solid var(--line);font-size:13px;cursor:pointer;transition:background .12s}
 .mk-row:first-child{border-top:none}
 .mk-row:hover{background:var(--bg-2)}
-.mk-row.off{color:var(--slate-l)}
+.mk-row.off{color:var(--slate)}
 .mk-row.off .mk-oms{text-decoration:line-through}
 .mk-row.off .klas-tag{opacity:.5}
 .mk-oms{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -384,7 +406,7 @@ button.lev:hover{border-color:var(--teal);color:var(--teal-d);box-shadow:0 0 0 3
 .arch-row.arch-head{font-size:11px;font-weight:700;color:var(--slate);text-transform:uppercase;letter-spacing:.4px;padding-top:10px}
 .arch-row.b{background:var(--green-l);box-shadow:inset 3px 0 0 var(--green)}
 .arch-row>span{overflow:hidden;text-overflow:ellipsis;min-width:0}
-.arch-row .sm{display:block;font-size:10.5px;color:var(--slate-l)}
+.arch-row .sm{display:block;font-size:10.5px;color:var(--slate)}
 .arch-row>span:last-child{padding-left:14px}
 .arch-row .cmt{font-size:12px;color:var(--slate)}
 .arch-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:2px}
@@ -399,7 +421,7 @@ button.lev:hover{border-color:var(--teal);color:var(--teal-d);box-shadow:0 0 0 3
 
 
 /* ---------- Coraal tegel (verwijderen, wissen) ---------- */
-.btn-ghost-coral{background:var(--paper);border:1.5px solid var(--coral-line-l);color:var(--coral-d)}
+.btn-ghost-coral{background:var(--paper);border:1.5px solid var(--coral-line-l);color:var(--coral-t)}
 .btn-ghost-coral:hover{background:var(--coral-soft);border-color:var(--coral-line)}
 .btn-ghost-coral.soft{opacity:.5}
 .btn-ghost-coral.soft:hover{opacity:.8;background:var(--paper)}
@@ -421,9 +443,9 @@ button.lev:hover{border-color:var(--teal);color:var(--teal-d);box-shadow:0 0 0 3
 .st.sm{height:28px;padding:0 10px;font-size:12px;gap:5px}
 .st .pt{width:7px;height:7px;border-radius:50%;background:currentColor}
 .st.art-no{background:var(--paper);border-color:var(--line-d);color:var(--slate)}
-.st.art-yes{background:var(--teal-l);border-color:rgba(14,158,150,.35);color:var(--teal-d)}
-.st.fac-no{background:var(--amber-l);border-color:var(--amber-line);color:var(--amber-d)}
-.st.fac-yes{background:var(--green-l);border-color:var(--green-line);color:var(--green-d)}
+.st.art-yes{background:var(--teal-l);border-color:rgba(14,158,150,.35);color:var(--teal-xd)}
+.st.fac-no{background:var(--amber-l);border-color:var(--amber-line);color:var(--amber-t)}
+.st.fac-yes{background:var(--green-l);border-color:var(--green-line);color:var(--green-t)}
 button.st:hover{box-shadow:0 0 0 3px var(--teal-ring);filter:brightness(.98)}
 .st-pair{display:inline-flex;gap:8px;flex-wrap:wrap}
 
@@ -433,7 +455,7 @@ button.st:hover{box-shadow:0 0 0 3px var(--teal-ring);filter:brightness(.98)}
    Tekst wordt nooit geschaald (blijft scherp): enkel de tegel (::before) en de schaduw (::after) groeien. */
 .filterbar{display:flex;align-items:center;gap:10px 16px;flex-wrap:wrap;margin-bottom:12px}
 .fb-sum{margin-left:auto;font-size:13px;color:var(--slate);white-space:nowrap}
-.fb-sum b{color:var(--amber-d);font-weight:700}
+.fb-sum b{color:var(--amber-t);font-weight:700}
 .bl-card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding-bottom:4px}
 .bl-head,.bl-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr) 108px 150px 96px 206px 104px;gap:16px;align-items:center}
 .bl-head{padding:0 12px 0 18px;height:40px;background:var(--bg-2);border-bottom:1px solid var(--line);border-radius:var(--r) var(--r) 0 0;font-size:12.5px;font-weight:600;color:var(--slate)}
@@ -473,7 +495,7 @@ button.st:hover{box-shadow:0 0 0 3px var(--teal-ring);filter:brightness(.98)}
 .bl-two{display:flex;flex-direction:column;justify-content:center;min-width:0;line-height:1.25}
 .bl-num{font-size:14px;font-weight:600;white-space:nowrap}
 .bl-sub{font-size:11.5px;color:var(--slate);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
-.bl-sub.w{color:var(--coral-d);font-weight:600}
+.bl-sub.w{color:var(--coral-t);font-weight:600}
 .bl-date,.bl-cnt{font-size:13.5px;white-space:nowrap}
 .bl-amt{font-size:14px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
 .bl-row .st-pair{flex-wrap:nowrap;gap:6px}
@@ -487,10 +509,10 @@ button.st:hover{box-shadow:0 0 0 3px var(--teal-ring);filter:brightness(.98)}
 .bl-row .bt-sub{grid-column:1/-1;margin:2px 0 0}
 .bl-empty{padding:40px;text-align:center;color:var(--slate)}
 .sup-tag{display:inline-block;max-width:100%;height:24px;line-height:22px;padding:0 11px;border-radius:999px;background:var(--teal-l);border:1px solid transparent;
-  font-size:12.5px;font-weight:600;color:var(--teal-d);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;transition:background-color .15s,border-color .15s}
+  font-size:12.5px;font-weight:600;color:var(--teal-xd);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;transition:background-color .15s,border-color .15s}
 .bl-item.deleted .bl-num{text-decoration:line-through;text-decoration-color:var(--coral-line);color:var(--slate)}
 .bl-item.deleted .bl-amt{color:var(--slate)}
-.del-tag{display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 10px;border-radius:999px;font-size:12px;font-weight:700;color:var(--coral-d);background:var(--coral-soft);border:1px solid var(--coral-line-l);white-space:nowrap}
+.del-tag{display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 10px;border-radius:999px;font-size:12px;font-weight:700;color:var(--coral-t);background:var(--coral-soft);border:1px solid var(--coral-line-l);white-space:nowrap}
 
 /* ---------- Laden (skeleton) ---------- */
 .skel-wrap{display:flex;flex-direction:column;gap:10px;padding:16px 18px}
@@ -501,13 +523,13 @@ button.st:hover{box-shadow:0 0 0 3px var(--teal-ring);filter:brightness(.98)}
 /* ---------- Bondetails: tegels per artikel ---------- */
 .lev.ok{opacity:.55}
 button.lev.ok:hover{opacity:1}
-.lev.ok.conf{opacity:1;background:var(--green-l);border-color:var(--green-line);color:var(--green-d)}
+.lev.ok.conf{opacity:1;background:var(--green-l);border-color:var(--green-line);color:var(--green-t)}
 .lev.mv{background:var(--sand-l);border-color:var(--sand);color:var(--sand-d)}
 button.lev.mv:hover{border-color:var(--sand-d);color:var(--ink);box-shadow:0 0 0 3px rgba(140,124,92,.15)}
 .bd-tiles{display:flex;gap:6px;justify-content:flex-end}
 .mv-list{display:flex;flex-direction:column;gap:8px}
-.rcard.danger.sel{border-color:var(--coral);background:var(--coral-soft);box-shadow:0 0 0 3px var(--coral-soft)}
-.rcard.danger.sel .rc-check{background:var(--coral);border-color:var(--coral)}
+.rcard.danger.is-sel{border-color:var(--coral);background:var(--coral-soft);box-shadow:0 0 0 3px var(--coral-soft)}
+.rcard.danger.is-sel .rc-check{background:var(--coral-d);border-color:var(--coral-d)}
 
 /* ---------- Archief: in- en uitklappen ---------- */
 .group.foldable .group-head{cursor:pointer;user-select:none}
@@ -520,10 +542,21 @@ button.lev.mv:hover{border-color:var(--sand-d);color:var(--ink);box-shadow:0 0 0
 /* ---------- Instellingen: klassen ---------- */
 .kl-chips{display:flex;flex-wrap:wrap;gap:7px;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--bg-2)}
 .kl-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:9px;background:var(--paper);border:1.5px solid var(--line);font-size:13px;font-weight:600;color:var(--ink);transition:.15s}
-.kl-chip .i{font-size:10.5px;font-weight:700;color:var(--slate-l);font-variant-numeric:tabular-nums}
+.kl-chip .i{font-size:10.5px;font-weight:700;color:var(--slate);font-variant-numeric:tabular-nums}
 .kl-chip:hover{border-color:var(--teal)}
-.kl-chip.sel{border-color:var(--teal);background:var(--teal-l);color:var(--teal-d);box-shadow:0 0 0 3px var(--teal-ring)}
+.kl-chip.is-sel{border-color:var(--teal);background:var(--teal-l);color:var(--teal-xd);box-shadow:0 0 0 3px var(--teal-ring)}
 .kl-chip.new{animation:pop .5s ease}
+.kl-shared{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.kl-group{display:flex;flex-direction:column;gap:7px}
+.kl-glabel{font-size:13.5px;font-weight:600;color:var(--ink)}
+.kl-chips.ro{height:100%;align-content:flex-start}
+.kl-chips.ro .kl-chip{cursor:default}
+.kl-chips.ro .kl-chip:hover{border-color:var(--line)}
+.kl-chip.off{color:var(--slate);border-style:dashed;background:transparent}
+.kl-chip .kl-off{font-size:10.5px;font-weight:600;color:var(--slate)}
+.kl-chip.dup{border-style:dashed}
+a.btn{text-decoration:none}
+#klWarn:empty{display:none}
 @keyframes pop{0%{transform:scale(.85);background:var(--green-l)}60%{transform:scale(1.05)}100%{transform:none}}
 .kl-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-height:34px}
 .kl-bar .hint{margin-right:auto}
@@ -537,14 +570,42 @@ button.lev.mv:hover{border-color:var(--sand-d);color:var(--ink);box-shadow:0 0 0
 .es-sub{margin-top:6px;font-size:13.5px}
 .toast-wrap{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:200;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none}
 .toast{background:var(--ink);color:var(--paper);padding:12px 20px;border-radius:12px;font-size:14px;font-weight:600;box-shadow:var(--shadow-lg);
-  display:flex;align-items:center;gap:10px;animation:tin .25s;max-width:90vw;text-align:center}
-.toast.ok{background:var(--green-d)}
-.toast.err{background:var(--coral-d)}
+  display:flex;align-items:center;gap:12px;animation:tin .25s;max-width:90vw;text-align:center;pointer-events:auto}
+.toast.has-act{padding:10px 12px 10px 18px}
+.toast.ok{background:var(--green-t)}
+.toast.err{background:var(--coral-t)}
+.toast button{background:rgba(255,255,255,.18);color:var(--paper);border-radius:8px;padding:5px 11px;font-weight:700;font-size:13px;white-space:nowrap}
+.toast button:hover{background:rgba(255,255,255,.3)}
 .toast.out{opacity:0;transform:translateY(6px);transition:.25s}
 
+/* ---------- Opvallende waarschuwing (1.4, patroon uit uitstappen.html) ---------- */
+.ctrl.invalid{border-color:var(--coral);box-shadow:0 0 0 3px var(--coral-soft)}
+.warns{display:flex;flex-direction:column;gap:8px}
+.warns:empty{display:none}
+.prijs-warns{grid-column:4 / span 9;margin-top:-4px}
+.fwarn{display:flex;gap:9px;align-items:flex-start;background:var(--amber-l);border:1px solid var(--amber-line);color:var(--amber-t);
+  padding:9px 12px;border-radius:10px;font-size:13px;font-weight:500;line-height:1.45;box-shadow:0 1px 2px rgba(169,111,23,.08)}
+.fwarn b{font-weight:700}
+.fwarn.appear{animation:tin .3s ease}
+.wpop{position:fixed;inset:0;z-index:260;display:grid;place-items:center;padding:20px;background:rgba(8,83,79,.16);opacity:0;
+  -webkit-backdrop-filter:blur(0);backdrop-filter:blur(0);transition:opacity .28s ease,backdrop-filter .28s ease,-webkit-backdrop-filter .28s ease}
+.wpop.in{opacity:1;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.wpop.out{opacity:0;transition-duration:.45s}
+.wpop-box{background:var(--paper);border-radius:var(--r-lg);box-shadow:var(--shadow-lg);padding:20px;width:100%;max-width:540px;display:flex;flex-direction:column;gap:14px;transform:translateY(12px) scale(.97);transition:transform .28s cubic-bezier(.2,.9,.3,1.1)}
+.wpop.in .wpop-box{transform:none}
+.wpop-t{display:flex;align-items:center;gap:9px;font-size:16px;font-weight:700;color:var(--amber-t)}
+.wpop-cards{display:flex;flex-direction:column;gap:8px}
+.wpop-cards .fwarn{font-size:14px;padding:12px 14px}
+.wpop-f{display:flex;justify-content:flex-end}
+.fwarn.landing{visibility:hidden}
+.fwarn.flyer{position:fixed;z-index:270;margin:0;box-shadow:0 18px 40px -12px rgba(8,83,79,.45);
+  transition:left .5s cubic-bezier(.3,.7,.2,1),top .5s cubic-bezier(.3,.7,.2,1),width .5s cubic-bezier(.3,.7,.2,1),box-shadow .5s,font-size .5s,padding .5s}
+.fwarn.flyer.go{box-shadow:0 0 0 rgba(0,0,0,0);font-size:13px;padding:9px 12px}
+
 /* ---------- Toegankelijkheid ---------- */
-.tab:focus-visible,.btn:focus-visible,.btn-txt-del:focus-visible,.btn-link:focus-visible,.chip:focus-visible,.seg button:focus-visible,.admin-toggle:focus-visible,.conn:focus-visible,.check:focus-visible,.icon-btn:focus-visible,.copy-btn:focus-visible,.modal-close:focus-visible,.lev:focus-visible,.rcard:focus-visible,.sort:focus-visible,.s-clear:focus-visible,.nclear:focus-visible,.cbx:focus-visible,.st:focus-visible,.kl-chip:focus-visible,.group-head:focus-visible,.bl-btn:focus-visible,.bl-head .sort:focus-visible{outline:none;box-shadow:0 0 0 3px var(--teal-l),0 0 0 5px var(--teal)}
+.tab:focus-visible,.btn:focus-visible,.btn-txt-del:focus-visible,.btn-link:focus-visible,.chip:focus-visible,.seg button:focus-visible,.admin-toggle:focus-visible,.conn:focus-visible,.check:focus-visible,.icon-btn:focus-visible,.copy-btn:focus-visible,.modal-close:focus-visible,.lev:focus-visible,.rcard:focus-visible,.sort:focus-visible,.s-clear:focus-visible,.nclear:focus-visible,.cbx:focus-visible,.st:focus-visible,.kl-chip:focus-visible,.group-head:focus-visible,.bl-btn:focus-visible,.bl-head .sort:focus-visible,.toast button:focus-visible{outline:none;box-shadow:0 0 0 3px var(--teal-l),0 0 0 5px var(--teal)}
 .ctrl:focus-visible,.tb-sel:focus-visible{outline:none}
+.check-row input:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
 @media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
 
 /* ---------- Responsief ---------- */
@@ -559,7 +620,7 @@ button.lev.mv:hover{border-color:var(--sand-d);color:var(--ink);box-shadow:0 0 0
   .grid>*{grid-column:span 12 !important}
   .tab{padding:8px 13px;font-size:13.5px}
   .row-head{display:none}
-  .mode-klas .order-row,.mode-lev .order-row{grid-template-columns:28px minmax(0,1fr) minmax(0,1fr) 30px;gap:6px;padding:10px;border:1px solid var(--line);margin-bottom:4px}
+  .mode-klas .order-row,.mode-lev .order-row,.mode-datum .order-row{grid-template-columns:28px minmax(0,1fr) minmax(0,1fr) 30px;gap:6px;padding:10px;border:1px solid var(--line);margin-bottom:4px}
   .order-row input{background:var(--paper);border-color:var(--line)}
   .rowtotal{text-align:left}
   .row-sub,.oms-note,.note-panel{margin-left:12px}
@@ -586,7 +647,7 @@ button.lev.mv:hover{border-color:var(--sand-d);color:var(--ink);box-shadow:0 0 0
 #printArea{display:none}
 @media print{
   @page{size:A4;margin:13mm}
-  header,main,.toast-wrap,.overlay,.hovercard,.oms-float{display:none !important}
+  header,main,.toast-wrap,.overlay,.hovercard,.oms-float,.wpop,.fwarn.flyer{display:none !important}
   body{background:var(--paper)}
   #printArea{display:block !important;color:var(--ink);font-family:'Outfit',sans-serif}
   .print-head{display:flex;align-items:center;gap:14px;border-bottom:2px solid var(--teal-d);padding-bottom:10px;margin-bottom:14px}
@@ -604,8 +665,8 @@ button.lev.mv:hover{border-color:var(--sand-d);color:var(--ink);box-shadow:0 0 0
   .print-block th.tick,.print-block td.tick{width:20px;text-align:center}
   .print-block td.tick{border:1px solid var(--line-d)}
   .pnote{font-size:9px;color:var(--slate);font-style:italic;margin-top:1px}
-  .pdate{font-size:8.5px;color:var(--slate-l);margin-top:1px}
-  .plev{font-size:9px;font-weight:700;color:var(--amber-d);margin-top:1px}
+  .pdate{font-size:8.5px;color:var(--slate);margin-top:1px}
+  .plev{font-size:9px;font-weight:700;color:var(--amber-t);margin-top:1px}
   tr{break-inside:avoid}
   tr.pb td{background:var(--green-l) !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   tr.pw td{background:var(--amber-l) !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
@@ -648,8 +709,8 @@ button.lev.mv:hover{border-color:var(--sand-d);color:var(--ink);box-shadow:0 0 0
   <!-- ============ NIEUWE BESTELLING ============ -->
   <section class="view active" id="view-bestellen">
     <div class="card form-card">
-      <div class="section-title">Nieuwe bestelling toevoegen</div>
-      <div class="section-sub">Vul de gegevens in en klik op <b>Artikel toevoegen</b>. Klas en leverancier blijven staan, zodat je vlot meerdere artikelen na elkaar ingeeft.</div>
+      <div class="legend"><span class="dot"></span>Nieuwe bestelling</div>
+      <div class="legend-sub">Vul de gegevens in en klik op <b>Artikel toevoegen</b>. Klas en leverancier blijven staan, zodat je vlot meerdere artikelen na elkaar ingeeft.</div>
       <div class="grid">
         <div class="field span4">
           <label for="f-klas">Klas <span class="req">*</span></label>
@@ -674,7 +735,7 @@ button.lev.mv:hover{border-color:var(--sand-d);color:var(--ink);box-shadow:0 0 0
           <input class="ctrl" id="f-omschrijving" placeholder="bv. Pilot FriXion balpen, blauw, doos van 12" autocomplete="off">
         </div>
         <div class="field span3">
-          <label for="f-aantal">Aantal</label>
+          <label for="f-aantal">Aantal <span class="req">*</span></label>
           <input class="ctrl num" id="f-aantal" inputmode="decimal" placeholder="0" autocomplete="off">
         </div>
         <div class="field span3">
@@ -685,6 +746,7 @@ button.lev.mv:hover{border-color:var(--sand-d);color:var(--ink);box-shadow:0 0 0
           <span class="flabel">Totale prijs</span>
           <div class="total-preview"><span class="lbl">Totaal</span><span class="val" id="f-totaal">€ 0,00</span></div>
         </div>
+        <div class="warns prijs-warns" id="prijsWarn"></div>
         <div class="span12 callout" id="btwNote">
           <span data-ic="info"></span><span><b>Let op:</b> Lyreco-prijzen zijn meestal <b>excl. btw</b>, andere leveranciers <b>incl. btw</b>. Geen prijs gekend? Laat het veld gerust leeg.</span>
         </div>
@@ -714,6 +776,7 @@ button.lev.mv:hover{border-color:var(--sand-d);color:var(--ink);box-shadow:0 0 0
       <div class="seg" id="modeSeg" role="group" aria-label="Groeperen">
         <button data-mode="klas" class="on" aria-pressed="true">Per klas</button>
         <button data-mode="lev" aria-pressed="false">Per leverancier</button>
+        <button data-mode="datum" aria-pressed="false" title="Nieuwste artikelen bovenaan, per dag">Per datum</button>
       </div>
       <span class="tb-space"></span>
       <button class="btn btn-primary admin-only" id="makeBonBtn">Bestelbon aanmaken</button>
@@ -765,24 +828,33 @@ button.lev.mv:hover{border-color:var(--sand-d);color:var(--ink);box-shadow:0 0 0
 
   <!-- ============ INSTELLINGEN ============ -->
   <section class="view" id="view-instellingen">
+    <div class="card form-card set-card" id="klGedCard" style="max-width:none;margin-bottom:18px">
+      <div>
+        <div class="legend"><span class="dot"></span>Klassen</div>
+        <div class="legend-sub tight">Gedeeld met de uitstappentool. Een klas toevoegen, verwijderen of op niet actief zetten doe je daar, onder <b>Instellingen</b>. De wijziging verschijnt hier vanzelf.</div>
+      </div>
+      <div class="kl-shared" id="klShared"></div>
+      <div class="kl-bar"><span class="hint" id="klSharedInfo"></span>
+        <a class="btn btn-ghost btn-sm" id="klToUit" href="https://klim-op.github.io/klimop-software/uitstappen.html" target="_blank" rel="noopener"><span data-ic="ext" data-sz="14"></span>Klassen wijzigen in de uitstappentool</a></div>
+    </div>
     <div class="card form-card set-card" id="klCard" style="max-width:none;margin-bottom:18px">
       <div>
-        <div class="section-title">Klassen</div>
-        <div class="section-sub" style="margin-bottom:0">Deze lijst verschijnt bij het ingeven van een bestelling en bepaalt de volgorde in het overzicht. Klik op een klas om ze te verplaatsen of te verwijderen.</div>
+        <div class="legend"><span class="dot"></span>Andere bestellers</div>
+        <div class="legend-sub tight">Bestellers die geen klas zijn, zoals Secretariaat, levensbeschouwing of LO. Ze staan enkel in deze tool, onder de klassen. Klik op een besteller om hem te verplaatsen of te verwijderen.</div>
       </div>
       <div id="klWarn"></div>
-      <div class="kl-chips" id="klChips" role="listbox" aria-label="Klassen in volgorde"></div>
+      <div class="kl-chips" id="klChips" role="listbox" aria-label="Andere bestellers in volgorde"></div>
       <div class="kl-bar" id="klBar"></div>
       <div class="kl-add">
-        <div class="field"><label for="klNew">Nieuwe klas</label><input class="ctrl" id="klNew" placeholder="bv. 1KC" autocomplete="off"></div>
+        <div class="field"><label for="klNew">Nieuwe besteller</label><input class="ctrl" id="klNew" placeholder="bv. Zorgteam" autocomplete="off"></div>
         <div class="field"><label for="klAfter">Invoegen na</label><select class="ctrl" id="klAfter"></select></div>
-        <button class="btn btn-primary" id="klAdd" style="height:45px"><span data-ic="plus"></span>Klas toevoegen</button>
+        <button class="btn btn-primary" id="klAdd" style="height:45px"><span data-ic="plus"></span>Toevoegen</button>
       </div>
     </div>
     <div class="card form-card set-card" style="max-width:none">
       <div>
-        <div class="section-title">Instellingen</div>
-        <div class="section-sub" style="margin-bottom:0">Enkel zichtbaar voor de beheerder.</div>
+        <div class="legend"><span class="dot"></span>Instellingen</div>
+        <div class="legend-sub tight">Enkel zichtbaar voor de beheerder.</div>
       </div>
       <div>
         <div class="set-row">
@@ -805,17 +877,22 @@ button.lev.mv:hover{border-color:var(--sand-d);color:var(--ink);box-shadow:0 0 0
 <div class="hovercard" id="hoverCard" role="tooltip"></div>
 <div class="toast-wrap" id="toastWrap" role="status" aria-live="polite" aria-atomic="false"></div>
 
-<!-- PIN -->
+<!-- Aanmelden als beheerder -->
 <div class="overlay" id="pinOverlay">
   <div class="modal pin-modal" role="dialog" aria-modal="true" aria-labelledby="pinTitle">
     <div class="lk" data-ic="lock" data-sz="26"></div>
-    <h2 id="pinTitle">Beheerdersmodus</h2>
-    <p>Voer de beheerderscode in om te kunnen wijzigen.</p>
-    <input class="ctrl pin-in" id="pinIn" type="password" placeholder="••••••" autocomplete="off" aria-label="Beheerderscode">
+    <h2 id="pinTitle">Aanmelden als beheerder</h2>
+    <p>Meld je aan met je beheerdersaccount om gegevens te kunnen wijzigen.</p>
+    <div class="login-fields">
+      <div class="field"><label for="loginMail">E-mailadres</label><input class="ctrl" id="loginMail" type="email" autocomplete="username"></div>
+      <div class="field"><label for="pinIn">Wachtwoord</label><input class="ctrl" id="pinIn" type="password" autocomplete="current-password"></div>
+      <label class="check-row"><input type="checkbox" id="loginRem"> Aangemeld blijven op deze computer</label>
+      <div class="hint">Niet aanvinken op een gedeelde computer. Je aanmelding geldt ook voor de uitstappentool.</div>
+    </div>
     <div class="pin-err" id="pinErr" role="alert"></div>
     <div class="mf">
       <button class="btn btn-ghost" id="pinCancel">Annuleren</button>
-      <button class="btn btn-primary" id="pinOk">Inloggen</button>
+      <button class="btn btn-primary" id="pinOk"><span class="lbl">Aanmelden</span></button>
     </div>
   </div>
 </div>
@@ -924,6 +1001,7 @@ button.lev.mv:hover{border-color:var(--sand-d);color:var(--ink);box-shadow:0 0 0
     <div class="modal-head"><h3 id="lvTitle">Levering</h3><button class="modal-close" data-close="lvOverlay" aria-label="Sluiten"><span data-ic="x" data-sz="18"></span></button></div>
     <div class="modal-body" id="lvBody"></div>
     <div class="modal-foot">
+      <button class="btn-link left" id="lvReset" hidden title="De lijn opnieuw als nog niet nagekeken tonen"><span data-ic="undo" data-sz="14"></span>Terugzetten naar niet bevestigd</button>
       <button class="btn btn-ghost" id="lvCancel">Annuleren</button>
       <button class="btn btn-primary" id="lvOk">Opslaan</button>
     </div>
@@ -942,22 +1020,103 @@ const DEFAULT_KLASSEN = ["Instap A","Instap B","1KA","1KB","2KA","2KB","3KA","3K
   "1A","1B","2A","2B","3A","3B","4A","4B","5A","5B","5C","6A","6B","6C",
   "Kiwi","Maki","Toekan","Poema","Zoco","Secretariaat",
   "Islam","Zedenleer","Protestant","RKG","LO kleuter","LO lager"];
-let klassenList = DEFAULT_KLASSEN.slice();   // gedeelde lijst, beheerd in Instellingen
-const ADMIN_PIN = "Claudius147";
-const LS_ADMIN  = "klimop_mat_admin";
+/* Klassen = Kleuter en Lager uit de gedeelde lijst van de uitstappentool (enkel lezen),
+   gevolgd door de "Andere bestellers" die enkel in deze tool bestaan. "Andere" uit de uitstappentool blijft daar. */
+const DEFAULT_ANDERE = ["Kiwi","Maki","Toekan","Poema","Zoco","Secretariaat","Islam","Zedenleer","Protestant","RKG","LO kleuter","LO lager"];
+const GEDEELDE_GROEPEN = ["Kleuter","Lager"];
+const UITSTAPPEN_URL = "https://klim-op.github.io/klimop-software/uitstappen.html";
+let gedeeld = null;          // [{naam,groep,actief}] uit de gedeelde lijst; null = niet beschikbaar
+let gedeeldRuw;              // zoals laatst opgehaald (voor de vergelijking bij het vernieuwen)
+let andereList = DEFAULT_ANDERE.slice();
+let eigenOud = null;         // de vroegere volledige lijst van deze tool (terugval, en om Andere bestellers af te leiden)
+let klassenList = DEFAULT_KLASSEN.slice();   // volgorde voor het overzicht: gedeelde klassen, dan Andere bestellers
+const OLD_ADMIN_KEY = "klimop_mat_admin";   // beheerstatus van de pincodeversie: wordt opgeruimd
 const BASE_SUPP = ["Lyreco","Marsival"];
 const MK_ALL    = "__all__";
 const ADMIN_VIEWS = ["bestelbons","instellingen"];
 
-/* ---------- Supabase ---------- */
-const SUPA_URL = "https://vmvxawjfryaijkhhnnyr.supabase.co";
-const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZtdnhhd2pmcnlhaWpraGhubnlyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0NjM0NDgsImV4cCI6MjA5NjAzOTQ0OH0.6UMvrhkHwbrtQwOvn3od8X6DAKXSiPdtCeFdt3nZZdE";
-const T_ORD  = "materiaal_bestellingen";
-const T_ARCH = "materiaal_archief";
-const T_BON  = "materiaal_bestelbons";
-const T_SET  = "materiaal_instellingen";
+/* ---------- Supabase ----------
+   Alle gegevens lopen via een eigen REST-laag met timeout. supabase-js dient enkel voor de aanmelding.
+   Niets geldt als bewaard zonder bevestiging van de database. */
+const SUPA = {URL:"https://vmvxawjfryaijkhhnnyr.supabase.co", KEY:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZtdnhhd2pmcnlhaWpraGhubnlyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0NjM0NDgsImV4cCI6MjA5NjAzOTQ0OH0.6UMvrhkHwbrtQwOvn3od8X6DAKXSiPdtCeFdt3nZZdE"};
+/* Tabellen. In het testbestand krijgen ze het voorvoegsel "test_" (kopieën), live geen. */
+const PFX = "";
+const T_ORD=PFX+"materiaal_bestellingen", T_ARCH=PFX+"materiaal_archief", T_BON=PFX+"materiaal_bestelbons", T_SET=PFX+"materiaal_instellingen";
+const RPC_BONSTATUS = "rpc/"+PFX+"materiaal_bon_status";   // leveringsstatus van de bons voor wie niet aangemeld is
+const T_GEDEELD = "instellingen";   // gedeelde instellingen van de uitstappentool: enkel lezen, nooit met voorvoegsel
 const SET_ID = "klimop";
-const sb = window.supabase ? window.supabase.createClient(SUPA_URL, SUPA_KEY) : null;
+
+/* conflict: iemand anders wijzigde intussen · rechten: geweigerd door de beveiliging · network: geen verbinding · weg: rij bestaat niet meer */
+class DbError extends Error{ constructor(msg,{conflict=false,network=false,rechten=false,status=0,weg=false}={}){ super(msg); Object.assign(this,{conflict,network,rechten,status,weg}); } }
+
+/* ---------- Aanmelding (supabase-js, enkel hiervoor) ----------
+   GEDEELD MET DE UITSTAPPENTOOL: dezelfde storageKey "klimop_auth" en dezelfde vlag "klimop_auth_blijven".
+   Wie in de ene tool aanmeldt, is (in dezelfde browser) ook in de andere aangemeld; afmelden geldt voor beide.
+   Wijzig dit enkel samen met uitstappen.html. "Aangemeld blijven" = localStorage; anders sessionStorage (per tabblad). */
+function supabaseAuth(){
+  const REM="klimop_auth_blijven";
+  const store={
+    getItem:k=>{ try{ return localStorage.getItem(k) ?? sessionStorage.getItem(k); }catch(e){ return null; } },
+    setItem:(k,v)=>{ try{ if(localStorage.getItem(REM)==="1"){ localStorage.setItem(k,v); sessionStorage.removeItem(k); } else { sessionStorage.setItem(k,v); localStorage.removeItem(k); } }catch(e){} },
+    removeItem:k=>{ try{ localStorage.removeItem(k); sessionStorage.removeItem(k); }catch(e){} }
+  };
+  let sb=null;
+  try{ sb=window.supabase.createClient(SUPA.URL,SUPA.KEY,{auth:{storageKey:"klimop_auth",storage:store,persistSession:true,autoRefreshToken:true,detectSessionInUrl:false}}); }
+  catch(e){ console.error("Aanmeldmodule niet geladen",e); }
+  return {
+    ready: !!sb,
+    async token(){ if(!sb) return null; try{ const {data}=await sb.auth.getSession(); return data&&data.session ? data.session.access_token : null; }catch(e){ return null; } },
+    async signIn(email,pw,blijven){
+      if(!sb) throw new Error("De aanmeldmodule kon niet geladen worden. Controleer je internetverbinding en laad de pagina opnieuw.");
+      try{ if(blijven) localStorage.setItem(REM,"1"); else localStorage.removeItem(REM); }catch(e){}
+      const {data,error}=await sb.auth.signInWithPassword({email,password:pw});
+      if(error) throw error; return data.session;
+    },
+    async signOut(){ if(sb){ try{ await sb.auth.signOut({scope:"local"}); }catch(e){} } try{ localStorage.removeItem(REM); localStorage.removeItem("klimop_auth"); sessionStorage.removeItem("klimop_auth"); }catch(e){} },
+    onChange(cb){ if(sb) sb.auth.onAuthStateChange((ev,session)=>{ setTimeout(()=>cb(ev,session),0); }); }
+  };
+}
+const AUTH = window.MockAuth || supabaseAuth();   // MockAuth enkel in lokale tests
+
+/* ---------- Supabase via REST ---------- */
+function supabaseAPI(){
+  async function call(path,opt={}){
+    const tok = opt.anon ? null : await AUTH.token();
+    const headers=Object.assign({apikey:SUPA.KEY,Authorization:"Bearer "+(tok||SUPA.KEY),"Content-Type":"application/json"},opt.headers||{});
+    const ctl=new AbortController(), to=setTimeout(()=>ctl.abort(),12000);
+    let r;
+    try{ r=await fetch(SUPA.URL+"/rest/v1/"+path,{method:opt.method||"GET",headers,body:opt.body,signal:ctl.signal}); }
+    catch(e){ throw new DbError("Geen verbinding met de database",{network:true}); }
+    finally{ clearTimeout(to); }
+    /* 401 met een toegangsbewijs = ongeldige of verlopen sessie (een weigering door de regels geeft 403 of nul rijen).
+       Dan afmelden en één keer opnieuw zonder aanmelding: lezen en wat een leerkracht mag, blijft zo gewoon werken. */
+    if(r.status===401 && tok && !opt.anon){ await sessieVerlopen(); return call(path,Object.assign({},opt,{anon:true})); }
+    if(!r.ok){
+      let j=null, t=""; try{ t=await r.text(); j=JSON.parse(t); }catch(e){}
+      const code=j&&j.code, msg=(j&&(j.message||j.msg))||t;
+      const rechten = r.status===401 || r.status===403 || code==="42501" || code==="PGRST301";
+      throw new DbError(rechten ? "Geweigerd: geen beheerrechten of sessie verlopen." : "Database gaf fout "+r.status+" "+String(msg).slice(0,160),{rechten,status:r.status});
+    }
+    const txt=await r.text(), json=txt ? JSON.parse(txt) : null;
+    const cr=r.headers.get("content-range"), tot=cr&&cr.split("/")[1];
+    if(Array.isArray(json) && tot && tot!=="*") Object.defineProperty(json,"_total",{value:+tot});
+    return json;
+  }
+  /* Alle rijen in pagina's (de server geeft er per oproep maximaal 1000). Het pad heeft een vaste volgorde. */
+  async function callAll(path,opt={}){
+    const size=1000, out=[];
+    for(let n=0;n<500;n++){
+      const page=await call(`${path}&limit=${size}&offset=${out.length}`,Object.assign({},opt,{headers:Object.assign({Prefer:"count=exact"},opt.headers||{})}))||[];
+      out.push(...page);
+      if(!page.length) break;
+      if(page._total!=null){ if(out.length>=page._total) break; }
+      else if(page.length<size) break;
+    }
+    return out;
+  }
+  return {call,callAll};
+}
+const REST = supabaseAPI();
 
 /* ---------- Iconen (lijnstijl) ---------- */
 const ICONS = {
@@ -985,6 +1144,8 @@ const ICONS = {
   arrowUp:'<path d="M12 19V5M6 11l6-6 6 6"/>',
   chevron:'<path d="m9 6 6 6-6 6"/>',
   move:'<path d="M7 7h13M16 3l4 4-4 4"/><path d="M17 17H4M8 13l-4 4 4 4"/>',
+  undo:'<path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/>',
+  ext:'<path d="M14 4h6v6M20 4l-9 9"/><path d="M19 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h5"/>',
   truck:'<path d="M3 6h11v10H3zM14 9.5h4l3 3.5v3h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>'
 };
 function ic(name, size=16, sw=2){
@@ -1024,8 +1185,25 @@ const NFQ = new Intl.NumberFormat("nl-BE",{maximumFractionDigits:3});
 const euro      = n => "€ " + NF2.format(typeof n==="number" ? n : parseNum(n));
 const fmtPrice  = v => hasNum(v) ? NF2.format(parseNum(v)) : "";
 const fmtQty    = v => hasNum(v) ? NFQ.format(parseNum(v)) : "";
-const normPrice = v => hasNum(v) ? parseNum(v).toFixed(2) : "";
-const normQty   = v => hasNum(v) ? String(+parseNum(v).toFixed(3)) : "";
+/* Invoer lezen volgens parseEuro (1.4), met tot 3 decimalen (prijzen per stuk zoals 0,125):
+   12 · 12,5 · 0,125 · 4.50 · 1.250 (= 1250) · 1.250,50 · € 12 → getal. Ongeldig → NaN (nooit stilletjes 0). Leeg → null. */
+function leesGetal(v,dec=3){
+  const s=String(v??"").replace(/[\s€\u00a0\u202f]/g,""); if(!s) return null;
+  const D=`\\d{1,${dec}}`; let n;
+  if(/^\d+$/.test(s)) n=s;
+  else if(new RegExp(`^\\d+,${D}$`).test(s)) n=s.replace(",",".");
+  else if(/^[1-9]\d{0,2}(\.\d{3})+$/.test(s)) n=s.replace(/\./g,"");
+  else if(new RegExp(`^\\d+\\.${D}$`).test(s)) n=s;
+  else if(new RegExp(`^[1-9]\\d{0,2}(\\.\\d{3})+,${D}$`).test(s)) n=s.replace(/\./g,"").replace(",",".");
+  else if(new RegExp(`^[1-9]\\d{0,2}(,\\d{3})+\\.${D}$`).test(s)) n=s.replace(/,/g,"");
+  else return NaN;
+  if(n.replace(".","").length>12) return NaN;
+  const x=Number(n); return Number.isFinite(x) ? x : NaN;
+}
+const isOngeldig = x => typeof x==="number" && isNaN(x);
+/* Opgeslagen vorm blijft zoals vroeger: prijs met 2 decimalen, aantal met tot 3. Ongeldig → NaN. */
+const normPrice = v => { const x=leesGetal(v); return x==null ? "" : isNaN(x) ? NaN : x.toFixed(2); };
+const normQty   = v => { const x=leesGetal(v); return x==null ? "" : isNaN(x) ? NaN : String(+x.toFixed(3)); };
 const qtyOf     = o => parseNum(o.aantal);
 function rowTotal(o){ return parseNum(o.aantal)*parseNum(o.prijs); }
 
@@ -1070,8 +1248,8 @@ const ui = {
   archTab:"rondes", archQ:"", bonQ:"", bonSupp:"", bonFilter:"all",
   bonSort:{k:"nummer",d:-1}, recent:[], archOpen:new Set(), klSel:null
 };
-lsDel(LS_ADMIN);   // oude, blijvende beheerdersstatus opruimen
-let isAdmin = ssGet(LS_ADMIN)==="1";
+lsDel(OLD_ADMIN_KEY); ssDel(OLD_ADMIN_KEY);   // status van de oude pincode opruimen
+let isAdmin = false;    // wordt bij het opstarten bepaald door de aanmelding (initAuth)
 let HAS_LEV = true;     // kolom 'levering' bestaat in materiaal_bestellingen
 let HAS_ONTV = true;    // kolom 'artikelen_ontvangen' bestaat in materiaal_bestelbons
 let HAS_SET = true;     // tabel materiaal_instellingen bestaat
@@ -1100,94 +1278,248 @@ const fromBon  = r => ({id:r.id,nummer:r.nummer||"",leverancier:r.leverancier||"
   artikelen_ontvangen: r.artikelen_ontvangen==null ? !!r.factuur_ontvangen : !!r.artikelen_ontvangen,
   verwijderd_op: r.verwijderd_op||null,
   opmerking:r.opmerking||"",lijnen:r.lijnen||[],gearchiveerd:!!r.gearchiveerd});
+const ts = v => { if(!v) return null; const d=new Date(v); return isNaN(d) ? v : d.toISOString(); };
 function toRow(o){
   const r={id:o.id,klas:o.klas,leverancier:o.leverancier,artikel:o.artikel,omschrijving:o.omschrijving,aantal:o.aantal,prijs:o.prijs,
-    opmerking:o.opmerking,notitie:o.notitie,besteld:!!o.besteld,bon_id:o.bon_id||null,nietgeleverd:!!o.nietgeleverd};
-  if(HAS_LEV) r.levering=o.levering||null;
-  if(o.created_at) r.created_at=o.created_at;
+    opmerking:o.opmerking,notitie:o.notitie,besteld:!!o.besteld,bon_id:o.bon_id||null,nietgeleverd:!!o.nietgeleverd,levering:o.levering||null};
+  if(o.created_at) r.created_at=ts(o.created_at);
   return r;
 }
 function bonRow(b){
-  const r={id:b.id,nummer:b.nummer,leverancier:b.leverancier,datum:b.datum,factuur_ontvangen:!!b.factuur_ontvangen,
-    opmerking:b.opmerking||"",lijnen:b.lijnen||[],gearchiveerd:!!b.gearchiveerd};
-  if(HAS_ONTV) r.artikelen_ontvangen=!!b.artikelen_ontvangen;
-  if(HAS_DEL) r.verwijderd_op=b.verwijderd_op||null;
-  return r;
+  return {id:b.id,nummer:b.nummer,leverancier:b.leverancier,datum:ts(b.datum),factuur_ontvangen:!!b.factuur_ontvangen,
+    opmerking:b.opmerking||"",lijnen:b.lijnen||[],gearchiveerd:!!b.gearchiveerd,
+    artikelen_ontvangen:!!b.artikelen_ontvangen,verwijderd_op:ts(b.verwijderd_op)};
 }
+/* Voor wie niet aangemeld is: enkel de leveringsstatus van een bon (statusfunctie), zonder nummer, bedragen of opmerking */
+const fromBonStatus = r => ({id:r.id,nummer:"",leverancier:"",datum:null,factuur_ontvangen:false,artikelen_ontvangen:!!r.artikelen_ontvangen,
+  verwijderd_op:null,opmerking:"",lijnen:Array.isArray(r.lijnen)?r.lijnen:[],gearchiveerd:!!r.gearchiveerd,licht:true});
 
 /* ---------- Verbinding en schrijfacties ---------- */
 function setConn(ok){
   $("conn").classList.toggle("off",!ok);
   $("connTxt").textContent = ok ? "verbonden" : "geen verbinding";
 }
-async function dbRun(make,label,{quiet=false}={}){
-  if(!sb){ setConn(false); if(!quiet) toast("Geen verbinding met de database","err"); return false; }
+/* ---------- Schrijven ----------
+   Elk object uit de database onthoudt zijn versie (updated_at) en de laatst bevestigde rij.
+   Een wijziging stuurt enkel de gewijzigde velden, met versiecontrole. Per object na elkaar (wachtrij). */
+const META = new WeakMap();
+const canon = v => JSON.stringify(v, (k,x)=> x && typeof x==="object" && !Array.isArray(x) ? Object.fromEntries(Object.keys(x).sort().map(y=>[y,x[y]])) : x);
+const zelfde = (a,b) => canon(a??null)===canon(b??null);
+function onthoud(obj,row,toR,fromR){ META.set(obj,{upd:row.updated_at, base:toR(fromR(row))}); return obj; }
+let loadGen=0, writeGen=0, authGen=0;
+const wachtrij=new Map();
+function inRij(key,fn){
+  const p=(wachtrij.get(key)||Promise.resolve()).catch(()=>{}).then(fn);
+  wachtrij.set(key,p.catch(()=>{}));
+  return p;
+}
+async function schrijf(key,fn){
   pending++;
-  try{ const {error}=await make(); if(error) throw error; setConn(true); return true; }
-  catch(e){ console.error(label,e); setConn(false); if(!quiet) toast("Opslaan mislukt. Klik op het verbindingsbolletje om te vernieuwen.","err"); return false; }
+  try{ const r=await inRij(key,fn); writeGen++; setConn(true); return r; }
   finally{ pending--; }
 }
-const db = {
-  insertOrder : (o,opt) => dbRun(()=>sb.from(T_ORD).insert(toRow(o)),"insert",opt),
-  upsertOrders: arr => arr.length ? dbRun(()=>sb.from(T_ORD).upsert(arr.map(toRow)),"upsert") : Promise.resolve(true),
-  deleteOrder : id  => dbRun(()=>sb.from(T_ORD).delete().eq("id",id),"delete"),
-  deleteOrders: ids => dbRun(()=>sb.from(T_ORD).delete().in("id",ids),"deleteIds"),
-  deleteAllOrders:()=> dbRun(()=>sb.from(T_ORD).delete().neq("id",""),"delAllOrd"),
-  insertRound : r   => dbRun(()=>sb.from(T_ARCH).insert({id:r.id,datum:r.datum,lijnen:r.lijnen}),"archIns"),
-  deleteAllRounds:()=> dbRun(()=>sb.from(T_ARCH).delete().neq("id",""),"archDel"),
-  upsertBon   : b   => dbRun(()=>sb.from(T_BON).upsert(bonRow(b)),"bonUpsert"),
-  deleteBon   : id  => dbRun(()=>sb.from(T_BON).delete().eq("id",id),"bonDel"),
-  saveSettings: ()  => dbRun(()=>sb.from(T_SET).upsert({id:SET_ID,data:{klassen:klassenList},updated_at:new Date().toISOString()}),"setUpsert")
-};
-async function fetchData(){
-  const qs=[
-    sb.from(T_ORD).select("*").order("created_at",{ascending:true}),
-    sb.from(T_ARCH).select("*").order("datum",{ascending:false}),
-    sb.from(T_BON).select("*").order("datum",{ascending:false})
-  ];
-  if(HAS_SET) qs.push(sb.from(T_SET).select("*").eq("id",SET_ID));
-  const [r1,r2,r3,r4]=await Promise.all(qs);
-  const err=r1.error||r2.error||r3.error; if(err) throw err;
-  // klassen: undefined = onbekend (laat staan), null = geen eigen lijst (standaard)
-  let klassen;
-  if(r4 && !r4.error){ const row=(r4.data||[])[0]; const k=row && row.data && row.data.klassen; klassen = Array.isArray(k)&&k.length ? k.map(String) : null; }
-  return { orders:(r1.data||[]).map(fromOrder), archief:(r2.data||[]).map(fromArch), bons:(r3.data||[]).map(fromBon), klassen };
+const enc=encodeURIComponent, RET={Prefer:"return=representation"};
+async function haalRij(T,id){ const r=await REST.call(`${T}?select=*&id=eq.${enc(id)}`); return (r&&r[0])||null; }
+/* Nieuwe rij: gewone insert (nooit upsert). Bestaat de id al (een eerdere poging kwam aan), dan geldt die als bewaard. */
+async function voegToe(T,obj,toR,fromR){
+  let row;
+  try{ row=(await REST.call(T,{method:"POST",headers:RET,body:JSON.stringify(toR(obj))}))[0]; }
+  catch(e){ if(e.status===409){ row=await haalRij(T,obj.id); if(!row) throw e; } else throw e; }
+  return onthoud(obj,row,toR,fromR);
 }
-const dataSig = d => JSON.stringify([d.orders, d.archief.map(r=>r.id+":"+(r.lijnen||[]).length), d.bons, d.klassen===undefined?klassenList:d.klassen]);
-function applyKlassen(k){
-  if(k===undefined) return;
-  const next = k || DEFAULT_KLASSEN.slice();
-  if(JSON.stringify(next)===JSON.stringify(klassenList)) return;
-  klassenList=next; refreshKlasSelects();
+/* Wijzigen met versiecontrole. Nul rijen terug? Opnieuw ophalen beslist:
+   versie ongewijzigd = geweigerd · rij weg = verdwenen · andere versie = echt conflict (per veld samenvoegen). */
+async function wijzig(T,obj,toR,fromR,label,poging=0){
+  const m=META.get(obj);
+  if(!m) return voegToe(T,obj,toR,fromR);
+  const cur=toR(obj), diff=Object.keys(cur).filter(k=>!zelfde(cur[k],m.base[k]));
+  if(!diff.length) return obj;
+  const r=await REST.call(`${T}?id=eq.${enc(obj.id)}&updated_at=eq.${enc(m.upd)}`,{method:"PATCH",headers:RET,body:JSON.stringify(Object.fromEntries(diff.map(k=>[k,cur[k]])))});
+  if(r&&r.length) return onthoud(obj,r[0],toR,fromR);
+  const srv=await haalRij(T,obj.id);
+  if(!srv) throw new DbError(label+" bestaat niet meer.",{weg:true});
+  if(srv.updated_at===m.upd) throw new DbError("Geweigerd: geen beheerrechten of sessie verlopen.",{rechten:true});
+  if(poging>=3) throw new DbError("Intussen gewijzigd",{conflict:true});
+  const theirs=toR(fromR(srv));
+  const clash=diff.filter(k=>!zelfde(theirs[k],m.base[k]) && !zelfde(theirs[k],cur[k]));
+  let houd=diff;
+  if(clash.length && !(await kiesMijnVersie(label,clash,cur,theirs))) houd=diff.filter(k=>!clash.includes(k));
+  const vers=fromR(srv);
+  Object.keys(vers).forEach(k=>{ if(k!=="id" && !houd.includes(k) && k in obj) obj[k]=vers[k]; });
+  if(houd.includes("created_at")) obj.created_at=vers.created_at;
+  META.set(obj,{upd:srv.updated_at, base:theirs});
+  houd.length ? await wijzig(T,obj,toR,fromR,label,poging+1) : 0;
+  samengevoegd=true;
+  return obj;
 }
-async function loadAll({silent=false}={}){
-  if(!sb){ loaded=true; setConn(false); if(!silent) toast("De databasebibliotheek is niet geladen. Controleer je internetverbinding.","err"); return false; }
-  try{
-    const d=await fetchData();
-    state.orders=d.orders; state.archief=d.archief; state.bons=d.bons; applyKlassen(d.klassen); lastSig=dataSig(d);
-    loaded=true; setConn(true); return true;
-  }catch(e){ console.error("fetch",e); loaded=true; setConn(false); if(!silent) toast("Kon de gegevens niet laden. Controleer je verbinding.","err"); return false; }
+let samengevoegd=false;
+const VELDNAAM={klas:"klas",leverancier:"leverancier",artikel:"artikelnummer",omschrijving:"omschrijving",aantal:"aantal",prijs:"prijs",opmerking:"opmerking leerkracht",
+  notitie:"opmerking beheerder",besteld:"besteld",bon_id:"bestelbon",levering:"levering",nummer:"bonnummer",datum:"besteldatum",factuur_ontvangen:"factuur",
+  artikelen_ontvangen:"artikelen ontvangen",lijnen:"artikelen op de bon",gearchiveerd:"archief"};
+function kiesMijnVersie(label,velden,mijn,hun){
+  const toon=v=> v==null||v==="" ? "<i>leeg</i>" : typeof v==="object" ? "<i>gewijzigd</i>" : esc(String(v));
+  return confirmDialog({title:"Intussen ook gewijzigd",ok:"Mijn versie bewaren",cancel:"Hun versie houden",
+    html:`<p>Iemand anders wijzigde ${esc(label.toLowerCase())} intussen ook. Voor deze velden verschillen jullie versies:</p>
+      <div class="infobox">${velden.map(k=>`<span><b>${esc(VELDNAAM[k]||k)}</b>: jij ${toon(mijn[k])} · ander ${toon(hun[k])}</span>`).join("")}</div>
+      <p style="font-size:13px;color:var(--slate)">De andere velden worden samengevoegd.</p>`});
 }
-async function waitIdle(max=5000){ const t0=Date.now(); while(pending>0 && Date.now()-t0<max) await new Promise(r=>setTimeout(r,50)); }
-async function probeSchema(){
-  // Stelt vast of de database-update (SQL) al is uitgevoerd; zo niet, blijft de rest gewoon werken.
-  if(!sb) return;
-  const missing=e=>!!e && /42703|42P01|PGRST20[45]|does not exist|could not find/i.test((e.code||"")+" "+(e.message||""));
-  const safe=async (q,flag)=>{ try{ const r=await q; if(missing(r.error)) flag(); }catch(e){} };
-  await Promise.all([
-    safe(sb.from(T_ORD).select("id,levering").limit(1),()=>HAS_LEV=false),
-    safe(sb.from(T_BON).select("id,artikelen_ontvangen").limit(1),()=>HAS_ONTV=false),
-    safe(sb.from(T_SET).select("id").limit(1),()=>HAS_SET=false),
-    safe(sb.from(T_BON).select("id,verwijderd_op").limit(1),()=>HAS_DEL=false)
-  ]);
+async function verwijderRijen(T,ids){
+  if(!ids.length) return true;
+  const r=await REST.call(`${T}?id=in.(${ids.map(x=>'"'+String(x).replace(/"/g,'')+'"').join(",")})`,{method:"DELETE",headers:RET});
+  if((r||[]).length>=ids.length) return true;
+  const weg=new Set((r||[]).map(x=>x.id)), rest=ids.filter(x=>!weg.has(x));
+  const nog=await REST.call(`${T}?select=id&id=in.(${rest.map(x=>'"'+String(x).replace(/"/g,'')+'"').join(",")})`);
+  if((nog||[]).length) throw new DbError("Geweigerd: geen beheerrechten of sessie verlopen.",{rechten:true});
+  return true;   // was al weg
 }
 
+/* Alles wissen (enkel de beheerder). Blijft er daarna nog iets staan, dan weigerde de beveiliging. */
+async function wisAlles(T){
+  await REST.call(`${T}?id=not.is.null`,{method:"DELETE"});
+  const nog=await REST.call(`${T}?select=id&limit=1`);
+  if((nog||[]).length) throw new DbError("Geweigerd: geen beheerrechten of sessie verlopen.",{rechten:true});
+  return true;
+}
+/* Foutmelding volgens de echte oorzaak; daarna de lijst opnieuw ophalen, want de database is de waarheid. */
+function dbFail(e,wat){
+  console.error(e);
+  const w = wat ? wat+" lukte niet: " : "Niet gelukt: ";
+  if(e && e.rechten && sessieMelding){ herlaadStraks(); return; }   // de melding "sessie verlopen" zegt het al
+  if(e && e.rechten){
+    toast(w+(isAdmin?"je bent niet (meer) aangemeld als beheerder.":"dit mag enkel de beheerder, of het artikel is intussen besteld."),"err",{label:"Aanmelden",fn:()=>openLogin()});
+    if(isAdmin) AUTH.token().then(t=>{ if(!t){ wisBeheerToestand(); loadAll({silent:true}).then(renderCurrent); } });
+  }
+  else if(e && e.weg) toast(e.message+" De lijst is vernieuwd.","err");
+  else if(e && e.conflict) toast(w+"iemand anders wijzigde dit intussen. De lijst is vernieuwd.","err");
+  else if(e && e.network){ setConn(false); toast(w+"geen verbinding met de database. De lijst toont weer wat bewaard is.","err"); }
+  else if(e instanceof DbError) toast(w+"de database weigerde de gegevens"+(e.status?` (fout ${e.status})`:"")+".","err");
+  else toast(w+"er liep iets mis in de tool. Laad de pagina opnieuw.","err");
+  herlaadStraks();
+}
+let herlaadTimer=null;
+function herlaadStraks(){ clearTimeout(herlaadTimer); herlaadTimer=setTimeout(async()=>{ await waitIdle(); if(await loadAll({silent:true})) rerenderPreserving(); },400); }
+async function poog(fn,wat,{quiet=false}={}){
+  try{ await fn(); if(samengevoegd){ samengevoegd=false; renderCurrent(); } return true; }
+  catch(e){ samengevoegd=false; if(quiet){ console.error(e); if(e&&e.network) setConn(false); return e; } dbFail(e,wat); return false; }
+}
+const ordKey=id=>"o:"+id, bonKey=id=>"b:"+id;
+const db = {
+  insertOrder : (o,{quiet=false}={}) => poog(()=>schrijf(ordKey(o.id),()=>voegToe(T_ORD,o,toRow,fromOrder)),"Opslaan",{quiet}).then(r=>r===true),
+  upsertOrders: (arr,{quiet=false}={}) => !arr.length ? Promise.resolve(true)
+    : Promise.all(arr.map(o=>poog(()=>schrijf(ordKey(o.id),()=>wijzig(T_ORD,o,toRow,fromOrder,"Dit artikel")),"Opslaan",{quiet}))).then(r=>r.every(x=>x===true)),
+  deleteOrder : (id,{quiet=false}={}) => poog(()=>schrijf(ordKey(id),()=>verwijderRijen(T_ORD,[id])),"Verwijderen",{quiet}).then(r=>r===true),
+  deleteOrders: (ids,{quiet=false}={}) => poog(()=>schrijf("o:*",()=>verwijderRijen(T_ORD,ids)),"Verwijderen",{quiet}).then(r=>r===true),
+  deleteAllOrders:()=> poog(()=>schrijf("o:*",()=>wisAlles(T_ORD)),"Wissen").then(r=>r===true),
+  insertRound : (r,{quiet=false}={}) => poog(()=>schrijf("r:"+r.id,()=>voegToe(T_ARCH,r,x=>({id:x.id,datum:ts(x.datum),lijnen:x.lijnen}),fromArch)),"Archiveren",{quiet}).then(x=>x===true),
+  deleteAllRounds:()=> poog(()=>schrijf("r:*",()=>wisAlles(T_ARCH)),"Wissen").then(r=>r===true),
+  insertBon   : (b,{quiet=false}={}) => poog(()=>schrijf(bonKey(b.id),()=>voegToe(T_BON,b,bonRow,fromBon)),"Bestelbon aanmaken",{quiet}).then(r=>r===true),
+  upsertBon   : (b,{quiet=false}={}) => poog(()=>schrijf(bonKey(b.id),()=>wijzig(T_BON,b,bonRow,fromBon,"Deze bestelbon")),"Bestelbon bewaren",{quiet}).then(r=>r===true),
+  deleteBon   : id  => poog(()=>schrijf(bonKey(id),()=>verwijderRijen(T_BON,[id])),"Bestelbon verwijderen").then(r=>r===true),
+  saveSettings: ()  => poog(()=>schrijf("s:"+SET_ID,bewaarInstellingen),"Instellingen bewaren").then(r=>r===true)
+};
+/* Instellingen: bij een conflict opnieuw toepassen op de nieuwste versie (andere sleutels blijven staan). */
+let setData=null, setUpd=null;
+async function bewaarInstellingen(poging=0){
+  const data=Object.assign({},setData||{},{klassen:klassenList,andere:andereList});
+  if(!setUpd){
+    let row;
+    try{ row=(await REST.call(T_SET,{method:"POST",headers:RET,body:JSON.stringify({id:SET_ID,data})}))[0]; }
+    catch(e){ if(e.status!==409 || poging>2) throw e; const cur=await haalRij(T_SET,SET_ID); setData=(cur&&cur.data)||{}; setUpd=cur&&cur.updated_at; return bewaarInstellingen(poging+1); }
+    setData=row.data; setUpd=row.updated_at; return;
+  }
+  const r=await REST.call(`${T_SET}?id=eq.${SET_ID}&updated_at=eq.${enc(setUpd)}`,{method:"PATCH",headers:RET,body:JSON.stringify({data})});
+  if(r&&r.length){ setData=r[0].data; setUpd=r[0].updated_at; return; }
+  const cur=await haalRij(T_SET,SET_ID);
+  if(cur && cur.updated_at===setUpd) throw new DbError("Geweigerd: geen beheerrechten of sessie verlopen.",{rechten:true});
+  if(poging>2) throw new DbError("Intussen gewijzigd",{conflict:true});
+  setData=(cur&&cur.data)||{}; setUpd=cur?cur.updated_at:null;
+  return bewaarInstellingen(poging+1);
+}
+async function fetchData(){
+  const admin=isAdmin;
+  const [ord,arch,bonsVol,setR,gedR]=await Promise.all([
+    REST.callAll(`${T_ORD}?select=*&order=created_at.asc,id.asc`),
+    REST.callAll(`${T_ARCH}?select=*&order=datum.desc,id.asc`),
+    admin ? REST.callAll(`${T_BON}?select=*&order=datum.desc,id.asc`).catch(e=>{ if(e.rechten) return null; throw e; }) : Promise.resolve(null),
+    REST.call(`${T_SET}?select=*&id=eq.${SET_ID}`).catch(e=>{ console.error("instellingen",e); return undefined; }),
+    REST.call(`${T_GEDEELD}?select=data&id=eq.klimop`).catch(e=>{ console.error("gedeelde klassenlijst",e); return null; })
+  ]);
+  /* Bestelbons: volledig voor de beheerder, anders enkel de leveringsstatus */
+  let bons, geweigerd=false;
+  if(bonsVol) bons=bonsVol.map(r=>onthoud(fromBon(r),r,bonRow,fromBon));
+  else { geweigerd=admin; bons=(await REST.callAll(`${RPC_BONSTATUS}?order=id.asc`)).map(fromBonStatus); }
+  // eigen lijst: undefined = onbekend (laat staan)
+  let klassen, setRow=null;
+  if(setR!==undefined){ setRow=(setR||[])[0]||null; const d=(setRow&&setRow.data)||{};
+    klassen={ oud: Array.isArray(d.klassen)&&d.klassen.length ? d.klassen.map(String) : null, andere: Array.isArray(d.andere) ? d.andere.map(String) : null }; }
+  // gedeelde lijst: null = niet beschikbaar
+  let ged=null;
+  if(gedR){ const k=(((gedR||[])[0]||{}).data||{}).klassen;
+    ged = Array.isArray(k) ? k.filter(x=>x && GEDEELDE_GROEPEN.includes(x.groep) && String(x.naam||"").trim())
+            .map(x=>({naam:String(x.naam).trim().replace(/\s+/g," "),groep:x.groep,actief:x.actief!==false})) : null; }
+  return { orders:ord.map(r=>onthoud(fromOrder(r),r,toRow,fromOrder)), archief:arch.map(fromArch), bons, klassen, gedeeld:ged, setRow, geweigerd,
+           sigUpd:[ord.map(r=>r.id+r.updated_at), arch.map(r=>r.id+r.updated_at), (bonsVol||[]).map(r=>r.id+r.updated_at)] };
+}
+const dataSig = d => JSON.stringify([d.sigUpd, d.bons.map(b=>b.licht?canon(b):b.id), d.setRow&&d.setRow.updated_at, d.klassen===undefined?null:d.klassen, d.gedeeld===undefined?null:d.gedeeld]);
+const lc = x => String(x).toLowerCase();
+/* Eerste keer (nog geen eigen lijst "andere"): alles uit de vroegere lijst dat niet in de gedeelde lijst staat */
+function afleidenAndere(oud){
+  if(!oud || !gedeeld) return DEFAULT_ANDERE.slice();
+  const g=new Set(gedeeld.map(k=>lc(k.naam)));
+  return oud.filter(k=>!g.has(lc(k)));
+}
+function bouwKlassen(){
+  if(!gedeeld) return (eigenOud||DEFAULT_KLASSEN).slice();
+  const g=new Set(gedeeld.map(k=>lc(k.naam)));
+  return [...gedeeld.map(k=>k.naam), ...andereList.filter(k=>!g.has(lc(k)))];
+}
+/* Groepen voor de keuzelijsten: enkel actieve klassen */
+function klasGroepen(){
+  if(!gedeeld) return [["",klassenList]];
+  const g=new Set(gedeeld.map(k=>lc(k.naam)));
+  return [...GEDEELDE_GROEPEN.map(gr=>[gr,gedeeld.filter(k=>k.groep===gr && k.actief).map(k=>k.naam)]),
+          ["Andere bestellers", andereList.filter(k=>!g.has(lc(k)))]].filter(([,l])=>l.length);
+}
+function applyKlassen(k,g){
+  const voor=JSON.stringify([klassenList,klasGroepen()]);
+  if(g!==undefined){ gedeeldRuw=g; gedeeld = g && g.length ? GEDEELDE_GROEPEN.flatMap(gr=>g.filter(x=>x.groep===gr)) : null; }
+  if(k!==undefined){ eigenOud = k ? k.oud : null; andereList = k && k.andere ? k.andere : afleidenAndere(eigenOud); }
+  else if(g!==undefined && !ui.klAndereBewaard) andereList = afleidenAndere(eigenOud);
+  klassenList=bouwKlassen();
+  if(JSON.stringify([klassenList,klasGroepen()])!==voor) refreshKlasSelects();
+}
+/* Laden met generaties: een antwoord dat ouder is dan een nieuwer laadverzoek, een bewaring of een aan-/afmelding
+   mag die recentere toestand niet terugdraaien (en mag na afmelden geen beheergegevens terugzetten). */
+function pasToe(d){
+  if(!isAdmin) d.bons=d.bons.map(b=>b.licht?b:fromBonStatus({id:b.id,artikelen_ontvangen:b.artikelen_ontvangen,gearchiveerd:b.gearchiveerd,lijnen:[]}));
+  state.orders=d.orders; state.archief=d.archief; state.bons=d.bons;
+  if(d.klassen!==undefined){ setData=(d.setRow&&d.setRow.data)||null; setUpd=d.setRow?d.setRow.updated_at:null; }
+  applyKlassen(d.klassen,d.gedeeld); lastSig=dataSig(d); lastLoad=new Date();
+  $("conn").title="Verbonden · laatst vernieuwd om "+lastLoad.toLocaleTimeString("nl-BE",{hour:"2-digit",minute:"2-digit"})+". Klik om te vernieuwen.";
+}
+let lastLoad=null;
+async function loadAll({silent=false,poging=0}={}){
+  const my=++loadGen, w=writeGen, a=authGen;
+  let d;
+  try{ d=await fetchData(); }
+  catch(e){ if(my!==loadGen) return false; console.error("laden",e); loaded=true; setConn(false); if(!silent) toast("Kon de gegevens niet laden. Controleer je verbinding.","err"); return false; }
+  if(my!==loadGen) return false;                                                      // een nieuwer laadverzoek neemt het over
+  if(a!==authGen || w!==writeGen){ if(poging<3) return loadAll({silent,poging:poging+1}); return false; }
+  if(d.geweigerd && isAdmin){ wisBeheerToestand(); toast("Je bent afgemeld. Meld opnieuw aan om verder te beheren.","err",{label:"Aanmelden",fn:()=>openLogin()}); }
+  pasToe(d); loaded=true; setConn(true); return true;
+}
+async function waitIdle(max=5000){ const t0=Date.now(); while(pending>0 && Date.now()-t0<max) await new Promise(r=>setTimeout(r,50)); }
+
 /* ---------- Meldingen ---------- */
-function toast(msg,type="ok"){
+/* action = {label, fn}: bv. "Aanmelden" of "Ongedaan maken". Zo'n melding blijft langer staan. */
+function toast(msg,type="ok",action){
   const w=$("toastWrap"); const t=document.createElement("div");
-  t.className="toast "+type; t.textContent=msg; w.appendChild(t);
+  t.className="toast "+type+(action?" has-act":"");
+  const s=document.createElement("span"); s.textContent=msg; t.appendChild(s);
+  if(action){ const b=document.createElement("button"); b.type="button"; b.textContent=action.label; b.onclick=()=>{ t.remove(); action.fn(); }; t.appendChild(b); }
+  w.appendChild(t);
   while(w.children.length>3) w.firstChild.remove();
-  setTimeout(()=>{ t.classList.add("out"); setTimeout(()=>t.remove(),260); },2800);
+  setTimeout(()=>{ t.classList.add("out"); setTimeout(()=>t.remove(),260); }, action?6500:(type==="err"?5200:2800));
 }
 
 /* ---------- Vensters: focus, Escape, stapelen ---------- */
@@ -1279,6 +1611,9 @@ function levOf(o){
   if(o && o.nietgeleverd) return {ontvangen:0,status:"wacht",legacy:true};
   return null;
 }
+/* Statussen in levering: "geleverd" (bevestigd), "wacht" (nalevering verwacht), "ontvangen" (nageleverd), "vervallen".
+   Een probleem = er ontbreekt nog iets of het komt niet meer. */
+const levProbleem = l => !!l && (l.status==="wacht" || l.status==="vervallen");
 function missingQty(o){ const l=levOf(o); if(!l) return 0; const q=qtyOf(o); return q>0 ? Math.max(0,q-(l.ontvangen||0)) : 0; }
 function missingAmount(o){ return missingQty(o)*parseNum(o.prijs); }
 function levTag(o){
@@ -1287,6 +1622,7 @@ function levTag(o){
   if(l.status==="wacht") return `<span class="lev-tag wait">${ic("truck",12)}${l.ontvangen>0?`Deels geleverd · nog ${esc(fmtQty(m))} verwacht`:"Nog niet geleverd · nalevering verwacht"}</span>`;
   if(l.status==="vervallen") return `<span class="lev-tag gone">${l.ontvangen>0?`Deels geleverd · ${esc(fmtQty(l.ontvangen))} van ${esc(fmtQty(q))}`:"Niet geleverd"}</span>`;
   if(l.status==="ontvangen") return `<span class="lev-tag done">${ic("check",11,2.6)}Nageleverd${l.datum?" op "+esc(datumLabel(l.datum)):""}</span>`;
+  if(l.status==="geleverd") return `<span class="lev-tag done">${ic("check",11,2.6)}Geleverd</span>`;
   return "";
 }
 function levTagFor(o){
@@ -1296,7 +1632,7 @@ function levTagFor(o){
   return (b && b.artikelen_ontvangen) ? `<span class="lev-tag done">${ic("check",11,2.6)}Geleverd</span>` : "";
 }
 function levShort(o){
-  const l=levOf(o); if(!l) return "Geleverd";
+  const l=levOf(o); if(!l || l.status==="geleverd") return "Geleverd";
   const q=qtyOf(o);
   if(l.status==="wacht") return q>0 ? `${fmtQty(l.ontvangen||0)} van ${fmtQty(q)} ontvangen` : "nalevering verwacht";
   if(l.status==="vervallen") return l.ontvangen>0 ? `${fmtQty(l.ontvangen)} van ${fmtQty(q)} · rest vervalt` : "niet geleverd · vervalt";
@@ -1304,6 +1640,7 @@ function levShort(o){
 }
 function levCsv(o){
   const l=levOf(o); if(!l) return "";
+  if(l.status==="geleverd") return "geleverd"+(l.datum?" (bevestigd op "+datumLabel(l.datum)+")":"");
   const q=qtyOf(o);
   const part = q>0 ? ` (${fmtQty(l.ontvangen||0)} van ${fmtQty(q)} ontvangen)` : "";
   if(l.status==="wacht") return "wacht op nalevering"+part;
@@ -1394,36 +1731,100 @@ function setYear(){
   $("yearBadge").innerHTML=html; $("yearBadge2").innerHTML=html;
 }
 
-/* ---------- Beheerder (PIN-venster) ---------- */
+/* ---------- Beheerder: aanmelden met een eigen account ----------
+   Beheerder = aangemeld én op de gedeelde beheerderslijst (is_beheerder).
+   "Aangemeld blijven" aangevinkt: de sessie blijft bewaard (localStorage).
+   Niet aangevinkt: de sessie stopt bij het sluiten van het tabblad (sessionStorage). */
 function updateAdminUI(){
   document.body.classList.toggle("is-admin",isAdmin);
   const b=$("adminBtn");
   b.classList.toggle("on",isAdmin);
-  b.innerHTML=ic(isAdmin?"unlock":"lock",14,2.2)+(isAdmin?"Beheerder aan":"Beheerder");
-  b.title=isAdmin?"Klik om de beheerdersmodus uit te zetten":"Inloggen als beheerder";
+  b.innerHTML=ic(isAdmin?"unlock":"lock",14,2.2)+(isAdmin?"Beheer aan · afmelden":"Beheer");
+  b.title=isAdmin?"Aangemeld als beheerder. Klik om af te melden (ook in de andere tools).":"Aanmelden als beheerder";
   b.setAttribute("aria-pressed",isAdmin?"true":"false");
 }
 function setAdmin(on){
   isAdmin=on;
-  if(on) ssSet(LS_ADMIN,"1"); else ssDel(LS_ADMIN);
   updateAdminUI();
   if(!on){ ui.archTab="rondes"; if(ADMIN_VIEWS.includes(ui.view)) showView("overzicht"); }
   renderCurrent(); requestAnimationFrame(()=>moveIndicator());
 }
-$("adminBtn").onclick=()=>{
-  if(isAdmin){ setAdmin(false); toast("Beheerdersmodus uit"); return; }
-  $("pinIn").value=""; $("pinErr").textContent="";
-  openOverlay("pinOverlay","#pinIn");
-};
-function tryPin(){
-  if($("pinIn").value===ADMIN_PIN){ closeOverlay("pinOverlay"); setAdmin(true); toast("Beheerdersmodus aan"); return; }
-  $("pinErr").textContent="Onjuiste code. Probeer opnieuw.";
-  const m=$("pinOverlay").querySelector(".modal"); m.classList.remove("shake"); void m.offsetWidth; m.classList.add("shake");
-  $("pinIn").select();
+async function isBeheerder(){
+  const tok=await AUTH.token(); if(!tok) return false;
+  try{ return (await REST.call("rpc/is_beheerder",{method:"POST",body:"{}"}))===true; }catch(e){ if(e.rechten) return false; throw e; }
 }
-$("pinOk").onclick=tryPin;
+/* Sessie ongeldig of verlopen (bv. na lange inactiviteit): afmelden, beheer uit, één melding */
+let sessieMelding=false;
+async function sessieVerlopen(){
+  try{ await AUTH.signOut(); }catch(e){}
+  if(!isAdmin) return;
+  wisBeheerToestand();
+  if(!sessieMelding){ sessieMelding=true; setTimeout(()=>sessieMelding=false,6000);
+    toast("Je sessie is verlopen. Meld opnieuw aan om verder te beheren.","err",{label:"Aanmelden",fn:()=>openLogin()}); }
+  herlaadStraks();
+}
+/* Eén plek die bij afmelden (knop, verlopen sessie of afmelden in een andere tool) alle beheergegevens opruimt */
+function wisBeheerToestand(){
+  isAdmin=false; authGen++;
+  state.bons=state.bons.map(b=>b.licht?b:fromBonStatus({id:b.id,artikelen_ontvangen:b.artikelen_ontvangen,gearchiveerd:b.gearchiveerd,lijnen:(b.lijnen||[]).map(o=>({id:o.id,bon_id:b.id,aantal:o.aantal,levering:o.levering||null,nietgeleverd:!!o.nietgeleverd}))}));
+  ["bdOverlay","lvOverlay","mvOverlay","beOverlay","mkOverlay"].forEach(id=>{ const ov=$(id); if(ov && ov.classList.contains("open")) closeOverlay(id); });
+  curBon=null; $("printArea").innerHTML="";
+  setAdmin(false);
+}
+function openLogin(){
+  $("pinErr").textContent=""; $("pinIn").value=""; $("loginRem").checked=false;
+  openOverlay("pinOverlay", $("loginMail").value ? "#pinIn" : "#loginMail");
+}
+async function logout(){
+  await AUTH.signOut();
+  wisBeheerToestand(); toast("Afgemeld");
+  await loadAll({silent:true}); renderCurrent();
+}
+$("adminBtn").onclick=()=>{ if(isAdmin) logout(); else openLogin(); };
+let loggingIn=false;
+function loginError(msg){
+  $("pinErr").textContent=msg;
+  const m=$("pinOverlay").querySelector(".modal"); m.classList.remove("shake"); void m.offsetWidth; m.classList.add("shake");
+}
+async function tryLogin(){
+  if(loggingIn) return;
+  const mail=$("loginMail").value.trim(), pw=$("pinIn").value;
+  if(!/^\S+@\S+\.\S+$/.test(mail)){ loginError("Vul een geldig e-mailadres in."); $("loginMail").focus(); return; }
+  if(!pw){ loginError("Vul je wachtwoord in."); $("pinIn").focus(); return; }
+  const btn=$("pinOk"); loggingIn=true; btn.disabled=true; btn.classList.add("busy");
+  btn.innerHTML=`<span class="spin"></span><span class="lbl">Bezig met aanmelden…</span>`; $("pinErr").textContent="";
+  try{
+    await AUTH.signIn(mail,pw,$("loginRem").checked);
+    if(!(await isBeheerder())){ await AUTH.signOut(); loginError("Dit account heeft geen beheerrechten voor de materialentool."); return; }
+    authGen++; closeOverlay("pinOverlay"); isAdmin=true; updateAdminUI();
+    await loadAll({silent:true}); setAdmin(true); toast("Aangemeld als beheerder");
+  }catch(e){
+    const msg=String(e&&e.message||"");
+    console.error("aanmelden",e);
+    loginError(/invalid login|invalid_credentials|invalid grant/i.test(msg) ? "E-mailadres of wachtwoord klopt niet."
+      : /fetch|network|verbinding/i.test(msg) ? "Geen verbinding. Controleer je internet en probeer opnieuw."
+      : msg || "Aanmelden lukte niet.");
+    $("pinIn").value=""; $("pinIn").focus();
+  }
+  finally{ loggingIn=false; btn.disabled=false; btn.classList.remove("busy"); btn.innerHTML=`<span class="lbl">Aanmelden</span>`; }
+}
+/* Bij het opstarten: bestaande sessie (ook van de uitstappentool)? Dan nagaan of dit account beheerder is. */
+async function initAuth(){
+  try{ if(await AUTH.token()) isAdmin = await isBeheerder(); }catch(e){ isAdmin=false; }
+  AUTH.onChange(async ev=>{
+    if(ev==="SIGNED_OUT" && isAdmin){
+      wisBeheerToestand(); await loadAll({silent:true}); renderCurrent();
+      toast("Je bent afgemeld. Meld opnieuw aan om verder te beheren.","err",{label:"Aanmelden",fn:()=>openLogin()});
+    }
+    if(ev==="SIGNED_IN" && !isAdmin && !loggingIn){   // aangemeld in een andere tool (zelfde browser)
+      try{ if(await isBeheerder() && !isAdmin){ authGen++; isAdmin=true; await loadAll({silent:true}); setAdmin(true); toast("Aangemeld als beheerder"); } }catch(e){}
+    }
+  });
+}
+$("pinOk").onclick=tryLogin;
 $("pinCancel").onclick=()=>closeOverlay("pinOverlay");
-$("pinIn").addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); tryPin(); } });
+/* Enter afvangen: anders klikt dezelfde toetsaanslag na het sluiten ook de knop in de hoofding aan */
+$("pinOverlay").querySelector(".login-fields").addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); tryLogin(); } });
 
 /* ---------- Verbindingsbolletje = vernieuwen ---------- */
 $("conn").onclick=async()=>{
@@ -1433,33 +1834,76 @@ $("conn").onclick=async()=>{
 };
 
 /* ---------- Nieuwe bestelling ---------- */
-let saving=false;
+let saving=false, pogingNieuw=null;
 function syncChips(){
   const v=fold($("f-leverancier").value.trim());
   document.querySelectorAll(".chip[data-supp]").forEach(c=>{ const on=fold(c.dataset.supp)===v; c.classList.toggle("on",on); c.setAttribute("aria-pressed",on?"true":"false"); });
 }
-function updateTotalPreview(){ $("f-totaal").textContent=euro(parseNum($("f-aantal").value)*parseNum($("f-prijs").value)); }
+function updateTotalPreview(){ const a=leesGetal($("f-aantal").value), p=leesGetal($("f-prijs").value); $("f-totaal").textContent=euro((a>0?a:0)*(p>0?p:0)); }
 function setAddLabel(t){ $("addBtn").querySelector(".lbl").textContent=t; }
 function hideFormError(){ $("formError").classList.remove("show"); }
 function clearForm(all){
   ["f-artikel","f-omschrijving","f-aantal","f-prijs","f-opmerking"].forEach(id=>$(id).value="");
   if(all){ $("f-klas").value=""; $("f-leverancier").value=""; }
-  updateTotalPreview(); syncChips(); hideFormError(); setAddLabel("Artikel toevoegen");
+  updateTotalPreview(); syncChips(); hideFormError(); clearPrijsWarn(); setAddLabel("Artikel toevoegen");
+  document.querySelectorAll("#view-bestellen .ctrl.invalid").forEach(x=>x.classList.remove("invalid"));
 }
+
+/* ---------- Opvallende waarschuwing (1.4) ----------
+   Verschijnt met wazige achtergrond; na "OK, begrepen" schuift de kaart naar haar plaats onder het prijsveld.
+   Per sessie verschijnt het venster maar één keer; daarna komt de waarschuwing meteen onder het prijsveld. */
+const WARN_PRIJS_KEY = "klimop_mat_waarsch_prijs";
+let prijsGewaarschuwd = false;   // voor het artikel dat nu ingevuld wordt
+const PRIJS_WARN_HTML = "<b>Er is geen prijs ingevuld.</b> Vul de prijs per stuk in als je die kent. Ken je de prijs niet? Klik dan op <b>Toch toevoegen zonder prijs</b>.";
+function opvallend(html,slot){
+  const prev=document.activeElement, el=document.createElement("div"); el.className="wpop";
+  el.innerHTML=`<div class="wpop-box" role="alertdialog" aria-modal="true" aria-labelledby="wpT"><div class="wpop-t" id="wpT">${ic("alert",18)}Even opletten</div>
+    <div class="wpop-cards"><div class="fwarn">${ic("alert",16)}<div>${html}</div></div></div><div class="wpop-f"><button type="button" class="btn btn-primary">OK, begrepen</button></div></div>`;
+  document.body.appendChild(el); hideHover();
+  requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add("in")));
+  const ok=el.querySelector(".btn"); setTimeout(()=>ok.focus({preventScroll:true}),40);
+  const done=()=>{
+    if(el._d) return; el._d=true;
+    const t=document.createElement("div"); t.className="fwarn landing"; t.innerHTML=`${ic("alert",16)}<div>${html}</div>`; slot.innerHTML=""; slot.appendChild(t);
+    const c=el.querySelector(".wpop-cards .fwarn"), r1=c.getBoundingClientRect(), r2=t.getBoundingClientRect();
+    const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches, f=c.cloneNode(true);
+    if(!reduce){ f.classList.add("flyer"); Object.assign(f.style,{left:r1.left+"px",top:r1.top+"px",width:r1.width+"px"}); document.body.appendChild(f); }
+    el.classList.add("out"); el.classList.remove("in");
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{ f.classList.add("go"); Object.assign(f.style,{left:r2.left+"px",top:r2.top+"px",width:r2.width+"px"}); }));
+    setTimeout(()=>{ f.remove(); t.classList.remove("landing"); el.remove(); if(prev&&prev.focus) prev.focus({preventScroll:true}); }, reduce?0:560);
+  };
+  ok.onclick=done;
+  el.addEventListener("keydown",e=>{ if(["Enter","Escape"," "].includes(e.key)){ e.preventDefault(); done(); } else if(e.key==="Tab"){ e.preventDefault(); ok.focus(); } });
+}
+function clearPrijsWarn(){ prijsGewaarschuwd=false; $("prijsWarn").innerHTML=""; }
+function toonPrijsWarn(){
+  prijsGewaarschuwd=true; setAddLabel("Toch toevoegen zonder prijs");
+  const slot=$("prijsWarn");
+  if(ssGet(WARN_PRIJS_KEY)!=="1"){ ssSet(WARN_PRIJS_KEY,"1"); opvallend(PRIJS_WARN_HTML,slot); return; }
+  slot.innerHTML=`<div class="fwarn appear" role="alert">${ic("alert",16)}<div>${PRIJS_WARN_HTML}</div></div>`;
+}
+function markInvalid(id,msg){ const el=$(id); el.classList.add("invalid"); toast(msg,"err"); el.focus(); }
 function refreshKlasSelects(){
+  const groepen=klasGroepen(), alle=groepen.flatMap(([,l])=>l);
   const fill=(sel,first)=>{ if(!sel) return; const cur=sel.value; sel.innerHTML="";
-    sel.add(new Option(first,"")); klassenList.forEach(k=>sel.add(new Option(k,k)));
-    if(cur && !klassenList.includes(cur)) sel.add(new Option(cur,cur));   // lopende keuze nooit wissen
+    sel.add(new Option(first,""));
+    groepen.forEach(([naam,l])=>{
+      const doel = naam ? Object.assign(document.createElement("optgroup"),{label:naam}) : sel;
+      l.forEach(k=>doel.appendChild(new Option(k,k))); if(naam) sel.appendChild(doel); });
+    if(cur && !alle.includes(cur)) sel.add(new Option(cur,cur));   // lopende keuze nooit wissen
     sel.value=cur; };
   fill($("f-klas"),"Kies een klas"); fill($("klasFilter"),"Alle klassen");
 }
 function initForm(){
   refreshKlasSelects();
-  document.querySelectorAll(".chip[data-supp]").forEach(c=>c.onclick=()=>{ $("f-leverancier").value=c.dataset.supp; syncChips(); $("f-artikel").focus(); });
+  document.querySelectorAll(".chip[data-supp]").forEach(c=>c.onclick=()=>{ $("f-leverancier").value=c.dataset.supp; $("f-leverancier").classList.remove("invalid"); syncChips(); $("f-artikel").focus(); });
   $("f-leverancier").addEventListener("input",syncChips);
   ["f-aantal","f-prijs"].forEach(id=>$(id).addEventListener("input",updateTotalPreview));
-  $("f-prijs").addEventListener("blur",e=>{ if(hasNum(e.target.value)) e.target.value=fmtPrice(e.target.value); });
-  $("f-aantal").addEventListener("blur",e=>{ if(hasNum(e.target.value)) e.target.value=fmtQty(e.target.value); });
+  ["f-klas","f-leverancier","f-omschrijving","f-aantal"].forEach(id=>$(id).addEventListener("input",e=>e.target.classList.remove("invalid")));
+  $("f-klas").addEventListener("change",e=>e.target.classList.remove("invalid"));
+  $("f-prijs").addEventListener("input",e=>{ e.target.classList.remove("invalid"); if(prijsGewaarschuwd && leesGetal(e.target.value)!=null){ clearPrijsWarn(); setAddLabel("Artikel toevoegen"); } });
+  $("f-prijs").addEventListener("blur",e=>{ const x=normPrice(e.target.value); if(x && !isOngeldig(x)) e.target.value=fmtPrice(x); });
+  $("f-aantal").addEventListener("blur",e=>{ const x=normQty(e.target.value); if(x && !isOngeldig(x)) e.target.value=fmtQty(x); });
   ["f-artikel","f-omschrijving","f-aantal","f-prijs"].forEach(id=>$(id).addEventListener("keydown",e=>{ if(e.key==="Enter" && !e.isComposing){ e.preventDefault(); addOrder(); } }));
   $("addBtn").onclick=addOrder;
   $("clearBtn").onclick=()=>{ clearForm(true); $("f-klas").focus(); };
@@ -1468,12 +1912,21 @@ async function addOrder(){
   if(saving) return;
   const klas=$("f-klas").value, lev=$("f-leverancier").value.trim(), oms=$("f-omschrijving").value.trim();
   hideFormError();
-  if(!klas){ toast("Kies eerst een klas","err"); $("f-klas").focus(); return; }
-  if(!lev){ toast("Vul een leverancier in","err"); $("f-leverancier").focus(); return; }
-  if(!oms){ toast("Vul een omschrijving in","err"); $("f-omschrijving").focus(); return; }
-  const o={ id:uid(), klas, leverancier:canonicalSupplier(lev), artikel:$("f-artikel").value.trim(), omschrijving:oms,
+  if(!klas){ markInvalid("f-klas","Kies eerst een klas"); return; }
+  if(!lev){ markInvalid("f-leverancier","Vul een leverancier in"); return; }
+  if(!oms){ markInvalid("f-omschrijving","Vul een omschrijving in"); return; }
+  const aantalX=leesGetal($("f-aantal").value), prijsX=leesGetal($("f-prijs").value);
+  if(aantalX==null){ markInvalid("f-aantal","Vul een aantal in"); return; }
+  if(isNaN(aantalX)){ markInvalid("f-aantal","Dit aantal kan ik niet lezen. Schrijf bv. 12 of 2,5"); return; }
+  if(!(aantalX>0)){ markInvalid("f-aantal","Het aantal moet groter zijn dan 0"); return; }
+  if(isOngeldig(prijsX)){ markInvalid("f-prijs","Deze prijs kan ik niet lezen. Schrijf bv. 4,50"); return; }
+  if(prijsX==null && !prijsGewaarschuwd){ toonPrijsWarn(); return; }
+  /* Een nieuwe poging na een fout houdt dezelfde id: kwam de eerste toch aan, dan telt die (geen dubbel artikel). */
+  const sleutel=JSON.stringify([klas,lev,$("f-artikel").value.trim(),oms,$("f-aantal").value,$("f-prijs").value,$("f-opmerking").value.trim()]);
+  if(!pogingNieuw || pogingNieuw.sleutel!==sleutel) pogingNieuw={sleutel,id:uid(),created_at:new Date().toISOString()};
+  const o={ id:pogingNieuw.id, klas, leverancier:canonicalSupplier(lev), artikel:$("f-artikel").value.trim(), omschrijving:oms,
     aantal:normQty($("f-aantal").value), prijs:normPrice($("f-prijs").value), opmerking:$("f-opmerking").value.trim(),
-    notitie:"", besteld:false, created_at:new Date().toISOString(), bon_id:null, nietgeleverd:false, levering:null };
+    notitie:"", besteld:false, created_at:pogingNieuw.created_at, bon_id:null, nietgeleverd:false, levering:null };
   saving=true; const btn=$("addBtn"); btn.disabled=true; btn.classList.add("busy"); setAddLabel("Bezig met opslaan…");
   const ok=await db.insertOrder(o,{quiet:true});
   saving=false; btn.disabled=false; btn.classList.remove("busy");
@@ -1481,7 +1934,8 @@ async function addOrder(){
     $("formErrorTxt").textContent="Opslaan is niet gelukt. Je gegevens staan er nog: controleer je internetverbinding en probeer opnieuw.";
     $("formError").classList.add("show"); setAddLabel("Opnieuw proberen"); toast("Niet opgeslagen","err"); return;
   }
-  state.orders.push(o); ui.recent.unshift(o.id);
+  pogingNieuw=null;
+  if(!state.orders.some(x=>x.id===o.id)) state.orders.push(o); ui.recent.unshift(o.id);
   clearForm(false); updateCounts(); refreshSupplierList(); renderRecent();
   toast("Artikel toegevoegd"); $("f-artikel").focus();
 }
@@ -1498,7 +1952,7 @@ function renderRecent(){
       <span class="rc-oms" title="${esc(o.omschrijving)}">${esc(o.omschrijving)}</span>
       <span class="rc-qty">${hasNum(o.aantal)?esc(fmtQty(o.aantal))+" × ":""}${hasNum(o.prijs)?euro(o.prijs):"geen prijs"}</span>
       <span class="num"><b>${euro(rowTotal(o))}</b></span>
-      <span class="rc-act">${o.besteld?`<span class="pill done">besteld</span>`:`<button class="btn-txt-del" data-undo="${o.id}">Ongedaan maken</button>`}</span>
+      <span class="rc-act">${o.besteld?`<span class="pill done">besteld</span>`:`<button class="btn-txt-del" data-undo="${esc(o.id)}">Ongedaan maken</button>`}</span>
     </div>`).join("");
 }
 $("recent").addEventListener("click",e=>{
@@ -1520,11 +1974,28 @@ function visibleOrders(){
   const ts=terms(ui.q);
   return state.orders.filter(o=>(!ui.klas || o.klas===ui.klas) && matchAll(ts,...orderHay(o)));
 }
-const keyOf = o => ui.mode==="klas" ? (o.klas||"—") : (o.leverancier||"—");
+const dagKey = o => o.created_at ? isoToLocalDate(o.created_at) : "—";
+const keyOf = o => ui.mode==="klas" ? (o.klas||"—") : ui.mode==="lev" ? (o.leverancier||"—") : dagKey(o);
+/* Naam van een dagblok: Vandaag, Gisteren, anders weekdag en datum */
+function dagLabel(key){
+  if(key==="—") return "Zonder datum";
+  const gis=new Date(); gis.setDate(gis.getDate()-1);
+  if(key===localISODate()) return "Vandaag";
+  if(key===localISODate(gis)) return "Gisteren";
+  const d=new Date(key+"T12:00:00");
+  const t=d.toLocaleDateString("nl-BE",{weekday:"long",day:"numeric",month:"long",...(d.getFullYear()!==new Date().getFullYear()?{year:"numeric"}:{})});
+  return t.charAt(0).toUpperCase()+t.slice(1);
+}
+const groupLabel = k => ui.mode==="datum" ? dagLabel(k) : k;
 function groupsOf(list){
   const g=new Map(); list.forEach(o=>{ const k=keyOf(o); if(!g.has(k)) g.set(k,[]); g.get(k).push(o); });
   const keys=[...g.keys()];
-  if(ui.mode==="klas") keys.sort((a,b)=>klasIdx(a)-klasIdx(b)||a.localeCompare(b,"nl")); else keys.sort((a,b)=>a.localeCompare(b,"nl"));
+  if(ui.mode==="klas") keys.sort((a,b)=>klasIdx(a)-klasIdx(b)||a.localeCompare(b,"nl"));
+  else if(ui.mode==="datum"){
+    keys.sort((a,b)=>a==="—"?1:b==="—"?-1:b.localeCompare(a));   // nieuwste dag eerst
+    g.forEach(items=>items.sort((x,y)=>String(y.created_at||"").localeCompare(String(x.created_at||""))));   // en binnen de dag het nieuwste bovenaan
+  }
+  else keys.sort((a,b)=>a.localeCompare(b,"nl"));
   return keys.map(k=>[k,g.get(k)]);
 }
 function renderOverview(){
@@ -1545,7 +2016,7 @@ function renderSummary(list,groups){
   const all=state.orders.length, n=list.length;
   const b=list.filter(o=>o.besteld).length, np=list.filter(o=>!hasNum(o.prijs)).length;
   const tot=list.reduce((s,o)=>s+rowTotal(o),0);
-  const unit = ui.mode==="klas" ? ["klas","klassen"] : ["leverancier","leveranciers"];
+  const unit = ui.mode==="klas" ? ["klas","klassen"] : ui.mode==="lev" ? ["leverancier","leveranciers"] : ["dag","dagen"];
   const parts=[
     n!==all ? `<span><b>${n}</b> van ${artikelen(all)}${n?` · in ${plural(groups.length,...unit)}`:""}</span>` : `<span><b>${n}</b> ${n===1?"artikel":"artikelen"}</span>`,
     `<span><i class="sum-sw"></i><b>${b}</b> besteld</span>`,
@@ -1563,13 +2034,13 @@ function groupHtml(key,items){
   const tot=items.reduce((s,o)=>s+rowTotal(o),0);
   const b=items.filter(o=>o.besteld).length, np=items.filter(o=>!hasNum(o.prijs)).length;
   const allB=items.length>0 && b===items.length;
-  const head = ui.mode==="klas"
+  const head = ui.mode!=="lev"
     ? `<span></span><span>Leverancier</span><span>Art.nr</span><span>Omschrijving</span><span class="tr">Aantal</span><span class="tr">Prijs/st</span><span class="tr last">Totaal</span><span></span><span></span>`
     : `<span></span><span>Art.nr</span><span>Omschrijving</span><span class="tr">Aantal</span><span class="tr">Prijs/st</span><span class="tr last">Totaal</span><span></span><span></span>`;
   return `<div class="card group" data-key="${esc(key)}">
     <div class="group-head">
-      <input type="checkbox" class="cbx blk-check" data-key="${esc(key)}" ${ui.selected.has(key)?"checked":""} aria-label="Blok ${esc(key)} selecteren om af te drukken" title="Selecteer dit blok om af te drukken">
-      <span class="group-name">${esc(key)}</span>
+      <input type="checkbox" class="cbx blk-check" data-key="${esc(key)}" ${ui.selected.has(key)?"checked":""} aria-label="Blok ${esc(groupLabel(key))} selecteren om af te drukken" title="Selecteer dit blok om af te drukken">
+      <span class="group-name">${esc(groupLabel(key))}</span>
       <span class="group-meta"><span>${artikelen(items.length)}</span><span class="group-tot">${euro(tot)}</span>
         ${np?`<span class="pill open">${np} zonder prijs</span>`:""}${b?`<span class="pill done">${b}/${items.length} besteld</span>`:""}</span>
       <div class="group-actions">${isAdmin?`<button class="btn btn-sm ${allB?"btn-ghost":"btn-green"}" data-act="block" data-key="${esc(key)}">${allB?"Toch niet besteld":"Hele blok besteld"}</button>`:""}</div>
@@ -1588,23 +2059,23 @@ function orderRow(o){
   const locked=!isAdmin && o.besteld, ro=locked?"readonly":"";
   const note=(o.notitie||"").trim(), tnote=(o.opmerking||"").trim();
   const check = isAdmin
-    ? `<button class="check" data-act="besteld" data-id="${o.id}" aria-pressed="${o.besteld}" aria-label="${o.besteld?"Besteld, klik om terug te zetten":"Markeer als besteld"}: ${esc(o.omschrijving)}" title="${o.besteld?"Besteld. Klik om terug te zetten.":"Markeer als besteld"}">${ic("check",14,3)}</button>`
+    ? `<button class="check" data-act="besteld" data-id="${esc(o.id)}" aria-pressed="${o.besteld}" aria-label="${o.besteld?"Besteld, klik om terug te zetten":"Markeer als besteld"}: ${esc(o.omschrijving)}" title="${o.besteld?"Besteld. Klik om terug te zetten.":"Markeer als besteld"}">${ic("check",14,3)}</button>`
     : (o.besteld ? `<span class="check ro" role="img" aria-label="Besteld" title="Besteld">${ic("check",14,3)}</span>` : `<span></span>`);
-  const levCell = ui.mode==="klas" ? hlField(`<input value="${esc(o.leverancier)}" list="supp-list" data-f="leverancier" placeholder="leverancier" aria-label="Leverancier" ${ro}>`,o.leverancier,ts) : "";
-  const klasTag = ui.mode==="lev" ? `<span class="klas-tag" style="margin-right:6px">${esc(o.klas)}</span>` : "";
+  const levCell = ui.mode!=="lev" ? hlField(`<input value="${esc(o.leverancier)}" list="supp-list" data-f="leverancier" placeholder="leverancier" aria-label="Leverancier" ${ro}>`,o.leverancier,ts) : "";
+  const klasTag = ui.mode!=="klas" ? `<span class="klas-tag" style="margin-right:6px">${esc(o.klas)}</span>` : "";
   const noteBtn = isAdmin
-    ? `<button class="icon-btn note-btn ${note?"has":""}" data-act="note" data-id="${o.id}" aria-label="Opmerking beheerder" title="${note?esc("Opmerking beheerder: "+note):"Opmerking beheerder toevoegen"}">${ic("note",15)}</button>`
-    : (note ? `<button class="icon-btn note-btn has" data-act="note" data-id="${o.id}" aria-label="Opmerking beheerder lezen" title="${esc("Opmerking beheerder: "+note)}">${ic("note",15)}</button>` : `<span></span>`);
+    ? `<button class="icon-btn note-btn ${note?"has":""}" data-act="note" data-id="${esc(o.id)}" aria-label="Opmerking beheerder" title="${note?esc("Opmerking beheerder: "+note):"Opmerking beheerder toevoegen"}">${ic("note",15)}</button>`
+    : (note ? `<button class="icon-btn note-btn has" data-act="note" data-id="${esc(o.id)}" aria-label="Opmerking beheerder lezen" title="${esc("Opmerking beheerder: "+note)}">${ic("note",15)}</button>` : `<span></span>`);
   const endBtn = locked
     ? `<span class="lockicon" role="img" aria-label="Besteld en vergrendeld" title="Besteld en vergrendeld">${ic("lock",14)}</span>`
-    : `<button class="icon-btn del" data-act="del" data-id="${o.id}" aria-label="Verwijder ${esc(o.omschrijving)}" title="Verwijderen">${ic("x",15,2.2)}</button>`;
+    : `<button class="icon-btn del" data-act="del" data-id="${esc(o.id)}" aria-label="Verwijder ${esc(o.omschrijving)}" title="Verwijderen">${ic("x",15,2.2)}</button>`;
   const hasP=hasNum(o.prijs);
-  const tn = tnote ? `<div class="oms-note"><span class="oms-note-lbl">Opmerking leerkracht</span>${hlField(`<input class="oms-note-input" data-omsid="${o.id}" value="${esc(o.opmerking)}" readonly aria-label="Opmerking leerkracht">`,o.opmerking,ts,{small:true})}${locked?"":`<button class="icon-btn" data-act="editoms" data-id="${o.id}" aria-label="Opmerking leerkracht aanpassen" title="Aanpassen">${ic("pencil",13)}</button>`}</div>` : "";
+  const tn = tnote ? `<div class="oms-note"><span class="oms-note-lbl">Opmerking leerkracht</span>${hlField(`<input class="oms-note-input" data-omsid="${esc(o.id)}" value="${esc(o.opmerking)}" readonly aria-label="Opmerking leerkracht">`,o.opmerking,ts,{small:true})}${locked?"":`<button class="icon-btn" data-act="editoms" data-id="${esc(o.id)}" aria-label="Opmerking leerkracht aanpassen" title="Aanpassen">${ic("pencil",13)}</button>`}</div>` : "";
   const panel = isAdmin
-    ? `<div class="note-panel" data-id="${o.id}"><div class="nlabel"><span>Opmerking beheerder</span><button class="nclear" data-act="note-clear" data-id="${o.id}">wissen</button></div><textarea data-noteid="${o.id}" placeholder="bv. andere leverancier gekozen, niet voorradig" aria-label="Opmerking beheerder">${esc(o.notitie)}</textarea></div>`
-    : (note ? `<div class="note-panel" data-id="${o.id}"><div class="nlabel"><span>Opmerking beheerder</span></div><div class="note-read">${hl(note,ts)}</div></div>` : "");
-  return `<div class="order-wrap ${o.besteld?"besteld":""}" data-id="${o.id}">
-    <div class="order-row" data-id="${o.id}">
+    ? `<div class="note-panel" data-id="${esc(o.id)}"><div class="nlabel"><span>Opmerking beheerder</span><button class="nclear" data-act="note-clear" data-id="${esc(o.id)}">wissen</button></div><textarea data-noteid="${esc(o.id)}" placeholder="bv. andere leverancier gekozen, niet voorradig" aria-label="Opmerking beheerder">${esc(o.notitie)}</textarea></div>`
+    : (note ? `<div class="note-panel" data-id="${esc(o.id)}"><div class="nlabel"><span>Opmerking beheerder</span></div><div class="note-read">${hl(note,ts)}</div></div>` : "");
+  return `<div class="order-wrap ${o.besteld?"besteld":""}" data-id="${esc(o.id)}">
+    <div class="order-row" data-id="${esc(o.id)}">
       ${check}${levCell}
       <div class="cell-copy">${hlField(`<input value="${esc(o.artikel)}" data-f="artikel" placeholder="art.nr" aria-label="Artikelnummer" ${ro}>`,o.artikel,ts)}<button class="copy-btn" data-act="copy" aria-label="Kopieer artikelnummer" title="Kopieer artikelnummer">${ic("copy",14)}</button></div>
       <div class="cell-copy">${klasTag}${hlField(`<input class="oms-in" value="${esc(o.omschrijving)}" data-f="omschrijving" placeholder="omschrijving" aria-label="Omschrijving" ${ro}>`,o.omschrijving,ts)}<button class="copy-btn" data-act="copy" aria-label="Kopieer omschrijving" title="Kopieer omschrijving">${ic("copy",14)}</button></div>
@@ -1618,7 +2089,7 @@ function orderRow(o){
 }
 function rowSubHtml(o){
   const p=[];
-  if(o.created_at) p.push(`<span title="${esc(datumTitel(o.created_at))}">${esc(datumLabel(o.created_at))}</span>`);
+  if(o.created_at) p.push(`<span title="${esc(datumTitel(o.created_at))}">${esc(ui.mode==="datum" ? "om "+uurLabel(o.created_at) : datumLabel(o.created_at))}</span>`);
   if(isAdmin && o.bon_id){ const b=bonById(o.bon_id); if(b) p.push(`<span class="bon-tag" title="Bestelbon">${hl(bonLabel(b),terms(ui.q))}</span>`); }
   const lt=levTagFor(o); if(lt) p.push(lt);
   return p.length ? `<div class="row-sub">${p.join("")}</div>` : "";
@@ -1676,7 +2147,7 @@ $("groups").addEventListener("input",e=>{
   if(t.matches("input[data-omsid]")){ const o=orderById(t.dataset.omsid); if(o) o.opmerking=t.value; return; }
   if(t.matches("textarea[data-noteid]")){
     const o=orderById(t.dataset.noteid); if(!o) return; o.notitie=t.value;
-    const btn=document.querySelector(`.note-btn[data-id="${o.id}"]`); if(btn) btn.classList.toggle("has",!!t.value.trim());
+    const btn=document.querySelector(`.note-btn[data-id="${esc(o.id)}"]`); if(btn) btn.classList.toggle("has",!!t.value.trim());
     return;
   }
   const inp=t.closest("input[data-f]"); if(!inp) return;
@@ -1689,6 +2160,9 @@ $("groups").addEventListener("input",e=>{
     refreshLiveTotals();
   }
 });
+/* aantal: vorige waarde onthouden, zodat een leeg of ongeldig aantal teruggezet kan worden */
+$("groups").addEventListener("focusin",e=>{ const i=e.target.closest("input[data-f='aantal'],input[data-f='prijs']"); if(!i) return; const o=orderById(i.closest(".order-row").dataset.id); if(o){ i._prev=o.aantal; i._prevP=o.prijs; } });
+function refreshRowTotal(inp){ const row=inp.closest(".order-row"), o=orderById(row.dataset.id), rt=row.querySelector(".rowtotal"); if(!o||!rt) return; const has=hasNum(o.prijs); rt.textContent=has?euro(rowTotal(o)):"geen prijs"; rt.classList.toggle("none",!has); }
 $("groups").addEventListener("change",e=>{
   const t=e.target;
   if(t.matches(".blk-check")){
@@ -1701,8 +2175,19 @@ $("groups").addEventListener("change",e=>{
   const inp=t.closest("input[data-f]"); if(!inp) return;
   const o=orderById(inp.closest(".order-row").dataset.id); if(!o) return;
   const f=inp.dataset.f;
-  if(f==="aantal"){ o.aantal=normQty(inp.value); inp.value=fmtQty(o.aantal); refreshLiveTotals(); }
-  else if(f==="prijs"){ o.prijs=normPrice(inp.value); inp.value=fmtPrice(o.prijs); refreshLiveTotals(); }
+  if(f==="aantal"){
+    const nq=normQty(inp.value);
+    if((!nq || isOngeldig(nq) || !(parseNum(nq)>0)) && inp._prev!=null){   // aantal is verplicht en moet leesbaar zijn: terugzetten
+      o.aantal=inp._prev; inp.value=fmtQty(o.aantal); refreshLiveTotals(); refreshRowTotal(inp);
+      toast(!nq?"Het aantal is verplicht":isOngeldig(nq)?"Dit aantal kan ik niet lezen. Schrijf bv. 12 of 2,5":"Het aantal moet groter zijn dan 0","err"); return;
+    }
+    o.aantal=nq; inp.value=fmtQty(o.aantal); inp._prev=nq; refreshLiveTotals();
+  }
+  else if(f==="prijs"){
+    const np=normPrice(inp.value);
+    if(isOngeldig(np)){ o.prijs=inp._prevP??o.prijs; inp.value=fmtPrice(o.prijs); refreshLiveTotals(); refreshRowTotal(inp); toast("Deze prijs kan ik niet lezen. Schrijf bv. 4,50","err"); return; }
+    o.prijs=np; inp.value=fmtPrice(o.prijs); inp._prevP=np; refreshLiveTotals();
+  }
   else if(f==="leverancier"){
     const c=canonicalSupplier(inp.value); const changed=c!==inp.value; o.leverancier=c;
     db.upsertOrders([o]); if(changed||ui.mode==="lev") renderOverview(); refreshSupplierList(); return;
@@ -1845,13 +2330,26 @@ $("afrondBtn").onclick=async()=>{
       <span><b>${artikelen(rest.length)}</b> ${rest.length===1?"blijft":"blijven"} in het overzicht staan (nog niet besteld).</span></div>
       <p style="font-size:13px;color:var(--slate)">De bestelbons blijven onaangeroerd in het tabblad Bestelbons.</p>`});
   if(!ok) return;
-  const round={ id:uid(), datum:new Date().toISOString(), lijnen:state.orders.map(o=>({...o})) };
-  const touched=state.bons.filter(b=>!b.gearchiveerd && state.orders.some(o=>o.bon_id===b.id));
-  touched.forEach(b=>{ syncBonSnapshot(b); db.upsertBon(b); });
-  state.archief.unshift(round); state.orders=rest; ui.selected.clear();
-  renderCurrent(); toast("Bestelronde afgerond en gearchiveerd");
-  db.insertRound(round); if(bes.length) db.deleteOrders(bes.map(o=>o.id));
+  if(afronden) return;
+  afronden=true; const btn=$("afrondBtn"); btn.disabled=true; btn.classList.add("busy");
+  try{
+    const round={ id:uid(), datum:new Date().toISOString(), lijnen:state.orders.map(o=>({...o})) };
+    if(!(await db.insertRound(round))) return;            // niets gewijzigd: de melding zegt waarom
+    state.archief.unshift(round); renderCurrent();
+    const touched=state.bons.filter(b=>!b.gearchiveerd && state.orders.some(o=>o.bon_id===b.id));
+    await afrondVerder(bes.map(o=>o.id),touched);
+  } finally { afronden=false; btn.disabled=false; btn.classList.remove("busy"); }
 };
+let afronden=false;
+/* Na het archiveren: eerst de bons bijwerken (hun momentopname), pas daarna de bestelde artikelen uit het overzicht.
+   Lukt een stap niet, dan zegt de melding precies wat wel lukte, en "Opnieuw proberen" maakt het af. */
+async function afrondVerder(ids,touched){
+  const okB=(await Promise.all(touched.map(b=>{ syncBonSnapshot(b); return db.upsertBon(b,{quiet:true}); }))).every(Boolean);
+  if(!okB){ toast("De ronde staat in het archief, maar niet alle bestelbons konden bijgewerkt worden. De bestelde artikelen blijven daarom nog in het overzicht.","err",{label:"Opnieuw proberen",fn:()=>afrondVerder(ids,touched)}); return; }
+  if(ids.length && !(await db.deleteOrders(ids,{quiet:true}))){ toast("De ronde staat in het archief, maar de bestelde artikelen konden niet uit het overzicht gehaald worden.","err",{label:"Opnieuw proberen",fn:()=>afrondVerder(ids,touched)}); return; }
+  const weg=new Set(ids); state.orders=state.orders.filter(o=>!weg.has(o.id)); ui.selected.clear();
+  renderCurrent(); toast("Bestelronde afgerond en gearchiveerd");
+}
 
 /* ============================================================
    BESTELBON AANMAKEN
@@ -1861,6 +2359,7 @@ const pendingRows = () => state.orders.filter(o=>o.besteld && !o.bon_id);
 function mkRows(){ const v=$("mkSupp").value, rows=pendingRows(); return v===MK_ALL ? rows : rows.filter(o=>(o.leverancier||"—")===v); }
 $("makeBonBtn").onclick=()=>{
   if(!isAdmin) return;
+  mkId=null;   // nieuwe bon = nieuwe id (een id blijft enkel behouden bij opnieuw proberen)
   const rows=pendingRows();
   if(!rows.length){ toast("Geen aangevinkte artikelen zonder bestelbon","err"); return; }
   const supps=[...new Set(rows.map(o=>o.leverancier||"—"))].sort((a,b)=>a.localeCompare(b,"nl"));
@@ -1875,7 +2374,7 @@ function renderMk(){
   const rows=mkRows(), all=pendingRows(), v=$("mkSupp").value;
   const supps=[...new Set(all.map(o=>o.leverancier||"—"))];
   $("mkList").innerHTML=rows.map(o=>`<label class="mk-row ${mk.off.has(o.id)?"off":""}">
-      <input type="checkbox" class="cbx" data-mk="${o.id}" ${mk.off.has(o.id)?"":"checked"} aria-label="${esc(o.omschrijving)} op deze bon">
+      <input type="checkbox" class="cbx" data-mk="${esc(o.id)}" ${mk.off.has(o.id)?"":"checked"} aria-label="${esc(o.omschrijving)} op deze bon">
       <span class="klas-tag">${esc(o.klas)}</span>
       <span class="mk-oms" title="${esc(o.omschrijving)}">${esc(o.omschrijving)}${v===MK_ALL?` <span style="color:var(--slate)">· ${esc(o.leverancier)}</span>`:""}</span>
       <span class="num">${esc(fmtQty(o.aantal))||"—"}</span>
@@ -1905,19 +2404,25 @@ $("mkDo").onclick=async()=>{
     const ok=await confirmDialog({title:"Bonnummer bestaat al",html:`<p>Er bestaat al een bestelbon met nummer <b>${esc(nummer)}</b>. Toch aanmaken?</p>`,ok:"Toch aanmaken"});
     if(!ok) return;
   }
+  if(mkBezig) return;
   const dv=$("mkDate").value;
-  const bon={ id:uid(), nummer, leverancier:[...new Set(rows.map(o=>o.leverancier||"—"))].join(" + "),
+  const bon={ id:mkId||(mkId=uid()), nummer, leverancier:[...new Set(rows.map(o=>o.leverancier||"—"))].join(" + "),
     datum: dv ? noonISO(dv) : new Date().toISOString(), factuur_ontvangen:false, artikelen_ontvangen:false,
-    opmerking:$("mkNote").value.trim(), lijnen:[], gearchiveerd:false };
-  rows.forEach(o=>o.bon_id=bon.id);
-  bon.lijnen=rows.map(o=>({...o}));
-  state.bons.unshift(bon);
-  closeOverlay("mkOverlay");
-  const rest=pendingRows().length;
-  renderCurrent();
-  toast(`Bestelbon ${nummer} aangemaakt (${artikelen(rows.length)})`+(rest?` · ${rest} nog zonder bon`:""));
-  db.upsertBon(bon); db.upsertOrders(rows);
+    opmerking:$("mkNote").value.trim(), lijnen:rows.map(o=>({...o,bon_id:mkId})), gearchiveerd:false, verwijderd_op:null };
+  const btn=$("mkDo"); mkBezig=true; btn.disabled=true; btn.classList.add("busy");
+  try{
+    if(!(await db.insertBon(bon))) return;                 // venster blijft open, invoer blijft staan
+    mkId=null;
+    rows.forEach(o=>o.bon_id=bon.id);
+    state.bons.unshift(bon);
+    closeOverlay("mkOverlay");
+    const rest=pendingRows().length;
+    renderCurrent();
+    toast(`Bestelbon ${nummer} aangemaakt (${artikelen(rows.length)})`+(rest?` · ${rest} nog zonder bon`:""));
+    if(!(await db.upsertOrders(rows,{quiet:true}))){ toast("De bon is aangemaakt, maar niet alle artikelen konden eraan gekoppeld worden. De lijst is vernieuwd; controleer de bon.","err"); herlaadStraks(); }
+  } finally { mkBezig=false; btn.disabled=false; btn.classList.remove("busy"); }
 };
+let mkBezig=false, mkId=null;
 
 /* ============================================================
    BESTELBONS — compacte lijst met zwevende rij
@@ -1953,7 +2458,7 @@ function tilesHtml(b,clickable,{short=false}={}){
   const t=(cls,lbl,full,attr)=>clickable
     ? `<button class="st${sz} ${cls}" ${attr} title="${full}. Klik om te wijzigen." aria-label="${full}. Klik om te wijzigen.">${lbl}</button>`
     : `<span class="st${sz} ${cls}" title="${full}" aria-label="${full}">${lbl}</span>`;
-  return `<span class="st-pair">${t(aYes?"art-yes":"art-no",aLbl,aTxt,`data-art="${b.id}" aria-pressed="${aYes}"`)}${t(fYes?"fac-yes":"fac-no",fLbl,fTxt,`data-inv="${b.id}" aria-pressed="${fYes}"`)}</span>`;
+  return `<span class="st-pair">${t(aYes?"art-yes":"art-no",aLbl,aTxt,`data-art="${esc(b.id)}" aria-pressed="${aYes}"`)}${t(fYes?"fac-yes":"fac-no",fLbl,fTxt,`data-inv="${esc(b.id)}" aria-pressed="${fYes}"`)}</span>`;
 }
 function bonHeadHtml(sort,sortable){
   const cols=[["nummer","Bon"],["lev","Leverancier"],["datum","Besteld op"],["arts","Artikelen"],["bedrag","Bedrag"],[null,"Status"],[null,""]];
@@ -1966,14 +2471,14 @@ function bonHeadHtml(sort,sortable){
 }
 function bonRowInner(b,{archived=false,match=null,ts=[]}={}){
   const L=bonLines(b), m=bonMoney(b), w=waitingLines(b), del=b.verwijderd_op;
-  const acts=[`<button class="bl-btn" data-print="${b.id}" title="Afdrukken" aria-label="Bestelbon ${esc(bonLabel(b))} afdrukken">${ic("printer",15)}</button>`];
+  const acts=[`<button class="bl-btn" data-print="${esc(b.id)}" title="Afdrukken" aria-label="Bestelbon ${esc(bonLabel(b))} afdrukken">${ic("printer",15)}</button>`];
   if(isAdmin){
     if(archived){
-      acts.push(`<button class="bl-btn" data-unarch="${b.id}" title="Terugzetten naar Bestelbons" aria-label="Terugzetten naar Bestelbons">${ic("unarchive",15)}</button>`);
-      acts.push(`<button class="bl-btn del" data-delarch="${b.id}" title="Definitief verwijderen" aria-label="Definitief verwijderen">${ic("trash",14)}</button>`);
+      acts.push(`<button class="bl-btn" data-unarch="${esc(b.id)}" title="Terugzetten naar Bestelbons" aria-label="Terugzetten naar Bestelbons">${ic("unarchive",15)}</button>`);
+      acts.push(`<button class="bl-btn del" data-delarch="${esc(b.id)}" title="Definitief verwijderen" aria-label="Definitief verwijderen">${ic("trash",14)}</button>`);
     } else if(w.length){
-      acts.push(`<button class="bl-btn dis" data-archblocked="${b.id}" aria-disabled="true" title="Kan pas naar het archief als de nalevering is afgehandeld" aria-label="Archiveren kan pas na de nalevering">${ic("archive",15)}</button>`);
-    } else acts.push(`<button class="bl-btn" data-arch="${b.id}" title="Naar het archief" aria-label="Naar het archief">${ic("archive",15)}</button>`);
+      acts.push(`<button class="bl-btn dis" data-archblocked="${esc(b.id)}" aria-disabled="true" title="Kan pas naar het archief als de nalevering is afgehandeld" aria-label="Archiveren kan pas na de nalevering">${ic("archive",15)}</button>`);
+    } else acts.push(`<button class="bl-btn" data-arch="${esc(b.id)}" title="Naar het archief" aria-label="Naar het archief">${ic("archive",15)}</button>`);
   }
   const status = del
     ? `<span class="del-tag" title="Als verwijderd gemarkeerd op ${esc(datumLang(del))}">${ic("trash",12)}Verwijderd op ${esc(fmtDate(del))}</span>`
@@ -1993,7 +2498,7 @@ function bonRowInner(b,{archived=false,match=null,ts=[]}={}){
 }
 function bonItemHtml(b,opts={}){
   const r=bonRowInner(b,opts);
-  return `<div class="bl-item${b.verwijderd_op?" deleted":""}" data-bon="${b.id}"><div class="bl-row${r.sub?" has-sub":""}" tabindex="0" aria-label="Bestelbon ${esc(bonLabel(b))}, ${esc(b.leverancier)}, ${euro(bonMoney(b).best)}${b.verwijderd_op?", als verwijderd gemarkeerd":""}">${r.html}</div></div>`;
+  return `<div class="bl-item${b.verwijderd_op?" deleted":""}" data-bon="${esc(b.id)}"><div class="bl-row${r.sub?" has-sub":""}" tabindex="0" aria-label="Bestelbon ${esc(bonLabel(b))}, ${esc(b.leverancier)}, ${euro(bonMoney(b).best)}${b.verwijderd_op?", als verwijderd gemarkeerd":""}">${r.html}</div></div>`;
 }
 function visibleBons(){
   const ts=terms(ui.bonQ);
@@ -2033,7 +2538,7 @@ function renderBons(){
 /* Eén rij bijwerken zonder de lijst opnieuw op te bouwen: een zwevende rij blijft zo rustig staan. */
 function refreshBonRow(b){
   if(ui.view!=="bestelbons") return false;
-  const x=visibleBons().find(y=>y.b===b), it=document.querySelector(`#bonList .bl-item[data-bon="${b.id}"]`);
+  const x=visibleBons().find(y=>y.b===b), it=document.querySelector(`#bonList .bl-item[data-bon="${esc(b.id)}"]`);
   if(!x || !it) return false;
   const r=bonRowInner(b,{match:x.m,ts:terms(ui.bonQ)}), row=it.querySelector(".bl-row");
   row.innerHTML=r.html; row.classList.toggle("has-sub",r.sub);
@@ -2101,8 +2606,20 @@ function toggleArt(b){
   if(!isAdmin || b.gearchiveerd) return;
   if(!HAS_ONTV){ toast("Artikelen ontvangen aanduiden kan pas na de database-update","err"); return; }
   b.artikelen_ontvangen=!b.artikelen_ontvangen;
+  // Terug op "niet ontvangen": bevestigde lijnen ("geleverd") gaan weer open. Nalevering en vervallen blijven staan.
+  const reset = b.artikelen_ontvangen ? [] : bonLines(b).filter(o=>{ const l=levOf(o); return l && l.status==="geleverd"; }).map(o=>[o.id,levOf(o)]);
+  const lives = reset.map(([id])=>setLevMem(b,id,null)).filter(Boolean);
   if(!refreshBonRow(b)) renderCurrent(); if(curBon===b) renderBonDetail();
-  toast(b.artikelen_ontvangen?`Bon ${bonLabel(b)}: artikelen ontvangen`:`Bon ${bonLabel(b)}: artikelen terug op niet ontvangen`);
+  if(reset.length){
+    toast(`Bon ${bonLabel(b)}: artikelen terug op niet ontvangen · ${reset.length===1?"1 bevestigd artikel staat":reset.length+" bevestigde artikelen staan"} weer open`,"ok",
+      {label:"Ongedaan maken",fn:()=>{
+        b.artikelen_ontvangen=true;
+        const back=reset.map(([id,l])=>setLevMem(b,id,l)).filter(Boolean);
+        if(!refreshBonRow(b)) renderCurrent(); if(curBon===b) renderBonDetail();
+        if(back.length) db.upsertOrders(back); db.upsertBon(b); toast("Ongedaan gemaakt");
+      }});
+  } else toast(b.artikelen_ontvangen?`Bon ${bonLabel(b)}: artikelen ontvangen`:`Bon ${bonLabel(b)}: artikelen terug op niet ontvangen`);
+  if(lives.length) db.upsertOrders(lives);
   db.upsertBon(b);
 }
 function toggleInv(b){
@@ -2145,17 +2662,20 @@ function openBonDetail(id){ const b=bonById(id); if(!b) return; curBon=b; render
 onDismiss.bdOverlay=id=>{ closeOverlay(id); curBon=null; };
 $("bdOk").onclick=()=>dismiss("bdOverlay");
 function levChip(o,editable,conf){
-  // Standaard "Geleverd" = niets gemeld: vervaagd. Lichten op zodra de bon als ontvangen is aangeduid.
+  // Standaard "Geleverd" = nog niets gemeld: vervaagd. Groen zodra de lijn bevestigd is of de bon als ontvangen is aangeduid.
   const l=levOf(o), q=qtyOf(o);
   let cls="ok"+(conf?" conf":""), txt="Geleverd";
   if(l){
     if(l.status==="wacht"){ cls="wait"; txt = q>0 ? `Wacht · ${fmtQty(l.ontvangen||0)} van ${fmtQty(q)}` : "Wacht op nalevering"; }
     else if(l.status==="vervallen"){ cls="gone"; txt = l.ontvangen>0 ? `Deels · ${fmtQty(l.ontvangen)} van ${fmtQty(q)}` : "Niet geleverd"; }
+    else if(l.status==="geleverd"){ cls="ok conf"; }
     else { cls="done"; txt="Nageleverd"; }
   }
-  const icon = l && l.status==="wacht" ? ic("truck",13) : ((l && l.status==="ontvangen") || (!l && conf) ? ic("check",12,2.6) : "");
+  const green = (l && (l.status==="ontvangen"||l.status==="geleverd")) || (!l && conf);
+  const icon = l && l.status==="wacht" ? ic("truck",13) : (green ? ic("check",12,2.6) : "");
+  const tip = !l && !conf ? "Nog niet bevestigd. Klik om de levering aan te duiden." : "Levering aanduiden";
   return editable
-    ? `<button class="lev ${cls}" data-lev="${o.id}" title="Levering aanduiden" aria-label="Levering: ${esc(txt)}. Klik om te wijzigen">${icon}${esc(txt)}</button>`
+    ? `<button class="lev ${cls}" data-lev="${esc(o.id)}" title="${tip}" aria-label="Levering: ${esc(green||l?txt:"nog niet bevestigd")}. Klik om te wijzigen">${icon}${esc(txt)}</button>`
     : `<span class="lev ${cls}">${icon}${esc(txt)}</span>`;
 }
 function renderBonDetail(){
@@ -2167,7 +2687,7 @@ function renderBonDetail(){
   $("bdTitle").textContent="Bestelbon "+bonLabel(b);
   const lock = b.gearchiveerd
     ? (b.verwijderd_op
-        ? `<span class="bd-lock" style="color:var(--coral-d);border-color:var(--coral-line-l);background:var(--coral-soft)">${ic("trash",13)}Als verwijderd gemarkeerd op ${esc(datumLang(b.verwijderd_op))} · alleen-lezen. Terugzetten of definitief verwijderen kan in Archief, onderdeel Bestelbons.</span>`
+        ? `<span class="bd-lock" style="color:var(--coral-t);border-color:var(--coral-line-l);background:var(--coral-soft)">${ic("trash",13)}Als verwijderd gemarkeerd op ${esc(datumLang(b.verwijderd_op))} · alleen-lezen. Terugzetten of definitief verwijderen kan in Archief, onderdeel Bestelbons.</span>`
         : `<span class="bd-lock">${ic("lock",13)}Gearchiveerd · alleen-lezen. Terugzetten kan in Archief, onderdeel Bestelbons.</span>`)
     : (L.length && !anyLive ? `<span class="bd-lock">${ic("folder",13)}Bestelronde afgerond · levering en verplaatsen blijven mogelijk</span>` : "");
   const conf=!!b.artikelen_ontvangen;
@@ -2180,7 +2700,7 @@ function renderBonDetail(){
       <span class="r">${esc(fmtQty(o.aantal))||"—"}</span>
       <span class="r">${hasNum(o.prijs)?euro(o.prijs):"—"}</span>
       <span class="r"><b>${hasNum(o.prijs)?euro(rowTotal(o)):"—"}</b></span>
-      <span class="bd-tiles">${levChip(o,editable,conf)}${editable?`<button class="lev mv" data-mv="${o.id}" title="Naar een andere bon verplaatsen of uit deze bon halen" aria-label="Verplaatsen: ${esc(o.omschrijving)}">${ic("move",13)}Verplaatsen</button>`:""}</span>
+      <span class="bd-tiles">${levChip(o,editable,conf)}${editable?`<button class="lev mv" data-mv="${esc(o.id)}" title="Naar een andere bon verplaatsen of uit deze bon halen" aria-label="Verplaatsen: ${esc(o.omschrijving)}">${ic("move",13)}Verplaatsen</button>`:""}</span>
     </div>`; }).join("");
   const tot = (m.wacht||m.verv)
     ? `<div class="tl"><span>Bestelbedrag</span><b>${euro(m.best)}</b></div>`
@@ -2268,18 +2788,20 @@ function openLev(oid){
   const b=curBon; if(!b) return;
   const o=bonLines(b).find(x=>x.id===oid); if(!o) return;
   const l=levOf(o);
-  lv={ oid, choice: !l ? "ok" : (l.ontvangen>0 ? "deels" : "niets"), ontv: l&&l.ontvangen>0 ? String(l.ontvangen) : "",
-       status: l ? l.status : "wacht" };
+  const bev = !l || l.status==="geleverd";
+  lv={ oid, choice: bev ? "ok" : (l.ontvangen>0 ? "deels" : "niets"), ontv: !bev && l.ontvangen>0 ? String(l.ontvangen) : "",
+       status: bev ? "wacht" : l.status };
   renderLev(); openOverlay("lvOverlay","#lvOk");
 }
 function renderLev(){
   const b=curBon, o=bonLines(b).find(x=>x.id===lv.oid); if(!o) return;
   const q=qtyOf(o), live=isLiveLine(b,o.id), canDeels=q>1, disabled=!HAS_LEV && live;
-  const rc=(k,title,sub,extra="",dis=false)=>`<button type="button" class="rcard ${lv.choice===k?"sel":""}" data-choice="${k}" ${dis?"disabled style='opacity:.5;cursor:not-allowed'":""} aria-pressed="${lv.choice===k}">
+  const rc=(k,title,sub,extra="",dis=false)=>`<button type="button" class="rcard ${lv.choice===k?"is-sel":""}" data-choice="${k}" ${dis?"disabled style='opacity:.5;cursor:not-allowed'":""} aria-pressed="${lv.choice===k}">
       <span class="rc-check">${lv.choice===k?ic("check",12,3):""}</span><span><span class="rc-title">${title}</span><span class="rc-sub">${sub}</span></span>${extra}</button>`;
   const missing = lv.choice==="niets" ? q : Math.max(0,q-parseNum(lv.ontv));
   const missAmt = missing*parseNum(o.prijs);
   $("lvTitle").textContent="Artikel op bon "+bonLabel(b);
+  $("lvReset").hidden = !(levOf(o) || b.artikelen_ontvangen) || disabled;
   $("lvBody").innerHTML=`
     <div class="lv-art"><span class="klas-tag">${esc(o.klas)}</span><b>${esc(o.omschrijving)}</b><span>· besteld: ${esc(fmtQty(o.aantal))||"—"}${o.artikel?" · art.nr "+esc(o.artikel):""}</span></div>
     ${disabled?`<div class="callout">${ic("alert",16)}<span>Leveringen registreren kan pas nadat de database-update (SQL) is uitgevoerd.</span></div>`:""}
@@ -2310,28 +2832,55 @@ $("lvBody").addEventListener("click",e=>{
 $("lvBody").addEventListener("input",e=>{ if(e.target.id==="lvOntv"){ lv.ontv=e.target.value; const pos=e.target.selectionStart; renderLev(); const i=$("lvOntv"); if(i){ i.focus(); try{ i.setSelectionRange(pos,pos); }catch(_){} } } });
 $("lvBody").addEventListener("keydown",e=>{ if(e.key==="Enter" && e.target.id==="lvOntv"){ e.preventDefault(); $("lvOk").click(); } });
 $("lvCancel").onclick=()=>closeOverlay("lvOverlay");
+/* Terugzetten naar niet bevestigd: de lijn wordt weer vervaagd ("nog niet nagekeken").
+   Stond de bon als geheel op ontvangen, dan blijven de andere lijnen groen (als bevestigd) en gaat de bon terug op niet ontvangen. */
+$("lvReset").onclick=()=>{
+  const b=curBon; if(!b||!lv) return;
+  const o=bonLines(b).find(x=>x.id===lv.oid); if(!o) return;
+  if(!HAS_LEV && isLiveLine(b,o.id)){ toast("Leveringen registreren kan pas na de database-update","err"); return; }
+  const snap=levSnap(b), lives=new Map();
+  const bonTerug=!!b.artikelen_ontvangen;
+  if(bonTerug){
+    bonLines(b).forEach(x=>{ if(x.id!==o.id && !levOf(x)){ const lx=setLevMem(b,x.id,{status:"geleverd"}); if(lx) lives.set(lx.id,lx); } });
+    b.artikelen_ontvangen=false;
+  }
+  const live=setLevMem(b,o.id,null); if(live) lives.set(live.id,live);
+  if(lives.size) db.upsertOrders([...lives.values()]);
+  db.upsertBon(b);
+  closeOverlay("lvOverlay");
+  toast(bonTerug ? "Terug op niet bevestigd · de bon staat weer op Artikelen niet ontvangen" : "Terug op niet bevestigd", "ok",
+    {label:"Ongedaan maken", fn:()=>levRestore(b,snap)});
+  afterBonChange();
+};
 $("lvOk").onclick=()=>{
   const b=curBon; if(!b||!lv) return;
   const o=bonLines(b).find(x=>x.id===lv.oid); if(!o) return;
   const q=qtyOf(o), old=levOf(o);
   let nl=null;
   if(lv.choice==="deels"){
-    const r=parseNum(lv.ontv);
-    if(!hasNum(lv.ontv) || !(r>0 && r<q)){ toast(`Vul een ontvangen aantal in tussen 0 en ${fmtQty(q)}`,"err"); const i=$("lvOntv"); if(i) i.focus(); return; }
+    const r=leesGetal(lv.ontv);
+    if(r==null || isNaN(r) || !(r>0 && r<q)){ toast(`Vul een ontvangen aantal in tussen 0 en ${fmtQty(q)}`,"err"); const i=$("lvOntv"); if(i) i.focus(); return; }
     nl={ontvangen:r,status:lv.status};
   } else if(lv.choice==="niets") nl={ontvangen:0,status:lv.status};
-  const same = JSON.stringify(old?{o:old.ontvangen||0,s:old.status}:null)===JSON.stringify(nl?{o:nl.ontvangen,s:nl.status}:null) && !(old&&old.legacy);
+  else if(old || !b.artikelen_ontvangen) nl={status:"geleverd"};   // volledig geleverd: bevestigd (bij een ontvangen bon is niets melden genoeg)
+  const same = JSON.stringify(old?{o:old.ontvangen||0,s:old.status}:null)===JSON.stringify(nl?{o:nl.ontvangen||0,s:nl.status}:null) && !(old&&old.legacy);
   if(nl){
-    nl.gemeld=(old&&old.gemeld)||new Date().toISOString();
+    if(nl.status!=="geleverd") nl.gemeld=(old&&old.gemeld)||new Date().toISOString();
     if(nl.status!=="wacht") nl.datum=(old&&old.status===nl.status&&old.datum)||new Date().toISOString();
   }
   const live=isLiveLine(b,o.id);
+  let auto=false, snap=null;
   if(!same){
     if(!HAS_LEV && live){ toast("Leveringen registreren kan pas na de database-update","err"); return; }
-    applyLevering(b,o.id,nl);
+    snap=levSnap(b);
+    auto=applyLevering(b,o.id,nl);
   }
   closeOverlay("lvOverlay");
-  if(!same) toast(nl ? (nl.status==="wacht"?"Nalevering geregistreerd":nl.status==="ontvangen"?"Nalevering ontvangen":"Nalevering vervalt") : "Als volledig geleverd gemarkeerd");
+  if(!same){
+    const msg = !nl ? "Als volledig geleverd gemarkeerd" : nl.status==="geleverd" ? "Als geleverd bevestigd"
+      : nl.status==="wacht" ? "Nalevering geregistreerd" : nl.status==="ontvangen" ? "Nalevering ontvangen" : "Nalevering vervalt";
+    toast(auto ? msg+" · alle artikelen verwerkt, bon staat op Artikelen ontvangen" : msg, "ok", {label:"Ongedaan maken", fn:()=>levRestore(b,snap)});
+  }
   afterBonChange();
 };
 /* --- Verplaatsen (apart venster) --- */
@@ -2346,7 +2895,7 @@ function renderMove(){
   // bons van dezelfde leverancier eerst, daarna de nieuwste
   const others=activeBons().filter(x=>x.id!==b.id).sort((x,y)=>((y.leverancier===b.leverancier)-(x.leverancier===b.leverancier)) || (new Date(y.datum)-new Date(x.datum)));
   const live=isLiveLine(b,o.id);
-  const card=(val,title,sub,extra="")=>`<button type="button" class="rcard ${extra} ${mvState.to===val?"sel":""}" data-to="${val}" aria-pressed="${mvState.to===val}">
+  const card=(val,title,sub,extra="")=>`<button type="button" class="rcard ${extra} ${mvState.to===val?"is-sel":""}" data-to="${val}" aria-pressed="${mvState.to===val}">
       <span class="rc-check">${mvState.to===val?ic("check",12,3):""}</span><span><span class="rc-title">${title}</span><span class="rc-sub">${sub}</span></span></button>`;
   $("mvBody").innerHTML=`
     <div class="lv-art"><span class="klas-tag">${esc(o.klas)}</span><b>${esc(o.omschrijving)}</b><span>· nu op bon ${esc(bonLabel(b))}</span></div>
@@ -2366,13 +2915,45 @@ $("mvOk").onclick=()=>{
   closeOverlay("mvOverlay");
   if(moveLine(b,mvState.oid,mvState.to)) afterBonChange();
 };
-function applyLevering(b,oid,lev){
-  const nd=!!(lev && lev.status!=="ontvangen");
+/* Levering van één lijn in het geheugen zetten (live artikel en momentopname); geeft het live artikel terug */
+function setLevMem(b,oid,lev){
+  const nd=levProbleem(lev);
   const live=state.orders.find(x=>x.id===oid && x.bon_id===b.id);
-  if(live){ live.levering=lev; live.nietgeleverd=nd; db.upsertOrders([live]); }
+  if(live){ live.levering=lev; live.nietgeleverd=nd; }
   syncBonSnapshot(b);
   const s=(b.lijnen||[]).find(x=>x.id===oid); if(s){ s.levering=lev; s.nietgeleverd=nd; }
+  return live||null;
+}
+/* Momentopname van de levering van een hele bon (ruwe velden), om een wijziging exact ongedaan te maken */
+function levSnap(b){
+  return { ont:!!b.artikelen_ontvangen,
+    rows:bonLines(b).map(o=>({id:o.id, lev:o.levering?JSON.parse(JSON.stringify(o.levering)):null, nd:!!o.nietgeleverd})) };
+}
+function levRestore(b,snap){
+  b.artikelen_ontvangen=snap.ont;
+  const key=r=>JSON.stringify([r.lev,r.nd]), lives=[];
+  snap.rows.forEach(r=>{ const live=state.orders.find(x=>x.id===r.id && x.bon_id===b.id);
+    if(live && key({lev:live.levering||null,nd:!!live.nietgeleverd})!==key(r)){ live.levering=r.lev; live.nietgeleverd=r.nd; lives.push(live); } });
+  syncBonSnapshot(b);
+  snap.rows.forEach(r=>{ const x=(b.lijnen||[]).find(y=>y.id===r.id); if(x){ x.levering=r.lev; x.nietgeleverd=r.nd; } });
+  if(lives.length) db.upsertOrders(lives);
   db.upsertBon(b);
+  if(!refreshBonRow(b)) renderCurrent(); if(curBon===b) renderBonDetail();
+  toast("Ongedaan gemaakt");
+}
+/* Is elke lijn verwerkt (bevestigd, nalevering of vervallen), dan gaat de bon vanzelf op "Artikelen ontvangen". */
+function autoOntvangen(b){
+  if(b.artikelen_ontvangen || !HAS_ONTV) return false;
+  const L=bonLines(b);
+  if(!L.length || !L.every(o=>levOf(o))) return false;
+  b.artikelen_ontvangen=true; return true;
+}
+function applyLevering(b,oid,lev){
+  const live=setLevMem(b,oid,lev);
+  const auto=autoOntvangen(b);   // vóór het bewaren, zodat de bon in één keer goed wordt opgeslagen
+  if(live) db.upsertOrders([live]);
+  db.upsertBon(b);
+  return auto;
 }
 function moveLine(from,oid,v){
   const src=bonLines(from), o=src.find(x=>x.id===oid); if(!o) return false;
@@ -2426,20 +3007,20 @@ function renderArchiveRounds(){
   w.innerHTML=res.map(({r,lines})=>{
     const all=(r.lijnen||[]).length, tot=lines.reduce((s,o)=>s+rowTotal(o),0), b=lines.filter(o=>o.besteld).length;
     const open = ts.length>0 || ui.archOpen.has(r.id);   // bij zoeken staan gevonden rondes open
-    return `<div class="card group foldable ${open?"open":""}" data-round="${r.id}">
-      <div class="group-head" role="button" tabindex="0" aria-expanded="${open}" data-fold="${r.id}">
+    return `<div class="card group foldable ${open?"open":""}" data-round="${esc(r.id)}">
+      <div class="group-head" role="button" tabindex="0" aria-expanded="${open}" data-fold="${esc(r.id)}">
         <span class="fold-ic">${ic("chevron",16,2.4)}</span>
         <span class="group-name">${esc(datumLang(r.datum))}</span>
         <span class="group-meta"><span>om ${esc(uurLabel(r.datum))}</span><span>${lines.length!==all?`<b>${lines.length}</b> van ${artikelen(all)}`:artikelen(all)}</span>
           <span class="group-tot" title="${lines.length!==all?"Totaal van de gevonden artikelen":"Totaal"}">${euro(tot)}</span>${b?`<span class="pill done">${b} besteld</span>`:""}</span>
         <div class="group-actions"><span class="lockpill">${ic("lock",12)}Alleen-lezen</span>
-          <button class="btn btn-ghost btn-sm" data-rcsv="${r.id}">${ic("download",14)}CSV</button></div>
+          <button class="btn btn-ghost btn-sm" data-rcsv="${esc(r.id)}">${ic("download",14)}CSV</button></div>
       </div>
       <div class="rows">
         <div class="arch-row arch-head"><span>Klas</span><span>Leverancier</span><span>Art.nr</span><span>Omschrijving</span><span class="num">Aantal</span><span class="num">Prijs/st</span><span class="num">Totaal</span><span>Opmerking</span></div>
         ${lines.map(o=>{
           const cur=levForArchive(o); const lt=levTagFor(cur);
-          const bn = isAdmin && o.bon_id && bonById(o.bon_id) ? `<span class="bon-tag" style="font-size:10.5px;font-weight:700;color:var(--teal-d);background:var(--teal-l);padding:0 7px;border-radius:5px">${hl(bonLabel(bonById(o.bon_id)),ts)}</span>` : "";
+          const bn = isAdmin && o.bon_id && bonById(o.bon_id) ? `<span class="bon-tag" style="font-size:10.5px;font-weight:700;color:var(--teal-xd);background:var(--teal-l);padding:0 7px;border-radius:5px">${hl(bonLabel(bonById(o.bon_id)),ts)}</span>` : "";
           const cm=[o.opmerking?"Leerkracht: "+o.opmerking:"", o.notitie?"Beheerder: "+o.notitie:""].filter(Boolean).join(" · ");
           return `<div class="arch-row ${o.besteld?"b":""}">
             <span>${hl(o.klas,ts)}</span><span title="${esc(o.leverancier)}">${hl(o.leverancier,ts)}</span><span>${hl(o.artikel,ts)}</span>
@@ -2506,46 +3087,67 @@ $("archWipe").onclick=async()=>{
 /* ============================================================
    INSTELLINGEN
    ============================================================ */
-function renderSettings(){ setYear(); renderKlassen(); }
+function renderSettings(){ setYear(); renderGedeeld(); renderKlassen(); }
+function renderGedeeld(){
+  const w=$("klShared");
+  if(!gedeeld){
+    w.innerHTML=`<div class="callout">${ic("alert",16)}<span>De gedeelde klassenlijst kon niet geladen worden. Tot dan geldt de vorige lijst van deze tool.</span></div>`;
+    $("klSharedInfo").textContent=""; return;
+  }
+  w.innerHTML=GEDEELDE_GROEPEN.map(gr=>{ const l=gedeeld.filter(k=>k.groep===gr); if(!l.length) return "";
+    return `<div class="kl-group"><span class="kl-glabel">${gr}</span><div class="kl-chips ro">${l.map(k=>
+      `<span class="kl-chip ${k.actief?"":"off"}" ${k.actief?"":`title="Niet actief in de uitstappentool: verschijnt niet bij het ingeven van een bestelling"`}>${esc(k.naam)}${k.actief?"":`<span class="kl-off">niet actief</span>`}</span>`).join("")}</div></div>`;
+  }).join("");
+  const act=gedeeld.filter(k=>k.actief).length, off=gedeeld.length-act;
+  $("klSharedInfo").textContent = plural(act,"klas","klassen")+(off?` · ${off} niet actief`:"");
+}
 function guessAfter(name){
-  // "1KC" komt standaard na de laatste klas die met "1K" begint
-  const n=name.trim(); if(!n) return klassenList[klassenList.length-1]||"";
+  // "Zorg B" komt standaard na de laatste besteller die met "Zorg " begint
+  const L=andereList, n=name.trim(); if(!n) return L[L.length-1]||"";
   const pre=n.slice(0,-1).toLowerCase(); let best="";
-  if(pre) klassenList.forEach(k=>{ if(k.toLowerCase().startsWith(pre) && k.length===n.length) best=k; });
-  return best || klassenList[klassenList.length-1] || "";
+  if(pre) L.forEach(k=>{ if(k.toLowerCase().startsWith(pre) && k.length===n.length) best=k; });
+  return best || L[L.length-1] || "";
 }
 function renderKlassen(justAdded){
   const dis=!HAS_SET;
-  $("klWarn").innerHTML = dis ? `<div class="callout">${ic("alert",16)}<span>Klassen beheren kan pas nadat de database-update (SQL) is uitgevoerd. Tot dan geldt de standaardlijst.</span></div>` : "";
-  if(ui.klSel && !klassenList.includes(ui.klSel)) ui.klSel=null;
-  $("klChips").innerHTML=klassenList.map((k,i)=>`<button type="button" class="kl-chip ${ui.klSel===k?"sel":""} ${justAdded===k?"new":""}" data-kl="${esc(k)}" role="option" aria-selected="${ui.klSel===k}" ${dis?"disabled":""}><span class="i">${i+1}</span>${esc(k)}</button>`).join("");
-  const sel=ui.klSel, idx=sel?klassenList.indexOf(sel):-1;
+  const L=andereList, ged=new Set((gedeeld||[]).map(k=>lc(k.naam)));
+  $("klWarn").innerHTML = dis ? `<div class="callout">${ic("alert",16)}<span>Bestellers beheren kan pas nadat de database-update (SQL) is uitgevoerd. Tot dan geldt de standaardlijst.</span></div>` : "";
+  if(ui.klSel && !L.includes(ui.klSel)) ui.klSel=null;
+  $("klChips").innerHTML=L.length ? L.map((k,i)=>{ const dup=ged.has(lc(k));
+    return `<button type="button" class="kl-chip ${ui.klSel===k?"is-sel":""} ${justAdded===k?"new":""} ${dup?"dup":""}" data-kl="${esc(k)}" role="option" aria-selected="${ui.klSel===k}" ${dup?`title="Staat nu ook bij de gedeelde klassen. Je mag hem hier verwijderen."`:""} ${dis?"disabled":""}><span class="i">${i+1}</span>${esc(k)}</button>`; }).join("")
+    : `<span class="hint">Nog geen andere bestellers.</span>`;
+  const sel=ui.klSel, idx=sel?L.indexOf(sel):-1;
   const used=sel?state.orders.filter(o=>o.klas===sel).length:0;
   $("klBar").innerHTML = sel
     ? `<span class="hint">Geselecteerd: <b style="color:var(--ink)">${esc(sel)}</b>${used?` · ${artikelen(used)} in het overzicht`:""}</span>
        <button class="btn btn-ghost btn-sm" data-klmv="-1" ${idx<=0?"disabled":""}>${ic("arrowUp",14)}Eerder</button>
-       <button class="btn btn-ghost btn-sm" data-klmv="1" ${idx>=klassenList.length-1?"disabled":""}>${ic("arrowDown",14)}Later</button>
+       <button class="btn btn-ghost btn-sm" data-klmv="1" ${idx>=L.length-1?"disabled":""}>${ic("arrowDown",14)}Later</button>
        <button class="btn btn-ghost-coral btn-sm" data-kldel="1">${ic("trash",14)}Verwijderen</button>`
-    : `<span class="hint">${plural(klassenList.length,"klas","klassen")}. Klik op een klas om ze te verplaatsen of te verwijderen.</span>`;
+    : `<span class="hint">${plural(L.length,"besteller","bestellers")}. Klik op een besteller om hem te verplaatsen of te verwijderen.</span>`;
   const after=$("klAfter"), cur=after.value;
-  after.innerHTML=klassenList.map(k=>`<option value="${esc(k)}">${esc(k)}</option>`).join("");
-  after.value = (cur && klassenList.includes(cur)) ? cur : guessAfter($("klNew").value);
+  after.innerHTML=L.map(k=>`<option value="${esc(k)}">${esc(k)}</option>`).join("") || `<option value="">(vooraan)</option>`;
+  after.value = (cur && L.includes(cur)) ? cur : guessAfter($("klNew").value);
   [$("klNew"),$("klAfter"),$("klAdd")].forEach(el=>el.disabled=dis);
 }
-function saveKlassen(msg,justAdded){ refreshKlasSelects(); renderKlassen(justAdded); lastSig=dataSig(state); db.saveSettings(); if(msg) toast(msg); }
+function saveKlassen(msg,justAdded){
+  ui.klAndereBewaard=true; klassenList=bouwKlassen(); eigenOud=klassenList.slice();
+  refreshKlasSelects(); renderKlassen(justAdded);
+  lastSig=dataSig({...state, klassen:{oud:klassenList.slice(),andere:andereList.slice()}, gedeeld:gedeeldRuw});
+  db.saveSettings(); if(msg) toast(msg);
+}
 $("klChips").addEventListener("click",e=>{ e.stopPropagation(); const c=e.target.closest("[data-kl]"); if(!c) return; ui.klSel = ui.klSel===c.dataset.kl ? null : c.dataset.kl; renderKlassen(); });
 $("klBar").addEventListener("click",async e=>{
   e.stopPropagation();
   const sel=ui.klSel; if(!sel||!isAdmin) return;
   const mv=e.target.closest("[data-klmv]");
-  if(mv){ const i=klassenList.indexOf(sel), j=i+(+mv.dataset.klmv); if(j<0||j>=klassenList.length) return;
-    const l=klassenList.slice(); [l[i],l[j]]=[l[j],l[i]]; klassenList=l; saveKlassen(); const c=document.querySelector(`.kl-chip[data-kl="${CSS.escape(sel)}"]`); if(c) c.focus(); return; }
+  if(mv){ const i=andereList.indexOf(sel), j=i+(+mv.dataset.klmv); if(j<0||j>=andereList.length) return;
+    const l=andereList.slice(); [l[i],l[j]]=[l[j],l[i]]; andereList=l; saveKlassen(); const c=document.querySelector(`#klChips .kl-chip[data-kl="${CSS.escape(sel)}"]`); if(c) c.focus(); return; }
   if(e.target.closest("[data-kldel]")){
     const used=state.orders.filter(o=>o.klas===sel).length;
-    const ok=await confirmDialog({title:"Klas verwijderen?",tone:"danger",ok:"Verwijderen",
-      html:`<p>Klas <b>${esc(sel)}</b> verdwijnt uit de keuzelijst bij het ingeven van een bestelling.</p><p>${used?`De ${artikelen(used)} van deze klas in het overzicht blijven gewoon bewaard.`:"Bestaande bestellingen en het archief blijven ongewijzigd."}</p>`});
+    const ok=await confirmDialog({title:"Besteller verwijderen?",tone:"danger",ok:"Verwijderen",
+      html:`<p><b>${esc(sel)}</b> verdwijnt uit de keuzelijst bij het ingeven van een bestelling.</p><p>${used?`De ${artikelen(used)} van ${esc(sel)} in het overzicht blijven gewoon bewaard.`:"Bestaande bestellingen en het archief blijven ongewijzigd."}</p>`});
     if(!ok) return;
-    klassenList=klassenList.filter(k=>k!==sel); ui.klSel=null; saveKlassen(`Klas ${sel} verwijderd`);
+    andereList=andereList.filter(k=>k!==sel); ui.klSel=null; saveKlassen(`${sel} verwijderd`);
   }
 });
 document.addEventListener("click",e=>{ if(ui.klSel && ui.view==="instellingen" && !e.target.closest("#klChips,#klBar,.overlay")){ ui.klSel=null; renderKlassen(); } });
@@ -2554,11 +3156,13 @@ $("klNew").addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault
 $("klAdd").onclick=()=>{
   if(!isAdmin||!HAS_SET) return;
   const n=$("klNew").value.trim().replace(/\s+/g," ");
-  if(!n){ toast("Vul de naam van de klas in","err"); $("klNew").focus(); return; }
-  if(klassenList.some(k=>k.toLowerCase()===n.toLowerCase())){ toast(`Klas ${n} bestaat al`,"err"); return; }
-  const after=$("klAfter").value, i=klassenList.indexOf(after);
-  const l=klassenList.slice(); l.splice(i<0?l.length:i+1,0,n); klassenList=l;
-  $("klNew").value=""; ui.klSel=null; saveKlassen(`Klas ${n} toegevoegd`,n);
+  if(!n){ toast("Vul de naam van de besteller in","err"); $("klNew").focus(); return; }
+  const gHit=(gedeeld||[]).find(k=>lc(k.naam)===lc(n)), aHit=andereList.find(k=>lc(k)===lc(n));
+  if(gHit){ toast(`${gHit.naam} staat al bij de gedeelde klassen`,"err"); $("klNew").focus(); return; }
+  if(aHit){ toast(`${aHit} bestaat al`,"err"); $("klNew").focus(); return; }
+  const after=$("klAfter").value, i=andereList.indexOf(after);
+  const l=andereList.slice(); l.splice(i<0?l.length:i+1,0,n); andereList=l;
+  $("klNew").value=""; ui.klSel=null; saveKlassen(`${n} toegevoegd`,n);
 };
 $("resetBtn").onclick=async()=>{
   if(!isAdmin) return;
@@ -2609,24 +3213,24 @@ function printHead(title,meta){
 function buildPrintOverview(keys){
   const groups=groupsOf(visibleOrders()); const blocks = keys ? groups.filter(([k])=>keys.includes(k)) : groups;
   if(!blocks.length){ toast("Geen blokken om af te drukken","err"); return false; }
-  const perLev=ui.mode==="lev"; let grand=0;
+  const perLev=ui.mode==="lev", perDag=ui.mode==="datum"; let grand=0;
   const html=blocks.map(([key,items])=>{
     const tot=items.reduce((s,o)=>s+rowTotal(o),0); grand+=tot;
     const rows=items.map(o=>{
       const notes=[o.opmerking,o.notitie].filter(x=>x&&x.trim()).join(" — "); const l=levOf(o);
-      return `<tr class="${l&&l.status!=="ontvangen"?"pw":(o.besteld?"pb":"")}"><td class="tick"></td><td>${esc(perLev?o.klas:o.leverancier)}</td><td>${esc(o.artikel)}</td><td>${esc(o.omschrijving)}${o.created_at?`<div class="pdate">ingegeven ${esc(datumLabel(o.created_at))}</div>`:""}${l?`<div class="plev">${esc(levCsv(o))}</div>`:""}${notes?`<div class="pnote">${esc(notes)}</div>`:""}</td><td class="r">${esc(fmtQty(o.aantal))}</td><td class="r">${hasNum(o.prijs)?euro(o.prijs):""}</td><td class="r">${euro(rowTotal(o))}</td></tr>`;
+      return `<tr class="${levProbleem(l)?"pw":(o.besteld?"pb":"")}"><td class="tick"></td><td>${perDag?`${esc(o.klas)} · ${esc(o.leverancier)}`:esc(perLev?o.klas:o.leverancier)}</td><td>${esc(o.artikel)}</td><td>${esc(o.omschrijving)}${o.created_at?`<div class="pdate">ingegeven ${esc(datumLabel(o.created_at))}</div>`:""}${l&&l.status!=="geleverd"?`<div class="plev">${esc(levCsv(o))}</div>`:""}${notes?`<div class="pnote">${esc(notes)}</div>`:""}</td><td class="r">${esc(fmtQty(o.aantal))}</td><td class="r">${hasNum(o.prijs)?euro(o.prijs):""}</td><td class="r">${euro(rowTotal(o))}</td></tr>`;
     }).join("");
-    return `<section class="print-block"><h2>${perLev?"":"Klas "}${esc(key)}<span class="pcount">${artikelen(items.length)} · ${euro(tot)}</span></h2>
-      <table><thead><tr><th class="tick">✓</th><th>${perLev?"Klas":"Leverancier"}</th><th>Art.nr</th><th>Omschrijving</th><th class="r">Aantal</th><th class="r">Prijs/st</th><th class="r">Totaal</th></tr></thead><tbody>${rows}</tbody></table></section>`;
+    return `<section class="print-block"><h2>${perDag?esc(dagLabel(key)):(perLev?"":"Klas ")+esc(key)}<span class="pcount">${artikelen(items.length)} · ${euro(tot)}</span></h2>
+      <table><thead><tr><th class="tick">✓</th><th>${perDag?"Klas · leverancier":perLev?"Klas":"Leverancier"}</th><th>Art.nr</th><th>Omschrijving</th><th class="r">Aantal</th><th class="r">Prijs/st</th><th class="r">Totaal</th></tr></thead><tbody>${rows}</tbody></table></section>`;
   }).join("");
-  $("printArea").innerHTML=printHead("Bestellijst materialen",`Afgedrukt op ${esc(datumLang(new Date()))}<br>Gesorteerd per ${perLev?"leverancier":"klas"}<br>Kruis aan bij levering`)+html+`<div class="print-grand">Algemeen totaal: ${euro(grand)}</div>`;
+  $("printArea").innerHTML=printHead("Bestellijst materialen",`Afgedrukt op ${esc(datumLang(new Date()))}<br>Gesorteerd per ${perDag?"datum, nieuwste eerst":perLev?"leverancier":"klas"}<br>Kruis aan bij levering`)+html+`<div class="print-grand">Algemeen totaal: ${euro(grand)}</div>`;
   return true;
 }
 function buildBonPrint(b){
   const L=bonLines(b), m=bonMoney(b);
   const rows=L.map(o=>{
     const l=levOf(o), notes=[o.opmerking,o.notitie].filter(x=>x&&x.trim()).join(" — ");
-    return `<tr class="${l&&l.status!=="ontvangen"?"pw":""}"><td class="tick"></td><td>${esc(o.klas)}</td><td>${esc(o.artikel)}</td><td>${esc(o.omschrijving)}${l?`<div class="plev">${esc(levCsv(o))}</div>`:""}${notes?`<div class="pnote">${esc(notes)}</div>`:""}</td><td class="r">${esc(fmtQty(o.aantal))}</td><td class="r">${hasNum(o.prijs)?euro(o.prijs):""}</td><td class="r">${euro(rowTotal(o))}</td></tr>`;
+    return `<tr class="${levProbleem(l)?"pw":""}"><td class="tick"></td><td>${esc(o.klas)}</td><td>${esc(o.artikel)}</td><td>${esc(o.omschrijving)}${l&&l.status!=="geleverd"?`<div class="plev">${esc(levCsv(o))}</div>`:""}${notes?`<div class="pnote">${esc(notes)}</div>`:""}</td><td class="r">${esc(fmtQty(o.aantal))}</td><td class="r">${hasNum(o.prijs)?euro(o.prijs):""}</td><td class="r">${euro(rowTotal(o))}</td></tr>`;
   }).join("");
   const extra=(m.wacht?`<div class="sub">Nog na te leveren: ${euro(m.wacht)}</div>`:"")+(m.verv?`<div class="sub">Vervallen: − ${euro(m.verv)}</div>`:"");
   $("printArea").innerHTML=printHead("Bestelbon "+esc(bonLabel(b)),`Leverancier: <b>${esc(b.leverancier||"—")}</b><br>Besteld op ${esc(datumLabel(b.datum))}<br>Artikelen: ${b.artikelen_ontvangen?"ontvangen":"nog niet ontvangen"} · Factuur: ${b.factuur_ontvangen?"ontvangen":"nog niet ontvangen"}<br>Afgedrukt op ${esc(datumLang(new Date()))}`)
@@ -2657,11 +3261,13 @@ function rerenderPreserving(){
   window.scrollTo(0,sy);
 }
 async function silentRefresh(){
-  if(!sb || !["overzicht","archief","bestelbons"].includes(ui.view) || isBusy()) return;
-  let d; try{ d=await fetchData(); setConn(true); }catch(e){ setConn(false); return; }
-  if(isBusy()) return;
-  const sig=dataSig(d); if(sig===lastSig) return;
-  lastSig=sig; state.orders=d.orders; state.archief=d.archief; state.bons=d.bons;
+  if(!["bestellen","overzicht","archief","bestelbons","instellingen"].includes(ui.view) || isBusy()) return;
+  const my=++loadGen, w=writeGen, a=authGen;
+  let d; try{ d=await fetchData(); setConn(true); }catch(e){ if(my===loadGen) setConn(false); return; }
+  if(my!==loadGen || w!==writeGen || a!==authGen || isBusy()) return;
+  if(d.geweigerd && isAdmin){ wisBeheerToestand(); toast("Je bent afgemeld. Meld opnieuw aan om verder te beheren.","err",{label:"Aanmelden",fn:()=>openLogin()}); pasToe(d); rerenderPreserving(); return; }
+  if(dataSig(d)===lastSig){ lastLoad=new Date(); return; }
+  pasToe(d);
   rerenderPreserving();
 }
 
@@ -2681,10 +3287,9 @@ async function boot(){
   hydrateIcons(); initForm(); initKlasFilter(); updateAdminUI(); setYear();
   showView("bestellen"); moveIndicator(true);
   if(document.fonts && document.fonts.ready) document.fonts.ready.then(()=>{ moveIndicator(true); markTruncated($("groups")); });
-  await probeSchema();
+  await initAuth(); updateAdminUI();
   await loadAll();
   renderCurrent();
-  if((!HAS_LEV||!HAS_ONTV||!HAS_SET||!HAS_DEL) && isAdmin) toast("Database-update nog niet uitgevoerd: enkele nieuwe functies zijn tijdelijk uitgeschakeld","err");
   setInterval(silentRefresh,20000);
 }
 boot();
