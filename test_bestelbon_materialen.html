@@ -1009,6 +1009,69 @@ button.mx-cel:hover{box-shadow:0 0 0 2px var(--teal);transform:translateY(-1px)}
   .pud,.pud *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
 
+/* ============================================================
+   RONDE 4
+   ============================================================ */
+/* Klastotaal als optelling: besteld + nog niet besteld = totaal */
+.kt-som{display:flex;flex-direction:column;gap:3px;margin-top:4px;padding:9px 12px 10px;border:1px solid var(--line);border-radius:12px;background:var(--bg-2);font-size:12.5px;color:var(--slate);animation:fade .25s ease}
+.kt-kop{font-size:12px;margin-bottom:3px}
+.kt-kop b{color:var(--ink);font-weight:700}
+.kt-r{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:baseline}
+.kt-som.bud .kt-r{grid-template-columns:minmax(0,1fr) auto 42px}
+.kt-r .a{font-variant-numeric:tabular-nums;color:var(--ink);font-weight:600;text-align:right;white-space:nowrap}
+.kt-r .p{text-align:right;font-weight:700;color:var(--teal-xd);font-variant-numeric:tabular-nums;white-space:nowrap}
+.kt-r .p.w{color:var(--amber-t)}
+.kt-r .p.o{color:var(--coral-t)}
+.kt-r small{font-size:11.5px;color:var(--slate)}
+.kt-r.tot{border-top:1px solid var(--line-d);padding-top:5px;margin-top:2px;color:var(--ink);font-weight:700}
+.kt-r.tot .a{font-weight:800}
+.kt-bar2{position:relative;height:6px;border-radius:999px;background:var(--line);overflow:hidden;margin-top:7px}
+.kt-bar2 i{position:absolute;top:0;bottom:0;border-radius:999px}
+.kt-bar2 .b1{left:0;background:var(--teal);z-index:1}
+.kt-bar2 .b2{background:color-mix(in srgb, var(--teal) 38%, var(--paper))}
+.kt-bar2.w .b1{background:var(--amber)}
+.kt-bar2.w .b2{background:color-mix(in srgb, var(--amber) 42%, var(--paper))}
+.kt-bar2.o .b1{background:var(--coral-d)}
+.kt-bar2.o .b2{background:color-mix(in srgb, var(--coral) 42%, var(--paper))}
+/* Beslissingsvraag: nooit hoger dan het scherm; de kaarten scrollen, de knoppen blijven zichtbaar */
+.wpop-box{max-height:calc(100vh - 40px);max-height:calc(100dvh - 40px)}
+.wpop-cards{overflow-y:auto;min-height:0}
+/* Overzicht: celgroepen. Op brede schermen tellen ze niet mee voor het raster */
+.order-row>.c{display:contents}
+/* Acties onder een artikel: opmerking toevoegen, klas wijzigen */
+.row-acts{display:inline-flex;gap:14px;margin-left:auto;opacity:0;transition:opacity .15s}
+.order-wrap:hover .row-acts,.row-acts:focus-within{opacity:1}
+.row-act{font-size:11.5px;font-weight:600;color:var(--teal-d);padding:0;background:none;border:none;cursor:pointer;white-space:nowrap}
+.row-act:hover{text-decoration:underline}
+.row-act:focus-visible{outline:none;box-shadow:0 0 0 2px var(--teal-ring);border-radius:4px}
+/* Aanraakschermen kennen geen hover: de stille knoppen daar altijd tonen */
+@media (hover:none){ .note-btn,.rej-btn{opacity:.55} .row-acts{opacity:1} }
+/* Levering: ontvangen aantal staat naast de keuzekaarten, niet erin */
+.lv-ontv{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:13.5px;color:var(--slate)}
+.lv-ontv label{font-weight:600;color:var(--ink)}
+.lv-ontv .ctrl{width:96px;padding:8px 10px;text-align:right}
+/* Leverancier meewijzigen bij verplaatsen of bongegevens */
+.mv-lev,.be-lev{display:flex;gap:9px;align-items:center;margin-top:12px;font-size:13.5px;cursor:pointer;line-height:1.4}
+.be-lev[hidden]{display:none}
+/* Smalle schermen: elk artikel als een kaart (omschrijving bovenaan, aantal, prijs en totaal onderaan) */
+@media (max-width:860px){
+  #groups .order-row{grid-template-columns:28px minmax(0,1fr) minmax(0,1fr) minmax(0,1fr) auto;
+    grid-template-areas:"chk oms oms oms acts" "chk lev lev art art" "chk aan prs tot tot";gap:6px 8px;align-items:end}
+  #groups.mode-lev .order-row{grid-template-areas:"chk oms oms oms acts" "chk art art art art" "chk aan prs tot tot"}
+  #groups .order-row>.c{display:block;min-width:0}
+  #groups .order-row>.c-chk{grid-area:chk;align-self:start;display:grid;place-items:center;padding-top:5px}
+  #groups .order-row>.c-acts{grid-area:acts;display:flex;align-items:center;gap:2px;align-self:start}
+  #groups .c-oms{grid-area:oms;align-self:center}
+  #groups .c-lev{grid-area:lev}
+  #groups .c-art{grid-area:art}
+  #groups .c-aan{grid-area:aan}
+  #groups .c-prs{grid-area:prs}
+  #groups .c-tot{grid-area:tot;justify-self:end;align-self:end;padding-bottom:9px}
+  #groups .c-aan::before,#groups .c-prs::before{display:block;font-size:10.5px;font-weight:700;color:var(--slate);margin:0 0 3px 2px}
+  #groups .c-aan::before{content:"Aantal"}
+  #groups .c-prs::before{content:"Prijs"}
+}
+
 /* ---------- VOORBEELDVERSIE: band bovenaan (niet in het livebestand) ---------- */
 .vb-band{background:var(--amber-l);border-bottom:1px solid var(--amber-line);color:var(--amber-t);font-size:13px;padding:8px 28px;position:relative;z-index:41}
 .vb-band .wrap{display:flex;align-items:center;gap:8px 14px;flex-wrap:wrap}
@@ -1075,7 +1138,7 @@ button.mx-cel:hover{box-shadow:0 0 0 2px var(--teal);transform:translateY(-1px)}
       <div class="grid">
         <div class="field span4">
           <label for="f-klas">Klas <span class="req">*</span></label>
-          <select class="ctrl" id="f-klas"><option value="">Kies een klas</option></select>
+          <select class="ctrl" id="f-klas" aria-required="true"><option value="">Kies een klas</option></select>
           <div class="kt" id="ktInfo" hidden aria-live="polite"></div>
         </div>
         <div class="field span8">
@@ -1085,7 +1148,7 @@ button.mx-cel:hover{box-shadow:0 0 0 2px var(--teal);transform:translateY(-1px)}
             <button type="button" class="chip marsival" data-supp="Marsival" aria-pressed="false">Marsival</button>
             <span class="hint">of typ hieronder een andere leverancier</span>
           </div>
-          <input class="ctrl" id="f-leverancier" list="supp-list" placeholder="bv. Bol.com, Baert, Decathlon" autocomplete="off">
+          <input class="ctrl" id="f-leverancier" aria-required="true" list="supp-list" placeholder="bv. Bol.com, Baert, Decathlon" autocomplete="off">
           <datalist id="supp-list"></datalist>
         </div>
         <div class="field span4">
@@ -1094,14 +1157,14 @@ button.mx-cel:hover{box-shadow:0 0 0 2px var(--teal);transform:translateY(-1px)}
         </div>
         <div class="field span8">
           <label for="f-omschrijving">Omschrijving <span class="req">*</span></label>
-          <input class="ctrl" id="f-omschrijving" placeholder="bv. Pilot FriXion balpen, blauw, doos van 12" autocomplete="off">
+          <input class="ctrl" id="f-omschrijving" aria-required="true" placeholder="bv. Pilot FriXion balpen, blauw, doos van 12" autocomplete="off">
         </div>
         <div class="field span3">
           <label for="f-aantal">Aantal <span class="req">*</span></label>
-          <input class="ctrl num" id="f-aantal" inputmode="decimal" placeholder="0" autocomplete="off">
+          <input class="ctrl num" id="f-aantal" aria-required="true" inputmode="decimal" placeholder="0" autocomplete="off">
         </div>
         <div class="field span3">
-          <label for="f-prijs">Prijs per stuk</label>
+          <label for="f-prijs">Prijs zoals in de webshop</label>
           <div class="euro-field"><span class="pre">€</span><input class="ctrl num" id="f-prijs" inputmode="decimal" placeholder="0,00" autocomplete="off"></div>
         </div>
         <div class="field span6">
@@ -1110,7 +1173,7 @@ button.mx-cel:hover{box-shadow:0 0 0 2px var(--teal);transform:translateY(-1px)}
         </div>
         <div class="warns prijs-warns" id="prijsWarn"></div>
         <div class="span12 callout" id="btwNote">
-          <span data-ic="info"></span><span><b>Let op:</b> Lyreco-prijzen zijn meestal <b>excl. btw</b>, andere leveranciers <b>incl. btw</b>. Geen prijs gekend? Laat het veld gerust leeg.</span>
+          <span data-ic="info"></span><span><b>Let op:</b> vul aantal en prijs in zoals in de webshop: kost een doos van 12 stuks € 5, vul dan aantal 1 en prijs 5 in. Lyreco-prijzen zijn meestal <b>excl. btw</b>, andere leveranciers <b>incl. btw</b>.</span>
         </div>
         <div class="field span12">
           <label for="f-opmerking">Opmerking</label>
@@ -1462,6 +1525,7 @@ button.mx-cel:hover{box-shadow:0 0 0 2px var(--teal);transform:translateY(-1px)}
         <div class="field span6"><label for="beNum">Bestelbonnummer <span class="req">*</span></label><input class="ctrl" id="beNum" autocomplete="off"></div>
         <div class="field span6"><label for="beDate">Datum bestelling</label><input class="ctrl" id="beDate" type="date"></div>
         <div class="field span12"><label for="beSupp">Leverancier</label><input class="ctrl" id="beSupp" list="supp-list" autocomplete="off"></div>
+        <label class="span12 be-lev" id="beLevRow" hidden><input type="checkbox" class="cbx" id="beLev" checked><span id="beLevTxt"></span></label>
         <div class="field span12"><label for="beNote">Opmerking</label><textarea class="ctrl" id="beNote" placeholder="bv. contact met leverancier op 3/10: rest volgt eind oktober"></textarea></div>
       </div>
     </div>
@@ -1677,7 +1741,8 @@ function parseNum(v){
 const NF2 = new Intl.NumberFormat("nl-BE",{minimumFractionDigits:2,maximumFractionDigits:2});
 const NFQ = new Intl.NumberFormat("nl-BE",{maximumFractionDigits:3});
 const euro      = n => "€ " + NF2.format(typeof n==="number" ? n : parseNum(n));
-const fmtPrice  = v => hasNum(v) ? NF2.format(parseNum(v)) : "";
+const NFP = new Intl.NumberFormat("nl-BE",{minimumFractionDigits:2,maximumFractionDigits:3});
+const fmtPrice  = v => hasNum(v) ? NFP.format(parseNum(v)) : "";
 const fmtQty    = v => hasNum(v) ? NFQ.format(parseNum(v)) : "";
 /* Invoer lezen volgens parseEuro (1.4), met tot 3 decimalen (prijzen per stuk zoals 0,125):
    12 · 12,5 · 0,125 · 4.50 · 1.250 (= 1250) · 1.250,50 · € 12 → getal. Ongeldig → NaN (nooit stilletjes 0). Leeg → null. */
@@ -1695,8 +1760,9 @@ function leesGetal(v,dec=3){
   const x=Number(n); return Number.isFinite(x) ? x : NaN;
 }
 const isOngeldig = x => typeof x==="number" && isNaN(x);
-/* Opgeslagen vorm blijft zoals vroeger: prijs met 2 decimalen, aantal met tot 3. Ongeldig → NaN. */
-const normPrice = v => { const x=leesGetal(v); return x==null ? "" : isNaN(x) ? NaN : x.toFixed(2); };
+/* Opgeslagen vorm: prijs met 2 decimalen, of 3 als de derde nodig is (0,125); aantal met tot 3. Ongeldig → NaN. */
+const prijsTekst = x => { const s=(Math.round(x*1000)/1000).toFixed(3); return s.endsWith("0") ? (+s).toFixed(2) : s; };
+const normPrice = v => { const x=leesGetal(v); return x==null ? "" : isNaN(x) ? NaN : prijsTekst(x); };
 const normQty   = v => { const x=leesGetal(v); return x==null ? "" : isNaN(x) ? NaN : String(+x.toFixed(3)); };
 const qtyOf     = o => parseNum(o.aantal);
 function rowTotal(o){ return parseNum(o.aantal)*parseNum(o.prijs); }
@@ -1825,10 +1891,10 @@ async function voegToe(T,obj,toR,fromR){
 }
 /* Wijzigen met versiecontrole. Nul rijen terug? Opnieuw ophalen beslist:
    versie ongewijzigd = geweigerd · rij weg = verdwenen · andere versie = echt conflict (per veld samenvoegen). */
-async function wijzig(T,obj,toR,fromR,label,poging=0){
+async function wijzig(T,obj,toR,fromR,label,poging=0,snap=null){
   const m=META.get(obj);
   if(!m) return voegToe(T,obj,toR,fromR);
-  const cur=toR(obj), diff=Object.keys(cur).filter(k=>!zelfde(cur[k],m.base[k]));
+  const cur=snap||toR(obj), diff=Object.keys(cur).filter(k=>!zelfde(cur[k],m.base[k]));
   if(!diff.length) return obj;
   const r=await REST.call(`${T}?id=eq.${enc(obj.id)}&updated_at=eq.${enc(m.upd)}`,{method:"PATCH",headers:RET,body:JSON.stringify(Object.fromEntries(diff.map(k=>[k,cur[k]])))});
   if(r&&r.length) return onthoud(obj,r[0],toR,fromR);
@@ -1844,7 +1910,7 @@ async function wijzig(T,obj,toR,fromR,label,poging=0){
   Object.keys(vers).forEach(k=>{ if(k!=="id" && !houd.includes(k) && k in obj) obj[k]=vers[k]; });
   if(houd.includes("created_at")) obj.created_at=vers.created_at;
   META.set(obj,{upd:srv.updated_at, base:theirs});
-  houd.length ? await wijzig(T,obj,toR,fromR,label,poging+1) : 0;
+  houd.length ? await wijzig(T,obj,toR,fromR,label,poging+1,snap?Object.assign({},theirs,Object.fromEntries(houd.map(k=>[k,cur[k]]))):null) : 0;
   samengevoegd=true;
   return obj;
 }
@@ -1888,6 +1954,7 @@ function dbFail(e,wat){
   else if(e && e.weg) toast(e.message+" De lijst is vernieuwd.","err");
   else if(e && e.conflict) toast(w+"iemand anders wijzigde dit intussen. De lijst is vernieuwd.","err");
   else if(e && e.network){ setConn(false); toast(w+"geen verbinding met de database. De lijst toont weer wat bewaard is.","err"); }
+  else if(e && /afgekeurd_niet_besteld/.test(e.message||"")) toast(w+"dit artikel is intussen afgekeurd of besteld. De lijst is vernieuwd.","err");
   else if(e instanceof DbError) toast(w+"de database weigerde de gegevens"+(e.status?` (fout ${e.status})`:"")+".","err");
   else toast(w+"er liep iets mis in de tool. Laad de pagina opnieuw.","err");
   herlaadStraks();
@@ -1902,7 +1969,7 @@ const ordKey=id=>"o:"+id, bonKey=id=>"b:"+id;
 const db = {
   insertOrder : (o,{quiet=false}={}) => poog(()=>schrijf(ordKey(o.id),()=>voegToe(T_ORD,o,toRow,fromOrder)),"Opslaan",{quiet}).then(r=>r===true),
   upsertOrders: (arr,{quiet=false}={}) => !arr.length ? Promise.resolve(true)
-    : Promise.all(arr.map(o=>poog(()=>schrijf(ordKey(o.id),()=>wijzig(T_ORD,o,toRow,fromOrder,"Dit artikel")),"Opslaan",{quiet}))).then(r=>r.every(x=>x===true)),
+    : Promise.all(arr.map(o=>{ const snap=toRow(o); return poog(()=>schrijf(ordKey(o.id),()=>wijzig(T_ORD,o,toRow,fromOrder,"Dit artikel",0,snap)),"Opslaan",{quiet}); })).then(r=>r.every(x=>x===true)),
   deleteOrder : (id,{quiet=false}={}) => poog(()=>schrijf(ordKey(id),()=>verwijderRijen(T_ORD,[id])),"Verwijderen",{quiet}).then(r=>r===true),
   deleteOrders: (ids,{quiet=false}={}) => poog(()=>schrijf("o:*",()=>verwijderRijen(T_ORD,ids)),"Verwijderen",{quiet}).then(r=>r===true),
   deleteAllOrders:()=> poog(()=>schrijf("o:*",()=>wisAlles(T_ORD)),"Wissen").then(r=>r===true),
@@ -1914,14 +1981,16 @@ const db = {
   saveSettings: ()  => poog(()=>schrijf("s:"+SET_ID,bewaarInstellingen),"Instellingen bewaren").then(r=>r===true)
 };
 /* Instellingen: bij een conflict opnieuw toepassen op de nieuwste versie (andere sleutels blijven staan). */
-let setData=null, setUpd=null, setWijz={};   // setWijz: nog niet bevestigde instellingen van deze sessie (controle, budget)
+let setData=null, setUpd=null, instOk=false;   // instOk: de instellingen zijn minstens één keer geladen
+const setWijz=new Map(); let setWijzNr=0;   // nog niet bevestigde wijzigingen per pad (zie wijzigInstelling)
 async function bewaarInstellingen(){
-  const sent=JSON.parse(JSON.stringify(setWijz));
-  await bewaarInstellingenRuw(0,sent);
-  Object.keys(sent).forEach(k=>{ if(zelfde(setWijz[k],sent[k])) delete setWijz[k]; });
+  const sent=[...setWijz.values()];
+  if(!sent.length) return;
+  try{ await bewaarInstellingenRuw(0,sent); }
+  finally{ sent.forEach(w=>{ const k=JSON.stringify(w.pad), c=setWijz.get(k); if(c && c.nr===w.nr) setWijz.delete(k); }); }   // bewaard of mislukt: niet langer in afwachting
 }
 async function bewaarInstellingenRuw(poging,sent){
-  const data=Object.assign({},setData||{},{klassen:klassenList,andere:andereList},sent);
+  const data=JSON.parse(JSON.stringify(setData||{})); sent.forEach(w=>zetPad(data,w.pad,w.v));   // enkel de gewijzigde paden, op de nieuwste versie
   if(!setUpd){
     let row;
     try{ row=(await REST.call(T_SET,{method:"POST",headers:RET,body:JSON.stringify({id:SET_ID,data})}))[0]; }
@@ -2001,7 +2070,8 @@ function applyKlassen(k,g){
 function pasToe(d){
   if(!isAdmin) d.bons=d.bons.map(b=>b.licht?b:fromBonStatus({id:b.id,artikelen_ontvangen:b.artikelen_ontvangen,gearchiveerd:b.gearchiveerd,datum:b.datum,lijnen:[]}));
   state.orders=d.orders; state.archief=d.archief; state.bons=d.bons;
-  if(d.klassen!==undefined){ setData=(d.setRow&&d.setRow.data)||null; setUpd=d.setRow?d.setRow.updated_at:null; }
+  if(d.klassen!==undefined){ setData=(d.setRow&&d.setRow.data)||null; setUpd=d.setRow?d.setRow.updated_at:null; instOk=true; }
+  if(isAdmin) setTimeout(herstelKoppelingen,0);
   applyKlassen(d.klassen,d.gedeeld); lastSig=dataSig(d); lastLoad=new Date();
   $("conn").title="Verbonden · laatst vernieuwd om "+lastLoad.toLocaleTimeString("nl-BE",{hour:"2-digit",minute:"2-digit"})+". Klik om te vernieuwen.";
 }
@@ -2061,7 +2131,11 @@ document.addEventListener("keydown",e=>{
   else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
 });
 
-function confirmDialog({title,html,ok="Bevestigen",cancel="Annuleren",tone="primary",single=false,focus=null}){
+/* Bevestigingsvensters na elkaar: komt er een tweede terwijl er al één open is, dan wacht die zijn beurt af */
+const cfWacht=[]; let cfOpen=false;
+function confirmDialog(o){ return new Promise(res=>{ cfWacht.push({o,res}); if(!cfOpen) cfVolgende(); }); }
+function cfVolgende(){ const x=cfWacht.shift(); if(!x){ cfOpen=false; return; } cfOpen=true; confirmDialogNu(x.o).then(v=>{ x.res(v); setTimeout(cfVolgende,0); }); }
+function confirmDialogNu({title,html,ok="Bevestigen",cancel="Annuleren",tone="primary",single=false,focus=null}){
   return new Promise(res=>{
     $("cfTitle").textContent=title; $("cfBody").innerHTML=html;
     const okB=$("cfOk"), noB=$("cfCancel");
@@ -2363,7 +2437,7 @@ function clearForm(all){
    Per sessie verschijnt het venster maar één keer; daarna komt de waarschuwing meteen onder het prijsveld. */
 const WARN_PRIJS_KEY = "klimop_mat_waarsch_prijs";
 let prijsGewaarschuwd = false;   // voor het artikel dat nu ingevuld wordt
-const PRIJS_WARN_HTML = "<b>Er is geen prijs ingevuld.</b> Vul de prijs per stuk in als je die kent. Ken je de prijs niet? Klik dan op <b>Toch toevoegen zonder prijs</b>.";
+const PRIJS_WARN_HTML = "<b>Er is geen prijs ingevuld.</b> Zoek de prijs op en vul ze in: zonder prijs kunnen we niet opvolgen wat er besteld wordt. Is de prijs echt nergens te vinden? Klik dan op <b>Toch toevoegen zonder prijs</b>.";
 function opvallend(html,slot){
   const prev=document.activeElement, el=document.createElement("div"); el.className="wpop";
   el.innerHTML=`<div class="wpop-box" role="alertdialog" aria-modal="true" aria-labelledby="wpT"><div class="wpop-t" id="wpT">${ic("alert",18)}Even opletten</div>
@@ -2391,7 +2465,7 @@ function toonPrijsWarn(){
   if(ssGet(WARN_PRIJS_KEY)!=="1"){ ssSet(WARN_PRIJS_KEY,"1"); opvallend(PRIJS_WARN_HTML,slot); return; }
   slot.innerHTML=`<div class="fwarn appear" role="alert">${ic("alert",16)}<div>${PRIJS_WARN_HTML}</div></div>`;
 }
-function markInvalid(id,msg){ const el=$(id); el.classList.add("invalid"); toast(msg,"err"); el.focus(); }
+function markInvalid(id,msg){ const el=$(id); el.classList.add("invalid"); el.setAttribute("aria-invalid","true"); toast(msg,"err"); el.focus(); }
 function refreshKlasSelects(){
   const groepen=klasGroepen(), alle=groepen.flatMap(([,l])=>l);
   const fill=(sel,first)=>{ if(!sel) return; const cur=sel.value; sel.innerHTML="";
@@ -2408,10 +2482,10 @@ function initForm(){
   document.querySelectorAll(".chip[data-supp]").forEach(c=>c.onclick=()=>{ $("f-leverancier").value=c.dataset.supp; $("f-leverancier").classList.remove("invalid"); syncChips(); clearCtlWarn(); $("f-artikel").focus(); });
   $("f-leverancier").addEventListener("input",syncChips);
   ["f-aantal","f-prijs"].forEach(id=>$(id).addEventListener("input",updateTotalPreview));
-  ["f-klas","f-leverancier","f-omschrijving","f-aantal"].forEach(id=>$(id).addEventListener("input",e=>e.target.classList.remove("invalid")));
+  ["f-klas","f-leverancier","f-omschrijving","f-aantal"].forEach(id=>$(id).addEventListener("input",e=>{ e.target.classList.remove("invalid"); e.target.removeAttribute("aria-invalid"); }));
   /* Een melding van een vraag (niet toegevoegd, of bevestigd) verdwijnt zodra je aan een volgend artikel begint */
   ["f-leverancier","f-artikel","f-omschrijving","f-aantal","f-prijs"].forEach(id=>$(id).addEventListener("input",clearCtlWarn));
-  $("f-klas").addEventListener("change",e=>{ e.target.classList.remove("invalid"); clearCtlWarn(); renderKlastotaal(); });
+  $("f-klas").addEventListener("change",e=>{ e.target.classList.remove("invalid"); e.target.removeAttribute("aria-invalid"); clearCtlWarn(); renderKlastotaal(); });
   $("f-prijs").addEventListener("input",e=>{ e.target.classList.remove("invalid"); if(prijsGewaarschuwd && leesGetal(e.target.value)!=null){ clearPrijsWarn(); setAddLabel("Artikel toevoegen"); } });
   $("f-prijs").addEventListener("blur",e=>{ const x=normPrice(e.target.value); if(x && !isOngeldig(x)) e.target.value=fmtPrice(x); });
   $("f-aantal").addEventListener("blur",e=>{ const x=normQty(e.target.value); if(x && !isOngeldig(x)) e.target.value=fmtQty(x); });
@@ -2421,6 +2495,7 @@ function initForm(){
 }
 async function addOrder(){
   if(saving || vragen>0) return;
+  if(!loaded || !instOk){ toast(loaded?"De instellingen zijn nog niet geladen. Probeer het zo meteen opnieuw.":"Even geduld: de gegevens worden nog geladen.","err"); if(loaded) loadAll({silent:true}).then(()=>renderCurrent()); return; }
   const klas=$("f-klas").value, lev=$("f-leverancier").value.trim(), oms=$("f-omschrijving").value.trim();
   hideFormError();
   if(!klas){ markInvalid("f-klas","Kies eerst een klas"); return; }
@@ -2470,12 +2545,12 @@ function renderRecent(){
       <span class="rc-oms" title="${esc(o.omschrijving)}">${esc(o.omschrijving)}</span>
       <span class="rc-qty">${hasNum(o.aantal)?esc(fmtQty(o.aantal))+" × ":""}${hasNum(o.prijs)?euro(o.prijs):"geen prijs"}</span>
       <span class="num"><b>${euro(rowTotal(o))}</b></span>
-      <span class="rc-act">${o.besteld?`<span class="pill done">besteld</span>`:`<button class="btn-txt-del" data-undo="${esc(o.id)}">Ongedaan maken</button>`}</span>
+      <span class="rc-act">${o.besteld?`<span class="pill done">besteld</span>`:o.afgekeurd?`<span class="pill warn">afgekeurd</span>`:`<button class="btn-txt-del" data-undo="${esc(o.id)}">Ongedaan maken</button>`}</span>
     </div>`).join("");
 }
 $("recent").addEventListener("click",e=>{
   const b=e.target.closest("[data-undo]"); if(!b) return;
-  const o=orderById(b.dataset.undo); if(!o || o.besteld) return;
+  const o=orderById(b.dataset.undo); if(!o || o.besteld || o.afgekeurd){ renderRecent(); return; }
   state.orders=state.orders.filter(x=>x.id!==o.id); ui.recent=ui.recent.filter(x=>x!==o.id);
   renderRecent(); updateCounts(); toast("Artikel verwijderd"); db.deleteOrder(o.id);
 });
@@ -2560,8 +2635,8 @@ function groupHtml(key,items){
   const allB=telt.length>0 && b===telt.length, extra=isAdmin?"<span></span>":"";
   const kt = curKlasTot && ui.mode==="klas" ? klasTotLink(key) : "";
   const head = ui.mode!=="lev"
-    ? `<span></span><span>Leverancier</span><span>Art.nr</span><span>Omschrijving</span><span class="tr">Aantal</span><span class="tr">Prijs/st</span><span class="tr last">Totaal</span><span></span><span></span>${extra}`
-    : `<span></span><span>Art.nr</span><span>Omschrijving</span><span class="tr">Aantal</span><span class="tr">Prijs/st</span><span class="tr last">Totaal</span><span></span><span></span>${extra}`;
+    ? `<span></span><span>Leverancier</span><span>Art.nr</span><span>Omschrijving</span><span class="tr">Aantal</span><span class="tr">Prijs</span><span class="tr last">Totaal</span><span></span><span></span>${extra}`
+    : `<span></span><span>Art.nr</span><span>Omschrijving</span><span class="tr">Aantal</span><span class="tr">Prijs</span><span class="tr last">Totaal</span><span></span><span></span>${extra}`;
   return `<div class="card group" data-key="${esc(key)}">
     <div class="group-head">
       <input type="checkbox" class="cbx blk-check" data-key="${esc(key)}" ${ui.selected.has(key)?"checked":""} aria-label="Blok ${esc(groupLabel(key))} selecteren om af te drukken" title="Selecteer dit blok om af te drukken">
@@ -2601,13 +2676,13 @@ function orderRow(o){
     : (note ? `<div class="note-panel" data-id="${esc(o.id)}"><div class="nlabel"><span>Opmerking beheerder</span></div><div class="note-read">${hl(note,ts)}</div></div>` : "");
   return `<div class="order-wrap ${o.besteld?"besteld":""}${afg?" afgekeurd":""}" data-id="${esc(o.id)}">
     <div class="order-row" data-id="${esc(o.id)}">
-      ${check}${levCell}
-      <div class="cell-copy">${hlField(`<input value="${esc(o.artikel)}" data-f="artikel" placeholder="art.nr" aria-label="Artikelnummer" ${ro}>`,o.artikel,ts)}<button class="copy-btn" data-act="copy" aria-label="Kopieer artikelnummer" title="Kopieer artikelnummer">${ic("copy",14)}</button></div>
-      <div class="cell-copy">${klasTag}${hlField(`<input class="oms-in" value="${esc(o.omschrijving)}" data-f="omschrijving" placeholder="omschrijving" aria-label="Omschrijving" ${ro}>`,o.omschrijving,ts)}<button class="copy-btn" data-act="copy" aria-label="Kopieer omschrijving" title="Kopieer omschrijving">${ic("copy",14)}</button></div>
-      ${hlField(`<input class="num" inputmode="decimal" value="${esc(fmtQty(o.aantal))}" data-f="aantal" placeholder="0" aria-label="Aantal" ${ro}>`,fmtQty(o.aantal),ts,{right:true})}
-      ${hlField(`<input class="num" inputmode="decimal" value="${esc(fmtPrice(o.prijs))}" data-f="prijs" placeholder="0,00" aria-label="Prijs per stuk" ${ro}>`,fmtPrice(o.prijs),ts,{right:true})}
-      <span class="rowtotal ${hasP?"":"none"}">${hasP?euro(rowTotal(o)):"geen prijs"}</span>
-      ${noteBtn}${isAdmin?rejBtn(o):""}${endBtn}
+      <div class="c c-chk">${check}</div>${levCell?`<div class="c c-lev">${levCell}</div>`:""}
+      <div class="cell-copy c-art">${hlField(`<input value="${esc(o.artikel)}" data-f="artikel" placeholder="art.nr" aria-label="Artikelnummer" ${ro}>`,o.artikel,ts)}<button class="copy-btn" data-act="copy" aria-label="Kopieer artikelnummer" title="Kopieer artikelnummer">${ic("copy",14)}</button></div>
+      <div class="cell-copy c-oms">${klasTag}${hlField(`<input class="oms-in" value="${esc(o.omschrijving)}" data-f="omschrijving" placeholder="omschrijving" aria-label="Omschrijving" ${ro}>`,o.omschrijving,ts)}<button class="copy-btn" data-act="copy" aria-label="Kopieer omschrijving" title="Kopieer omschrijving">${ic("copy",14)}</button></div>
+      <div class="c c-aan">${hlField(`<input class="num" inputmode="decimal" value="${esc(fmtQty(o.aantal))}" data-f="aantal" placeholder="0" aria-label="Aantal" ${ro}>`,fmtQty(o.aantal),ts,{right:true})}</div>
+      <div class="c c-prs">${hlField(`<input class="num" inputmode="decimal" value="${esc(fmtPrice(o.prijs))}" data-f="prijs" placeholder="0,00" aria-label="Prijs" ${ro}>`,fmtPrice(o.prijs),ts,{right:true})}</div>
+      <span class="rowtotal c-tot ${hasP?"":"none"}">${hasP?euro(rowTotal(o)):"geen prijs"}</span>
+      <div class="c c-acts">${noteBtn}${isAdmin?rejBtn(o):""}${endBtn}</div>
     </div>
     ${rowSubHtml(o)}${tn}${panel}
   </div>`;
@@ -2678,7 +2753,8 @@ $("groups").addEventListener("input",e=>{
   }
   const inp=t.closest("input[data-f]"); if(!inp) return;
   const row=inp.closest(".order-row"), o=orderById(row.dataset.id); if(!o) return;
-  o[inp.dataset.f]=inp.value;
+  const f0=inp.dataset.f;
+  if(f0==="aantal"||f0==="prijs"){ const x=leesGetal(inp.value); o[f0]=(x==null||isNaN(x))?inp.value:String(x); } else o[f0]=inp.value;
   const under=inp.parentElement.classList.contains("hlw") ? inp.parentElement.querySelector(".hl-under") : null; if(under) under.remove();
   if(inp.dataset.f==="aantal"||inp.dataset.f==="prijs"){
     const rt=row.querySelector(".rowtotal"), has=hasNum(o.prijs);
@@ -2687,7 +2763,7 @@ $("groups").addEventListener("input",e=>{
   }
 });
 /* aantal: vorige waarde onthouden, zodat een leeg of ongeldig aantal teruggezet kan worden */
-$("groups").addEventListener("focusin",e=>{ const i=e.target.closest("input[data-f='aantal'],input[data-f='prijs']"); if(!i) return; const o=orderById(i.closest(".order-row").dataset.id); if(o){ i._prev=o.aantal; i._prevP=o.prijs; } });
+$("groups").addEventListener("focusin",e=>{ const i=e.target.closest("input[data-f]"); if(!i) return; const o=orderById(i.closest(".order-row").dataset.id); if(o){ i._prev=o.aantal; i._prevP=o.prijs; i._prevT=o[i.dataset.f]; } });
 function refreshRowTotal(inp){ const row=inp.closest(".order-row"), o=orderById(row.dataset.id), rt=row.querySelector(".rowtotal"); if(!o||!rt) return; const has=hasNum(o.prijs); rt.textContent=has?euro(rowTotal(o)):"geen prijs"; rt.classList.toggle("none",!has); }
 $("groups").addEventListener("change",e=>{
   const t=e.target;
@@ -2708,21 +2784,27 @@ $("groups").addEventListener("change",e=>{
       toast(!nq?"Het aantal is verplicht":isOngeldig(nq)?"Dit aantal kan ik niet lezen. Schrijf bv. 12 of 2,5":"Het aantal moet groter zijn dan 0","err"); return;
     }
     const oud={aantal:inp._prev!=null?inp._prev:o.aantal, prijs:o.prijs};
-    o.aantal=nq; inp.value=fmtQty(o.aantal); refreshLiveTotals();
+    o.aantal=nq; inp.value=fmtQty(o.aantal); refreshLiveTotals(); refreshRowTotal(inp);
     return bewaarNaControle(o,oud,inp,()=>{ inp._prev=nq; });
   }
   else if(f==="prijs"){
     const np=normPrice(inp.value);
     if(isOngeldig(np)){ o.prijs=inp._prevP??o.prijs; inp.value=fmtPrice(o.prijs); refreshLiveTotals(); refreshRowTotal(inp); toast("Deze prijs kan ik niet lezen. Schrijf bv. 4,50","err"); return; }
     const oud={aantal:o.aantal, prijs:inp._prevP!=null?inp._prevP:o.prijs};
-    o.prijs=np; inp.value=fmtPrice(o.prijs); refreshLiveTotals();
+    o.prijs=np; inp.value=fmtPrice(o.prijs); refreshLiveTotals(); refreshRowTotal(inp);
     return bewaarNaControle(o,oud,inp,()=>{ inp._prevP=np; });
   }
   else if(f==="leverancier"){
-    const c=canonicalSupplier(inp.value); const changed=c!==inp.value; o.leverancier=c;
+    const c=canonicalSupplier(inp.value);
+    if(!c){ o.leverancier=inp._prevT!=null?inp._prevT:o.leverancier; inp.value=o.leverancier; toast("De leverancier is verplicht","err"); return; }
+    const changed=c!==inp.value; o.leverancier=c;
     db.upsertOrders([o]); if(changed||ui.mode==="lev") renderOverview(); refreshSupplierList(); return;
   }
-  else o[f]=inp.value.trim();
+  else {
+    const v=inp.value.trim();
+    if(f==="omschrijving" && !v){ o.omschrijving=inp._prevT!=null?inp._prevT:o.omschrijving; inp.value=o.omschrijving; toast("De omschrijving is verplicht","err"); return; }
+    o[f]=v;
+  }
   db.upsertOrders([o]);
   if(f==="omschrijving") markTruncated(inp.closest(".order-row"));
 });
@@ -2735,6 +2817,8 @@ $("groups").addEventListener("click",e=>{
   if(act==="besteld") return toggleBesteld(id);
   if(act==="block") return blockToggle(b.dataset.key);
   if(act==="afkeur") return openAfkeur(id);
+  if(act==="addoms") return voegOpmerkingToe(id);
+  if(act==="klas") return wijzigKlas(id);
   if(act==="ophef") return ophefAfkeur(id);
   if(act==="ugklas") return openUgDetail({klas:b.dataset.key,per:periodeSJ(huidigSJ())});
   if(act==="note"){
@@ -2754,6 +2838,7 @@ async function deleteOrderFlow(id){
   if(!isAdmin && o.besteld){ toast("Dit artikel is al besteld en kan niet meer verwijderd worden","err"); return; }
   if(!isAdmin && o.afgekeurd){ toast("Dit artikel is afgekeurd en kan niet meer verwijderd worden","err"); return; }
   const bon=o.bon_id?bonById(o.bon_id):null;
+  if(bon && bon.gearchiveerd){ toast("Dit artikel staat op een gearchiveerde bestelbon. Haal die bon eerst terug uit het archief (Archief, Bestelbons).","err"); return; }
   /* Altijd eerst bevestigen (leerkracht en beheerder): zo verdwijnt niets door een verkeerde klik. Annuleren heeft de focus. */
   const ok=await confirmDialog({title:"Artikel verwijderen?",html:verwijderHtml(o,bon),ok:"Verwijderen",tone:"danger"});
   if(!ok || !orderById(id)) return;
@@ -2890,7 +2975,7 @@ async function afrondVerder(ids,touched){
    BESTELBON AANMAKEN
    ============================================================ */
 const mk={off:new Set()};
-const pendingRows = () => state.orders.filter(o=>o.besteld && !o.bon_id);
+const pendingRows = () => state.orders.filter(o=>o.besteld && !o.bon_id && !o.afgekeurd && !opEenBon(o.id));
 function mkRows(){ const v=$("mkSupp").value, rows=pendingRows(); return v===MK_ALL ? rows : rows.filter(o=>(o.leverancier||"—")===v); }
 $("makeBonBtn").onclick=()=>{
   if(!isAdmin) return;
@@ -2946,7 +3031,7 @@ $("mkDo").onclick=async()=>{
     opmerking:$("mkNote").value.trim(), lijnen:rows.map(o=>({...o,bon_id:mkId})), gearchiveerd:false, verwijderd_op:null };
   const btn=$("mkDo"); mkBezig=true; btn.disabled=true; btn.classList.add("busy");
   try{
-    if(!(await db.insertBon(bon))) return;                 // venster blijft open, invoer blijft staan
+    if(!(await db.insertBon(bon))) return; await db.upsertBon(bon,{quiet:true});                 // venster blijft open, invoer blijft staan
     mkId=null;
     rows.forEach(o=>o.bon_id=bon.id);
     state.bons.unshift(bon);
@@ -3253,7 +3338,7 @@ function renderBonDetail(){
     </div>
     ${b.opmerking?`<div class="bd-note"><span>Opmerking</span>${hl(b.opmerking,ts)}</div>`:""}
     ${lock}
-    ${L.length?`<div class="bd-table"><div class="bd-line head"><span>Klas</span><span>Art.nr</span><span>Omschrijving</span><span class="r">Aantal</span><span class="r">Prijs/st</span><span class="r">Totaal</span><span class="r" style="padding-right:112px">Levering</span></div>${lines}</div>`
+    ${L.length?`<div class="bd-table"><div class="bd-line head"><span>Klas</span><span>Art.nr</span><span>Omschrijving</span><span class="r">Aantal</span><span class="r">Prijs</span><span class="r">Totaal</span><span class="r" style="padding-right:112px">Levering</span></div>${lines}</div>`
       :`<div class="note">${ic("info",16)}<span>Er staan geen artikelen meer op deze bon.</span></div>`}
     <div class="bd-tot">${tot}</div>`;
   // De tegel staat altijd op dezelfde plaats; kan verwijderen niet (meer), dan is hij vervaagd en legt een klik uit waarom.
@@ -3298,7 +3383,7 @@ $("bdDel").onclick=async()=>{
 
 /* --- Bongegevens wijzigen --- */
 function openBonEdit(b){
-  $("beNum").value=b.nummer||""; $("beDate").value=isoToLocalDate(b.datum); $("beSupp").value=b.leverancier||""; $("beNote").value=b.opmerking||"";
+  $("beNum").value=b.nummer||""; $("beDate").value=isoToLocalDate(b.datum); $("beSupp").value=b.leverancier||""; $("beNote").value=b.opmerking||""; $("beLev").checked=true; beLevSync();
   openOverlay("beOverlay","#beNum");
 }
 $("beCancel").onclick=()=>closeOverlay("beOverlay");
@@ -3313,7 +3398,10 @@ $("beOk").onclick=async()=>{
   }
   const dv=$("beDate").value;
   b.nummer=nummer; if(dv) b.datum=noonISO(dv);
-  b.leverancier=$("beSupp").value.trim()||b.leverancier; b.opmerking=$("beNote").value.trim();
+  const nieuweLev=$("beSupp").value.trim()||b.leverancier, levMee=!$("beLevRow").hidden && $("beLev").checked;
+  b.leverancier=nieuweLev; b.opmerking=$("beNote").value.trim();
+  if(levMee){ const c=canonicalSupplier(nieuweLev), L=[]; b.lijnen=(b.lijnen||[]).map(x=>({...x,leverancier:c}));
+    state.orders.forEach(o=>{ if(o.bon_id===b.id && o.leverancier!==c){ o.leverancier=c; L.push(o); } }); if(L.length) db.upsertOrders(L); }
   closeOverlay("beOverlay"); renderBonDetail(); renderCurrent(); toast("Bongegevens opgeslagen"); db.upsertBon(b);
 };
 
@@ -3345,9 +3433,10 @@ function renderLev(){
       <div class="radio-cards">
         ${rc("ok","Volledig geleverd","Alles is binnen. Dit is de standaard.")}
         ${rc("deels","Deels geleverd",canDeels?"Een deel is binnen, de rest volgt of vervalt.":"Kan enkel bij een aantal groter dan 1.",
-             lv.choice==="deels"?`<span class="rc-extra">ontvangen <input class="ctrl" id="lvOntv" inputmode="decimal" value="${esc(lv.ontv)}" aria-label="Ontvangen aantal"> van ${esc(fmtQty(q))}</span>`:"",!canDeels)}
+             "",!canDeels)}
         ${rc("niets","Niets geleverd","Van dit artikel is nog niets ontvangen.")}
       </div>
+      ${lv.choice==="deels"?`<div class="lv-ontv"><label for="lvOntv">Ontvangen</label><input class="ctrl" id="lvOntv" inputmode="decimal" value="${esc(lv.ontv)}"><span>van ${esc(fmtQty(q))}</span></div>`:""}
       ${lv.choice!=="ok"?`
         <span class="flabel" style="margin-top:6px">Nalevering</span>
         <div class="seg" id="lvStatus" role="group" aria-label="Nalevering" style="align-self:flex-start">
@@ -3439,16 +3528,21 @@ function renderMove(){
         ${others.length?others.map(x=>card(x.id,"Bon "+esc(bonLabel(x)),`${esc(x.leverancier)} · ${esc(fmtDate(x.datum))} · ${artikelen(bonLines(x).length)}`)).join(""):`<div class="note">${ic("info",16)}<span>Er zijn geen andere actieve bestelbons.</span></div>`}
         ${card("__none","Uit deze bon halen", live?"Het artikel blijft in het overzicht als besteld, zonder bon.":"De bestelronde is afgerond: het artikel staat daarna enkel nog in het archief van de ronde.","danger")}
       </div></div>`;
+  const doel=mvState.to&&mvState.to!=="__none"?state.bons.find(x=>x.id===mvState.to):null, dl=doel?(doel.leverancier||"").trim():"";
+  const toonLev=!!doel && !!dl && !dl.includes(" + ") && lc(canonicalSupplier(dl))!==lc(canonicalSupplier(o.leverancier||""));
+  if(toonLev){ if(mvState.lev==null) mvState.lev=true;
+    const art=$("mvBody").querySelector(".lv-art"); (art||$("mvBody")).insertAdjacentHTML(art?"afterend":"beforeend",`<label class="mv-lev"><input type="checkbox" class="cbx" id="mvLev" ${mvState.lev?"checked":""}><span>Leverancier van dit artikel ook wijzigen naar <b>${esc(canonicalSupplier(dl))}</b></span></label>`); }
+  mvState.levNaam=toonLev?canonicalSupplier(dl):null;
   const ok=$("mvOk"); ok.disabled=!mvState.to;
   ok.textContent = mvState.to==="__none" ? "Uit bon halen" : "Verplaatsen";
   ok.className = "btn " + (mvState.to==="__none" ? "btn-coral" : "btn-primary");
 }
-$("mvBody").addEventListener("click",e=>{ const c=e.target.closest("[data-to]"); if(c){ mvState.to=c.dataset.to; renderMove(); } });
+$("mvBody").addEventListener("click",e=>{ const c=e.target.closest("[data-to]"); if(c){ mvState.to=c.dataset.to; mvState.lev=null; renderMove(); } });
 $("mvCancel").onclick=()=>closeOverlay("mvOverlay");
 $("mvOk").onclick=()=>{
   const b=curBon; if(!b||!mvState||!mvState.to) return;
   closeOverlay("mvOverlay");
-  if(moveLine(b,mvState.oid,mvState.to)) afterBonChange();
+  if(moveLine(b,mvState.oid,mvState.to,mvState.levNaam&&mvState.lev?mvState.levNaam:null)) afterBonChange();
 };
 /* Levering van één lijn in het geheugen zetten (live artikel en momentopname); geeft het live artikel terug */
 function setLevMem(b,oid,lev){
@@ -3490,19 +3584,30 @@ function applyLevering(b,oid,lev){
   db.upsertBon(b);
   return auto;
 }
-function moveLine(from,oid,v){
+function moveLine(from,oid,v,lev=null){
   const src=bonLines(from), o=src.find(x=>x.id===oid); if(!o) return false;
   const to = v==="__none" ? null : state.bons.find(x=>x.id===v && !x.gearchiveerd);
   if(v!=="__none" && !to){ toast("De gekozen bestelbon is niet meer actief","err"); return false; }
+  const nu=new Date().toISOString(), ontv=b=>b.artikelen_ontvangen==null?!!b.factuur_ontvangen:!!b.artikelen_ontvangen;
+  /* De leveringsstatus eerst op de lijn vastleggen: zonder eigen registratie gold "geleverd" via een ontvangen bon */
+  let levering=o.levering||null;
+  if(!levering && ontv(from)) levering={status:"geleverd",datum:nu};
   const targetLines=new Map((to?bonLines(to):[]).map(x=>[x.id,{...x}]));
-  const live=state.orders.find(x=>x.id===oid && x.bon_id===from.id);
-  const moved={...o,bon_id:to?to.id:null};
-  if(!to){ moved.levering=null; moved.nietgeleverd=false; }
-  if(live){ live.bon_id=moved.bon_id; if(!to){ live.levering=null; live.nietgeleverd=false; } }
+  const live=state.orders.find(x=>x.id===oid && x.bon_id===from.id), extra=[];
+  const moved={...o,bon_id:to?to.id:null,levering:to?levering:null};
+  moved.nietgeleverd=!!(moved.levering && (moved.levering.status==="wacht"||moved.levering.status==="vervallen"));
+  if(to && lev) moved.leverancier=lev;
+  /* Een nog niet geleverde lijn naar een ontvangen bon: die bon is dan niet meer volledig ontvangen; zijn andere lijnen blijven groen */
+  if(to && ontv(to) && !moved.levering){
+    targetLines.forEach((x,id)=>{ if(!x.levering){ x.levering={status:"geleverd",datum:nu}; x.nietgeleverd=false;
+      const lo=state.orders.find(y=>y.id===id && y.bon_id===to.id); if(lo){ lo.levering=x.levering; lo.nietgeleverd=false; extra.push(lo); } } });
+    to.artikelen_ontvangen=false;
+  }
+  if(live){ live.bon_id=moved.bon_id; live.levering=moved.levering; live.nietgeleverd=moved.nietgeleverd; if(to && lev) live.leverancier=lev; }
   from.lijnen=src.filter(x=>x.id!==oid).map(x=>({...x}));
   if(to){ targetLines.set(oid,moved); to.lijnen=[...targetLines.values()]; db.upsertBon(to); }
   db.upsertBon(from);
-  if(live) db.upsertOrders([live]);
+  const L=[...(live?[live]:[]),...extra]; if(L.length) db.upsertOrders(L);
   toast(to ? "Artikel verplaatst naar bon "+bonLabel(to) : "Artikel uit de bon gehaald");
   return true;
 }
@@ -3513,9 +3618,7 @@ function afterBonChange(){ renderBonDetail(); renderCurrent(); }
    ============================================================ */
 function levForArchive(o){
   // Toon de actuele leveringsstatus uit de bon, zonder de momentopname te wijzigen.
-  const b=o.bon_id?bonById(o.bon_id):null;
-  if(b){ const x=bonLines(b).find(y=>y.id===o.id); if(x) return x; }
-  return o;
+  const x=effLijn(o.id); return x||o;
 }
 function renderArchive(){
   const bons = isAdmin && ui.archTab==="bons";
@@ -3552,7 +3655,7 @@ function renderArchiveRounds(){
           <button class="btn btn-ghost btn-sm" data-rcsv="${esc(r.id)}">${ic("download",14)}CSV</button></div>
       </div>
       <div class="rows">
-        <div class="arch-row arch-head"><span>Klas</span><span>Leverancier</span><span>Art.nr</span><span>Omschrijving</span><span class="num">Aantal</span><span class="num">Prijs/st</span><span class="num">Totaal</span><span>Opmerking</span></div>
+        <div class="arch-row arch-head"><span>Klas</span><span>Leverancier</span><span>Art.nr</span><span>Omschrijving</span><span class="num">Aantal</span><span class="num">Prijs</span><span class="num">Totaal</span><span>Opmerking</span></div>
         ${lines.map(o=>{
           const cur=levForArchive(o); const lt=levTagFor(cur);
           const bn = isAdmin && o.bon_id && bonById(o.bon_id) ? `<span class="bon-tag" style="font-size:10.5px;font-weight:700;color:var(--teal-xd);background:var(--teal-l);padding:0 7px;border-radius:5px">${hl(bonLabel(bonById(o.bon_id)),ts)}</span>` : "";
@@ -3668,6 +3771,7 @@ function saveKlassen(msg,justAdded){
   ui.klAndereBewaard=true; klassenList=bouwKlassen(); eigenOud=klassenList.slice();
   refreshKlasSelects(); renderKlassen(justAdded);
   lastSig=dataSig({...state, klassen:{oud:klassenList.slice(),andere:andereList.slice()}, gedeeld:gedeeldRuw});
+  wijzigInstelling(["andere"],andereList.slice()); wijzigInstelling(["klassen"],klassenList.slice());
   db.saveSettings(); if(msg) toast(msg);
 }
 $("klChips").addEventListener("click",e=>{ e.stopPropagation(); const c=e.target.closest("[data-kl]"); if(!c) return; ui.klSel = ui.klSel===c.dataset.kl ? null : c.dataset.kl; renderKlassen(); });
@@ -3716,14 +3820,14 @@ $("resetBtn").onclick=async()=>{
    ============================================================ */
 const csvMoney = n => (Math.round(n*100)/100).toFixed(2).replace(".",",");
 const csvQty   = v => hasNum(v) ? String(+parseNum(v).toFixed(3)).replace(".",",") : "";
-const csvPrice = v => hasNum(v) ? csvMoney(parseNum(v)) : "";
+const csvPrice = v => hasNum(v) ? prijsTekst(parseNum(v)).replace(".",",") : "";
 function downloadCsv(name,head,rows){
   const csv=[head,...rows].map(r=>r.map(c=>`"${String(c??"").replace(/"/g,'""')}"`).join(";")).join("\r\n");
   const url=URL.createObjectURL(new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"}));
   const a=document.createElement("a"); a.href=url; a.download=name+".csv"; document.body.appendChild(a); a.click(); a.remove();
   setTimeout(()=>URL.revokeObjectURL(url),2000); toast("CSV gedownload");
 }
-const ORDER_HEAD=["Ingegeven op","Klas","Leverancier","Artikelnummer","Omschrijving","Aantal","Prijs per stuk","Totale prijs","Besteld","Levering","Opmerking leerkracht","Opmerking beheerder","Afgekeurd","Bevestigd door leerkracht"];
+const ORDER_HEAD=["Ingegeven op","Klas","Leverancier","Artikelnummer","Omschrijving","Aantal","Prijs per eenheid","Totale prijs","Besteld","Levering","Opmerking leerkracht","Opmerking beheerder","Afgekeurd","Bevestigd door leerkracht"];
 const orderCsv = o => [datumLabel(o.created_at),o.klas,o.leverancier,o.artikel,o.omschrijving,csvQty(o.aantal),csvPrice(o.prijs),csvMoney(rowTotal(o)),o.besteld?"ja":"nee",levCsv(levForArchive(o)),o.opmerking,o.notitie,afgCsv(o),bevestigdTxt(o)];
 function exportOrders(rows,name){ if(!rows.length){ toast("Niets om te exporteren","err"); return; } downloadCsv(name,ORDER_HEAD,rows.map(orderCsv)); }
 function exportArchiveAll(){
@@ -3756,7 +3860,7 @@ function buildPrintOverview(keys){
       return `<tr class="${o.afgekeurd?"pa":levProbleem(l)?"pw":(o.besteld?"pb":"")}"><td class="tick"></td><td>${perDag?`${esc(o.klas)} · ${esc(o.leverancier)}`:esc(perLev?o.klas:o.leverancier)}</td><td>${esc(o.artikel)}</td><td>${esc(o.omschrijving)}${o.created_at?`<div class="pdate">ingegeven ${esc(datumLabel(o.created_at))}</div>`:""}${o.afgekeurd?`<div class="pafg">Afgekeurd${o.afgekeurd.reden?": "+esc(o.afgekeurd.reden):""}</div>`:""}${l&&l.status!=="geleverd"?`<div class="plev">${esc(levCsv(o))}</div>`:""}${notes?`<div class="pnote">${esc(notes)}</div>`:""}</td><td class="r">${esc(fmtQty(o.aantal))}</td><td class="r">${hasNum(o.prijs)?euro(o.prijs):""}</td><td class="r">${euro(rowTotal(o))}</td></tr>`;
     }).join("");
     return `<section class="print-block"><h2>${perDag?esc(dagLabel(key)):(perLev?"":"Klas ")+esc(key)}<span class="pcount">${artikelen(items.length)} · ${euro(tot)}</span></h2>
-      <table><thead><tr><th class="tick">✓</th><th>${perDag?"Klas · leverancier":perLev?"Klas":"Leverancier"}</th><th>Art.nr</th><th>Omschrijving</th><th class="r">Aantal</th><th class="r">Prijs/st</th><th class="r">Totaal</th></tr></thead><tbody>${rows}</tbody></table></section>`;
+      <table><thead><tr><th class="tick">✓</th><th>${perDag?"Klas · leverancier":perLev?"Klas":"Leverancier"}</th><th>Art.nr</th><th>Omschrijving</th><th class="r">Aantal</th><th class="r">Prijs</th><th class="r">Totaal</th></tr></thead><tbody>${rows}</tbody></table></section>`;
   }).join("");
   $("printArea").innerHTML=printHead("Bestellijst materialen",`Afgedrukt op ${esc(datumLang(new Date()))}<br>Gesorteerd per ${perDag?"datum, nieuwste eerst":perLev?"leverancier":"klas"}<br>Kruis aan bij levering`)+html+`<div class="print-grand">Algemeen totaal: ${euro(grand)}</div>`;
   return true;
@@ -3771,7 +3875,7 @@ function buildBonPrint(b){
   $("printArea").innerHTML=printHead("Bestelbon "+esc(bonLabel(b)),`Leverancier: <b>${esc(b.leverancier||"—")}</b><br>Besteld op ${esc(datumLabel(b.datum))}<br>Artikelen: ${b.artikelen_ontvangen?"ontvangen":"nog niet ontvangen"} · Factuur: ${b.factuur_ontvangen?"ontvangen":"nog niet ontvangen"}<br>Afgedrukt op ${esc(datumLang(new Date()))}`)
     +(b.opmerking?`<p style="font-size:10.5px;font-style:italic;margin-bottom:8px">${esc(b.opmerking)}</p>`:"")
     +`<section class="print-block"><h2>${artikelen(L.length)}<span class="pcount">Kruis aan bij levering</span></h2>
-      <table><thead><tr><th class="tick">✓</th><th>Klas</th><th>Art.nr</th><th>Omschrijving</th><th class="r">Aantal</th><th class="r">Prijs/st</th><th class="r">Totaal</th></tr></thead><tbody>${rows}</tbody></table></section>`
+      <table><thead><tr><th class="tick">✓</th><th>Klas</th><th>Art.nr</th><th>Omschrijving</th><th class="r">Aantal</th><th class="r">Prijs</th><th class="r">Totaal</th></tr></thead><tbody>${rows}</tbody></table></section>`
     +`<div class="print-grand">${extra}${(m.wacht||m.verv)?`Bestelbedrag: ${euro(m.best)} · Te factureren: ${euro(m.fact)}`:`Totaal bestelbon: ${euro(m.best)}`}</div>`;
 }
 
@@ -3784,6 +3888,7 @@ function buildBonPrint(b){
 let curSig=null, curKlasTot=null, vragen=0;
 const NF0 = new Intl.NumberFormat("nl-BE",{maximumFractionDigits:0});
 const euroRond = n => Number.isInteger(+n) ? "€ "+NF0.format(+n) : euro(+n);
+const euroP = v => "€ "+fmtPrice(v);   // eenheidsprijs, tot 3 decimalen
 const fmtKort  = n => n==null ? "" : Number.isInteger(+n) ? NF0.format(+n) : NF2.format(+n);
 const bedragGrens = v => (v==null || v==="" || !Number.isFinite(+v) || +v<=0) ? null : +v;
 const huidigSJ = () => { const d=new Date(); return d.getMonth()>=8 ? d.getFullYear() : d.getFullYear()-1; };
@@ -3804,11 +3909,17 @@ function relTijd(d){
    materiaal_instellingen.data.budget   = {"2026-2027": {"3A": 600, ...}}
    Ontbreekt een sleutel, dan geldt de standaardwaarde. Een grens null = geen vraag. */
 const CTL_DEF = {grensArtikel:100, grensReeks:100, dubbelAan:true, dubbelAantal:1, dubbelEenheid:"maand", klastotaal:"altijd"};
-function ctl(){ return Object.assign({}, CTL_DEF, (setData&&setData.controle)||{}, setWijz.controle||{}); }
-function budgetAlle(){ return Object.assign({}, (setData&&setData.budget)||{}, setWijz.budget||{}); }
+/* Wijzigingen per pad (bv. ["controle","grensArtikel"] of ["budget","2026-2027","3A"]). Bij het bewaren gaan ze op de nieuwste
+   versie uit de database, zodat een gelijktijdige wijziging aan iets anders niet verloren gaat. Mislukt het bewaren, dan vervallen ze. */
+function zetPad(d,pad,v){ let x=d; for(let i=0;i<pad.length-1;i++){ const k=pad[i]; if(!x[k]||typeof x[k]!=="object"||Array.isArray(x[k])) x[k]={}; x=x[k]; }
+  const k=pad[pad.length-1]; if(v===undefined) delete x[k]; else x[k]=v; }
+function wijzigInstelling(pad,v){ setWijz.set(JSON.stringify(pad),{pad,v:v===undefined?undefined:JSON.parse(JSON.stringify(v)),nr:++setWijzNr}); }
+function setEffectief(){ const d=JSON.parse(JSON.stringify(setData||{})); setWijz.forEach(w=>zetPad(d,w.pad,w.v)); return d; }
+function ctl(){ return Object.assign({}, CTL_DEF, setEffectief().controle||{}); }
+function budgetAlle(){ return setEffectief().budget||{}; }
 function budgetVan(sj){ return budgetAlle()[sj]||{}; }
-function bewaarCtl(k,v){ setWijz.controle=Object.assign({}, (setData&&setData.controle)||{}, setWijz.controle||{}, {[k]:v}); return db.saveSettings(); }
-function bewaarBudgetJaar(sj,jaar){ const all=budgetAlle(); all[sj]=jaar; setWijz.budget=all; return db.saveSettings(); }
+function bewaarCtl(k,v){ wijzigInstelling(["controle",k],v); return db.saveSettings(); }
+function bewaarBudget(sj,wijz){ Object.entries(wijz).forEach(([k,v])=>wijzigInstelling(["budget",sj,k],v==null?undefined:v)); return db.saveSettings(); }
 
 /* ---------- Alle artikelen, elk één keer ----------
    Het archief bewaart bij elke afronding een momentopname van álle artikelen, ook de nog niet bestelde
@@ -3820,8 +3931,12 @@ function alleArtikelen(){
   const m=new Map();
   state.archief.slice().sort((a,b)=>new Date(a.datum)-new Date(b.datum))
     .forEach(r=>(r.lijnen||[]).forEach(o=>{ if(o && o.id) m.set(o.id,{o,ronde:r.datum,live:false}); }));
-  state.bons.forEach(b=>{ if(b.licht) return; (b.lijnen||[]).forEach(o=>{ if(!o || !o.id || o.klas==null) return;
-    const x=m.get(o.id); m.set(o.id,{o:x?Object.assign({},x.o,o):o, ronde:x?x.ronde:null, live:false}); }); });
+  state.bons.forEach(b=>{ (b.lijnen||[]).forEach(o=>{ if(!o || !o.id) return;
+    const x=m.get(o.id);
+    /* Leerkracht: de beperkte bongegevens geven per lijn de actuele bon en levering (ook na verplaatsen) */
+    if(b.licht){ if(x) m.set(o.id,{...x,o:Object.assign({},x.o,{bon_id:o.bon_id||b.id,levering:o.levering==null?null:o.levering,nietgeleverd:!!o.nietgeleverd})}); return; }
+    if(o.klas==null) return;
+    m.set(o.id,{o:x?Object.assign({},x.o,o):o, ronde:x?x.ronde:null, live:false}); }); });
   state.orders.forEach(o=>m.set(o.id,{o,ronde:null,live:true}));
   return [...m.values()].filter(x=>x.live || x.o.besteld || x.o.afgekeurd);
 }
@@ -3841,7 +3956,13 @@ function datumVoor(x){
   return toDate(o.created_at);
 }
 /* Actuele leveringsregel (uit de bon) en het bedrag dat echt besteld blijft (min een vervallen nalevering) */
-function levRegel(o){ const b=o.bon_id?bonById(o.bon_id):null; if(b){ const x=bonLines(b).find(y=>y.id===o.id); if(x) return x; } return o; }
+/* De actuele lijn van een artikel: het live artikel op een bon, anders de bon die het artikel nu bevat (ook na verplaatsen) */
+function effLijn(id){
+  const live=state.orders.find(o=>o.id===id && o.bon_id); if(live) return live;
+  for(const b of state.bons){ const x=(b.lijnen||[]).find(y=>y && y.id===id); if(x) return x; }
+  return null;
+}
+function levRegel(o){ return effLijn(o.id)||o; }
 function nettoBedrag(o){
   let t=rowTotal(o); const l=levOf(levRegel(o));
   if(l && l.status==="vervallen"){ const q=qtyOf(o); t-=Math.max(0,q-(l.ontvangen||0))*parseNum(o.prijs); }
@@ -3867,7 +3988,12 @@ function klasTotalenSJ(j=huidigSJ()){
 const nrSleutel = s => fold(s).replace(/[\s.\-_/]/g,"");
 const dagSleutel = o => o && o.created_at ? isoToLocalDate(o.created_at) : "";
 const metAkkoord = o => !!(o && o.bevestigd && o.bevestigd.directie);
-function dubbelVanaf(c,ref){ const d=new Date(ref); if(c.dubbelEenheid==="week") d.setDate(d.getDate()-7*c.dubbelAantal); else d.setMonth(d.getMonth()-c.dubbelAantal); return d; }
+function dubbelVanaf(c,ref){
+  const d=new Date(ref);
+  if(c.dubbelEenheid==="week"){ d.setDate(d.getDate()-7*c.dubbelAantal); return d; }
+  const dag=d.getDate(); d.setDate(1); d.setMonth(d.getMonth()-c.dubbelAantal);   // 31 maart min 1 maand = 28 of 29 februari
+  d.setDate(Math.min(dag,new Date(d.getFullYear(),d.getMonth()+1,0).getDate())); return d;
+}
 /* Eerdere ingaven van hetzelfde artikel (zelfde klas, leverancier en artikelnummer) binnen de ingestelde periode */
 function eerdereIngaven(n,A){
   const c=ctl(); if(!c.dubbelAan || !(+c.dubbelAantal>0)) return [];
@@ -3896,7 +4022,7 @@ function grensHtml(n,g,{wijzig=false}={}){
   const slot = wijzig ? "voor je het artikel hier aanpast" : (g.soort==="artikel" ? "voor je het artikel hier ingeeft" : "voor je de bestelling hier ingeeft");
   if(g.soort==="artikel"){
     const reeks = g.andere && g.andere.length ? `<span class="wp-sub">Samen met wat vandaag al voor ${esc(n.klas)} ingegeven werd, komt de bestelling op ${euro(g.reeksTot)}.</span>` : "";
-    return `<b>Dit artikel komt ${wijzig?"nu ":""}op ${euro(g.bedrag)}</b> (${esc(fmtQty(n.aantal))} × ${euro(n.prijs)}). ${GRENS_VRAAG} Zo niet, bespreek dit dan eerst met de directie ${slot}.${reeks}`;
+    return `<b>Dit artikel komt ${wijzig?"nu ":""}op ${euro(g.bedrag)}</b> (${esc(fmtQty(n.aantal))} × ${euroP(n.prijs)}). ${GRENS_VRAAG} Zo niet, bespreek dit dan eerst met de directie ${slot}.${reeks}`;
   }
   return `<b>Samen met wat vandaag al voor ${esc(n.klas)} ingegeven werd, komt deze bestelling ${wijzig?"nu ":""}op ${euro(g.bedrag)}</b> (${artikelen(g.andere.length+1)}). ${GRENS_VRAAG} Zo niet, bespreek dit dan eerst met de directie ${slot}.`;
 }
@@ -3904,7 +4030,7 @@ function reeksLijst(n,andere,nuLabel="nieuw"){
   const L=[...andere].sort((a,b)=>String(a.created_at).localeCompare(String(b.created_at)));
   const zp=L.filter(o=>!hasNum(o.prijs)).length+(hasNum(n.prijs)?0:1);
   const rij=(o,nu)=>`<div class="wp-l${nu?" nu":""}"><span class="t">${nu?nuLabel:esc(uurLabel(o.created_at))}</span><span class="o" title="${esc(o.omschrijving)}">${esc(o.omschrijving)}</span>`
-    +`<span class="q">${esc(fmtQty(o.aantal))} × ${hasNum(o.prijs)?euro(o.prijs):"geen prijs"}</span><b>${hasNum(o.prijs)?euro(rowTotal(o)):"—"}</b></div>`;
+    +`<span class="q">${esc(fmtQty(o.aantal))} × ${hasNum(o.prijs)?euroP(o.prijs):"geen prijs"}</span><b>${hasNum(o.prijs)?euro(rowTotal(o)):"—"}</b></div>`;
   const tot=L.reduce((s,o)=>s+rowTotal(o),0)+rowTotal(n);
   return `<div class="wp-list">${L.map(o=>rij(o,false)).join("")}${rij(n,true)}<div class="wp-sum"><span>${esc(n.klas)} vandaag${zp?` · ${zp} zonder prijs`:""}</span><b>${euro(tot)}</b></div></div>`;
 }
@@ -3990,7 +4116,7 @@ async function controleBijToevoegen(n){
         ? `Goedkeuring van de directie bevestigd voor dit artikel (${euro(g.bedrag)}).`
         : `Goedkeuring van de directie bevestigd voor de bestelling van ${esc(n.klas)} vandaag (${euro(g.bedrag)}).`}});
     if(!ja) return false;
-    bv.directie=new Date().toISOString();
+    bv.directie=new Date().toISOString(); bv.bedrag=Math.round(g.bedrag*100)/100;
   }
   return bv;
 }
@@ -4008,7 +4134,7 @@ async function controleBijWijzigen(o,oud){
   const ja=await beslis({titel:"Grote bestelling",html:grensHtml(o,g,{wijzig:true}),lijst:g.soort==="reeks"?reeksLijst(o,g.andere,"gewijzigd"):"",
     nee:"Nee, niet wijzigen",ja:"Ja, de directie keurde dit goed"});
   if(!ja) return false;
-  o.bevestigd=Object.assign({},o.bevestigd||{},{directie:new Date().toISOString()});
+  o.bevestigd=Object.assign({},o.bevestigd||{},{directie:new Date().toISOString(),bedrag:Math.round(g.bedrag*100)/100});
   return true;
 }
 async function bewaarNaControle(o,oud,inp,ok){
@@ -4047,7 +4173,7 @@ function grensTag(o,g){
   const bron = g.soort==="artikel" ? (metAkkoord(o)?o:null) : g.akkoord;
   const txt = g.soort==="artikel" ? `Vanaf ${euroRond(g.grens)}` : `Reeks ${euro(g.bedrag)}`;
   const tip = (g.soort==="artikel" ? `Dit artikel komt op ${euro(g.bedrag)}.` : `${g.n} artikelen van ${o.klas} op ${dagMaand(o.created_at)}, samen ${euro(g.bedrag)}.`)
-    + (bron ? ` De leerkracht bevestigde de goedkeuring van de directie op ${dagMaand(bron.bevestigd.directie)} om ${uurLabel(bron.bevestigd.directie)}.` : " Zonder bevestiging van de goedkeuring ingegeven.");
+    + (bron ? ` De leerkracht bevestigde de goedkeuring van de directie op ${dagMaand(bron.bevestigd.directie)} om ${uurLabel(bron.bevestigd.directie)}${bron.bevestigd.bedrag!=null?`, voor ${euro(bron.bevestigd.bedrag)}`:""}.` : " Zonder bevestiging van de goedkeuring ingegeven.");
   return `<span class="ctl-tag" title="${esc(tip)}">${ic("alert",11,2.4)}<span class="tx">${txt}${bron?" · akkoord directie gemeld":""}</span></span>`;
 }
 function dubbelTag(o,E){
@@ -4058,6 +4184,7 @@ function dubbelTag(o,E){
 function ctlTags(o){
   const p=[]; if(o.afgekeurd) p.push(afgTag(o));
   if(isAdmin && curSig){ const g=curSig.grens.get(o.id); if(g) p.push(grensTag(o,g)); const d=curSig.dubbel.get(o.id); if(d) p.push(dubbelTag(o,d)); }
+  p.push(...rowActies(o));
   return p;
 }
 function afgMark(o){ const r=o.afgekeurd&&o.afgekeurd.reden; return `<span class="afg-mark" role="img" aria-label="Afgekeurd" title="Afgekeurd${r?": "+esc(r):""}">${ic("ban",16,2.2)}</span>`; }
@@ -4096,12 +4223,12 @@ function openAfkeur(id){
   const dag=dagSleutel(o);
   const mee=dag ? state.orders.filter(x=>x.id!==o.id && x.klas===o.klas && !x.besteld && !x.bon_id && !x.afgekeurd && dagSleutel(x)===dag) : [];
   afState={id,mee:new Set()};
-  const conf=[metAkkoord(o)?`<div class="af-conf">${ic("check",14,2.6)}De leerkracht bevestigde de goedkeuring van de directie.</div>`:"",
+  const conf=[metAkkoord(o)?`<div class="af-conf">${ic("check",14,2.6)}De leerkracht bevestigde de goedkeuring van de directie${o.bevestigd.bedrag!=null?` voor ${euro(o.bevestigd.bedrag)}`:""}.</div>`:"",
               o.bevestigd&&o.bevestigd.dubbel?`<div class="af-conf">${ic("check",14,2.6)}De leerkracht bevestigde dat dit opnieuw besteld moet worden.</div>`:""].join("");
   $("afBody").innerHTML=`<div class="af-art">
       <div class="af-top"><span class="klas-tag">${esc(o.klas)}</span><span>${esc(o.leverancier||"—")}${o.artikel?` · art.nr ${esc(o.artikel)}`:""}</span></div>
       <div class="af-oms">${esc(o.omschrijving)}</div>
-      <div class="af-meta"><span>${esc(fmtQty(o.aantal))} × ${hasNum(o.prijs)?euro(o.prijs):"geen prijs"}</span><b>${hasNum(o.prijs)?euro(rowTotal(o)):"—"}</b><span>${esc(datumTitel(o.created_at))}</span></div>${conf}
+      <div class="af-meta"><span>${esc(fmtQty(o.aantal))} × ${hasNum(o.prijs)?euroP(o.prijs):"geen prijs"}</span><b>${hasNum(o.prijs)?euro(rowTotal(o)):"—"}</b><span>${esc(datumTitel(o.created_at))}</span></div>${conf}
     </div>
     <div class="field">
       <label for="afReden">Reden, zichtbaar voor de leerkracht</label>
@@ -4113,7 +4240,7 @@ function openAfkeur(id){
       <div class="mk-list" id="afMee">${mee.map(x=>`<label class="mk-row off"><input type="checkbox" class="cbx" data-mee="${esc(x.id)}" aria-label="${esc(x.omschrijving)} ook afkeuren">
         <span class="klas-tag">${esc(uurLabel(x.created_at))}</span><span class="mk-oms" title="${esc(x.omschrijving)}">${esc(x.omschrijving)}</span>
         <span class="num">${esc(fmtQty(x.aantal))}</span><span class="num"><b>${hasNum(x.prijs)?euro(rowTotal(x)):"geen prijs"}</b></span></label>`).join("")}</div></div>`:""}`;
-  openOverlay("afOverlay","#afReden");
+  afSync(); openOverlay("afOverlay","#afReden");
 }
 function afSync(){
   const v=$("afReden").value.trim();
@@ -4150,24 +4277,119 @@ async function ophefAfkeur(id){
   toast("Afkeuring opgeheven","ok",{label:"Ongedaan maken",fn:()=>{ o.afgekeurd=a; renderCurrent(); db.upsertOrders([o]); toast("Opnieuw afgekeurd"); }});
 }
 
-/* ---------- Klastotaal onder de klas (Nieuwe bestelling) ---------- */
+/* ---------- Klastotaal onder de klas (Nieuwe bestelling) ----------
+   Niets open: één regel. Iets open: een kleine optelling (besteld + nog niet besteld = totaal), met budget ook beide percentages. */
 function renderKlastotaal(){
   const w=$("ktInfo"); if(!w) return;
   const klas=$("f-klas").value, c=ctl();
   if(!klas || c.klastotaal==="uit" || !loaded){ w.hidden=true; w.innerHTML=""; return; }
   const j=huidigSJ(), bud=bedragGrens(budgetVan(`${j}-${j+1}`)[klas]);
   if(c.klastotaal==="budget" && bud==null){ w.hidden=true; w.innerHTML=""; return; }
-  const per=periodeSJ(j); let tot=0;
-  alleArtikelen().forEach(x=>{ const o=x.o; if(o.klas!==klas || !o.besteld || o.afgekeurd) return; const d=datumVoor(x); if(d && d>=per.van && d<per.tot) tot+=nettoBedrag(o); });
-  const l1=`<span>${esc(klas)} heeft dit schooljaar <b>${euro(tot)}</b> besteld</span>`;
-  if(bud==null) w.innerHTML=`<div class="kt-l">${l1}</div>`;
-  else {
-    const pct=Math.round(tot/bud*100), cl=pct>100?"o":pct>=80?"w":"";
-    w.innerHTML=`<div class="kt-l">${l1}<span class="kt-pct ${cl}">${pct} % van het budget</span></div>`
-      +`<div class="kt-bar ${cl}" role="img" aria-label="${pct} procent van het budget van ${euro(bud)}"><i style="width:${Math.min(100,pct)}%"></i></div>`;
+  const per=periodeSJ(j); let besteld=0;
+  alleArtikelen().forEach(x=>{ const o=x.o; if(o.klas!==klas || !o.besteld || o.afgekeurd) return; const d=datumVoor(x); if(d && d>=per.van && d<per.tot) besteld+=nettoBedrag(o); });
+  const openL=state.orders.filter(o=>o.klas===klas && !o.besteld && !o.afgekeurd), open=openL.reduce((t,o)=>t+rowTotal(o),0), zp=openL.filter(o=>!hasNum(o.prijs)).length;
+  const pc=v=>Math.round(v/bud*100), kl=p=>p>100?"o":p>=80?"w":"";
+  if(!openL.length){
+    const l1=`<span>${esc(klas)} heeft dit schooljaar <b>${euro(besteld)}</b> besteld</span>`;
+    if(bud==null) w.innerHTML=`<div class="kt"><div class="kt-l">${l1}</div></div>`;
+    else { const p=pc(besteld); w.innerHTML=`<div class="kt"><div class="kt-l">${l1}<span class="kt-pct ${kl(p)}">${p} % van het budget</span></div>`
+      +`<div class="kt-bar ${kl(p)}" role="img" aria-label="${p} procent van het budget van ${euro(bud)}"><i style="width:${Math.min(100,p)}%"></i></div></div>`; }
+  } else {
+    const tot=besteld+open, mb=bud!=null, p1=mb?pc(besteld):0, p2=mb?pc(tot):0, w1=Math.min(100,p1), w2=Math.max(0,Math.min(100,p2)-w1);
+    w.innerHTML=`<div class="kt-som ${mb?"bud":""}">
+      <div class="kt-kop"><b>${esc(klas)}</b>, dit schooljaar${mb?` · budget ${euro(bud)}`:""}</div>
+      <div class="kt-r"><span>Besteld</span><span class="a">${euro(besteld)}</span>${mb?`<span class="p ${kl(p1)}">${p1} %</span>`:""}</div>
+      <div class="kt-r"><span>Nog niet besteld${zp?` <small>· ${zp} zonder prijs</small>`:""}</span><span class="a">+ ${euro(open)}</span>${mb?`<span></span>`:""}</div>
+      <div class="kt-r tot"><span>Totaal</span><span class="a">${euro(tot)}</span>${mb?`<span class="p ${kl(p2)}">${p2} %</span>`:""}</div>
+      ${mb?`<div class="kt-bar2 ${kl(p2)}" role="img" aria-label="Besteld ${p1} procent; samen met wat nog niet besteld is ${p2} procent van het budget"><i class="b1" style="width:${w1}%"></i><i class="b2" style="left:calc(${w1}% - 3px);width:calc(${w2}% + 3px)"></i></div>`:""}
+    </div>`;
   }
   w.hidden=false;
 }
+
+/* ---------- Opmerking achteraf, klas wijzigen, koppelingen herstellen (ronde 4) ---------- */
+function rowActies(o){
+  const a=[], locked=!isAdmin && (o.besteld || o.afgekeurd);
+  if(!locked && !(o.opmerking||"").trim()) a.push(`<button type="button" class="row-act" data-act="addoms" data-id="${esc(o.id)}" aria-label="Opmerking toevoegen bij ${esc(o.omschrijving)}">Opmerking toevoegen</button>`);
+  if(isAdmin) a.push(`<button type="button" class="row-act" data-act="klas" data-id="${esc(o.id)}" aria-label="Klas wijzigen van ${esc(o.omschrijving)}">Klas wijzigen</button>`);
+  return a.length ? [`<span class="row-acts">${a.join("")}</span>`] : [];
+}
+function voegOpmerkingToe(id){
+  const o=orderById(id); if(!o || (!isAdmin && (o.besteld||o.afgekeurd))) return;
+  const wrap=document.querySelector(`.order-wrap[data-id="${CSS.escape(id)}"]`); if(!wrap) return;
+  let inp=wrap.querySelector("input[data-omsid]");
+  if(!inp){
+    const div=document.createElement("div"); div.className="oms-note";
+    div.innerHTML=`<span class="oms-note-lbl">Opmerking leerkracht</span><input class="oms-note-input" data-omsid="${esc(o.id)}" value="" placeholder="bv. voor de middeleeuwse dag" aria-label="Opmerking leerkracht">`;
+    const na=wrap.querySelector(".row-sub")||wrap.querySelector(".order-row"); na.insertAdjacentElement("afterend",div);
+    inp=div.querySelector("input");
+  }
+  inp.readOnly=false; inp.focus(); inp.select();
+}
+$("groups").addEventListener("focusout",e=>{
+  const t=e.target; if(!t.matches || !t.matches("input[data-omsid]")) return;
+  t.readOnly=true;   // buiten het veld klikken sluit het bewerken af, ook zonder wijziging; opnieuw bewerken via het potloodje
+  const o=orderById(t.dataset.omsid); if(o && !t.value.trim() && !(o.opmerking||"").trim()){ const n=t.closest(".oms-note"); if(n) n.remove(); }
+});
+/* Leverancier of artikelnummer wijzigen in het Overzicht: eerst bevestigen, met de oude en de nieuwe waarde.
+   Zo gaat een waarde niet verloren door een toevallige toets. Een lege leverancier springt zonder vraag terug (verplicht veld). */
+$("groups").addEventListener("change",async e=>{
+  const inp=e.target; if(!inp.matches || !inp.matches("input[data-f='leverancier'],input[data-f='artikel']")) return;
+  if(inp._bevestigd){ inp._bevestigd=false; return; }          // tweede keer, na "Wijzigen": gewoon verwerken
+  const f=inp.dataset.f, o=orderById(inp.closest(".order-row").dataset.id); if(!o) return;
+  const oud=String(inp._prevT!=null?inp._prevT:"").trim();
+  let nieuw=inp.value.trim();
+  if(f==="leverancier"){ nieuw=canonicalSupplier(nieuw); if(!nieuw || lc(nieuw)===lc(canonicalSupplier(oud))) return; }
+  else if(nieuw===oud) return;
+  e.stopImmediatePropagation(); e.stopPropagation();
+  const weg = f==="artikel" && !nieuw;
+  const ok=await confirmDialog({title: f==="leverancier" ? "Leverancier wijzigen?" : weg ? "Artikelnummer verwijderen?" : "Artikelnummer wijzigen?",
+    ok: weg ? "Verwijderen" : "Wijzigen", focus:"#cfCancel",
+    html:`<div class="af-art"><div class="af-top"><span class="klas-tag">${esc(o.klas)}</span><span>${esc(f==="leverancier"?"Leverancier":"Artikelnummer")}</span></div><div class="af-oms">${esc(o.omschrijving)}</div></div>`
+      +(weg ? `<p>Het artikelnummer <b>${esc(oud)}</b> wordt verwijderd.</p>` : `<p>Van <b>${esc(oud||"leeg")}</b> naar <b>${esc(nieuw)}</b>.</p>`)});
+  if(!document.contains(inp)) return;
+  if(ok){ inp._bevestigd=true; inp.dispatchEvent(new Event("change",{bubbles:true})); return; }
+  o[f]=oud; inp.value=oud;   // annuleren: de oude waarde terug, niets bewaard
+},true);
+async function wijzigKlas(id){
+  const o=orderById(id); if(!o || !isAdmin) return;
+  const p=confirmDialog({title:"Klas wijzigen",ok:"Klas wijzigen",focus:"#kwSel",
+    html:`<div class="af-art"><div class="af-top"><span class="klas-tag">${esc(o.klas)}</span><span>${esc(o.leverancier||"—")}${o.artikel?` · art.nr ${esc(o.artikel)}`:""}</span></div>
+      <div class="af-oms">${esc(o.omschrijving)}</div></div>
+      <div class="field"><label for="kwSel">Nieuwe klas</label><select class="ctrl" id="kwSel">${$("f-klas").innerHTML}</select></div>
+      <p style="font-size:13px;color:var(--slate)">Het artikel verhuist overal mee: overzicht, klastotaal, bestelbon en Uitgaven.</p>`});
+  const sel=$("kwSel"); sel.value=o.klas;
+  if(!(await p)) return;
+  const nieuw=sel.value; if(!nieuw || nieuw===o.klas) return;
+  const oud=o.klas; o.klas=nieuw; renderCurrent(); db.upsertOrders([o]);
+  toast(`Klas gewijzigd: ${oud} → ${nieuw}`,"ok",{label:"Ongedaan maken",fn:()=>{ o.klas=oud; renderCurrent(); db.upsertOrders([o]); toast("Klas teruggezet"); }});
+}
+/* Staat een besteld artikel al in de momentopname van één bon, maar mist de koppeling (een mislukte stap bij het aanmaken),
+   dan herstelt de tool die koppeling en biedt ze het artikel niet opnieuw aan voor een nieuwe bon. */
+const opEenBon = id => state.bons.some(b=>!b.licht && !b.verwijderd_op && (b.lijnen||[]).some(x=>x && x.id===id));
+let herstelBezig=false;
+async function herstelKoppelingen(){
+  if(!isAdmin || herstelBezig) return;
+  const L=[];
+  state.orders.forEach(o=>{ if(!o.besteld || o.bon_id || o.afgekeurd) return;
+    const B=state.bons.filter(b=>!b.licht && !b.verwijderd_op && (b.lijnen||[]).some(x=>x && x.id===o.id));
+    if(B.length===1){ o.bon_id=B[0].id; L.push(o); } });
+  if(!L.length) return;
+  herstelBezig=true;
+  try{ if(await db.upsertOrders(L,{quiet:true})){ renderCurrent(); toast(L.length===1?"De koppeling van 1 artikel met zijn bestelbon is hersteld":`De koppeling van ${L.length} artikelen met hun bestelbon is hersteld`); } }
+  finally{ herstelBezig=false; }
+}
+/* Bongegevens wijzigen en verplaatsen: leverancier van de artikelen meewijzigen (vinkje, standaard aan) */
+function beLevSync(){
+  const b=curBon, row=$("beLevRow"); if(!b || !row) return;
+  const v=$("beSupp").value.trim(), c=canonicalSupplier(v);
+  const n=bonLines(b).filter(x=>lc(canonicalSupplier(x.leverancier||""))!==lc(c)).length;
+  const toon=!!v && !v.includes(" + ") && n>0;
+  row.hidden=!toon; if(toon) $("beLevTxt").innerHTML=`Ook de leverancier van ${n===1?"het artikel":`de ${n} artikelen`} op deze bon wijzigen naar <b>${esc(c)}</b>`;
+}
+$("beSupp").addEventListener("input",beLevSync);
+$("mvBody").addEventListener("change",e=>{ if(e.target.id==="mvLev") mvState.lev=e.target.checked; });
+
 const afgCsv = o => o.afgekeurd ? "ja"+(o.afgekeurd.reden?": "+o.afgekeurd.reden:"") : "";
 const bevestigdTxt = o => [o.bevestigd&&o.bevestigd.directie?"akkoord directie":"", o.bevestigd&&o.bevestigd.dubbel?"geen vergissing (dubbel)":""].filter(Boolean).join("; ");
 
@@ -4175,7 +4397,7 @@ const bevestigdTxt = o => [o.bevestigd&&o.bevestigd.directie?"akkoord directie":
 function verwijderHtml(o,bon){
   return `<div class="af-art"><div class="af-top"><span class="klas-tag">${esc(o.klas)}</span><span>${esc(o.leverancier||"—")}${o.artikel?` · art.nr ${esc(o.artikel)}`:""}</span></div>
       <div class="af-oms">${esc(o.omschrijving)}</div>
-      <div class="af-meta"><span>${esc(fmtQty(o.aantal))} × ${hasNum(o.prijs)?euro(o.prijs):"geen prijs"}</span><b>${hasNum(o.prijs)?euro(rowTotal(o)):"—"}</b><span>${esc(datumTitel(o.created_at))}</span></div></div>`
+      <div class="af-meta"><span>${esc(fmtQty(o.aantal))} × ${hasNum(o.prijs)?euroP(o.prijs):"geen prijs"}</span><b>${hasNum(o.prijs)?euro(rowTotal(o)):"—"}</b><span>${esc(datumTitel(o.created_at))}</span></div></div>`
     +(bon?`<p>Dit artikel staat op bestelbon <b>${esc(bonLabel(bon))}</b>. Als je het verwijdert, verdwijnt het ook van die bon.</p>`:"")
     +(o.afgekeurd?`<p>Dit artikel is afgekeurd. Na het verwijderen verdwijnt ook dat spoor uit het overzicht.</p>`:"")
     +`<p style="font-size:13px;color:var(--slate)">Verwijderen kan niet ongedaan gemaakt worden.</p>`;
@@ -4354,7 +4576,7 @@ function ugLevHtml(D,per){
   const rows=[...by.entries()].map(([lev,L])=>({lev,s:ugSom(L),kl:new Set(L.filter(i=>i.cat!=="afg").map(i=>i.o.klas)).size}));
   rows.forEach(r=>{ r.s.aandeel=tot.best>0?Math.round(r.s.best/tot.best*100):null; });
   const sort=ui.ug.sortLev;
-  const cmp={best:(a,b)=>a.s.best-b.s.best, open:(a,b)=>a.s.open-b.s.open, n:(a,b)=>a.s.n-b.s.n, lev:(a,b)=>b.lev.localeCompare(a.lev,"nl")};
+  const cmp={best:(a,b)=>a.s.best-b.s.best, open:(a,b)=>a.s.open-b.s.open, n:(a,b)=>a.s.n-b.s.n, lev:(a,b)=>a.lev.localeCompare(b.lev,"nl")};
   rows.sort((a,b)=>((cmp[sort.k]||cmp.best)(a,b))*sort.d || a.lev.localeCompare(b.lev,"nl"));
   const ref=Math.max(1,...rows.map(r=>r.s.best+r.s.open));
   const kop=ugSorteerKop([["lev","Leverancier"],[null,"Aandeel in het totaal"],["best","Besteld",1],["open","Nog niet besteld",1],["n","Artikelen",1],[null,""]],sort);
@@ -4372,6 +4594,7 @@ const smal = () => matchMedia("(max-width:900px)").matches;
 let ugSmal=null;
 function ugResize(){ const s=smal(); if(ugSmal!==null && s!==ugSmal && ui.ug.view==="maand") renderUitgaven(); ugSmal=s; }
 function ugMaandHtml(D,per){
+  ugSmal=smal();
   const M=ugMaanden(per);
   if(M.length>12) return `<div class="card ug-note">De maandtabel toont hoogstens 12 maanden. Kies een kortere periode, of de weergave Per klas.</div>`;
   const best=D.items.filter(i=>i.cat==="best");
@@ -4398,7 +4621,7 @@ function ugMaandHtml(D,per){
   }).join("");
   const alle=rows.flatMap(r=>r.R), mv=m=>alle.reduce((s,k)=>s+val(k,m),0);
   const foot=`<div class="mx-row mx-foot" style="--n:${M.length}"><span class="mx-name">Totaal</span>${M.map(m=>`<span class="mx-cel">${mv(m)?NF0.format(Math.round(mv(m))):""}</span>`).join("")}<span class="mx-tot">${euro(M.reduce((s,m)=>s+mv(m),0))}</span></div>`;
-  return `<div class="ug-mx" role="table" aria-label="Besteld per klas en per maand, in euro">${head}${body}${foot}</div>`;
+  return `<div class="ug-mx" role="group" aria-label="Besteld per klas en per maand, in euro">${head}${body}${foot}</div>`;
 }
 
 /* ---------- Gebeurtenissen ---------- */
@@ -4461,7 +4684,7 @@ function renderUgDetail(){
   const lijn=i=>{ const o=i.o, z=statusVan(o);
     return `<div class="ugd-line${i.cat==="afg"?" afg":""}"><span>${esc(datumLabel(i.d))}</span><span>${st.klas?hl(o.leverancier||"—",q):`<span class="klas-tag">${hl(o.klas,q)}</span>`}</span>
       <span class="o">${hl(o.omschrijving,q)}${o.artikel?`<small>art.nr ${hl(o.artikel,q)}</small>`:""}${i.cat==="afg"&&o.afgekeurd.reden?`<small>${esc(o.afgekeurd.reden)}</small>`:""}</span>
-      <span class="r">${esc(fmtQty(o.aantal))} × ${hasNum(o.prijs)?euro(o.prijs):"?"}</span><span class="r tt"><b>${hasNum(o.prijs)?euro(i.bedrag):"—"}</b></span>
+      <span class="r">${esc(fmtQty(o.aantal))} × ${hasNum(o.prijs)?euroP(o.prijs):"?"}</span><span class="r tt"><b>${hasNum(o.prijs)?euro(i.bedrag):"—"}</b></span>
       <span class="st-c"><span class="pill ${z.c} sm">${esc(z.t)}</span></span></div>`; };
   const MAX=250;
   $("ugdBody").innerHTML=`<div class="ugd-stats">
@@ -4481,7 +4704,7 @@ $("ugdOk").onclick=()=>closeOverlay("ugOverlay");
 $("ugdCsv").onclick=()=>{ const st=ui.ugDet; if(!st) return; const D=ugDetData();
   if(!D.items.length){ toast("Niets om te exporteren","err"); return; }
   downloadCsv(("Uitgaven_"+(st.klas||st.lev)+"_"+(st.maand!=null?ymLabel(st.maand,true):st.per.kort)).replace(/[^\w-]+/g,"_"),
-    ["Datum","Telt als","Klas","Leverancier","Artikelnummer","Omschrijving","Aantal","Prijs per stuk","Bedrag","Status","Reden afkeuring"],
+    ["Datum","Telt als","Klas","Leverancier","Artikelnummer","Omschrijving","Aantal","Prijs per eenheid","Bedrag","Status","Reden afkeuring"],
     D.items.sort((a,b)=>a.d-b.d).map(i=>[datumLabel(i.d),{best:"besteld",open:"nog niet besteld",afg:"afgekeurd"}[i.cat],i.o.klas,i.o.leverancier,i.o.artikel,i.o.omschrijving,csvQty(i.o.aantal),csvPrice(i.o.prijs),csvMoney(i.bedrag),statusVan(i.o).t,i.o.afgekeurd?i.o.afgekeurd.reden||"":""])); };
 $("ugdPrint").onclick=()=>{ const st=ui.ugDet; if(!st) return;
   const body=$("ugdBody").cloneNode(true); body.querySelectorAll(".search").forEach(x=>x.remove());
@@ -4528,7 +4751,7 @@ function csvUitgaven(){
   const per=ugPeriode(); if(!per){ toast("Kies eerst een geldige periode","err"); return; }
   const D=ugVerzamel(per), naam=("Uitgaven_"+(ui.ug.view==="lev"?"per_leverancier":ui.ug.view==="maand"?"per_maand":"per_klas")+"_"+per.kort).replace(/[^\w-]+/g,"_");
   if(ui.ug.view==="maand"){
-    const M=ugMaanden(per).slice(0,24), best=D.items.filter(i=>i.cat==="best"), cel=new Map(); best.forEach(i=>{ const k=i.o.klas+"|"+ymOf(i.d); cel.set(k,(cel.get(k)||0)+i.bedrag); });
+    const M=ugMaanden(per), best=D.items.filter(i=>i.cat==="best"), cel=new Map(); best.forEach(i=>{ const k=i.o.klas+"|"+ymOf(i.d); cel.set(k,(cel.get(k)||0)+i.bedrag); });
     const ks=[...new Set(best.map(i=>i.o.klas))].sort((a,b)=>klasIdx(a)-klasIdx(b)||a.localeCompare(b,"nl"));
     downloadCsv(naam,["Klas",...M.map(m=>ymLabel(m,true)),"Totaal"],ks.map(k=>[k,...M.map(m=>csvMoney(cel.get(k+"|"+m)||0)),csvMoney(M.reduce((t,m)=>t+(cel.get(k+"|"+m)||0),0))])); return;
   }
@@ -4607,6 +4830,7 @@ function grVerdeling(D){
   const L=[...lj.values()].sort((a,b)=>{ const r=x=>{ const i=LJ_ORDE.indexOf(x.naam); return i>=0?i:x.naam==="Andere bestellers"?50:x.naam==="Overige"?60:40; }; return r(a)-r(b)||a.naam.localeCompare(b.naam,"nl"); });
   L.forEach(x=>x.klassen.sort((a,b)=>{ const i=orde.indexOf(a.k), j=orde.indexOf(b.k); return (i<0?999:i)-(j<0?999:j)||a.k.localeCompare(b.k,"nl"); }));
   const tot=L.reduce((s,x)=>s+x.v,0);
+  if(!(tot>0)) return titel+`<div class="gr-leeg">Geen verdeling mogelijk: de bestelde artikelen hebben geen prijs of een bedrag van nul.</div>`;
   const famIdx={}; L.forEach(x=>{ (famIdx[x.gr]=famIdx[x.gr]||[]).push(x); });
   L.forEach(x=>{ const F=famIdx[x.gr], i=F.indexOf(x), p=F.length>1?42+i*(56/(F.length-1)):78; x.kleur=mixKleur(FAM[x.gr]||"var(--teal)",p); x.p=p; });
   const cx=160,cy=160; let a=0, binnen="", buiten="";
@@ -4625,7 +4849,8 @@ function grVerdeling(D){
   return titel.replace("Enkel wat besteld is.","Enkel wat besteld is. Klik op een klas, in de ring of in de lijst, voor de details.")+`<div class="gr-don"><div>${svg}</div><div class="gr-leg" style="--r:${Math.ceil(L.length/2)}">${leg}</div></div>`;
 }
 function grMaand(D,per){
-  const M=ugMaanden(per).slice(0,24), best=D.items.filter(i=>i.cat==="best");
+  const M=ugMaanden(per), best=D.items.filter(i=>i.cat==="best");
+  if(M.length>24) return `<div class="gr-t">Besteld per maand</div><div class="gr-leeg">Deze grafiek toont hoogstens 24 maanden. Kies een kortere periode.</div>`;
   const groepen=[...new Set(D.G.map(g=>g.naam)),"Overige"].filter(g=>best.some(i=>i.gr===g));
   const series=groepen.map((g,gi)=>({naam:g,kleur:mixKleur(FAM[g]||"var(--teal)",g==="Andere bestellers"?80:g==="Overige"?45:88),
     waarden:M.map(m=>best.filter(i=>i.gr===g && ymOf(i.d)===m).reduce((t,i)=>t+i.bedrag,0))}));
@@ -4639,12 +4864,14 @@ function grMaand(D,per){
   return `<div class="gr-t">Besteld per maand</div><div class="gr-keys">${keys||"<span>Nog niets besteld in deze periode</span>"}</div>`
     +svgStaven(M.map(m=>MND[m%12]),series.length?series:[{naam:"Besteld",kleur:"var(--teal)",waarden:M.map(()=>0)}],{lijn,nu:M.indexOf(ymOf(new Date()))});
 }
+/* Dagnummer op kalenderdatum (zomer- en wintertijd spelen geen rol) */
+const dagIdx = (d,van) => Math.round((Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())-Date.UTC(van.getFullYear(),van.getMonth(),van.getDate()))/86400000);
 function grCumul(D,per){
   const W=560,h=220,Lm=52,R=10,T=12,B=24, ph=h-T-B;
-  const dagen=Math.round((per.tot-per.van)/86400000), dx=(W-Lm-R)/Math.max(1,dagen);
+  const dagen=dagIdx(per.tot,per.van), dx=(W-Lm-R)/Math.max(1,dagen);
   const best=D.items.filter(i=>i.cat==="best");
-  const reeks=(items,van)=>{ const a=new Array(dagen+1).fill(0); items.forEach(i=>{ const d=Math.floor((i.d-van)/86400000); if(d>=0&&d<=dagen) a[d]+=i.bedrag; }); for(let k=1;k<a.length;k++) a[k]+=a[k-1]; return a; };
-  const cur=reeks(best,per.van), nu=new Date(), tot=per.tot>nu&&per.van<=nu?Math.floor((nu-per.van)/86400000):dagen;
+  const reeks=(items,van)=>{ const a=new Array(dagen+1).fill(0); items.forEach(i=>{ const d=dagIdx(i.d,van); if(d>=0&&d<=dagen) a[d]+=i.bedrag; }); for(let k=1;k<a.length;k++) a[k]+=a[k-1]; return a; };
+  const cur=reeks(best,per.van), nu=new Date(), tot=per.tot>nu&&per.van<=nu?dagIdx(nu,per.van):dagen;
   let prev=null;
   if(per.soort!=="eig"){ const pv={van:new Date(per.van),tot:new Date(per.tot)}; pv.van.setFullYear(pv.van.getFullYear()-1); pv.tot.setFullYear(pv.tot.getFullYear()-1);
     const P=ugVerzamel(pv).items.filter(i=>i.cat==="best"); if(P.length) prev=reeks(P,pv.van); }
@@ -4654,10 +4881,10 @@ function grCumul(D,per){
   const X=d=>Lm+d*dx, Y=v=>T+ph-(v/max)*ph;
   let g="";
   for(let v=0; v<=max+1e-6; v+=stap) g+=`<line x1="${Lm}" x2="${W-R}" y1="${Y(v).toFixed(1)}" y2="${Y(v).toFixed(1)}" style="stroke:var(--line)"/>`+svgTxt(Lm-8,Y(v)+4,euroAs(v),{a:"end",s:10.5});
-  const M=ugMaanden(per).slice(0,24); let xl="";
-  M.forEach(m=>{ const d0=new Date(Math.floor(m/12),m%12,1), d=Math.round((d0-per.van)/86400000), d1=Math.round((new Date(Math.floor(m/12),m%12+1,1)-per.van)/86400000);
+  const M=ugMaanden(per), lstap=Math.max(1,Math.ceil(M.length/12)); let xl="";
+  M.forEach((m,mi)=>{ const d=dagIdx(new Date(Math.floor(m/12),m%12,1),per.van), d1=dagIdx(new Date(Math.floor(m/12),m%12+1,1),per.van);
     if(d>0) g+=`<line x1="${X(d).toFixed(1)}" x2="${X(d).toFixed(1)}" y1="${T}" y2="${T+ph}" style="stroke:var(--line);stroke-dasharray:2 4"/>`;
-    xl+=svgTxt(X((d+Math.min(d1,dagen))/2),h-6,MND[m%12],{a:"middle"}); });
+    if(mi%lstap===0) xl+=svgTxt(X((Math.max(0,d)+Math.min(d1,dagen))/2),h-6,MND[m%12],{a:"middle"}); });
   const pad=(a,n)=>a.slice(0,n+1).map((v,d)=>`${X(d).toFixed(1)},${Y(v).toFixed(1)}`).join(" ");
   let lijnen="";
   if(budget>0){
@@ -4672,9 +4899,10 @@ function grCumul(D,per){
     +`<circle cx="${X(tot).toFixed(1)}" cy="${Y(cur[tot]).toFixed(1)}" r="4" style="fill:var(--btn);stroke:var(--paper);stroke-width:2"/>`;
   if(tot<dagen) lijnen+=`<line x1="${X(tot).toFixed(1)}" x2="${X(tot).toFixed(1)}" y1="${T}" y2="${T+ph}" style="stroke:var(--teal);stroke-width:1.2"/>`+svgTxt(X(tot)+5,T+11,"vandaag",{s:10.5,c:"var(--teal-xd)",w:700});
   let hits="";
-  M.forEach(m=>{ const d0=Math.max(0,Math.round((new Date(Math.floor(m/12),m%12,1)-per.van)/86400000)), d1=Math.min(dagen,Math.round((new Date(Math.floor(m/12),m%12+1,1)-per.van)/86400000));
+  M.forEach(m=>{ const d0=Math.max(0,dagIdx(new Date(Math.floor(m/12),m%12,1),per.van)), d1=Math.min(dagen,dagIdx(new Date(Math.floor(m/12),m%12+1,1),per.van));
     if(d0>tot && !prev) return;
-    const e=Math.min(d1,tot), tip=`<b>Tot eind ${MND_LANG[m%12]}</b><br>`+(d0<=tot?`Dit jaar: ${euro(cur[Math.max(0,e)])}`:"")+(prev?`<br>Vorig jaar: ${euro(prev[d1]||0)}`:"")+(budget>0?`<br>Budget: ${euro(budget)}`:"");
+    const laatste=Math.max(d0,d1-1), e=Math.min(laatste,tot);   // de laatste dag van de maand, niet de eerste van de volgende
+    const tip=`<b>Tot ${laatste<=tot||!prev?"eind "+MND_LANG[m%12]:"eind "+MND_LANG[m%12]}</b><br>`+(d0<=tot?`Dit jaar: ${euro(cur[Math.max(0,e)])}${e<laatste?" (tot vandaag)":""}`:"")+(prev?`<br>Vorig jaar: ${euro(prev[laatste]||0)}`:"")+(budget>0?`<br>Budget: ${euro(budget)}`:"");
     hits+=`<rect x="${X(d0).toFixed(1)}" y="${T}" width="${Math.max(1,X(d1)-X(d0)).toFixed(1)}" height="${ph}" style="fill:transparent" data-tip="${esc(tip)}"/>`; });
   const keys=`<span><i style="background:var(--btn)"></i>${per.soort==="sj"?"Dit schooljaar":per.soort==="kj"?"Dit jaar":"Deze periode"}</span>`+(prev?`<span><i class="ln"></i>${per.soort==="sj"?"Vorig schooljaar":"Vorig jaar"}</span>`:"")+(budget>0?`<span><i class="ln a"></i>Budget en gelijkmatig tempo</span>`:"");
   return `<div class="gr-t">Lopend totaal</div><div class="gr-keys">${keys}</div><svg class="gr-svg" viewBox="0 0 ${W} ${h}" role="img" aria-label="Lopend totaal van wat besteld is">${g}${lijnen}${xl}${hits}</svg>`;
@@ -4690,7 +4918,7 @@ function grLev(D){
 function grTop(D){
   const best=D.items.filter(i=>i.cat==="best"), by=new Map();
   best.forEach(i=>{ const o=i.o, nr=nrSleutel(o.artikel), k=lc(o.leverancier||"")+"|"+(nr||fold(o.omschrijving));
-    if(!by.has(k)) by.set(k,{oms:o.omschrijving,lev:o.leverancier,art:o.artikel,v:0,kl:new Set(),t:0}); const x=by.get(k); x.v+=i.bedrag; x.kl.add(o.klas); if(String(o.created_at)>x.t){ x.t=String(o.created_at); x.oms=o.omschrijving; } });
+    if(!by.has(k)) by.set(k,{oms:o.omschrijving,lev:o.leverancier,art:o.artikel,v:0,kl:new Set(),t:""}); const x=by.get(k); x.v+=i.bedrag; x.kl.add(o.klas); if(String(o.created_at)>x.t){ x.t=String(o.created_at); x.oms=o.omschrijving; } });
   const L=[...by.values()].sort((a,b)=>b.v-a.v).slice(0,10), max=Math.max(1,...L.map(x=>x.v));
   const rows=L.length?L.map(x=>`<div class="hb hb2"><span class="n"><b title="${esc(x.oms)}">${esc(x.oms)}</b><small>${esc(x.lev||"—")}${x.art?" · "+esc(x.art):""} · ${plural(x.kl.size,"besteller","bestellers")}</small></span><span class="bar g"><i style="width:${(x.v/max*100).toFixed(1)}%"></i></span><span class="v">${euro(x.v)}</span></div>`).join("")
     :`<div class="hint">Nog niets besteld in deze periode.</div>`;
@@ -4699,10 +4927,10 @@ function grTop(D){
 function grControles(D){
   const it=D.items, ak=it.filter(i=>metAkkoord(i.o)).length, du=it.filter(i=>i.o.bevestigd&&i.o.bevestigd.dubbel).length, s=ugSom(it);
   const tile=(cl,l,v,sub)=>`<div class="gr-tile ${cl}"><div class="l">${l}</div><div class="v">${v}</div><div class="s">${sub}</div></div>`;
-  return `<div class="gr-t">Controles</div><div class="gr-s">Hoe vaak de nieuwe controles in deze periode tussenkwamen.</div><div class="gr-tiles">`
+  return `<div class="gr-t">Controles</div><div class="gr-s">Artikelen in deze periode met een bevestiging of een afkeuring.</div><div class="gr-tiles">`
     +tile("a","Akkoord directie gemeld",ak,"artikelen van een grote bestelling")
     +tile("c","Afgekeurd",s.nAfg,s.nAfg?euro(s.afg)+" niet besteld":"geen")
-    +tile("a","Dubbel, toch besteld",du,"bevestigd door de leerkracht")
+    +tile("a","Herhaling bevestigd",du,"bij een dubbele bestelling, door de leerkracht")
     +tile("","Zonder prijs",s.np,"bedrag onbekend, totalen zijn een minimum")+`</div>`;
 }
 function openGrafieken(){
@@ -4750,8 +4978,8 @@ $("grPrint").onclick=()=>{
   $("printArea").innerHTML=printHead("Uitgaven · grafieken",`${esc(per.label.charAt(0).toUpperCase()+per.label.slice(1))}${f?"<br>"+esc(f):""}<br>Stand op ${esc(datumLang(new Date()))}`)+`<div class="pgr">${$("grBody").innerHTML}</div>`;
   zetAfdrukRichting("landscape"); window.print();
 };
-
-/* ---------- Instellingen: controle bij nieuwe bestellingen ---------- */
+/* ---------- Instellingen: controle bij nieuwe bestellingen ----------
+   Een melding "bewaard" verschijnt pas nadat de database het bevestigde. Mislukt het, dan toont de kaart weer de bewaarde waarde. */
 function renderControleInst(){
   const c=ctl();
   [["ctlArt","grensArtikel"],["ctlReeks","grensReeks"]].forEach(([id,k])=>{ const el=$(id); if(document.activeElement!==el) el.value=fmtKort(bedragGrens(c[k])); });
@@ -4760,29 +4988,37 @@ function renderControleInst(){
   $("ctlDub").classList.toggle("uit",!c.dubbelAan);
   segZet("ktSeg",c.klastotaal);
 }
+async function ctlBewaar(k,v,melding){
+  const pr=bewaarCtl(k,v); renderControleInst();
+  const ok=await pr; renderControleInst();
+  if(ok && melding) toast(melding);
+  return ok;
+}
 function grensBewaar(id,key,label){
   const el=$(id), v=el.value.trim(), cur=bedragGrens(ctl()[key]);
   let x=null;
   if(v){ x=leesGetal(v,2); if(isOngeldig(x) || !(x>0)){ toast("Dit bedrag kan ik niet lezen. Schrijf bv. 100 of 150,50","err"); el.value=fmtKort(cur); return; } }
   el.value=fmtKort(x);
   if(cur===x) return;
-  bewaarCtl(key,x); toast(x==null?`${label}: geen vraag meer`:`${label}: ${euroRond(x)}`);
+  ctlBewaar(key,x,x==null?`${label}: geen vraag meer`:`${label}: ${euroRond(x)}`);
 }
 [["ctlArt","grensArtikel","Grens per artikel"],["ctlReeks","grensReeks","Grens per reeks"]].forEach(([id,k,l])=>{
   $(id).addEventListener("change",()=>grensBewaar(id,k,l));
   $(id).addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); e.target.blur(); } });
 });
 $("ctlDubAan").addEventListener("click",e=>{ const b=e.target.closest("[data-v]"); if(!b) return; const aan=b.dataset.v==="aan"; if(ctl().dubbelAan===aan) return;
-  bewaarCtl("dubbelAan",aan); renderControleInst(); toast(aan?"Controle op dubbele bestellingen staat aan":"Controle op dubbele bestellingen staat uit"); });
+  ctlBewaar("dubbelAan",aan,aan?"Controle op dubbele bestellingen staat aan":"Controle op dubbele bestellingen staat uit"); });
 $("ctlDubE").addEventListener("click",e=>{ const b=e.target.closest("[data-v]"); if(!b) return; const v=b.dataset.v; if(ctl().dubbelEenheid===v) return;
-  const n=+ctl().dubbelAantal, max=v==="week"?52:24; if(n>max) bewaarCtl("dubbelAantal",max);
-  bewaarCtl("dubbelEenheid",v); renderControleInst(); toast(`Dubbele bestellingen: binnen ${plural(Math.min(n,max),v==="week"?"week":"maand",v==="week"?"weken":"maanden")}`); });
+  const n=+ctl().dubbelAantal, max=v==="week"?52:24, m=Math.min(n,max);
+  if(n>max) wijzigInstelling(["controle","dubbelAantal"],max);
+  ctlBewaar("dubbelEenheid",v,`Dubbele bestellingen: binnen ${plural(m,v==="week"?"week":"maand",v==="week"?"weken":"maanden")}`); });
 $("ctlDubN").addEventListener("change",e=>{ const c=ctl(), max=c.dubbelEenheid==="week"?52:24, n=Math.round(+String(e.target.value).replace(",","."));
   if(!(n>=1 && n<=max)){ toast(`Kies een getal van 1 tot ${max}`,"err"); e.target.value=c.dubbelAantal; return; }
-  if(n===+c.dubbelAantal) return; bewaarCtl("dubbelAantal",n); toast(`Dubbele bestellingen: binnen ${plural(n,c.dubbelEenheid==="week"?"week":"maand",c.dubbelEenheid==="week"?"weken":"maanden")}`); });
+  if(n===+c.dubbelAantal) return;
+  ctlBewaar("dubbelAantal",n,`Dubbele bestellingen: binnen ${plural(n,c.dubbelEenheid==="week"?"week":"maand",c.dubbelEenheid==="week"?"weken":"maanden")}`); });
 $("ctlDubN").addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); e.target.blur(); } });
 $("ktSeg").addEventListener("click",e=>{ const b=e.target.closest("[data-v]"); if(!b) return; const v=b.dataset.v; if(ctl().klastotaal===v) return;
-  bewaarCtl("klastotaal",v); segZet("ktSeg",v); toast("Klastotaal voor leerkrachten: "+{uit:"uit",budget:"enkel bij een budget",altijd:"altijd"}[v]); });
+  ctlBewaar("klastotaal",v,"Klastotaal voor leerkrachten: "+{uit:"uit",budget:"enkel bij een budget",altijd:"altijd"}[v]); });
 
 /* ---------- Instellingen: budget per klas ---------- */
 let budJaar=huidigSJ();
@@ -4801,6 +5037,7 @@ function renderBudgetInst(){
   const vorig=budgetVan(`${budJaar-1}-${budJaar}`), heeftVorig=Object.values(vorig).some(v=>bedragGrens(v)!=null);
   const cp=$("budCopy"); cp.innerHTML=`${ic("copy",14)}Overnemen van ${budJaar-1}-${budJaar}`; cp.disabled=!heeftVorig;
   cp.title=heeftVorig?"Neemt de budgetten van het vorige schooljaar over":"Het vorige schooljaar heeft geen budgetten";
+  const actief=document.activeElement&&document.activeElement.dataset?document.activeElement.dataset.bud:null;
   let i=0;
   $("budGroups").innerHTML=ugGroepen().map(g=>{
     const ks=g.klassen.filter(k=>k.actief || bud[k.naam]!=null); if(!ks.length) return "";
@@ -4809,20 +5046,24 @@ function renderBudgetInst(){
       <div class="bud-fields">${ks.map(k=>{ const id="bud_"+(i++), v=bedragGrens(bud[k.naam]), t=tot.get(k.naam)||0;
         return `<div class="bud-f"><label for="${id}">${esc(k.naam)}</label><div class="euro-field"><span class="pre">€</span><input class="ctrl num" id="${id}" data-bud="${esc(k.naam)}" inputmode="decimal" placeholder="geen" value="${esc(fmtKort(v))}" autocomplete="off"></div><span class="h">besteld ${euro(t)}${v?` · ${Math.round(t/v*100)} %`:""}</span></div>`; }).join("")}</div></div>`;
   }).join("");
+  if(actief){ const el=$("budGroups").querySelector(`[data-bud="${CSS.escape(actief)}"]`); if(el) el.focus(); }
   budInfo();
 }
 $("budStep").addEventListener("click",e=>{ const b=e.target.closest("[data-step]"); if(!b||b.disabled) return; budJaar+=+b.dataset.step; renderBudgetInst(); });
-$("budGroups").addEventListener("change",e=>{
+$("budGroups").addEventListener("change",async e=>{
   const inp=e.target.closest("[data-bud]"); if(!inp) return;
   const klas=inp.dataset.bud, sj=budSJ(), cur=bedragGrens(budgetVan(sj)[klas]), v=inp.value.trim();
   let x=null;
   if(v){ x=leesGetal(v,2); if(isOngeldig(x) || !(x>0)){ toast("Dit bedrag kan ik niet lezen. Schrijf bv. 750 of 750,50","err"); inp.value=fmtKort(cur); return; } }
   inp.value=fmtKort(x);
   if(cur===x) return;
-  const jaar=Object.assign({},budgetVan(sj)); if(x==null) delete jaar[klas]; else jaar[klas]=x;
-  bewaarBudgetJaar(sj,jaar); budInfo();
-  const h=inp.closest(".bud-f").querySelector(".h"), t=klasTotalenSJ(budJaar).get(klas)||0; h.textContent=`besteld ${euro(t)}${x?` · ${Math.round(t/x*100)} %`:""}`;
-  inp.classList.add("saved"); setTimeout(()=>inp.classList.remove("saved"),900);
+  const pr=bewaarBudget(sj,{[klas]:x}); budInfo();
+  const ok=await pr;
+  const nu=bedragGrens(budgetVan(sj)[klas]), h=inp.closest(".bud-f")&&inp.closest(".bud-f").querySelector(".h"), t=klasTotalenSJ(budJaar).get(klas)||0;
+  if(document.activeElement!==inp) inp.value=fmtKort(nu);
+  if(h) h.textContent=`besteld ${euro(t)}${nu?` · ${Math.round(t/nu*100)} %`:""}`;
+  budInfo();
+  if(ok){ inp.classList.add("saved"); setTimeout(()=>inp.classList.remove("saved"),900); }
 });
 $("budGroups").addEventListener("keydown",e=>{
   const inp=e.target.closest("[data-bud]"); if(!inp || e.key!=="Enter") return; e.preventDefault();
@@ -4831,41 +5072,49 @@ $("budGroups").addEventListener("keydown",e=>{
 $("budGroups").addEventListener("click",async e=>{
   const b=e.target.closest("[data-budall]"); if(!b) return;
   const g=ugGroepen().find(x=>x.naam===b.dataset.budall); if(!g) return;
-  const ks=g.klassen.filter(k=>k.actief).map(k=>k.naam), wie=g.naam==="Andere bestellers"?plural(ks.length,"besteller","bestellers"):plural(ks.length,"klas","klassen");
+  const ks=g.klassen.filter(k=>k.actief).map(k=>k.naam), ab=g.naam==="Andere bestellers", wie=ab?plural(ks.length,"besteller","bestellers"):plural(ks.length,"klas","klassen");
   const p=confirmDialog({title:`Budget voor ${g.naam}`,ok:"Invullen",focus:"#budAllIn",
-    html:`<div class="field"><label for="budAllIn">Bedrag per ${g.naam==="Andere bestellers"?"besteller":"klas"}</label><div class="euro-field"><span class="pre">€</span><input class="ctrl num" id="budAllIn" inputmode="decimal" placeholder="bv. 750" autocomplete="off"></div></div>
+    html:`<div class="field"><label for="budAllIn">Bedrag per ${ab?"besteller":"klas"}</label><div class="euro-field"><span class="pre">€</span><input class="ctrl num" id="budAllIn" inputmode="decimal" placeholder="bv. 750" autocomplete="off"></div></div>
       <p style="font-size:13px;color:var(--slate)">Vult het budget in voor ${wie} van ${esc(g.naam)}, schooljaar ${budJaar}-${budJaar+1}. Bestaande budgetten van deze groep worden vervangen.</p>`});
-  const inp=$("budAllIn"); inp.addEventListener("keydown",ev=>{ if(ev.key==="Enter"){ ev.preventDefault(); $("cfOk").click(); } });
+  const inp=$("budAllIn"); if(inp) inp.addEventListener("keydown",ev=>{ if(ev.key==="Enter"){ ev.preventDefault(); $("cfOk").click(); } });
   if(!(await p)) return;
-  const v=inp.value.trim();
+  const v=inp?inp.value.trim():"";
   if(!v){ toast("Vul een bedrag in. Wissen doe je met Budgetten wissen.","err"); return; }
   const x=leesGetal(v,2); if(isOngeldig(x) || !(x>0)){ toast("Dit bedrag kan ik niet lezen. Schrijf bv. 750","err"); return; }
-  const sj=budSJ(), vorig=Object.assign({},budgetVan(sj)), jaar=Object.assign({},vorig); ks.forEach(k=>{ jaar[k]=x; });
-  bewaarBudgetJaar(sj,jaar); renderBudgetInst();
-  toast(`${g.naam}: ${euroRond(x)} per ${g.naam==="Andere bestellers"?"besteller":"klas"}`,"ok",{label:"Ongedaan maken",fn:()=>{ bewaarBudgetJaar(sj,vorig); renderBudgetInst(); toast("Ongedaan gemaakt"); }});
+  const sj=budSJ(), oud=budgetVan(sj), terug=Object.fromEntries(ks.map(k=>[k,bedragGrens(oud[k])]));
+  const pr=bewaarBudget(sj,Object.fromEntries(ks.map(k=>[k,x]))); renderBudgetInst();
+  const ok=await pr; renderBudgetInst();
+  if(ok) toast(`${g.naam}: ${euroRond(x)} per ${ab?"besteller":"klas"}`,"ok",{label:"Ongedaan maken",fn:async()=>{ const q=bewaarBudget(sj,terug); renderBudgetInst(); if(await q){ renderBudgetInst(); toast("Ongedaan gemaakt"); } }});
 });
 $("budGroups").addEventListener("click",async e=>{
   const b=e.target.closest("[data-budwis]"); if(!b) return;
   const g=ugGroepen().find(x=>x.naam===b.dataset.budwis); if(!g) return;
-  const sj=budSJ(), vorig=Object.assign({},budgetVan(sj)), namen=g.klassen.map(k=>k.naam).filter(k=>bedragGrens(vorig[k])!=null);
+  const sj=budSJ(), oud=budgetVan(sj), namen=g.klassen.map(k=>k.naam).filter(k=>bedragGrens(oud[k])!=null);
   if(!namen.length) return;
-  const ok=await confirmDialog({title:`Budgetten van ${g.naam} wissen?`,ok:"Budgetten wissen",tone:"danger",
-    html:`<p>De budgetten van ${plural(namen.length,g.naam==="Andere bestellers"?"besteller":"klas",g.naam==="Andere bestellers"?"bestellers":"klassen")} van ${esc(g.naam)} (schooljaar ${budJaar}-${budJaar+1}) worden leeggemaakt.</p>
+  const ab=g.naam==="Andere bestellers";
+  const ok0=await confirmDialog({title:`Budgetten van ${g.naam} wissen?`,ok:"Budgetten wissen",tone:"danger",
+    html:`<p>De budgetten van ${plural(namen.length,ab?"besteller":"klas",ab?"bestellers":"klassen")} van ${esc(g.naam)} (schooljaar ${budJaar}-${budJaar+1}) worden leeggemaakt.</p>
       <p style="font-size:13px;color:var(--slate)">De bestellingen zelf blijven ongewijzigd. Uitgaven toont voor deze klassen dan geen percentage meer.</p>`});
-  if(!ok) return;
-  const jaar=Object.assign({},vorig); namen.forEach(k=>{ delete jaar[k]; });
-  bewaarBudgetJaar(sj,jaar); renderBudgetInst();
-  toast(`Budgetten van ${g.naam} gewist`,"ok",{label:"Ongedaan maken",fn:()=>{ bewaarBudgetJaar(sj,vorig); renderBudgetInst(); toast("Budgetten teruggezet"); }});
+  if(!ok0) return;
+  const terug=Object.fromEntries(namen.map(k=>[k,bedragGrens(oud[k])]));
+  const pr=bewaarBudget(sj,Object.fromEntries(namen.map(k=>[k,null]))); renderBudgetInst();
+  const ok=await pr; renderBudgetInst();
+  if(ok) toast(`Budgetten van ${g.naam} gewist`,"ok",{label:"Ongedaan maken",fn:async()=>{ const q=bewaarBudget(sj,terug); renderBudgetInst(); if(await q){ renderBudgetInst(); toast("Budgetten teruggezet"); } }});
 });
 $("budCopy").onclick=async()=>{
   const sj=budSJ(), vorig=budgetVan(`${budJaar-1}-${budJaar}`), nu=budgetVan(sj);
   if(!Object.values(vorig).some(v=>bedragGrens(v)!=null)) return;
   if(Object.values(nu).some(v=>bedragGrens(v)!=null)){
-    const ok=await confirmDialog({title:"Budgetten overnemen?",ok:"Overnemen",html:`<p>Schooljaar ${budJaar}-${budJaar+1} heeft al budgetten. Die worden vervangen door de budgetten van ${budJaar-1}-${budJaar}.</p>`});
-    if(!ok) return;
+    const ok0=await confirmDialog({title:"Budgetten overnemen?",ok:"Overnemen",html:`<p>Schooljaar ${budJaar}-${budJaar+1} heeft al budgetten. Die worden vervangen door de budgetten van ${budJaar-1}-${budJaar}.</p>`});
+    if(!ok0) return;
   }
-  bewaarBudgetJaar(sj,Object.assign({},vorig)); renderBudgetInst(); toast(`Budgetten van ${budJaar-1}-${budJaar} overgenomen`);
+  const keys=new Set([...Object.keys(nu),...Object.keys(vorig)]);
+  const pr=bewaarBudget(sj,Object.fromEntries([...keys].map(k=>[k,bedragGrens(vorig[k])]))); renderBudgetInst();
+  const ok=await pr; renderBudgetInst();
+  if(ok) toast(`Budgetten van ${budJaar-1}-${budJaar} overgenomen`);
 };
+/* Totaal in het formulier opnieuw tonen na het opschonen van aantal of prijs (na de bestaande blur-verwerking) */
+["f-prijs","f-aantal"].forEach(id=>$(id).addEventListener("blur",()=>setTimeout(updateTotalPreview,0)));
 
 /* ============================================================
    STILLE VERVERSING (elke 20 s, nooit tijdens het werken)
@@ -4975,6 +5224,9 @@ async function beveiligingstest(){
   if(beh){
     x=await poging(()=>REST.call(`${T_ORD}?id=eq.${enc(id1)}`,{method:"PATCH",headers:RET,body:JSON.stringify({afgekeurd:{op:nu(),reden:"Beveiligingstest"}})}));
     rij("Beheerder kan een artikel afkeuren", rijen(x)===1);
+    x=await poging(()=>REST.call(`${T_ORD}?id=eq.${enc(id1)}`,{method:"PATCH",headers:RET,body:JSON.stringify({besteld:true})}));
+    r1=await poging(()=>REST.call(`${T_ORD}?select=besteld&id=eq.${enc(id1)}`,A));
+    rij("Database weigert een afgekeurd artikel als besteld, ook van de beheerder", !x.ok && r1.ok && r1.r[0] && !r1.r[0].besteld, x.ok?"de database aanvaardde het":"");
     x=await poging(()=>REST.call(`${T_ORD}?id=eq.${enc(id1)}`,Object.assign({method:"PATCH",headers:RET,body:JSON.stringify({aantal:"9"})},A)));
     rij("Leerkracht kan een afgekeurd artikel niet aanpassen", !x.ok || !rijen(x));
     x=await poging(()=>REST.call(`${T_ORD}?id=eq.${enc(id1)}`,Object.assign({method:"PATCH",headers:RET,body:JSON.stringify({afgekeurd:null})},A)));
@@ -4984,6 +5236,10 @@ async function beveiligingstest(){
     rij("Leerkracht kan een afgekeurd artikel niet verwijderen", (!x.ok || !rijen(x)) && r1.ok && r1.r.length===1);
     x=await poging(()=>REST.call(`${T_ORD}?id=eq.${enc(id1)}`,{method:"PATCH",headers:RET,body:JSON.stringify({afgekeurd:null})}));
     rij("Beheerder kan de afkeuring opheffen", rijen(x)===1);
+    x=await poging(()=>REST.call(`${T_ORD}?id=eq.${enc(id1)}`,{method:"PATCH",headers:RET,body:JSON.stringify({besteld:true})}));
+    const y=await poging(()=>REST.call(`${T_ORD}?id=eq.${enc(id1)}`,{method:"PATCH",headers:RET,body:JSON.stringify({afgekeurd:{op:nu(),reden:"test"}})}));
+    rij("Database weigert een besteld artikel af te keuren", rijen(x)===1 && !y.ok, y.ok?"de database aanvaardde het":"");
+    await poging(()=>REST.call(`${T_ORD}?id=eq.${enc(id1)}`,{method:"PATCH",headers:RET,body:JSON.stringify({besteld:false})}));
   }
   x=await poging(()=>REST.call(`${T_ORD}?id=eq.${enc(id1)}`,Object.assign({method:"DELETE",headers:RET},A)));
   rij("Leerkracht kan het eigen, open artikel verwijderen", rijen(x)===1);
@@ -5054,6 +5310,31 @@ async function totalen(){
     const t1=[...een.values()].reduce((a,b)=>a+b,0), t2=[...twee.values()].reduce((a,b)=>a+b,0);
     rij(`Besteld per klas, ${per.label}: ${euro(t1)}`, !vk.length && Math.abs(t1-t2)<0.01, vk.slice(0,6).map(k=>`${k}: ${euro(een.get(k)||0)} / ${euro(twee.get(k)||0)}`).join(" · "));
   });
+  /* Klas wijzigen werkt overal door: een tijdelijk testartikel gaat van klas A naar klas B */
+  const kl=ugGroepen().flatMap(g=>g.klassen.filter(k=>k.actief).map(k=>k.naam)).slice(0,2);
+  if(kl.length===2){
+    const id="tbtest-"+uid(), [ka,kb]=kl; let ok1=false, det="";
+    try{
+      await REST.call(T_ORD,{method:"POST",headers:RET,body:JSON.stringify(Object.assign(testArtikel(id),{klas:ka,prijs:"10.00",aantal:"1",omschrijving:"Testartikel klas wijzigen"}))});
+      await loadAll({silent:true});
+      const per=periodeSJ(huidigSJ()), som=k=>ugVerzamel(per,{groep:"",lev:""}).items.filter(i=>i.cat==="open" && i.o.klas===k).reduce((t,i)=>t+i.bedrag,0);
+      const a0=som(ka), b0=som(kb), o=orderById(id); o.klas=kb;
+      const okw=await db.upsertOrders([o]); await loadAll({silent:true});
+      const a1=som(ka), b1=som(kb), x=alleArtikelen().find(y=>y.o.id===id);
+      ok1=okw && !!orderById(id) && orderById(id).klas===kb && !!x && x.o.klas===kb && Math.abs((a0-a1)-10)<0.001 && Math.abs((b1-b0)-10)<0.001;
+      if(!ok1) det=`${ka}: ${euro(a0)} naar ${euro(a1)}, ${kb}: ${euro(b0)} naar ${euro(b1)}`;
+    }catch(e){ det=String(e&&e.message||e); }
+    finally{ await poging(()=>REST.call(`${T_ORD}?id=eq.${enc(id)}`,{method:"DELETE",headers:RET})); await loadAll({silent:true}); }
+    rij(`Klas wijzigen werkt door in Overzicht en Uitgaven (${ka} naar ${kb})`, ok1, det);
+    const op=state.orders.find(o=>o.bon_id && !o.afgekeurd);
+    if(op){ const oud=op.klas, nieuw=kl.find(k=>k!==oud)||kl[0]; let ok2=false, det2="";
+      try{ op.klas=nieuw; await db.upsertOrders([op]); await loadAll({silent:true});
+        const b=bonById(op.bon_id), l=b&&bonLines(b).find(x=>x.id===op.id); ok2=!!l && l.klas===nieuw; if(!ok2) det2="de bon toont "+(l?l.klas:"niets"); }
+      catch(e){ det2=String(e&&e.message||e); }
+      finally{ const o=orderById(op.id); if(o && o.klas!==oud){ o.klas=oud; await db.upsertOrders([o]); } await loadAll({silent:true}); }
+      rij("Klas wijzigen: een artikel op een bestelbon toont daar de nieuwe klas (daarna teruggezet)", ok2, det2);
+    }
+  }
   /* Per bestelbon: wat Uitgaven als besteld telt, tegenover het bedrag "te factureren" van de bon */
   const perBon=new Map(); A1.forEach(x=>{ const o=x.o; if(o.besteld && !o.afgekeurd && o.bon_id) perBon.set(o.bon_id,(perBon.get(o.bon_id)||0)+nettoBedrag(o)); });
   const afw=state.bons.filter(b=>!b.licht && !b.verwijderd_op).filter(b=>Math.abs((perBon.get(b.id)||0)-bonMoney(b).fact)>0.004);
