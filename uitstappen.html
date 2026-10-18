@@ -310,7 +310,7 @@ body.scrolled .toolbar.sticky{background:rgba(255,255,255,.86);-webkit-backdrop-
 /* ---------- Zwevende lijst (overzicht) ---------- */
 .bl-card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding-bottom:4px}
 .bl-head,.bl-row{display:grid;gap:14px;align-items:center;grid-template-columns:var(--cols)}
-.bl-head{padding:0 14px 0 18px;height:40px;background:var(--bg-2);border-bottom:1px solid var(--line);border-radius:var(--r) var(--r) 0 0;font-size:12.5px;font-weight:600;color:var(--slate);position:sticky;top:72px;z-index:5}
+.bl-head{padding:0 14px 0 18px;height:40px;background:var(--bg-2);border-bottom:1px solid var(--line);border-radius:var(--r) var(--r) 0 0;font-size:12.5px;font-weight:600;color:var(--slate);position:sticky;top:calc(var(--tb-h,62px) + 10px);z-index:5}
 .bl-head .sort{font:inherit;color:inherit;display:inline-flex;align-items:center;gap:4px;padding:3px 0;border-radius:6px}
 .bl-head .sort:hover,.bl-head .sort.on{color:var(--ink)}
 .bl-head .sort svg{opacity:0;transition:opacity .15s}
@@ -349,6 +349,9 @@ body.scrolled .toolbar.sticky{background:rgba(255,255,255,.86);-webkit-backdrop-
 .c-act .flags{display:inline-flex;gap:5px;margin-left:6px;vertical-align:1px}
 .c-cell{font-size:13px;min-width:0}
 .c-cell small{display:block;font-size:12px;color:var(--slate);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.c-verv small.vl{display:flex;min-width:0}                                   /* maatschappij · prijs: de prijs blijft altijd zichtbaar */
+.c-verv small.vl .vf{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.c-verv small.vl .vp{flex:none;white-space:pre}
 .c-verv{display:flex;align-items:center;gap:8px;min-width:0}
 .c-verv .vi{color:var(--slate);display:flex}
 .c-cost{font-variant-numeric:tabular-nums;text-align:right}
@@ -557,9 +560,9 @@ body.is-admin .wd.click:hover{box-shadow:inset 0 0 0 2px var(--teal-l)}
   .overlay{padding:0;align-items:flex-end}
   .modal,.modal.wide,.modal.mid{max-width:100%;max-height:94vh;border-radius:var(--r-lg) var(--r-lg) 0 0}
   .bl-head{display:none}
-  .bl-row{grid-template-columns:minmax(0,1fr) auto !important;grid-template-areas:"act date" "klas klas" "verv stat";gap:6px 10px;padding:12px 14px}
+  .bl-row{grid-template-columns:minmax(0,1fr) auto !important;grid-template-areas:"act date" "klas klas" "verv verv" "stat stat";gap:6px 10px;padding:12px 14px}
   .bl-row .c-act{grid-area:act}.bl-row .c-date{grid-area:date;text-align:right}
-  .bl-row .c-klas{grid-area:klas}.bl-row .c-verv{grid-area:verv}.bl-row .c-stat{grid-area:stat;justify-content:flex-end}
+  .bl-row .c-klas{grid-area:klas}.bl-row .c-verv{grid-area:verv}.bl-row .c-stat{grid-area:stat;justify-content:flex-start}
   .bl-row .m-hide{display:none}
   .set-grid{grid-template-columns:minmax(0,1fr)}
   .srow.vak,.srow.bus{grid-template-columns:minmax(0,1fr) minmax(0,1fr) 32px}
@@ -790,8 +793,11 @@ a.btn{text-decoration:none}
 .c-dn{min-width:0}
 .c-dn .dn-names,.klas-tags .dn-names{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
 .dn-wrap{display:flex;flex-direction:column;gap:8px}
-.dn-head,.dn-row{display:grid;grid-template-columns:28px minmax(0,1.6fr) minmax(0,.9fr);gap:10px;align-items:start}
-.dn-head.met-verv,.dn-row.met-verv{grid-template-columns:28px minmax(0,1.5fr) minmax(0,.8fr) minmax(0,1.15fr)}
+.dn-head,.dn-row{display:grid;grid-template-columns:28px minmax(0,1.6fr) minmax(0,.9fr) 40px;gap:10px;align-items:start}
+.dn-head.met-verv,.dn-row.met-verv{grid-template-columns:28px minmax(0,1.5fr) minmax(0,.8fr) minmax(0,1.15fr) 40px}
+.dn-del{height:43px;width:40px;display:grid;place-items:center;border:1px solid var(--line);border-radius:9px;background:var(--paper);color:var(--slate);cursor:pointer;transition:color .15s,border-color .15s,background .15s}
+.dn-del:hover{color:var(--coral-t);border-color:var(--coral);background:var(--coral-l,#ffe9e6)}
+.dn-del:focus-visible{outline:none;box-shadow:0 0 0 3px var(--teal-ring);border-color:var(--teal)}
 .dn-head{font-size:13px;font-weight:600;color:var(--ink);margin-top:2px}
 .dn-head .opt{color:var(--slate);font-weight:500}
 .dn-rows{display:flex;flex-direction:column;gap:8px}
@@ -802,15 +808,17 @@ a.btn{text-decoration:none}
 @media (max-width:860px){
   .dn-head{display:none}
   .dn-mlabel{display:block}
-  .dn-row{grid-template-columns:26px minmax(0,1fr);grid-template-areas:"nr naam" "nr klas"}
-  .dn-row.met-verv{grid-template-columns:26px minmax(0,1fr) minmax(0,1fr);grid-template-areas:"nr naam naam" "nr klas verv"}
+  .dn-row{grid-template-columns:26px minmax(0,1fr) 40px;grid-template-areas:"nr naam del" "nr klas del"}
+  .dn-row.met-verv{grid-template-columns:26px minmax(0,1fr) minmax(0,1fr) 40px;grid-template-areas:"nr naam naam del" "nr klas verv del"}
+  .dn-row .dn-del{grid-area:del;height:auto;align-self:stretch}
   .dn-row .dn-nr{grid-area:nr;height:auto;align-self:stretch}
   .dn-row .dn-naam{grid-area:naam}.dn-row .dn-klas{grid-area:klas}.dn-row .dn-verv{grid-area:verv}
 }
 .bar.nasch{background:var(--paper);color:var(--teal-xd);box-shadow:inset 0 0 0 1.5px rgba(14,158,150,.55)}
 .ag-item.nasch{background:var(--paper);box-shadow:inset 0 0 0 1.5px rgba(14,158,150,.45)}
 .lg.nasch{background:var(--paper);box-shadow:inset 0 0 0 1.5px rgba(14,158,150,.65)}
-@media print{ .pcal .pe.nasch{background:var(--paper) !important;border:1px solid var(--teal);border-left-width:2px} }
+@media print{ .pcal .pe.nasch{background:var(--paper) !important;border:1px solid var(--teal);border-left-width:2px}
+  .pcal .pe.pc{background:#fff !important;border-left-color:var(--coral);color:#7a2a1f;text-decoration:line-through;text-decoration-thickness:1px} }
 
 </style>
 </head>
@@ -916,7 +924,8 @@ a.btn{text-decoration:none}
 /* ---------- Constanten ---------- */
 const SS_CONCEPT  = "klimop_uit_concept_v1";  // sessionStorage: half ingevuld formulier
 const SS_PREFS    = "klimop_uit_prefs_v1";    // sessionStorage: naam, klasfilter (gedeelde computers)
-const LS_SEEN     = "klimop_uit_gezien_v1";   // localStorage: beheer, laatst bekeken aanvragen
+const LS_SEEN     = "klimop_uit_gezien_v1";   // localStorage: beheer, laatst bekeken aanvragen (uitstappen)
+const LS_SEEN_NAS = "klimop_uit_gezien_nas_v1";   // idem voor de nascholingen: "Alles gezien" geldt per weergave
 /* De oude kopieën van de vorige versie (klimop_uitstappen_v3, klimop_settings_v1) worden bewust
    genegeerd: ze kunnen bewust verwijderde uitstappen bevatten. Ze worden ook niet gewist. */
 const SCHEMA      = 2;
@@ -1117,12 +1126,15 @@ const toNum = v => (v===""||v==null||isNaN(Number(v))) ? null : Number(v);
 const NASCH_FIELDS = ["titel","plaats","deelnemersGroep","deelnemers","aantalDeelnemers","opvangNodig","inschrijving","inschrijfStatus","inschrijvenVoor","inschrijfLink","ingeschrevenOp",
   "bestelbon","bestelbonStatus","bestelbonDoorgegevenOp"];
 const DN_VERV_KEYS = ["wagen","meerijden","openbaar","actief"];
-const MAX_NAMEN = 25;
+const MAX_NAMEN = 60;
 function normNascholing(t){
   t.type="dag"; t.datumEind=null;
   t.klassen=[]; t.aantalLln=0; t.aantalBegeleiders=0; t.begeleidersNamen="";
   t.busNodig=false; t.vervoerwijze=null; t.openbaarVervoerder=null; t.kostOpenbaar=null; t.kostOpenbaarPerLln=null;
   t.vertrekSchool=""; t.terug=""; t.terugSchool="";
+  /* B21: bij het omzetten verdwijnt wat enkel bij een uitstap hoort, zoals de bevestiging belooft */
+  t.busmaatschappij=""; t.prijsVervoer=null; t.busReferentie=""; t.busOfferteOp=null; t.busBevestigdOp=null; t.internBestelbonBus="";
+  t.busStatus=null; t.factuurStatusBus=null; t.smartschool=null; delete t.opvangNodig;
   t.titel = t.titel==null ? "" : String(t.titel);
   t.plaats = ["locatie","online","school"].includes(t.plaats) ? t.plaats : "";
   if(t.plaats==="online"||t.plaats==="school"){ ["straat","nummer","postcode","stad"].forEach(f=>t[f]=""); t.locatieAnders=false; }
@@ -1131,8 +1143,7 @@ function normNascholing(t){
   t.deelnemers = dn.map(d=>({naam:String((d&&d.naam)??"").trim(), klas:String((d&&d.klas)??"").trim(),
     vervoer: t.plaats==="locatie" && DN_VERV_KEYS.includes(d&&d.vervoer) ? d.vervoer : ""})).filter(d=>d.naam);
   t.aantalDeelnemers = Math.max(0, Math.round(toNum(t.aantalDeelnemers)||0), t.deelnemers.length);
-  t.opvangNodig = t.deelnemersGroep==="naam" && !!t.opvangNodig;
-  t.inschrijving = ["zelf","secretariaat"].includes(t.inschrijving) ? t.inschrijving : "";
+  t.inschrijving = ["zelf","secretariaat","geen"].includes(t.inschrijving) ? t.inschrijving : "";
   t.inschrijfStatus = t.inschrijving==="secretariaat" ? (t.inschrijfStatus==="ingeschreven" ? "ingeschreven" : "teschrijven") : null;
   t.ingeschrevenOp = t.inschrijving==="secretariaat" && t.inschrijfStatus==="ingeschreven" && parseISO(t.ingeschrevenOp) ? t.ingeschrevenOp : null;
   t.inschrijvenVoor = t.inschrijving==="secretariaat" && parseISO(t.inschrijvenVoor) ? t.inschrijvenVoor : null;
@@ -1181,9 +1192,28 @@ function norm(src){
   t.busKm=toNum(t.busKm); t.busOfferteOpm=t.busOfferteOpm==null?"":String(t.busOfferteOpm); t.busOfferteOp=t.busOfferteOp||null;
   /* Factuurregels: gratis = geen factuur; een bus heeft altijd een factuur; openbaar vervoer heeft geen factuur */
   if(!["teontvangen","ontvangen","nvt"].includes(t.factuurStatus)) t.factuurStatus = t.factuurUitstap ? "ontvangen" : "teontvangen";
-  if(t.prijsStatus==="gratis") t.factuurStatus="nvt";
-  if(t.busNodig){ if(!["teontvangen","ontvangen"].includes(t.factuurStatusBus)) t.factuurStatusBus = t.factuurBus ? "ontvangen" : "teontvangen"; }
+  /* Annulering: met of zonder kosten, bij een uitstap met bus apart voor de bus. Zonder kosten vervalt de factuur;
+     met kosten is ze te ontvangen, ook bij een gratis activiteit. Oudere annuleringen zonder keuze blijven zoals ze waren. */
+  const ann = t.planStatus==="geannuleerd" && t.annulering ? t.annulering : null;
+  if(ann){
+    ann.kosten=toNum(ann.kosten); ann.busKosten=toNum(ann.busKosten);
+    if(!["geen","wel"].includes(ann.metKosten)){ if(ann.kosten>0) ann.metKosten="wel"; else delete ann.metKosten; }
+    if(!t.busNodig || !["geen","wel"].includes(ann.busMetKosten)) delete ann.busMetKosten;
+    if(ann.metKosten!=="wel") ann.kosten=ann.metKosten==="geen"?null:ann.kosten;
+    if(ann.busMetKosten!=="wel") ann.busKosten=null;
+  }
+  if(t.prijsStatus==="gratis" && !(ann && ann.metKosten==="wel")) t.factuurStatus="nvt";
+  if(ann && ann.metKosten==="geen" && t.factuurStatus==="teontvangen") t.factuurStatus="nvt";
+  if(ann && ann.metKosten==="wel" && t.factuurStatus==="nvt") t.factuurStatus="teontvangen";
+  if(t.busNodig){
+    const busNvt = !!(ann && ann.busMetKosten==="geen");
+    if(!["teontvangen","ontvangen",...(busNvt?["nvt"]:[])].includes(t.factuurStatusBus)) t.factuurStatusBus = t.factuurBus ? "ontvangen" : "teontvangen";
+    if(busNvt && t.factuurStatusBus==="teontvangen") t.factuurStatusBus="nvt";
+  }
   else t.factuurStatusBus=null;
+  /* Een bestelbon die door een annulering zonder kosten moet ingetrokken worden */
+  t.bonIngetrokkenOp = ann && ann.metKosten==="geen" && t.internBestelbonUitstap && parseISO(t.bonIngetrokkenOp) ? t.bonIngetrokkenOp : null;
+  t.bonBusIngetrokkenOp = ann && ann.busMetKosten==="geen" && t.internBestelbonBus && parseISO(t.bonBusIngetrokkenOp) ? t.bonBusIngetrokkenOp : null;
   t.factuurUitstap = t.factuurStatus==="ontvangen";
   t.factuurBus = t.factuurStatusBus==="ontvangen";
   t.voorschot = !!t.voorschot || (t.voorschotBedrag!=null && t.voorschotBedrag>0);
@@ -1192,7 +1222,7 @@ function norm(src){
   t.log = Array.isArray(t.log) ? t.log : [];
   t.v = SCHEMA;
   /* Een rij met een ongeldige datum (oud, geïmporteerd of rechtstreeks bewaard) mag de weergave niet laten vastlopen */
-  t._datumFout = !parseISO(t.datumStart) || (t.type==="meerdaags" && !parseISO(t.datumEind));
+  t._datumFout = !parseISO(t.datumStart) || (t.type==="meerdaags" && (!parseISO(t.datumEind) || t.datumEind<t.datumStart));
   return t;
 }
 /* Velden die enkel de beheerder mag zien. Ze staan in de afgeschermde tabel uitstap_beheer,
@@ -1218,6 +1248,8 @@ function vervoerTxt(t){ if(isNasch(t)) return nasVervoerTxt(t); const v=vervoer(
 /* ---------- Nascholing: hulpfuncties ---------- */
 const isNasch = t => !!t && t.categorie==="nascholing";
 /* Aantal personen waarop een prijs per persoon slaat: leerlingen bij een uitstap, deelnemers bij een nascholing */
+/* Informatief: geen inschrijving en gratis. Het secretariaat hoeft niets te doen; de status heet "Geregistreerd". */
+const isInfo = t => isNasch(t) && t.inschrijving==="geen" && t.prijsStatus==="gratis" && t.planStatus!=="geannuleerd";
 const persAantal = t => isNasch(t) ? (t.aantalDeelnemers||0) : (t.aantalLln||0);
 const titelVan = t => isNasch(t) ? (t.titel||t.activiteit||"") : (t.activiteit||"");
 const GROEP_LBL = {kleuter:"Hele kleuterschool",lager:"Hele lagere school",school:"Hele school"};
@@ -1239,7 +1271,7 @@ function vervSamen(t){
 }
 function nasVervoerTxt(t){ if(t.plaats==="locatie") return vervSamen(t)||"Op locatie"; return (PLAATS[t.plaats]||{l:"Niet ingevuld"}).l; }
 function inschPill(t,sm){
-  if(!isNasch(t)||isCancel(t)||!t.inschrijving) return "";
+  if(!isNasch(t)||isCancel(t)||!t.inschrijving||t.inschrijving==="geen") return "";
   if(t.inschrijving==="zelf") return bonNodig(t) && t.bestelbonStatus!=="doorgegeven" ? pill("Bestelbonnummer volgt","open",sm) : "";
   if(t.inschrijfStatus==="ingeschreven") return pill("Ingeschreven","done",sm);
   return pill("Nog in te schrijven","open",sm);
@@ -1248,6 +1280,7 @@ const BON_LBL = {nee:"niet nodig",dringend:"zo snel mogelijk (nodig om in te sch
 const bonNodig = t => !!t && (t.bestelbon==="dringend" || t.bestelbon==="later");
 function inschTxt(t){
   if(t.inschrijving==="zelf") return "De leerkracht doet de inschrijving zelf";
+  if(t.inschrijving==="geen") return "Geen inschrijving nodig";
   if(t.inschrijving==="secretariaat") return t.inschrijfStatus==="ingeschreven" ? "Ingeschreven door het secretariaat"+(t.ingeschrevenOp?" op "+fmtDY(t.ingeschrevenOp):"") : "Het secretariaat schrijft in";
   return "";
 }
@@ -1268,7 +1301,10 @@ const BUS_ST = {teregelen:["Bus nog te regelen","open"],offertes:["Offertes opge
 const FACT_ST = {teontvangen:["Te ontvangen","open"],ontvangen:["Ontvangen","done"],nvt:["Niet van toepassing","muted"]};
 const PLAN_ST = {aangevraagd:["Ontvangen","muted"],bevestigd:["Bevestigd","done"],geannuleerd:["Geannuleerd","warn"]};
 const PRIJS_ST = {gratis:"Gratis",bekend:"Prijs bekend",tebevestigen:"Prijs nog te bevestigen"};
-function pill(txt,cls,sm){ return `<span class="pill ${cls}${sm?" sm":""}"><span class="pt"></span>${esc(txt)}</span>`; }
+function pill(txt,cls,sm,tip){ return `<span class="pill ${cls}${sm?" sm":""}"${tip?` title="${esc(tip)}"`:""}><span class="pt"></span>${esc(txt)}</span>`; }
+/* De betekenis van de status, voor uitstappen en nascholingen */
+const PLAN_TIP = {aangevraagd:"Ontvangen: de aanvraag wacht op bevestiging door de school",bevestigd:"Bevestigd: de school keurt de aanvraag goed",
+  geannuleerd:"Geannuleerd",geregistreerd:"Geregistreerd: informatief, het secretariaat hoeft niets te doen"};
 
 /* Kosten, altijd vanuit één leidende basis */
 function kosten(t){
@@ -1292,14 +1328,13 @@ function kosten(t){
   return {act,per,actTot,verv,vs,saldo,tot,perAll,volledig};
 }
 
-/* Status zoals de leerkracht die ziet */
 /* Status zoals leerkrachten die zien: twee aparte gegevens.
    1. De uitstap zelf: Ontvangen · Bevestigd · Geannuleerd (enkel door de beheerder te wijzigen)
    2. De bus: Nog te regelen · Offertes opgevraagd · Geboekt
    Een openstaande wijzigings- of annuleringsaanvraag komt er zolang als extra label bij. */
-function lkStatus(t){ return PLAN_ST[t.planStatus] || PLAN_ST.aangevraagd; }
+function lkStatus(t){ if(isInfo(t) && t.planStatus==="aangevraagd") return ["Geregistreerd","done","geregistreerd"]; const s=PLAN_ST[t.planStatus] || PLAN_ST.aangevraagd; return [s[0],s[1],PLAN_ST[t.planStatus]?t.planStatus:"aangevraagd"]; }
 function openAanvraag(t){ return D.reqs.some(a=>a.uitstapId===t.id && a.status==="open"); }
-function statusPills(t,sm){ const st=lkStatus(t); return pill(st[0],st[1],sm)+(openAanvraag(t)?pill("Wijziging aangevraagd","open",sm):""); }
+function statusPills(t,sm){ const st=lkStatus(t); return pill(st[0],st[1],sm,PLAN_TIP[st[2]])+(openAanvraag(t)?pill("Wijziging aangevraagd","open",sm):""); }
 function busPill(t,sm){ return t.busNodig&&!isCancel(t) ? pill((BUS_ST[t.busStatus]||[""])[0],(BUS_ST[t.busStatus]||["",""])[1],sm) : ""; }
 
 /* Smartschool: welke velden zien ouders? */
@@ -1345,7 +1380,7 @@ const FIELD_LBL = {geannuleerd:"Annulering",smartschool:"Smartschool",verwijderd
   adminNotitie:"Mededeling administratie",interneNotitie:"Interne notitie",annulering:"Annulering",
   locatieAnders:"Andere locatie",locNaam:"Naam locatie",locStraat:"Straat locatie",locNummer:"Nr locatie",locPostcode:"Postcode locatie",locStad:"Stad/Gemeente locatie",
   categorie:"Soort aanvraag",titel:"Titel",plaats:"Plaats",deelnemersGroep:"Deelnemers",deelnemers:"Deelnemers",aantalDeelnemers:"Aantal deelnemers",opvangNodig:"Opvang klas",
-  inschrijving:"Inschrijving",inschrijfStatus:"Inschrijving",inschrijvenVoor:"Inschrijven vóór",inschrijfLink:"Link inschrijving",ingeschrevenOp:"Ingeschreven op",
+  inschrijving:"Inschrijving",inschrijfStatus:"Inschrijving",inschrijvenVoor:"Inschrijven vóór",inschrijfLink:"Link inschrijving",ingeschrevenOp:"Ingeschreven op",bonIngetrokkenOp:"Bestelbon ingetrokken",bonBusIngetrokkenOp:"Bestelbon bus ingetrokken",
   bestelbon:"Bestelbonnummer nodig",bestelbonStatus:"Bestelbonnummer aan aanvrager",bestelbonDoorgegevenOp:"Bestelbonnummer doorgegeven op"};
 /* Bij een nascholing heten enkele gegevens anders */
 const NASCH_LBL = {activiteit:"Organisatie",datumStart:"Startdatum",kostprijsPerLln:"Prijs per deelnemer",internBestelbonUitstap:"Bestelbon nascholing",factuurStatus:"Factuur nascholing"};
@@ -1358,16 +1393,16 @@ function showVal(f,v,t){
   if(f==="annulering") return v ? "geannuleerd"+(v.reden?": "+v.reden:"") : "niet geannuleerd";
   if(f==="locatieAnders") return v ? "andere locatie" : "adres van de organisatie";
   if(f==="categorie") return v==="nascholing" ? "nascholing" : "uitstap";
-  if(f==="deelnemers") return Array.isArray(v)&&v.length ? v.map(d=>d.naam+(d.klas?` (${d.klas})`:"")).join(", ") : "leeg";
+  if(f==="deelnemers") return Array.isArray(v)&&v.length ? v.map(d=>{ const x=[d.klas,DN_VERV_KORT[d.vervoer]].filter(Boolean); return d.naam+(x.length?` (${x.join(", ")})`:""); }).join(", ") : "leeg";
   if(f==="plaats") return v ? (PLAATS[v]||{l:v}).l : "leeg";
   if(f==="deelnemersGroep") return v==="naam" ? "met naam" : (GROEP_LBL[v]||"leeg");
-  if(f==="inschrijving") return v==="zelf" ? "zelf ingeschreven" : v==="secretariaat" ? "via het secretariaat" : "leeg";
+  if(f==="inschrijving") return v==="zelf" ? "schrijft zelf in" : v==="secretariaat" ? "via het secretariaat" : v==="geen" ? "geen inschrijving nodig" : "leeg";
   if(f==="inschrijfStatus") return v ? (INSCH_ST[v]||[v])[0] : "leeg";
   if(f==="bestelbon") return v ? BON_LBL[v]||v : "leeg";
   if(f==="bestelbonStatus") return v==="doorgegeven" ? "doorgegeven" : v ? "nog door te geven" : "leeg";
   if(v==null||v===""||(Array.isArray(v)&&!v.length)) return "leeg";
   if(Array.isArray(v)) return v.join(", ");
-  if(["datumStart","datumEind","voorschotVervalt","voorschotBetaaldOp","busBevestigdOp","busOfferteOp","inschrijvenVoor","ingeschrevenOp","bestelbonDoorgegevenOp"].includes(f)) return fmtDY(v);
+  if(["datumStart","datumEind","voorschotVervalt","voorschotBetaaldOp","busBevestigdOp","busOfferteOp","inschrijvenVoor","ingeschrevenOp","bestelbonDoorgegevenOp","bonIngetrokkenOp","bonBusIngetrokkenOp"].includes(f)) return fmtDY(v);
   if(["kostprijs","kostprijsPerLln","prijsVervoer","kostOpenbaar","kostOpenbaarPerLln","voorschotBedrag"].includes(f)) return euro(v);
   if(["vertrekSchool","terug","terugSchool"].includes(f)) return fmtTime(v);
   if(f==="busStatus") return (BUS_ST[v]||[v])[0];
@@ -1379,7 +1414,6 @@ function showVal(f,v,t){
   if(f==="kostprijsBasis"||f==="kostOpenbaarBasis") return v==="perLln"?(isNasch(t)?"per deelnemer":"per leerling"):"totaal voor de groep";
   if(f==="voorschotInclusief") return v==="incl"?"inclusief":"exclusief";
   if(typeof v==="boolean") return v?"ja":"nee";
-  if(f==="annulering") return v&&v.reden?("reden: "+v.reden):"—";
   return String(v);
 }
 const LOG_SKIP = ["log","v","smartschool","verwijderdOp","factuurUitstap","factuurBus","id","ingevoerdOp"];
@@ -1411,7 +1445,7 @@ function validateModel(M,{admin=false}={}){
   need("activiteit","Geef de uitstap of activiteit een naam.");
   const ds=parseISO(M.datumStart);
   if(!M.datumStart) e.datumStart="Kies een datum."; else if(!ds) e.datumStart="Dit is geen geldige datum.";
-  else { const y=ds.getFullYear(), ty=+todayISO().slice(0,4); if(y<ty-2||y>ty+3) e.datumStart="Controleer het jaartal."; }
+  else { const y=ds.getFullYear(), ty=+todayISO().slice(0,4); if((y<ty-2||y>ty+3) && !(admin && M._basisDatum===M.datumStart)) e.datumStart="Controleer het jaartal."; }
   if(M.type==="meerdaags"){
     if(!M.datumEind) e.datumEind="Kies de einddatum."; else if(!parseISO(M.datumEind)) e.datumEind="Dit is geen geldige datum.";
     else if(ds && M.datumEind<=M.datumStart) e.datumEind="De einddatum moet na de startdatum liggen.";
@@ -1463,6 +1497,9 @@ function validateKosten(M,e,admin,nas){
   }
   if(admin){
     if(M.planStatus==="geannuleerd" && !String(M.annuleringReden||"").trim()) e.annuleringReden="Geef een reden voor de annulering.";
+    if(M.planStatus==="geannuleerd" && !M.annuleringMetKosten) e.annuleringMetKosten="Duid aan of er annuleringskosten zijn.";
+    if(M.planStatus==="geannuleerd" && !nas && M.vervoer==="bus" && !M.annuleringBusMetKosten) e.annuleringBusMetKosten="Duid aan of er annuleringskosten zijn voor de bus.";
+    if(M.planStatus==="geannuleerd" && M.annuleringBusMetKosten==="wel" && String(M.annuleringBusKostenIn||"").trim()!==""){ const n=parseEuro(M.annuleringBusKostenIn); if(n==null||isNaN(n)) e.annuleringBusKostenIn="Geen geldig bedrag."; }
     if(String(M.annuleringKostenIn||"").trim()!==""){ const n=parseEuro(M.annuleringKostenIn); if(n==null||isNaN(n)) e.annuleringKostenIn="Geen geldig bedrag."; }
   }
 }
@@ -1474,7 +1511,7 @@ function validateNascholing(M,e,need,admin){
   if(!admin && !e.leerkracht && String(M.leerkracht).trim().split(/\s+/).length<2) e.leerkracht="Vul voornaam én familienaam in.";
   const ds=parseISO(M.datumStart);
   if(!M.datumStart) e.datumStart="Kies de startdatum."; else if(!ds) e.datumStart="Dit is geen geldige datum.";
-  else { const y=ds.getFullYear(), ty=+todayISO().slice(0,4); if(y<ty-2||y>ty+3) e.datumStart="Controleer het jaartal."; }
+  else { const y=ds.getFullYear(), ty=+todayISO().slice(0,4); if((y<ty-2||y>ty+3) && !(admin && M._basisDatum===M.datumStart)) e.datumStart="Controleer het jaartal."; }
   if(!M.plaats) e.plaats="Duid aan waar de nascholing doorgaat.";
   if(M.plaats==="locatie"){
     if(!admin && !String(M.stad||"").trim()) e.stad="Vul de stad of gemeente in.";
@@ -1498,27 +1535,31 @@ function validateNascholing(M,e,need,admin){
   if(M.inschrijving==="secretariaat" && M.inschrijvenVoor && !parseISO(M.inschrijvenVoor)) e.inschrijvenVoor="Geen geldige datum.";
   if(String(M.inschrijfLink||"").trim() && !veiligeLink(M.inschrijfLink)) e.inschrijfLink="Dit is geen geldige link. Begin met https://";
   if(M.inschrijving==="zelf" && !M.bestelbon) e.bestelbon="Duid aan of je een bestelbonnummer nodig hebt.";
+  /* B06: een doorgegeven bestelbonnummer heeft een nummer */
+  if(admin && M.inschrijving==="zelf" && bonNodig(M) && M.bestelbonStatus==="doorgegeven" && !String(M.internBestelbonUitstap||"").trim())
+    e.bestelbonStatus="Vul eerst het bestelbonnummer in (Bestelbon nascholing).";
   if(admin && M.inschrijfStatus==="ingeschreven" && M.ingeschrevenOp && !parseISO(M.ingeschrevenOp)) e.ingeschrevenOp="Geen geldige datum.";
 }
-const FIELD_ORDER = ["planStatus","annuleringReden","annuleringKostenIn","activiteit","datumStart","datumEind","leerkracht","stad","contactEmail","locStad","klassen","aantalLln","aantalBegeleiders",
+const FIELD_ORDER = ["planStatus","annuleringReden","annuleringMetKosten","annuleringKostenIn","annuleringBusMetKosten","annuleringBusKostenIn","activiteit","datumStart","datumEind","leerkracht","stad","contactEmail","locStad","klassen","aantalLln","aantalBegeleiders",
   "vervoer","openbaarVervoerder","kostOpenbaarIn","kostOpenbaarBasis","vertrekSchool","terug","terugSchool","prijsStatus","kostIn","kostprijsBasis","betaalKeuze","betaalAnder","voorschotIn","voorschotInclusief","voorschotVervalt",
   "prijsVervoerIn"];
 /* Volgorde waarin fouten gezocht worden: bij een nascholing de volgorde van het formulier, met de naamvelden */
 function fieldOrder(M){
   if(!M || M.categorie!=="nascholing") return FIELD_ORDER;
   const dn=[]; for(let i=0;i<MAX_NAMEN;i++) dn.push(`dn_${i}_naam`,`dn_${i}_vervoer`);
-  return ["planStatus","annuleringReden","annuleringKostenIn","titel","activiteit","datumStart","leerkracht","plaats","stad","locStad","contactEmail","deelnemersGroep","aantalDeelnemers",...dn,
-    "inschrijving","inschrijvenVoor","inschrijfLink","bestelbon","ingeschrevenOp","prijsStatus","kostIn","kostprijsBasis","betaalKeuze","betaalAnder","voorschotIn","voorschotInclusief","voorschotVervalt"];
+  return ["planStatus","annuleringReden","annuleringMetKosten","annuleringKostenIn","titel","activiteit","datumStart","leerkracht","plaats","stad","locStad","contactEmail","deelnemersGroep","aantalDeelnemers",...dn,
+    "inschrijving","inschrijvenVoor","inschrijfLink","bestelbon","bestelbonStatus","ingeschrevenOp","prijsStatus","kostIn","kostprijsBasis","betaalKeuze","betaalAnder","voorschotIn","voorschotInclusief","voorschotVervalt"];
 }
 /* In welk tabblad van het beheervenster staat een veld? */
 const FIELD_TAB = {planStatus:"alg",annuleringReden:"alg",annuleringKostenIn:"alg",activiteit:"alg",datumStart:"alg",datumEind:"alg",leerkracht:"alg",klassen:"alg",aantalLln:"alg",aantalBegeleiders:"alg",opmerking:"alg",
   straat:"best",nummer:"best",postcode:"best",stad:"best",contactTel:"best",contactEmail:"best",locatieAnders:"best",locNaam:"best",locStraat:"best",locNummer:"best",locPostcode:"best",locStad:"best",vervoer:"best",openbaarVervoerder:"best",kostOpenbaarIn:"best",kostOpenbaarBasis:"best",vertrekSchool:"best",terug:"best",terugSchool:"best",
   titel:"alg",plaats:"best",deelnemersGroep:"best",aantalDeelnemers:"best",opvangNodig:"best",inschrijving:"fact",inschrijvenVoor:"fact",inschrijfLink:"fact",ingeschrevenOp:"fact",bestelbon:"fact",bestelbonStatus:"fact"};
+Object.assign(FIELD_TAB,{annuleringMetKosten:"alg",annuleringBusMetKosten:"alg",annuleringBusKostenIn:"alg"});
 const tabOf = f => FIELD_TAB[f] || (String(f).startsWith("dn_") ? "best" : "fact");
 
 /* Model ↔ uitstap */
 function emptyModel(){
-  return {soort:"dag",categorie:"uitstap",titel:"",plaats:"",deelnemersGroep:"",aantalDeelnemers:"",deelnemers:[],opvangNodig:false,
+  return {soort:"dag",categorie:"uitstap",titel:"",plaats:"",deelnemersGroep:"",aantalDeelnemers:"",deelnemers:[],annuleringMetKosten:"",annuleringBusMetKosten:"",annuleringBusKostenIn:"",
     inschrijving:"",inschrijvenVoor:"",inschrijfLink:"",inschrijfStatus:"",ingeschrevenOp:"",bestelbon:"",bestelbonStatus:"",bestelbonDoorgegevenOp:"",
     type:"dag",activiteit:"",leerkracht:"",datumStart:"",datumEind:"",klassen:[],aantalLln:"",aantalBegeleiders:"",begeleidersNamen:"",
     locatieAnders:false,locNaam:"",locStraat:"",locNummer:"",locPostcode:"",locStad:"",
@@ -1545,13 +1586,15 @@ function toModel(t){
   M.busStatus=t.busStatus||"teregelen"; M.busBevestigdOp=t.busBevestigdOp||""; M.prijsVervoerIn=euroIn(t.prijsVervoer);
   M.factuurStatusBus=t.factuurStatusBus||"";
   M.annuleringReden=(t.annulering&&t.annulering.reden)||""; M.annuleringKostenIn=euroIn(t.annulering&&t.annulering.kosten);
+  M.annuleringMetKosten=(t.annulering&&t.annulering.metKosten)||""; M.annuleringBusMetKosten=(t.annulering&&t.annulering.busMetKosten)||"";
+  M.annuleringBusKostenIn=euroIn(t.annulering&&t.annulering.busKosten);
   M.categorie = isNasch(t) ? "nascholing" : "uitstap";
   M.soort = M.categorie==="nascholing" ? "nascholing" : (t.type==="meerdaags" ? "meerdaags" : "dag");
   if(M.categorie==="nascholing"){
     M.titel=t.titel||""; M.plaats=t.plaats||""; M.deelnemersGroep=t.deelnemersGroep||"naam";
     M.aantalDeelnemers=t.aantalDeelnemers?String(t.aantalDeelnemers):"";
     M.deelnemers=(t.deelnemers||[]).map(d=>({naam:d.naam||"",klas:d.klas||"",vervoer:d.vervoer||""}));
-    M.opvangNodig=!!t.opvangNodig; M.inschrijving=t.inschrijving||""; M.inschrijvenVoor=t.inschrijvenVoor||""; M.inschrijfLink=t.inschrijfLink||"";
+    M.inschrijving=t.inschrijving||""; M.inschrijvenVoor=t.inschrijvenVoor||""; M.inschrijfLink=t.inschrijfLink||"";
     M.inschrijfStatus=t.inschrijfStatus||""; M.ingeschrevenOp=t.ingeschrevenOp||"";
     M.bestelbon=t.bestelbon||""; M.bestelbonStatus=t.bestelbonStatus||""; M.bestelbonDoorgegevenOp=t.bestelbonDoorgegevenOp||"";
   }
@@ -1571,7 +1614,7 @@ function fromModel(M,base,{admin=false}={}){
     t.aantalDeelnemers=intOr(M.aantalDeelnemers,0);
     const n = t.deelnemersGroep==="naam" ? Math.min(t.aantalDeelnemers,MAX_NAMEN) : 0;
     t.deelnemers=(M.deelnemers||[]).slice(0,n).map(d=>({naam:String((d&&d.naam)||"").trim().replace(/\s+/g," "),klas:String((d&&d.klas)||""),vervoer:String((d&&d.vervoer)||"")}));
-    t.opvangNodig=!!M.opvangNodig; t.inschrijving=M.inschrijving||""; t.inschrijvenVoor=M.inschrijvenVoor||null;
+    t.inschrijving=M.inschrijving||""; t.inschrijvenVoor=M.inschrijvenVoor||null;
     t.inschrijfLink=veiligeLink(M.inschrijfLink)||"";
     t.bestelbon=M.bestelbon||"";
   }
@@ -1606,7 +1649,14 @@ function fromModel(M,base,{admin=false}={}){
     /* Van gratis naar betalend (ook via een verwerkte aanvraag): "niet van toepassing" was opgelegd door gratis */
     if(base && base.prijsStatus==="gratis" && t.prijsStatus!=="gratis" && t.factuurStatus==="nvt") t.factuurStatus="teontvangen";
     t.voorschotBetaaldOp = M.voorschot ? (M.voorschotBetaaldOp||null) : null;
-    t.annulering = t.planStatus==="geannuleerd" ? {reden:String(M.annuleringReden||"").trim(),op:(base&&base.annulering&&base.annulering.op)||todayISO(),kosten:parseEuro(M.annuleringKostenIn)} : null;
+    t.annulering = t.planStatus==="geannuleerd" ? Object.assign({reden:String(M.annuleringReden||"").trim(),op:(base&&base.annulering&&base.annulering.op)||todayISO(),
+        metKosten:M.annuleringMetKosten||undefined, kosten:M.annuleringMetKosten==="wel"?parseEuro(M.annuleringKostenIn):null},
+        t.busNodig ? {busMetKosten:M.annuleringBusMetKosten||undefined, busKosten:M.annuleringBusMetKosten==="wel"?parseEuro(M.annuleringBusKostenIn):null} : {}) : null;
+    /* Annulering ongedaan: een factuur die door "geen kosten" verviel, is weer te ontvangen */
+    if(base && base.planStatus==="geannuleerd" && t.planStatus!=="geannuleerd" && base.annulering){
+      if(base.annulering.metKosten==="geen" && t.factuurStatus==="nvt" && t.prijsStatus!=="gratis") t.factuurStatus="teontvangen";
+      if(base.annulering.busMetKosten==="geen" && t.factuurStatusBus==="nvt") t.factuurStatusBus="teontvangen";
+    }
     if(t.categorie==="nascholing"){
       t.inschrijfStatus = t.inschrijving==="secretariaat" ? (M.inschrijfStatus==="ingeschreven" ? "ingeschreven" : "teschrijven") : null;
       /* Datum "ingeschreven" enkel invullen op het moment dat de status naar ingeschreven gaat */
@@ -1715,6 +1765,12 @@ function supabaseAPI(){
         beheer ? callAll(`${T_BEH}?select=id,data,updated_at&order=id.asc`).catch(e=>{ if(e.rechten) return null; throw e; }) : Promise.resolve(null)
       ]);
       return {trips,reqs,settings:(set&&set[0])||null,beheer:beh};
+    },
+    /* Beheer: dossiers uit oudere schooljaren met een factuur die nog te ontvangen is (B08) */
+    async loadOpenOud(voorSJ){
+      const sel=`${T_TRIP}?select=id,nr,schooljaar,trip,updated_at&schooljaar=lt.${enc(voorSJ)}`;
+      const [a,b]=await Promise.all([callAll(sel+"&trip->>factuurStatus=eq.teontvangen"),callAll(sel+"&trip->>factuurStatusBus=eq.teontvangen")]);
+      const m=new Map(); [...(a||[]),...(b||[])].forEach(r=>m.set(r.id,r)); return [...m.values()];
     },
     async loadYear(sj){ return callAll(`${T_TRIP}?select=id,nr,schooljaar,trip,updated_at&schooljaar=eq.${enc(sj)}&order=nr.asc,id.asc`); },
     async years(){ const r=await callAll(`${T_TRIP}?select=schooljaar&order=schooljaar.asc,id.asc`); return [...new Set((r||[]).map(x=>x.schooljaar))]; },
@@ -1831,12 +1887,14 @@ let loadGen=0, writeGen=0, authGen=0;
 const markWrite = () => { writeGen++; };
 async function loadAll(poging=0){
   const my=++loadGen, w=writeGen, a=authGen, admin=isAdmin;
-  const res = await guarded(()=>API.load(sjShift(huidigSJ(),-1),{beheer:admin}));
+  const [res,oud] = await Promise.all([guarded(()=>API.load(sjShift(huidigSJ(),-1),{beheer:admin})),
+    admin&&API.loadOpenOud ? guarded(()=>API.loadOpenOud(sjShift(huidigSJ(),-1))).catch(e=>{ console.warn("Oude open dossiers niet geladen",e); return []; }) : Promise.resolve([])]);
   if(my!==loadGen) return false;                                        // een nieuwer laadverzoek neemt het over
   if(a!==authGen || w!==writeGen){ if(poging<3) return loadAll(poging+1); return false; }
   if(!isAdmin) res.beheer=null;                                         // nooit beheergegevens zonder aanmelding
   D.beheer={}; (res.beheer||[]).forEach(r=>{ D.beheer[r.id]={data:r.data||{},_upd:r.updated_at}; });
   D.trips=(res.trips||[]).map(fromRow);
+  (oud||[]).map(fromRow).forEach(t=>{ if(!D.trips.some(x=>x.id===t.id)){ t._oud=true; D.trips.push(t); } });
   D.arch=D.arch.map(t=>mergeBeheer(t));
   D.reqs=(res.reqs||[]).map(fromReq);
   if(res.settings){ D.settings=normSettings(res.settings.data); D.setUpd=res.settings.updated_at; }
@@ -1872,7 +1930,20 @@ async function saveTrip(next,base,{log}={}){
   }
   return saved;
 }
+/* B02: controle op het eindresultaat, ook na het samenvoegen met een wijziging van iemand anders.
+   Enkel nieuwe tegenstrijdigheden houden het bewaren tegen: een ouder dossier blijft bewerkbaar. */
+function eindControle(t){
+  const p=[];
+  if(t.type==="meerdaags" && parseISO(t.datumStart) && parseISO(t.datumEind) && t.datumEind<t.datumStart) p.push("De einddatum ligt vóór de startdatum.");
+  if(isNasch(t) && t.bestelbonStatus==="doorgegeven" && !String(t.internBestelbonUitstap||"").trim()) p.push("Het bestelbonnummer staat op doorgegeven, maar het nummer ontbreekt.");
+  if(t.prijsStatus==="bekend" && t.kostprijs==null) p.push("De prijs staat op gekend, maar het bedrag ontbreekt.");
+  if(isNasch(t) && t.deelnemersGroep==="naam" && !(t.deelnemers||[]).length) p.push("Er staan geen namen bij de deelnemers.");
+  return p;
+}
+function nieuweProblemen(t,base){ const oud=base?eindControle(norm(base)):[]; return eindControle(norm(t)).filter(x=>!oud.includes(x)); }
+function tegenstrijdig(msg){ const e=new DbError(msg); e.inconsistent=true; return e; }
 async function savePublic(t,base){
+  { const pr=nieuweProblemen(t,base); if(pr.length) throw tegenstrijdig(pr.join(" ")+" Er is niets bewaard."); }
   try{
     const row=await guarded(()=>API.updateTrip(storable(t),schooljaarVan(t.datumStart),base._upd));
     return replaceTrip(row);
@@ -1894,6 +1965,8 @@ async function savePublic(t,base){
     const merged=Object.assign({},theirs);
     mine.forEach(f=>{ if(!clash.includes(f)||keepMine) merged[f]=t[f]; });
     merged.log=[...(theirs.log||[]),...(t.log||[]).filter(l=>!(theirs.log||[]).some(x=>x.op===l.op))].slice(-40);
+    { const pr=nieuweProblemen(merged,base);
+      if(pr.length) throw tegenstrijdig("Samen met de wijziging van iemand anders klopt dit niet meer: "+pr.join(" ")+" Er is niets bewaard; kijk de gegevens na en bewaar opnieuw."); }
     const row=await guarded(()=>API.updateTrip(storable(norm(merged)),schooljaarVan(merged.datumStart),cur.updated_at));
     toast(clash.length?"Bewaard":"Bewaard en samengevoegd met een wijziging van iemand anders","ok");
     return replaceTrip(row);
@@ -1917,7 +1990,7 @@ async function beheerPatch(id,patch){
 function replaceTrip(row,idOnly){
   const cur=idOnly?tripById(idOnly):null;
   const nt=row?fromRow(row):mergeBeheer(Object.assign({},cur)), i=D.trips.findIndex(x=>x.id===nt.id), j=D.arch.findIndex(x=>x.id===nt.id);
-  if(i>=0) D.trips[i]=nt; else if(j>=0) D.arch[j]=nt; else D.trips.push(nt);
+  if(i>=0) D.trips[i]=nt; if(j>=0) D.arch[j]=nt; if(i<0&&j<0) D.trips.push(nt);
   markWrite(); D.sig=dataSig(); return nt;
 }
 /* Kleine, directe wijziging (statustegel, vinkje) */
@@ -1993,7 +2066,7 @@ document.addEventListener("visibilitychange",()=>{ if(!document.hidden) refresh(
    INTERFACE: vensters, meldingen, hoofding, beheer, tabbladen
    ============================================================ */
 const ui = {
-  view:"nieuw", q:"", klas:"", verv:"", soort:"uitstap", nKlas:"", nDeeln:"", nAanvr:"", nPlaats:"", periode:"komend", groep:"", werk:"", sort:{key:"datum",dir:1}, ovMode:"standaard",
+  view:"nieuw", q:"", klas:"", verv:"", soort:"uitstap", nKlas:"", nDeeln:"", nAanvr:"", nPlaats:"", nInfo:"", sortGekozen:false, periode:"komend", groep:"", werk:"", sort:{key:"datum",dir:1}, ovMode:"standaard",
   calMonth:null, archSJ:"", archQ:"", archSoort:"uitstap", selKlas:null, setSJ:""
 };
 (function(){ const p=ssGet(SS_PREFS)||{}; ui.klas=p.klas||""; })();
@@ -2014,6 +2087,7 @@ function toast(msg,type="ok",action){
    een weigering van de database, of een fout in de tool zelf. */
 function dbFail(e,wat){
   console.error(e);
+  if(e && e.inconsistent){ toast(e.message,"err"); return; }
   const w = wat ? wat+" lukte niet: " : "Niet gelukt: ";
   if(e && e.partial){ toast(e.message,"err",e.rechten?{label:"Aanmelden",fn:()=>openLogin()}:undefined); return; }
   if(e && e.rechten){ toast(w+"je bent niet (meer) aangemeld als beheerder. Je invoer blijft staan.","err",{label:"Aanmelden",fn:()=>openLogin()}); return; }
@@ -2227,8 +2301,11 @@ function pasWereldToe(){
 }
 /* Een venster volgt de soort van de uitstap of nascholing die het toont, los van de pagina erachter */
 function wereldVenster(id,nas){ const el=$(id); if(!el) return; el.classList.toggle("wereld-zand",!!nas); el.classList.toggle("wereld-teal",!nas && document.body.classList.contains("wereld-zand")); }
+/* B15: de hoogte van de plakkende werkbalk volgen, zodat de kolomkoppen er altijd net onder staan */
+const TB_RO = typeof ResizeObserver!=="undefined" ? new ResizeObserver(es=>{ es.forEach(e=>{ if(e.target.offsetParent) document.documentElement.style.setProperty("--tb-h",Math.round(e.target.offsetHeight)+"px"); }); }) : null;
+function volgWerkbalk(){ if(!TB_RO) return; TB_RO.disconnect(); qsa(".toolbar.sticky").forEach(tb=>{ if(tb.offsetParent) TB_RO.observe(tb); }); }
 function renderView(){
-  const v=ui.view; pasWereldToe();
+  const v=ui.view; pasWereldToe(); setTimeout(volgWerkbalk,0);
   if(v==="nieuw") renderNieuw();
   else if(v==="overzicht") renderOverzicht();
   else if(v==="kalender") renderKalender();
@@ -2274,7 +2351,7 @@ function fld(M,E,px,f,label,o={}){
 function rcards(M,E,f,items,{n=2,nm=1,label="",req=false,span=12,px="n",cls=""}={}){
   return `<div class="field span${span}" data-f="${f}">${label?`<span class="flabel" id="${px}_l_${f}">${label}${req?' <span class="req">*</span>':""}</span>`:""}
     <div class="rcards${cls?" "+cls:""}${E[f]?" invalid":""}" role="radiogroup"${label?` aria-labelledby="${px}_l_${f}"`:""} style="--n:${n};--nm:${nm}">
-    ${items.map(([val,icn,title,sub])=>`<button type="button" class="rcard${sub?"":" compact"}${M[f]===val?" is-sel":""}" role="radio" aria-checked="${M[f]===val}" data-set="${f}" data-val="${esc(val)}">
+    ${items.map(([val,icn,title,sub],i)=>`<button type="button" class="rcard${sub?"":" compact"}${M[f]===val?" is-sel":""}" role="radio" aria-checked="${M[f]===val}" tabindex="${M[f]===val||(i===0&&!items.some(x=>x[0]===M[f]))?0:-1}" data-set="${f}" data-val="${esc(val)}">
       ${icn?`<span class="rc-ic">${ic(icn,18)}</span>`:""}<span class="rc-txt"><span class="rc-title">${title}</span>${sub?`<span class="rc-sub">${sub}</span>`:""}</span><span class="rc-check" aria-hidden="true">${ic("check",12,3)}</span></button>`).join("")}
     </div>${fErr(E,f,px)}</div>`;
 }
@@ -2291,8 +2368,9 @@ const TILE = {
   fact:   {states:["teontvangen","ontvangen","nvt"], l:{teontvangen:"Te ontvangen",ontvangen:"Ontvangen",nvt:"Niet van toepassing"}, c:{teontvangen:"amber",ontvangen:"green",nvt:"grey"}},
   factBus:{states:["teontvangen","ontvangen"],       l:{teontvangen:"Te ontvangen",ontvangen:"Ontvangen"},                        c:{teontvangen:"amber",ontvangen:"green"}},
   bus:    {states:["teregelen","offertes","bevestigd"], l:{teregelen:"Nog te regelen",offertes:"Offertes opgevraagd",bevestigd:"Geboekt"}, c:{teregelen:"coral",offertes:"teal",bevestigd:"green"}},
-  insch:  {states:["teschrijven","ingeschreven"],     l:{teschrijven:"Nog in te schrijven",ingeschreven:"Ingeschreven",zelf:"Door de leerkracht"}, c:{teschrijven:"coral",ingeschreven:"green",zelf:"teal"}},
-  bonnr:  {states:["doorgeven","doorgegeven"],        l:{doorgeven:"Nog door te geven",doorgegeven:"Doorgegeven"},           c:{doorgeven:"coral",doorgegeven:"green"}}
+  insch:  {states:["teschrijven","ingeschreven"],     l:{teschrijven:"Nog in te schrijven",ingeschreven:"Ingeschreven",zelf:"Door de leerkracht",geen:"Niet nodig"}, c:{teschrijven:"coral",ingeschreven:"green",zelf:"teal",geen:"grey"}},
+  bonnr:  {states:["doorgeven","doorgegeven"],        l:{doorgeven:"Nog door te geven",doorgegeven:"Doorgegeven"},           c:{doorgeven:"coral",doorgegeven:"green"}},
+  intrek: {states:["intrekken","ingetrokken"],        l:{intrekken:"Nog in te trekken",ingetrokken:"Ingetrokken"},           c:{intrekken:"coral",ingetrokken:"green"}}
 };
 const nextState = (kind,v) => { const s=TILE[kind].states, i=s.indexOf(v); return s[(i+1)%s.length]; };
 function tile(kind,f,v,label,{attr="data-cycle",locked=false,lockTxt=""}={}){
@@ -2401,8 +2479,47 @@ function warnList(M,skipId){
     if(M.inschrijvenVoor<todayISO()) add("insch:voorbij","insch",`<b>De uiterste inschrijvingsdatum is voorbij.</b> Kan er nog ingeschreven worden? Vraag het eventueel na bij de organisatie.`);
     else if(parseISO(M.datumStart) && M.inschrijvenVoor>M.datumStart) add("insch:na","insch",`<b>Inschrijven vóór</b> ligt na de startdatum. Klopt die datum?`);
   }
+  /* W05: het secretariaat moet inschrijven, maar weet niet waar */
+  if(nas && M.inschrijving==="secretariaat" && !String(M.inschrijfLink||"").trim() && !String(M.contactEmail||"").trim() && !String(M.contactTel||"").trim())
+    add("insch:info","insch",`<b>Geen link en geen contact van de organisatie.</b> Hoe kan het secretariaat inschrijven? Vul de link hieronder in, of het telefoonnummer of e-mailadres van de organisatie in stap 2.`);
+  /* W01: dezelfde naam twee keer, of dezelfde collega die dag in een andere nascholing */
+  if(nas && M.deelnemersGroep==="naam"){
+    const nk=s=>String(s||"").trim().replace(/\s+/g," ").toLowerCase();
+    const namen=(M.deelnemers||[]).slice(0,dnRijen(M)).map(d=>String((d&&d.naam)||"").trim()).filter(Boolean), gezien=new Set(), dubbel=new Set();
+    namen.forEach(n=>{ const k=nk(n); if(gezien.has(k)) dubbel.add(n); gezien.add(k); });
+    dubbel.forEach(n=>add("dn:dubbel:"+nk(n),"deeln",`<b>${esc(n)}</b> staat twee keer in de lijst. Klopt dat?`));
+    if(ok) liveTrips().forEach(t=>{
+      if(t.id===skipId || !isNasch(t) || isCancel(t) || t._datumFout || t.datumStart!==M.datumStart) return;
+      const ook=(t.deelnemers||[]).filter(d=>gezien.has(nk(d.naam))).map(d=>d.naam);
+      if(ook.length) add("dn:dag:"+t.id,"deeln",`<b>${esc(ook.join(" en "))}</b> ${ook.length===1?"volgt":"volgen"} die dag ook een andere nascholing: <b>${esc(titelVan(t))}</b>. Klopt dat?`);
+    });
+  }
+  /* W02: een hele groep volgt de nascholing, terwijl klassen van die groep op uitstap gaan (en omgekeerd) */
+  if(nas && ok && GROEP_LBL[M.deelnemersGroep]){
+    const kl=groepKlassen(M.deelnemersGroep);
+    liveTrips().forEach(t=>{
+      if(t.id===skipId || isNasch(t) || isCancel(t) || t._datumFout || M.datumStart<t.datumStart || M.datumStart>tripEnd(t)) return;
+      const raak=sortKlassen(t.klassen.filter(k=>kl.includes(k)));
+      if(raak.length) add("dg:"+t.id,"deeln",`Die dag ${raak.length===1?"gaat":"gaan"} <b>${esc(raak.join(", "))}</b> op uitstap: <b>${esc(t.activiteit)}</b>. De ${esc(GROEP_LBL[M.deelnemersGroep].toLowerCase())} volgt dan deze nascholing. Is dat zo afgesproken?`);
+    });
+  }
+  if(!nas && ok && (M.klassen||[]).length){
+    const s=M.datumStart, e=(M.type==="meerdaags"&&parseISO(M.datumEind))?M.datumEind:s;
+    liveTrips().forEach(t=>{
+      if(t.id===skipId || !isNasch(t) || isCancel(t) || t._datumFout || t.datumStart<s || t.datumStart>e || !GROEP_LBL[t.deelnemersGroep]) return;
+      const raak=sortKlassen(M.klassen.filter(k=>groepKlassen(t.deelnemersGroep).includes(k)));
+      if(raak.length) add("ng:"+t.id,"klas",`${M.type==="meerdaags"?"Op "+esc(fmtD(t.datumStart)):"Die dag"} volgt de <b>${esc(GROEP_LBL[t.deelnemersGroep].toLowerCase())}</b> een nascholing: <b>${esc(titelVan(t))}</b>. Dat geldt ook voor <b>${esc(raak.join(", "))}</b>. Is dat zo afgesproken?`);
+    });
+  }
+  /* B13: een voorschot (inbegrepen) dat groter is dan de kostprijs */
+  if(M.voorschot && M.voorschotInclusief==="incl" && M.prijsStatus==="bekend"){
+    const vs=parseEuro(M.voorschotIn), p2=perLlnOf(M), kk=parseEuro(M.kostIn), tot=(p2&&p2.tot!=null)?p2.tot:(M.kostprijsBasis!=="perLln"?kk:null);
+    if(vs!=null && !isNaN(vs) && tot!=null && !isNaN(tot) && vs>tot) add("prijs:saldo","prijs",`Het voorschot (<b>${esc(euro(vs))}</b>) is groter dan de kostprijs (<b>${esc(euro(tot))}</b>). Klopt dat?`);
+  }
   return out;
 }
+/* De klassen van een groep: kleuterschool, lagere school of de hele school */
+function groepKlassen(g){ const ks=S().klassen; return (g==="kleuter"?ks.filter(k=>k.groep==="Kleuter"):g==="lager"?ks.filter(k=>k.groep==="Lager"):ks).map(k=>k.naam); }
 function slotHTML(list,slot,pend){
   return list.filter(w=>w.slot===slot).map(w=>`<div class="fwarn${pend&&pend(w.id)?" pending":""}" data-wid="${esc(w.id)}">${ic("alert",16)}<div>${w.html}</div></div>`).join("");
 }
@@ -2417,7 +2534,7 @@ function secWat(M,E,px,W,pend,{vorige=null}={}){
     ["nascholing","cap","Nascholing","Voor leerkrachten"]],{n:3,nm:1,px});
   if(M.categorie==="nascholing") return soort
     +fld(M,E,px,"titel","Titel van de nascholing",{req:true,span:12,ph:"bv. Leesmotivatie in de lagere school"})
-    +fld(M,E,px,"activiteit","Naam organisatie",{req:true,span:12,ph:"bv. Leerstudio, KU Leuven",list:"orgList"})
+    +fld(M,E,px,"activiteit","Naam organisatie",{req:true,span:12,ph:"bv. Leerstudio, KU Leuven",list:"orgList",hint:"Geen externe organisatie? Vul dan Klim-Op in."})
     +(px==="n"?`<div class="span12" data-live="vorige">${vorigeHTML(vorige,M)}</div>`:"")
     +fld(M,E,px,"datumStart","Startdatum nascholing",{req:true,type:"date",span:6,hint:"Loopt de nascholing over meer dagen? Geef dan de eerste dag."})
     +fld(M,E,px,"leerkracht","Aangevraagd door",{req:true,span:6,ph:"Voornaam Familienaam",ac:"name"})
@@ -2483,21 +2600,22 @@ function klasOpties(cur){
     +(cur&&!known?`<option value="${esc(cur)}" selected>${esc(cur)} (niet meer in de lijst)</option>`:"");
 }
 function dnRowHTML(M,E,px,i){
-  const d=(M.deelnemers||[])[i]||nieuweDn(), loc=M.plaats==="locatie", f=k=>`dn_${i}_${k}`, id=k=>`${px}_${f(k)}`;
+  const d=(M.deelnemers||[])[i]||nieuweDn(), loc=M.plaats!=="online"&&M.plaats!=="school", f=k=>`dn_${i}_${k}`, id=k=>`${px}_${f(k)}`;
   const inv=k=>E[f(k)]?` aria-invalid="true" aria-describedby="${px}_e_${f(k)}"`:"";
   return `<div class="dn-row${loc?" met-verv":""}">
     <span class="dn-nr" aria-hidden="true">${i+1}</span>
     <div class="dn-f dn-naam" data-f="${f("naam")}"><label class="sr-only" for="${id("naam")}">Naam deelnemer ${i+1}</label><input class="ctrl${E[f("naam")]?" invalid":""}" id="${id("naam")}" data-dn="${i}|naam" value="${esc(d.naam)}" placeholder="Voornaam Familienaam" autocomplete="off" list="naamList"${inv("naam")}>${fErr(E,f("naam"),px)}</div>
     <div class="dn-f dn-klas" data-f="${f("klas")}"><label class="sr-only" for="${id("klas")}">Klas van deelnemer ${i+1}</label><select class="ctrl" id="${id("klas")}" data-dn="${i}|klas">${klasOpties(d.klas)}</select></div>
     ${loc?`<div class="dn-f dn-verv" data-f="${f("vervoer")}"><label class="sr-only" for="${id("vervoer")}">Hoe gaat deelnemer ${i+1}?</label><select class="ctrl${E[f("vervoer")]?" invalid":""}" id="${id("vervoer")}" data-dn="${i}|vervoer"${inv("vervoer")}><option value="">Vervoer</option>${DN_VERV_KEYS.map(k=>`<option value="${k}"${d.vervoer===k?" selected":""}>${esc(DN_VERV[k])}</option>`).join("")}</select>${fErr(E,f("vervoer"),px)}</div>`:""}
+    <button type="button" class="dn-del" data-dn-del="${i}" aria-label="Deelnemer ${i+1} verwijderen" title="Deze deelnemer verwijderen">${ic("x",15)}</button>
   </div>`;
 }
 function dnLijstHTML(M,E,px){
-  const n=dnRijen(M), loc=M.plaats==="locatie";
+  const n=dnRijen(M), loc=M.plaats!=="online"&&M.plaats!=="school";   // vervoer ook zolang de plaats nog niet gekozen is
   if(!n) return `<div class="hint">Vul het aantal deelnemers in: per deelnemer verschijnt een veld voor de naam.</div>`;
-  return `<div class="hint">Eerst voornaam, dan familienaam, bv. Biba Janssens.${loc?" Duid per deelnemer aan hoe die naar de nascholing gaat.":""}</div>
+  return `<div class="hint">Eerst voornaam, dan familienaam, bv. Biba Janssens.${loc?" Duid per deelnemer aan hoe die naar de nascholing gaat.":M.plaats==="online"?" De nascholing is online: vervoer is niet nodig.":" De nascholing is op school: vervoer is niet nodig."}</div>
     <div class="dn-mlabel">Namen <span class="req">*</span></div>
-    <div class="dn-head${loc?" met-verv":""}" aria-hidden="true"><span></span><span>Naam <span class="req">*</span></span><span>Klas <span class="opt">(optioneel)</span></span>${loc?`<span>Vervoer <span class="req">*</span></span>`:""}</div>
+    <div class="dn-head${loc?" met-verv":""}" aria-hidden="true"><span></span><span>Naam <span class="req">*</span></span><span>Klas <span class="opt">(optioneel)</span></span>${loc?`<span>Vervoer <span class="req">*</span></span>`:""}<span></span></div>
     <div class="dn-rows">${Array.from({length:n},(_,i)=>dnRowHTML(M,E,px,i)).join("")}</div>
     ${intOr(M.aantalDeelnemers,0)>12?`<div class="finfo">${ic("info",16)}<div>Volgt een hele groep de nascholing? Kies dan hierboven <b>Hele kleuterschool</b>, <b>Hele lagere school</b> of <b>Hele school</b>: dan hoef je geen namen in te vullen.</div></div>`:""}
     <div class="hint">Vul je de klas in, dan waarschuwt de tool als die klas op de dag van de nascholing een uitstap heeft.</div>`;
@@ -2532,15 +2650,15 @@ function secDeelnemers(M,E,px,W,pend){
   return rcards(M,E,"deelnemersGroep",[["naam","","Collega's met naam",""],["kleuter","","Hele kleuterschool",""],["lager","","Hele lagere school",""],["school","","Hele school",""]],
       {n:4,nm:2,label:"Wie volgt de nascholing?",req:true,px,cls:"small"})
     +fld(M,E,px,"aantalDeelnemers",naam?"Aantal deelnemers":"Aantal deelnemers (ongeveer)",{req:true,span:naam?3:5,im:"numeric",ph:"0"})
-    +(naam?`<div class="span12 dn-wrap" data-live="dnlijst">${dnLijstHTML(M,E,px)}</div>`
-      +`<div class="span12"><label class="check-card${M.opvangNodig?" on":""}"><input type="checkbox" data-mb="opvangNodig"${M.opvangNodig?" checked":""}><span>De nascholing valt (deels) tijdens de lesuren: de klas moet opgevangen worden</span></label></div>`:"")
+    +(naam?`<div class="span12 dn-wrap" data-live="dnlijst">${dnLijstHTML(M,E,px)}</div>`:"")
     +slot("deeln",W,pend);
 }
 /* De inschrijving: voor een nascholing wat de bus is voor een uitstap */
 function secInschrijving(M,E,px,W,pend,{admin=false}={}){
   let h=rcards(M,E,"inschrijving",[["zelf","check","Ik doe de inschrijving zelf","Deelnemers zijn of worden door mij ingeschreven"],
-      ["secretariaat","mail","Secretariaat moet inschrijven","De inschrijving moet nog gebeuren; het secretariaat regelt dit"]],
-    {n:2,nm:1,label:"Wie schrijft in?",req:true,px});
+      ["secretariaat","mail","Secretariaat moet inschrijven","De inschrijving moet nog gebeuren; het secretariaat regelt dit"],
+      ["geen","info","Er is geen inschrijving nodig","Het secretariaat hoeft hiervoor niets te doen"]],
+    {n:3,nm:1,label:"Wie schrijft in?",req:true,px});
   if(M.inschrijving==="secretariaat") h+=`<div class="span12 vpanel"><div class="vp-h">${ic("mail",16)}Gegevens voor de inschrijving</div><div class="grid">
       ${fld(M,E,px,"inschrijvenVoor","Inschrijven vóór",{type:"date",span:4,opt:true,cls:"half-m"})}
       ${fld(M,E,px,"inschrijfLink","Link naar het aanbod of de inschrijving",{type:"url",span:8,opt:true,ph:"https://…",ac:"url"})}
@@ -2555,7 +2673,7 @@ function secInschrijving(M,E,px,W,pend,{admin=false}={}){
           {n:3,nm:1,label:"Heb je voor de inschrijving een bestelbonnummer van de school nodig?",req:true,px})}
       <div class="span12 hint">${bonNodig(M)?"Het secretariaat maakt de bestelbon en bezorgt je het nummer. Je vindt het ook terug in het detail van je nascholing."
         :"Twijfel je? Kies dan <b>Ja, later is goed</b>: het secretariaat bezorgt je het nummer zodra de bestelbon klaar is."}</div>
-      ${admin&&bonNodig(M)?`<div class="field span4"><span class="flabel">Doorgegeven aan de aanvrager</span>${tile("bonnr","bestelbonStatus",M.bestelbonStatus||"doorgeven","Bestelbonnummer")}</div>`:""}
+      ${admin&&bonNodig(M)?`<div class="field span4" data-f="bestelbonStatus"><span class="flabel">Doorgegeven aan de aanvrager</span>${tile("bonnr","bestelbonStatus",M.bestelbonStatus||"doorgeven","Bestelbonnummer")}${fErr(E,"bestelbonStatus",px)}</div>`:""}
     </div></div>`;
   return h+slot("insch",W,pend);
 }
@@ -2614,8 +2732,9 @@ function prijsCalcTxt(M){
   if(M.prijsStatus!=="bekend") return "";
   const nas=M.categorie==="nascholing", n=parseEuro(M.kostIn), l=intOr(nas?M.aantalDeelnemers:M.aantalLln,0), [ev,mv]=nas?["deelnemer","deelnemers"]:["leerling","leerlingen"];
   if(n==null||isNaN(n)||!n) return "";
-  if(M.kostprijsBasis==="perLln") return l>0 ? `= ${euro(r2(n*l))} voor ${plural(l,ev,mv)}` : `Vul het aantal ${mv} in voor het totaal.`;
-  return l>0 ? `= ${euro(r2(n/l))} per ${ev}` : "";
+  const raming = nas && M.deelnemersGroep && M.deelnemersGroep!=="naam";   // W02: een groep is een schatting
+  if(M.kostprijsBasis==="perLln") return l>0 ? `= ${euro(r2(n*l))} voor ${raming?"± ":""}${plural(l,ev,mv)}${raming?" (raming)":""}` : `Vul het aantal ${mv} in voor het totaal.`;
+  return l>0 ? `= ${euro(r2(n/l))} per ${ev}${raming?" (raming)":""}` : "";
 }
 function secOpmerking(M,E,px,{admin=false}={}){
   return fld(M,E,px,"opmerking",admin?"Opmerking leerkracht":"Opmerking voor de administratie",{span:12,area:true,opt:true,ph:M.categorie==="nascholing"?"bv. de sessiecode, of wie met wie meerijdt":"bv. graag een bus met gordels, twee kinderen met rolstoel"});
@@ -2623,9 +2742,17 @@ function secOpmerking(M,E,px,{admin=false}={}){
 /* Beheer: status van de aanvraag */
 function secStatus(M,E,px){
   const opts=[["aangevraagd","Ontvangen","teal"],["bevestigd","Bevestigd","green"],["geannuleerd","Geannuleerd","coral"]];
+  const nas=M.categorie==="nascholing", bus=!nas && M.vervoer==="bus";
+  const keuze=(f,label)=>rcards(M,E,f,[["geen","","Geen kosten","Bestelbon en factuur vervallen"],["wel","","Wel kosten","De factuur is te ontvangen"]],{n:2,nm:2,label,req:true,px,cls:"small"});
+  const bedrag=(f,label)=>fld(M,E,px,f,label,{span:4,euro:true,im:"decimal",opt:true,hint:"Leeg laten zolang het bedrag niet gekend is."});
   return `<div class="field span12" data-f="planStatus"><span class="flabel">Status van de aanvraag</span>
-    <div class="seg3" role="radiogroup">${opts.map(([v,l,c])=>`<button type="button" role="radio" aria-checked="${M.planStatus===v}" class="${M.planStatus===v?"on s-"+c:""}" data-set="planStatus" data-val="${v}">${l}</button>`).join("")}</div></div>`
-    +(M.planStatus==="geannuleerd"?fld(M,E,px,"annuleringReden","Reden annulering",{req:true,span:8})+fld(M,E,px,"annuleringKostenIn","Annuleringskosten",{span:4,euro:true,im:"decimal",opt:true}):"");
+    <div class="seg3" role="radiogroup">${opts.map(([v,l,c])=>`<button type="button" role="radio" aria-checked="${M.planStatus===v}" class="${M.planStatus===v?"on s-"+c:""}" data-set="planStatus" data-val="${v}">${l}</button>`).join("")}</div>
+    <div class="hint">Bevestigd: de school keurt de aanvraag goed.${nas?" Een nascholing zonder inschrijving die gratis is, staat als <b>Geregistreerd</b>: het secretariaat hoeft niets te doen.":""}</div></div>`
+    +(M.planStatus==="geannuleerd" ? fld(M,E,px,"annuleringReden","Reden annulering",{req:true,span:12})
+      +keuze("annuleringMetKosten",bus?"Annuleringskosten activiteit":nas?"Annuleringskosten nascholing":"Annuleringskosten")
+      +(M.annuleringMetKosten==="wel"?bedrag("annuleringKostenIn","Bedrag annuleringskosten"):"")
+      +(bus ? keuze("annuleringBusMetKosten","Annuleringskosten bus")+(M.annuleringBusMetKosten==="wel"?bedrag("annuleringBusKostenIn","Bedrag annuleringskosten bus"):"") : "")
+      +`<div class="span12 hint">Je kan dit later nog aanpassen, bijvoorbeeld als er toch een factuur komt.</div>` : "");
 }
 /* Beheer: bus */
 function secBus(M,E,px){
@@ -2665,8 +2792,24 @@ function vorigeKeer(M){
 /* ---------- Binden (één keer per houder) ---------- */
 function bindForm(host,getM,o){
   if(host._bound) return; host._bound=true;
-  const upd=()=>{ const M=getM(); if(M._tried) o.state.E=validateModel(M,{admin:o.admin}); liveUpdate(host,M,o); o.onChange&&o.onChange(); };
+  /* Een keuzegroep is één tabstop; de pijltjestoetsen kiezen de vorige of volgende kaart */
+  host.addEventListener("keydown",e=>{
+    const r=e.target.closest&&e.target.closest('.rcard[role="radio"]'); if(!r || !["ArrowRight","ArrowDown","ArrowLeft","ArrowUp"].includes(e.key)) return;
+    const all=[...r.closest('[role="radiogroup"]').querySelectorAll('.rcard[role="radio"]')], i=all.indexOf(r);
+    e.preventDefault(); all[(i+(e.key==="ArrowRight"||e.key==="ArrowDown"?1:-1)+all.length)%all.length].click();
+  });
+  const upd=(stil)=>{ const M=getM(); if(M._tried) o.state.E=validateModel(M,{admin:o.admin}); liveUpdate(host,M,o,stil); o.onChange&&o.onChange(); };
+  /* Datumvelden: de kalender van de browser past de datum al aan terwijl je door de maanden bladert. De waarschuwingen
+     wachten tot je terug in de pagina bent (muis of toetsenbord: een dag gekozen of buiten de kalender geklikt),
+     tot je het veld verlaat, of komen meteen als je de datum zelf typt. */
+  const DT={bezig:false,t:0,kt:0};
+  const bevestigDatum=()=>{ if(!DT.bezig) return; DT.bezig=false; WPOP.datumBezig=false; upd(); };
+  host.addEventListener("keydown",e=>{ if(e.target && e.target.type==="date") DT.kt=Date.now(); },true);
+  host.addEventListener("focusout",e=>{ if(e.target && e.target.type==="date") bevestigDatum(); });
+  ["pointermove","pointerdown","keydown"].forEach(ev=>document.addEventListener(ev,()=>{ if(DT.bezig && Date.now()-DT.t>150) bevestigDatum(); },true));
   host.addEventListener("input",e=>{ const el=e.target, M=getM();
+    if(el.dataset.m && el.type==="date" && Date.now()-DT.kt>500){   // uit de kalender, niet getypt
+      M[el.dataset.m]=el.value; DT.bezig=true; DT.t=Date.now(); WPOP.datumBezig=true; clearTimeout(WPOP.timer); upd(true); return; }
     if(el.dataset.dn){ zetDeelnemer(M,el.dataset.dn,el.value); upd(); return; }
     if(el.dataset.m){ const f=el.dataset.m, prev=M[f]; M[f]=el.value;
       if(f==="leerkracht") volgAanvrager(M,prev,host,o.px);
@@ -2680,8 +2823,14 @@ function bindForm(host,getM,o){
   });
   host.addEventListener("click",e=>{
     const M=getM();
+    /* B05: precies deze deelnemer verwijderen; het aantal volgt */
+    const del=e.target.closest("[data-dn-del]");
+    if(del){ const i=+del.dataset.dnDel, arr=(M.deelnemers||[]).slice(0,dnRijen(M)); arr.splice(i,1);
+      M.deelnemers=arr; M.aantalDeelnemers=String(arr.length);
+      rerender(host,M,o, arr.length ? `[data-dn="${Math.min(i,arr.length-1)}|naam"]` : `#${o.px}_aantalDeelnemers`); return; }
     const s=e.target.closest("[data-set]");
-    if(s){ const f=s.dataset.set, v=s.dataset.val; M[f]=v;
+    if(s){ const f=s.dataset.set, v=s.dataset.val, vorig=M[f]; M[f]=v;
+      if(f==="deelnemersGroep" && v!=="naam" && vorig!==v) M.aantalDeelnemers="";   // W02: bij een groep het aantal bewust invullen
       if(f==="soort"){ M.categorie = v==="nascholing" ? "nascholing" : "uitstap"; M.type = v==="meerdaags" ? "meerdaags" : "dag"; if(v==="nascholing") prepNascholing(M); }
       if(f==="deelnemersGroep" && v==="naam") prepNaam(M);
       if(f==="inschrijving" && v==="secretariaat" && !M.inschrijfStatus) M.inschrijfStatus="teschrijven";
@@ -2711,10 +2860,10 @@ function rerender(host,M,o,focusSel,noFocusIfElsewhere){
   window.scrollTo(0,y);
   o.onChange&&o.onChange();
 }
-function liveUpdate(host,M,o){
-  const W=warnList(M,o.skipId), pend=o.pend||null;
+function liveUpdate(host,M,o,stil){
+  const pend=o.pend||null;
   const set=(k,h)=>{ const el=qs(`[data-live="${k}"]`,host); if(el && el.innerHTML!==h) el.innerHTML=h; };
-  ["datum","klas","verv","betaal","prijs","deeln","insch"].forEach(s=>set("w-"+s,slotHTML(W,s,pend)));
+  if(!stil){ const W=warnList(M,o.skipId); ["datum","klas","verv","betaal","prijs","deeln","insch"].forEach(s=>set("w-"+s,slotHTML(W,s,pend))); }   // stil: de waarschuwingen wachten
   syncDnRows(host,M,o);
   set("calc",prijsCalcTxt(M)); set("calcOv",ovCalcTxt(M)); set("klascount",klasCountTxt(M));
   if(o.px==="n") set("vorige",vorigeHTML(vorigeKeer(M),M));
@@ -2722,8 +2871,9 @@ function liveUpdate(host,M,o){
     const E=o.state.E;
     qsa("[data-f]",host).forEach(w=>{
       const f=w.dataset.f, has=!!E[f], cur=qs(":scope > .ferr",w);
-      const ctrl=qs(".ctrl",w); if(ctrl){ ctrl.classList.toggle("invalid",has); if(has) ctrl.setAttribute("aria-invalid","true"); else ctrl.removeAttribute("aria-invalid"); }
-      const rc=qs(":scope > .rcards, :scope > .klas-groups, :scope > .basis-toggle",w); if(rc) rc.classList.toggle("invalid",has);
+      const eid=`${o.px}_e_${f}`, ariaFout=(el,aan)=>{ if(aan){ el.setAttribute("aria-describedby",eid); } else if(el.getAttribute("aria-describedby")===eid) el.removeAttribute("aria-describedby"); };
+      const ctrl=qs(".ctrl",w); if(ctrl){ ctrl.classList.toggle("invalid",has); if(has) ctrl.setAttribute("aria-invalid","true"); else ctrl.removeAttribute("aria-invalid"); ariaFout(ctrl,has); }
+      const rc=qs(":scope > .rcards, :scope > .klas-groups, :scope > .basis-toggle",w); if(rc){ rc.classList.toggle("invalid",has); ariaFout(rc,has); }
       if(has && !cur){ const d=document.createElement("div"); d.className="ferr"; d.id=`${o.px}_e_${f}`; d.innerHTML=ic("alert",14)+`<span>${esc(E[f])}</span>`;
         const anchor=qs(":scope > .hint",w)||qs(":scope > .basis-wrap",w)||qs(":scope > .calc",w); anchor?w.insertBefore(d,anchor):w.appendChild(d); }
       else if(has && cur){ qs("span",cur).textContent=E[f]; }
@@ -2758,10 +2908,10 @@ function focusFirstError(host,E,M){
    Verschijnt bovenaan met een wazige achtergrond. Na "OK" schuift ze
    vloeiend naar haar plaats in het formulier.
    ============================================================ */
-const WPOP={timer:null,open:false};
-function scheduleWarnPopup(ms=650){ clearTimeout(WPOP.timer); WPOP.timer=setTimeout(showWarnPopup,ms); }
+const WPOP={timer:null,open:false,datumBezig:false};
+function scheduleWarnPopup(ms=650){ clearTimeout(WPOP.timer); if(WPOP.datumBezig) return; WPOP.timer=setTimeout(showWarnPopup,ms); }
 function showWarnPopup(){
-  if(WPOP.open || ui.view!=="nieuw" || !NF.M || NF.confirmId || ovStack.length || NF.busy) return;
+  if(WPOP.open || WPOP.datumBezig || ui.view!=="nieuw" || !NF.M || NF.confirmId || ovStack.length || NF.busy) return;
   const items=warnList(NF.M).filter(w=>!NF.ack.includes(w.id)); if(!items.length) return;
   WPOP.open=true;
   const prev=document.activeElement;
@@ -2804,14 +2954,19 @@ function nfInit(){
   if(!c || !c.M || !c.M.soort) NF.M.soort = NF.M.categorie==="nascholing" ? "nascholing" : (NF.M.type==="meerdaags" ? "meerdaags" : "dag");
   if(!Array.isArray(NF.M.deelnemers)) NF.M.deelnemers=[];
   NF.ack = c && Array.isArray(c.ack) ? c.ack : [];
+  NF.pendingId = c && c.pid ? c.pid : null;   // een onzekere verzending overleeft het herladen
   if(!NF.M.leerkracht){ const p=ssGet(SS_PREFS)||{}; if(p.naam) NF.M.leerkracht=p.naam; }
 }
 /* Concept bewaren zolang er iets ingevuld is; is alles gewist, dan ook het bewaarde concept weg */
-const saveConcept = debounce(()=>{
+function bewaarConcept(){
   if(!NF.M) return;
-  if(hasContent(NF.M)) ssSet(SS_CONCEPT,{M:Object.fromEntries(Object.entries(NF.M).filter(([k])=>k[0]!=="_")),ack:NF.ack,op:Date.now()});
+  if(hasContent(NF.M)) ssSet(SS_CONCEPT,{M:Object.fromEntries(Object.entries(NF.M).filter(([k])=>k[0]!=="_")),ack:NF.ack,op:Date.now(),pid:NF.pendingId});
   else ssDel(SS_CONCEPT);
-},250);
+}
+const saveConcept = debounce(bewaarConcept,250);
+/* B01: dezelfde aanvraag herkennen, los van tijdstempels en historiek */
+function stabielJSON(v){ return Array.isArray(v) ? "["+v.map(stabielJSON).join(",")+"]" : (v&&typeof v==="object") ? "{"+Object.keys(v).sort().filter(k=>v[k]!==undefined).map(k=>JSON.stringify(k)+":"+stabielJSON(v[k])).join(",")+"}" : JSON.stringify(v===undefined?null:v); }
+function vingerafdruk(t){ const x=storable(norm(t)); delete x.ingevoerdOp; delete x.log; delete x.v; return stabielJSON(x); }
 function hasContent(M){ return !!(M.activiteit||M.datumStart||M.klassen.length||M.aantalLln||M.vervoer||M.prijsStatus||M.straat||M.stad||M.opmerking
   ||M.titel||M.plaats||M.inschrijving||(M.deelnemers||[]).some(d=>d&&String(d.naam||"").trim()&&String(d.naam).trim()!==String(M.leerkracht||"").trim())); }
 const nfPend = id => !NF.ack.includes(id);
@@ -2844,7 +2999,7 @@ function renderNieuw(){
       <datalist id="actList"></datalist><datalist id="orgList"></datalist><datalist id="naamList"></datalist>`;
     $("nfSend").onclick=submitNieuw;
     $("nfClear").onclick=async()=>{ if(hasContent(NF.M) && !(await confirmDialog({title:"Formulier leegmaken?",html:"<p>Alles wat je in dit formulier invulde, wordt gewist.</p>",ok:"Leegmaken",tone:"danger"}))) return;
-      const naam=NF.M.leerkracht, nas=NF.M.categorie==="nascholing"; NF.M=emptyModel(); NF.M.leerkracht=naam;
+      const naam=NF.M.leerkracht, nas=NF.M.categorie==="nascholing"; NF.M=emptyModel(); NF.M.leerkracht=naam; NF.pendingId=null;
       if(nas){ NF.M.soort="nascholing"; NF.M.categorie="nascholing"; prepNascholing(NF.M); } NF.ack=[]; NF.state.E={}; NF.err=null; NF.note=""; NF.pendingId=null; ssDel(SS_CONCEPT); renderNieuw(); window.scrollTo({top:0}); };
   }
   $("actList").innerHTML=[...new Set(D.trips.filter(t=>!isNasch(t)).map(t=>t.activiteit).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"nl")).map(a=>`<option value="${esc(a)}">`).join("");
@@ -2895,7 +3050,8 @@ function paintSummary(){
   const n=items.filter(i=>i[1]).length, pct=Math.round(n/items.length*100);
   el.innerHTML=`<div class="sum-head"><h3>Samenvatting</h3><span>${n} van ${items.length}</span></div><div class="sum-bar"><span style="width:${pct}%"></span></div>
     <div class="sum-list">${items.map(([l,ok,v])=>`<div class="sum-item${ok?" ok":""}"><span class="si">${ok?ic("check",11,3):""}</span><div><span class="sk">${l}</span><span class="sv">${ok&&v?v:"nog in te vullen"}</span></div></div>`).join("")}</div>
-    <div class="sum-foot">${n===items.length?`${ic("check",14)} Alles ingevuld. Je kan versturen.`:"Vul de onderdelen aan en verstuur onderaan."}</div>`;
+    <div class="sum-foot">${n===items.length && !Object.keys(validateModel(M)).length ? `${ic("check",14)} Alles ingevuld. Je kan versturen.`
+      : n===items.length ? "Bijna klaar: kijk alles nog eens na en verstuur onderaan." : "Vul de onderdelen aan en verstuur onderaan."}</div>`;
 }
 function sumItemsNas(M,k){
   const n=dnRijen(M), namen=(M.deelnemers||[]).slice(0,n).map(d=>String(d.naam||"").trim()).filter(Boolean), groep=M.deelnemersGroep&&M.deelnemersGroep!=="naam";
@@ -2904,9 +3060,10 @@ function sumItemsNas(M,k){
     ["Nascholing", String(M.titel||"").trim(), esc(M.titel)],
     ["Organisatie", String(M.activiteit||"").trim(), esc(M.activiteit)],
     ["Startdatum", parseISO(M.datumStart), esc(fmtLong(M.datumStart))],
-    ["Waar", M.plaats && (M.plaats!=="locatie"||String(M.stad||"").trim()), M.plaats==="locatie"?esc([M.straat,M.stad].filter(Boolean).join(", ")):esc((PLAATS[M.plaats]||{l:""}).l)],
+    ["Waar", M.plaats && (M.plaats!=="locatie"||String((M.locatieAnders?M.locStad:M.stad)||"").trim()),
+      M.plaats==="locatie"?esc((M.locatieAnders?[M.locNaam,M.locStad]:[M.straat,M.stad]).filter(Boolean).join(", ")):esc((PLAATS[M.plaats]||{l:""}).l)],
     ["Deelnemers", dnOk, groep?`${esc(GROEP_LBL[M.deelnemersGroep])} · ${esc(M.aantalDeelnemers)}`:esc(namen.join(", "))],
-    ["Inschrijving", M.inschrijving&&(M.inschrijving!=="zelf"||M.bestelbon), M.inschrijving==="zelf"?"Zelf"+(M.bestelbon==="nee"?" · geen bestelbonnummer nodig":bonNodig(M)?" · bestelbonnummer nodig":""):M.inschrijving==="secretariaat"?"Via het secretariaat":""],
+    ["Inschrijving", M.inschrijving&&(M.inschrijving!=="zelf"||M.bestelbon), M.inschrijving==="geen"?"Geen inschrijving nodig":M.inschrijving==="zelf"?"Zelf"+(M.bestelbon==="nee"?" · geen bestelbonnummer nodig":bonNodig(M)?" · bestelbonnummer nodig":""):M.inschrijving==="secretariaat"?"Via het secretariaat":""],
     ["Kostprijs", M.prijsStatus&&(M.prijsStatus!=="bekend"||(k&&!isNaN(k))), M.prijsStatus==="bekend"&&k&&!isNaN(k)?esc(euro(k))+(M.kostprijsBasis==="perLln"?" per deelnemer":" totaal"):esc(PRIJS_ST[M.prijsStatus]||"")],
     ["Betaling", M.prijsStatus==="gratis"||(M.betaalKeuze&&(M.betaalKeuze!=="Andere"||M.betaalAnder)), M.prijsStatus==="gratis"?"Niet nodig":esc(M.betaalKeuze==="Andere"?M.betaalAnder:(M.betaalKeuze||"").replace(" (voorkeur)",""))]
   ];
@@ -2920,13 +3077,22 @@ async function submitNieuw(){
     /* Dezelfde id bij een nieuwe poging: kwam de eerste poging toch aan, dan ontstaat er geen tweede uitstap */
     if(!NF.pendingId) NF.pendingId=uid();
     const t=fromModel(M,{id:NF.pendingId,ingevoerdOp:new Date().toISOString(),planStatus:"aangevraagd",adminNotitie:"",log:[{op:new Date().toISOString(),tekst:"Aanvraag ingediend door "+M.leerkracht.trim()}]});
-    const saved=await insertTrip(t);
+    let saved=await insertTrip(t);
+    /* Een vorige poging kwam toch aan, met andere gegevens: niet zomaar melden dat deze invoer bewaard is */
+    if(vingerafdruk(saved)!==vingerafdruk(t)){
+      const nieuw=await confirmDialog({title:"Deze aanvraag was al bewaard",
+        html:`<p>Bij een vorige poging kwam je aanvraag toch aan, met andere gegevens dan nu: <b>${esc(titelVan(saved))}</b>, ${esc(fmtDY(saved.datumStart))}.</p><p>Was het dezelfde aanvraag? Bekijk ze dan en vraag een wijziging aan. Gaat het om een andere aanvraag? Verstuur ze dan als nieuwe aanvraag.</p>`,
+        ok:"Als nieuwe aanvraag versturen",cancel:"De bewaarde bekijken"});
+      if(!nieuw){ NF.pendingId=null; bewaarConcept(); renderHeader(); openDetail(saved.id); return; }
+      NF.pendingId=uid(); bewaarConcept();
+      saved=await insertTrip(Object.assign({},t,{id:NF.pendingId}));
+    }
     NF.pendingId=null;
     savePrefs({naam:M.leerkracht.trim()}); ssDel(SS_CONCEPT); qsa("#toastWrap .toast.err").forEach(x=>x.remove());
     NF.confirmId=saved.id; NF.M=null; NF.ack=[]; NF.state.E={}; NF.note="";
     renderHeader(); renderNieuw(); window.scrollTo({top:0,behavior:"smooth"});
   }catch(e){
-    console.error(e); NF.err = e.network ? "Er is geen verbinding met de database." : "De database gaf een fout.";
+    console.error(e); bewaarConcept(); NF.err = e.network ? "Er is geen verbinding met de database." : "De database gaf een fout.";
     paintAlert(); toast("Niet verstuurd: je gegevens blijven staan","err");
   }finally{
     NF.busy=false; const b2=$("nfSend"); if(b2){ b2.classList.remove("busy"); b2.innerHTML=ic("send",16)+"Aanvraag versturen"; }
@@ -2972,7 +3138,7 @@ function renderConfirmNas(host,t){
   const k=kosten(t), groep=t.deelnemersGroep&&t.deelnemersGroep!=="naam";
   host.innerHTML=`<div class="card confirm-card">
     <div class="confirm-top"><div class="confirm-ic">${ic("check",26,2.4)}</div><div>
-      <h2>Nascholing ontvangen <span class="nr">#${esc(t._nr)}</span></h2>
+      <h2>Nascholing ${isInfo(t)?"geregistreerd":"ontvangen"} <span class="nr">#${esc(t._nr)}</span></h2>
       <p class="muted" style="margin-top:4px">${esc(titelVan(t))}${t.activiteit?" · "+esc(t.activiteit):""} · ${esc(fmtLong(t.datumStart))}</p></div></div>
     <div class="dsec" style="margin-top:18px"><dl class="dl">
       <dt>Deelnemers</dt><dd>${esc(deelnemersTxt(t))}${groep||t.aantalDeelnemers>1?` · ${plural(t.aantalDeelnemers,"deelnemer","deelnemers")}`:""}</dd>
@@ -2982,7 +3148,10 @@ function renderConfirmNas(host,t){
     </dl></div>
     <div class="next-steps">
       <div>${ic("check",14)} Je nascholing is bewaard. Je vindt ze in het overzicht (weergave Nascholingen) en in de kalender.</div>
-      <div>${ic("clock",14)} ${t.inschrijving==="secretariaat"?"Het secretariaat schrijft in en maakt de bestelbon. ":bonNodig(t)?`De administratie maakt de bestelbon en bezorgt je het nummer (${esc(BON_LBL[t.bestelbon]||"")}). `:"De administratie maakt de bestelbon. "}De status volg je in het overzicht, bij Nascholingen.</div>
+      <div>${ic("clock",14)} ${isInfo(t) ? "Je nascholing staat geregistreerd. Het secretariaat hoeft hiervoor niets te doen."
+        : [t.inschrijving==="secretariaat" ? (t.prijsStatus==="gratis"?"Het secretariaat schrijft in.":"Het secretariaat schrijft in en maakt de bestelbon.")
+            : t.prijsStatus==="gratis" ? "" : bonNodig(t) ? `De administratie maakt de bestelbon en bezorgt je het nummer (${esc(BON_LBL[t.bestelbon]||"")}).` : "De administratie maakt de bestelbon.",
+           "De status volg je in het overzicht, bij Nascholingen."].filter(Boolean).join(" ")}</div>
       <div>${ic("pencil",14)} Moet er iets veranderen? Gebruik <b>Wijziging aanvragen</b> in het detail van de nascholing.</div>
     </div>
     <div class="confirm-actions">
@@ -3000,7 +3169,13 @@ function renderConfirmNas(host,t){
   };
 }
 /* Kopiëren naar het formulier: "klas" houdt de datums, "herhaal" houdt de klassen */
-function copyToForm(t,mode){
+async function copyToForm(t,mode){
+  /* B10: staat er een aanvraag in voorbereiding, dan eerst vragen */
+  { const c=ssGet(SS_CONCEPT), bestaand = NF.M || (c&&c.M ? Object.assign(emptyModel(),c.M) : null);
+    if(bestaand && !NF.confirmId && hasContent(bestaand)){
+      const ok=await confirmDialog({title:"Aanvraag in voorbereiding vervangen?",html:`<p>In <b>Nieuwe aanvraag</b> staat nog een aanvraag die je aan het invullen bent. Wil je die vervangen door deze kopie?</p>`,ok:"Vervangen",cancel:"Annuleren"});
+      if(!ok) return;
+    } }
   detailBack=null;
   const M=toModel(t); const keep=emptyModel();
   ["planStatus","busStatus","busmaatschappij","busReferentie","busBevestigdOp","prijsVervoerIn","internBestelbonUitstap","internBestelbonBus","factuurStatus","factuurStatusBus",
@@ -3009,7 +3184,8 @@ function copyToForm(t,mode){
   if(mode==="klas"){ M.klassen=[]; M.aantalLln=""; M.aantalBegeleiders=""; }
   else { M.datumStart=""; M.datumEind=""; M.voorschotVervalt=""; M.leerkracht=p.naam||""; }
   M.opmerking=""; if(isNasch(t)) M.inschrijvenVoor="";
-  NF.M=M; NF.ack=[]; NF.state.E={}; NF.err=null; NF.confirmId=null;
+  NF.M=M; NF.ack=[]; NF.state.E={}; NF.err=null; NF.confirmId=null; NF.pendingId=null;   // een kopie is een nieuwe inzending
+  bewaarConcept();
   NF.note = mode==="klas" ? `Gekopieerd van aanvraag #${esc(t._nr)}. Kies de klas en vul het aantal leerlingen en begeleiders in.` : `Gekopieerd van ${esc(titelVan(t))} (${esc(fmtDY(t.datumStart))}). Kies de nieuwe datum en kijk de prijs na.`;
   const host=$("view-nieuw"); host.innerHTML="";
   closeDlg("dlg"); setView("nieuw"); window.scrollTo({top:0});
@@ -3018,24 +3194,31 @@ function copyToForm(t,mode){
 /* ============================================================
    OVERZICHT
    ============================================================ */
-function seenTs(){ return lsGet(LS_SEEN) || ""; }
+function seenTs(cat){ return lsGet(cat==="nascholing"?LS_SEEN_NAS:LS_SEEN) || lsGet(LS_SEEN) || ""; }
 function issues(t){
   const out=[], c=isCancel(t), past=isPast(t);
   if(t._datumFout) out.push({k:"onvolledig",l:"Datum ongeldig",c:"warn"});   // eerst: dit moet als eerste rechtgezet worden
   if(D.reqs.some(a=>a.uitstapId===t.id&&a.status==="open")) out.push({k:"aanvragen",l:"Wijziging aangevraagd",c:"open"});
-  /* Nascholing: het secretariaat moet nog inschrijven (koraal als de uiterste datum binnen de week valt) */
-  if(isNasch(t) && t.inschrijving==="secretariaat" && t.inschrijfStatus==="teschrijven" && !c && !past){
+  if(isInfo(t)) return out;   // informatief: het secretariaat hoeft niets te doen
+  /* Nascholing: het secretariaat moet nog inschrijven. De taak blijft tot ze af is, ook na de datum (B07). */
+  if(isNasch(t) && t.inschrijving==="secretariaat" && t.inschrijfStatus==="teschrijven" && !c){
     const dl=t.inschrijvenVoor, dringend=!!dl && daysBetween(todayISO(),dl)<=7;
-    out.push({k:"inschrijven",l:dl?"Inschrijven vóór "+fmtDM(dl):"Nog in te schrijven",c:dringend?"warn":"open"});
+    out.push({k:"inschrijven",l:past?"Inschrijving na te kijken":dl?"Inschrijven vóór "+fmtDM(dl):"Nog in te schrijven",c:(dringend||past)?"warn":"open"});
   }
-  /* Nascholing: de leerkracht schrijft zelf in en wacht op een bestelbonnummer */
-  if(isNasch(t) && t.inschrijving==="zelf" && bonNodig(t) && t.bestelbonStatus!=="doorgegeven" && !c && !past)
+  /* Nascholing: de leerkracht schrijft zelf in en wacht op een bestelbonnummer (ook na de datum) */
+  if(isNasch(t) && t.inschrijving==="zelf" && bonNodig(t) && t.bestelbonStatus!=="doorgegeven" && !c)
     out.push({k:"bonnr",l:t.bestelbon==="dringend"?"Bestelbonnummer: dringend":"Bestelbonnummer doorgeven",c:t.bestelbon==="dringend"?"warn":"open"});
   if(t.busNodig && t.busStatus==="teregelen" && !c && !past) out.push({k:"bus",l:"Offertes op te vragen",c:"open"});
   if(t.busNodig && t.busStatus==="offertes" && !c && !past) out.push({k:"boeken",l:"Bus nog te boeken",c:"info"});
+  if(!c && t.planStatus==="aangevraagd" && tripEnd(t)>=sjRange(huidigSJ())[0]) out.push({k:"bevestigen",l:"Nog te bevestigen",c:"open"});
+  const ann=(c&&t.annulering)||{}, metK=ann.metKosten==="wel", metKB=ann.busMetKosten==="wel";
   if(!c && t.prijsStatus!=="gratis" && (!t.internBestelbonUitstap || (t.busNodig && !t.internBestelbonBus))) out.push({k:"bon",l:"Bestelbon ontbreekt",c:"muted"});
-  const kosten0 = t.annulering && t.annulering.kosten>0;
-  if((!c||kosten0) && past && (t.factuurStatus==="teontvangen"||t.factuurStatusBus==="teontvangen")) out.push({k:"factuur",l:"Factuur te ontvangen",c:"open"});
+  else if(c && ((metK && !t.internBestelbonUitstap) || (metKB && !t.internBestelbonBus))) out.push({k:"bon",l:"Bestelbon ontbreekt",c:"muted"});
+  if(c && ann.metKosten==="geen" && t.internBestelbonUitstap && !t.bonIngetrokkenOp) out.push({k:"intrekken",l:"Bestelbon intrekken",c:"open"});
+  if(c && ann.busMetKosten==="geen" && t.internBestelbonBus && !t.bonBusIngetrokkenOp) out.push({k:"intrekken",l:"Bestelbon bus intrekken",c:"open"});
+  if(c && ((metK && t.factuurStatus==="teontvangen") || (metKB && t.factuurStatusBus==="teontvangen"))) out.push({k:"factuur",l:"Annuleringsfactuur",c:"open"});
+  else if(c && !ann.metKosten && ann.kosten>0 && past && (t.factuurStatus==="teontvangen"||t.factuurStatusBus==="teontvangen")) out.push({k:"factuur",l:"Factuur te ontvangen",c:"open"});
+  else if(!c && past && (t.factuurStatus==="teontvangen"||t.factuurStatusBus==="teontvangen")) out.push({k:"factuur",l:"Factuur te ontvangen",c:"open"});
   if(t.voorschot && !t.voorschotBetaaldOp && !c) out.push({k:"voorschot",l:"Voorschot te betalen",c:"open"});
   if(!t._datumFout && !c && !past && (t.prijsStatus==="tebevestigen" || (t.busNodig && (!bestemmingStad(t)||!t.vertrekSchool||!t.terug)))) out.push({k:"onvolledig",l:"Gegevens onvolledig",c:"muted"});
   const ch=ssChanged(t);
@@ -3045,12 +3228,13 @@ function issues(t){
 }
 /* Werkfilters met een kleur per soort: koraal = dringend, amber = opvolgen, teal/groen = ter info */
 const WERK = [
-  ["nieuw","Nieuw","teal"],["aanvragen","Wijzigingsaanvragen","coral"],["bevestigen","Nog te bevestigen","amber"],["inschrijven","Nog in te schrijven","coral"],["bonnr","Bestelbonnummer doorgeven","coral"],["bus","Offertes op te vragen","coral"],["boeken","Bus nog te boeken","amber"],["bon","Bestelbon ontbreekt","amber"],["factuur","Factuur te ontvangen","amber"],
+  ["nieuw","Nieuw","teal"],["aanvragen","Wijzigingsaanvragen","coral"],["bevestigen","Nog te bevestigen","amber"],["inschrijven","Nog in te schrijven","coral"],["bonnr","Bestelbonnummer doorgeven","coral"],["intrekken","Bestelbon intrekken","coral"],["bus","Offertes op te vragen","coral"],["boeken","Bus nog te boeken","amber"],["bon","Bestelbon ontbreekt","amber"],["factuur","Factuur te ontvangen","amber"],
   ["voorschot","Voorschot","amber"],["onvolledig","Onvolledig","amber"],["smartschool","Smartschool","teal"],["weken","Komende 2 weken","green"]
 ];
 const VERV_OPT = [["","Alle vervoer"],["bus","Met bus"],["openbaar","Openbaar vervoer"],["actief","Te voet of met de fiets"],["school","Op school"]];
 function werkMatch(t,k){
-  if(k==="nieuw") return !!t.ingevoerdOp && t.ingevoerdOp>seenTs();
+  if(isInfo(t) && k!=="aanvragen") return false;   // informatief: nergens bij Te doen, behalve een open aanvraag
+  if(k==="nieuw") return !!t.ingevoerdOp && t.ingevoerdOp>seenTs(t.categorie);
   /* Nog te bevestigen: status "Ontvangen", niet geannuleerd, vanaf het begin van dit schooljaar */
   if(k==="bevestigen") return !isCancel(t) && t.planStatus==="aangevraagd" && tripEnd(t)>=sjRange(huidigSJ())[0];
   if(k==="weken") return !isCancel(t) && t.datumStart>=todayISO() && t.datumStart<=addDays(todayISO(),14);
@@ -3076,89 +3260,128 @@ function baseFor(soort){ const ts=terms(ui.q), nas=soort==="nascholing";
 /* Weergave Nascholingen: klas van een deelnemer, deelnemer, aanvrager en plaats */
 function nasFilterOk(t){
   return (!ui.nKlas||nasKlassen(t).includes(ui.nKlas)) && (!ui.nDeeln||(t.deelnemers||[]).some(d=>d.naam===ui.nDeeln))
-    && (!ui.nAanvr||t.leerkracht===ui.nAanvr) && (!ui.nPlaats||t.plaats===ui.nPlaats);
+    && (!ui.nAanvr||t.leerkracht===ui.nAanvr) && (!ui.nPlaats||t.plaats===ui.nPlaats) && (!ui.nInfo || (ui.nInfo==="info")===isInfo(t));
 }
 function baseTrips(){ return baseFor(ui.soort); }
+/* W09: een werkfilter met een eigen volgorde, tot je zelf op een kolom klikt */
+const werkSort = () => isAdmin && !ui.sortGekozen && (ui.werk==="inschrijven"||ui.werk==="bonnr");
 function visibleTrips(){
   let rows=baseTrips();
   rows = (isAdmin && ui.werk) ? rows.filter(t=>werkMatch(t,ui.werk)) : rows.filter(periodOk);
+  /* W09: "Nog in te schrijven" eerst op inschrijfdatum, "Bestelbonnummer doorgeven" eerst de dringende.
+     Klik je zelf op een kolom, dan geldt die sortering. */
+  if(werkSort() && ui.werk==="inschrijven") return rows.slice().sort((a,b)=>(a.inschrijvenVoor||"9999").localeCompare(b.inschrijvenVoor||"9999")||(a.datumStart||"").localeCompare(b.datumStart||""));
+  if(werkSort() && ui.werk==="bonnr") return rows.slice().sort((a,b)=>((a.bestelbon==="dringend"?0:1)-(b.bestelbon==="dringend"?0:1))||(a.datumStart||"").localeCompare(b.datumStart||""));
   const dir=ui.sort.dir, key=ui.sort.key, ko=S().klassen.map(k=>k.naam);
   const kidx=t=>Math.min(999,...t.klassen.map(k=>{ const i=ko.indexOf(k); return i<0?998:i; }));
   rows=rows.slice().sort((a,b)=>{
+    if(!!a._datumFout!==!!b._datumFout) return a._datumFout?-1:1;   // eerst rechtzetten
     let c=0;
     if(key==="activiteit") c=titelVan(a).localeCompare(titelVan(b),"nl");
     else if(key==="klas") c=ui.soort==="nascholing" ? deelnemersTxt(a).localeCompare(deelnemersTxt(b),"nl") : kidx(a)-kidx(b);
     else if(key==="kost") c=(kosten(a).tot??-1)-(kosten(b).tot??-1);
     else if(key==="leerkracht") c=(a.leerkracht||"").localeCompare(b.leerkracht||"","nl");
-    if(!c) c=a.datumStart.localeCompare(b.datumStart)||((a._nr||0)-(b._nr||0));
+    if(!c) c=(a.datumStart||"").localeCompare(b.datumStart||"")||((a._nr||0)-(b._nr||0));
     return c*dir;
   });
   return rows;
 }
 function colsFor(){
   if(ui.soort==="nascholing"){
-    if(!isAdmin) return {cols:"112px minmax(0,1.6fr) minmax(0,1.2fr) minmax(0,1.1fr) 196px",
-      head:[["datum","Datum"],["activiteit","Nascholing"],["klas","Deelnemers"],[null,"Locatie"],[null,"Status"]]};
+    if(!isAdmin) return {cols:"112px minmax(0,1.6fr) minmax(0,1.15fr) minmax(0,1fr) 112px 190px",
+      head:[["datum","Datum"],["activiteit","Nascholing"],["klas","Deelnemers"],[null,"Locatie"],["kost","Kostprijs",1],[null,"Status"]]};
     if(ui.ovMode==="bon") return {cols:"118px minmax(0,1.6fr) minmax(0,1fr) 112px 150px minmax(0,1fr)",
       head:[["datum","Datum"],["activiteit","Nascholing"],["klas","Deelnemers"],["kost","Kostprijs",1],[null,"Bestelbon"],[null,"Factuur"]]};
     return {cols:"118px minmax(0,1.6fr) minmax(0,.95fr) minmax(0,1fr) 112px minmax(0,1.35fr)",
       head:[["datum","Datum"],["activiteit","Nascholing"],["klas","Deelnemers"],[null,"Locatie"],["kost","Kostprijs",1],[null,"Opvolging"]]};
   }
-  if(!isAdmin) return {cols:"112px minmax(0,1.6fr) minmax(0,1fr) 108px minmax(0,1.1fr) 182px",
-    head:[["datum","Datum"],["activiteit","Activiteit"],["klas","Klassen"],[null,"Uren"],[null,"Vervoer"],[null,"Status"]]};
+  if(!isAdmin) return {cols:"112px minmax(0,1.6fr) minmax(0,.75fr) 96px minmax(0,1.3fr) 112px 172px",
+    head:[["datum","Datum"],["activiteit","Activiteit"],["klas","Klassen"],[null,"Uren"],[null,"Vervoer"],["kost","Kostprijs",1],[null,"Status"]]};
   if(ui.ovMode==="bon") return {cols:"118px minmax(0,1.6fr) minmax(0,.9fr) 112px 128px 128px minmax(0,1.1fr)",
     head:[["datum","Datum"],["activiteit","Activiteit"],["klas","Klassen"],["kost","Kostprijs",1],[null,"Bestelbon uitstap"],[null,"Bestelbon bus"],[null,"Facturen"]]};
-  return {cols:"118px minmax(0,1.6fr) minmax(0,.95fr) minmax(0,1fr) 112px minmax(0,1.35fr)",
+  return {cols:"118px minmax(0,1.6fr) minmax(0,.8fr) minmax(0,1.2fr) 112px minmax(0,1.3fr)",
     head:[["datum","Datum"],["activiteit","Activiteit"],["klas","Klassen"],[null,"Vervoer"],["kost","Kostprijs",1],[null,"Opvolging"]]};
 }
 function rowHTML(t,ts){
   const k=kosten(t), cancel=isCancel(t);
   const date= t._datumFout ? `<div class="c-date"><b class="datum-fout">Datum ongeldig</b><small>${esc(t.datumStart||"leeg")}</small></div>` : `<div class="c-date"><b>${esc(fmtD(t.datumStart))}</b>${t.type==="meerdaags"?`<small>t.e.m. ${esc(fmtD(t.datumEind))}</small>`:`<small>${esc(jaarVan(t.datumStart))}</small>`}</div>`;
   if(isNasch(t)) return rowNasHTML(t,ts,date);
-  const flags=[t.type==="meerdaags"?`<span class="mtag">Meerdaags</span>`:"", isAdmin&&t.ingevoerdOp>seenTs()?`<span class="mtag" style="background:var(--teal-l);color:var(--teal-xd)">Nieuw</span>`:""].join("");
+  const flags=[t.type==="meerdaags"?`<span class="mtag">Meerdaags</span>`:"", isAdmin&&t.ingevoerdOp>seenTs(t.categorie)?`<span class="mtag" style="background:var(--teal-l);color:var(--teal-xd)">Nieuw</span>`:""].join("");
   const act=`<div class="c-act"><b>${hl(t.activiteit,ts)}</b><small>${[bestemmingStad(t)?hl(bestemmingStad(t),ts):"",t.leerkracht?hl(t.leerkracht,ts):""].filter(Boolean).join(" · ")||"&nbsp;"}${flags?`<span class="flags">${flags}</span>`:""}</small></div>`;
   const klas=`<div class="c-cell c-klas klas-tags">${sortKlassen(t.klassen).map(x=>`<span class="klas-tag">${hl(x,ts)}</span>`).join("")}</div>`;
   const v=vervoer(t), vv=VERVOER[v];
-  const verv=`<div class="c-cell c-verv"><span class="vi">${vv?ic(vv.ic,16):""}</span><div style="min-width:0"><div>${esc(t.busNodig?"Bus":vervoerTxt(t))}</div>${t.busNodig?`<small>${esc(t.busmaatschappij||(BUS_ST[t.busStatus]||[""])[0])}</small>`:""}</div></div>`;
-  const cost=`<div class="c-cost m-hide">${t.prijsStatus==="gratis"?"<b>Gratis</b>":t.prijsStatus==="tebevestigen"?`<b class="muted" style="font-weight:500">nog te bevestigen</b>`:`<b>${esc(euro(k.act))}</b>${k.per!=null&&t.aantalLln?`<small>${esc(euro(k.per))} p.p.</small>`:""}`}</div>`;
+  /* De vervoerkost staat bij het vervoer, met de busmaatschappij */
+  const verv=`<div class="c-cell c-verv"><span class="vi">${vv?ic(vv.ic,16):""}</span><div style="min-width:0"><div>${esc(t.busNodig?"Bus":vervoerTxt(t))}</div>${vervSub(t,k)}${t.busNodig&&!isCancel(t)?`<div class="verv-st">${busPill(t,1)}</div>`:""}</div></div>`;
+  const cost=`<div class="c-cost m-hide">${kostCel(t,k)}</div>`;
   let cells;
   if(!isAdmin){
     const uren = t.vertrekSchool||t.terugSchool ? `${esc(fmtTime(t.vertrekSchool)||"…")}${t.terugSchool?`<small>terug ${esc(fmtTime(t.terugSchool))}</small>`:""}` : `<span class="muted">—</span>`;
     /* busstatus apart onder "Bus" in de kolom Vervoer, de status van de uitstap in de kolom Status */
-    const vervLk=`<div class="c-cell c-verv"><span class="vi">${vv?ic(vv.ic,16):""}</span><div style="min-width:0"><div>${esc(t.busNodig?"Bus":vervoerTxt(t))}</div>${t.busNodig&&!cancel?`<div class="verv-st">${busPill(t,1)}</div>`:""}</div></div>`;
-    cells=date+act+klas+`<div class="c-cell m-hide">${uren}</div>`+vervLk+`<div class="c-stat">${statusPills(t,1)}</div>`;
+    const vervLk=`<div class="c-cell c-verv"><span class="vi">${vv?ic(vv.ic,16):""}</span><div style="min-width:0"><div>${esc(t.busNodig?"Bus":vervoerTxt(t))}</div>${vervSub(t,k)}${t.busNodig&&!cancel?`<div class="verv-st">${busPill(t,1)}</div>`:""}</div></div>`;
+    cells=date+act+klas+`<div class="c-cell m-hide">${uren}</div>`+vervLk+cost+`<div class="c-stat">${statusPills(t,1)}</div>`;
   } else if(ui.ovMode==="bon"){
     const fb=(s,l)=>s?pill(l+": "+(FACT_ST[s]||[""])[0].toLowerCase(),(FACT_ST[s]||["",""])[1],1):"";
-    cells=date+act+klas+cost+`<div class="c-cell m-hide">${t.internBestelbonUitstap?hl(t.internBestelbonUitstap,ts):`<span class="muted">—</span>`}</div>`
-      +`<div class="c-cell m-hide">${t.busNodig?(t.internBestelbonBus?hl(t.internBestelbonBus,ts):`<span class="muted">—</span>`):`<span class="muted">geen bus</span>`}</div>`
+    cells=date+act+klas+cost+bonCel(t.internBestelbonUitstap,k.actTot,ts)
+      +(t.busNodig?bonCel(t.internBestelbonBus,k.verv,ts):`<div class="c-cell m-hide"><span class="muted">geen bus</span></div>`)
       +`<div class="c-stat">${fb(t.factuurStatus,"Uitstap")}${t.busNodig?fb(t.factuurStatusBus,"Bus"):""}</div>`;
   } else {
     const is=issues(t).filter(i=>i.k!=="smartschool"||i.c==="warn");
-    const op = cancel ? pill("Geannuleerd","warn",1)+is.filter(i=>i.k==="smartschool"||i.k==="factuur").map(i=>pill(i.l,i.c,1)).join("")
+    const ci=is.filter(i=>i.k==="smartschool"||i.k==="factuur"||i.k==="intrekken"||i.k==="bon");
+    const op = cancel ? pill("Geannuleerd","warn",1)+ci.slice(0,1).map(i=>pill(i.l,i.c,1)).join("")+(ci.length>1?`<span class="pill muted sm" title="${esc(ci.slice(1).map(i=>i.l).join(", "))}">+${ci.length-1}</span>`:"")
       : is.length ? is.slice(0,2).map(i=>pill(i.l,i.c,1)).join("")+(is.length>2?`<span class="pill muted sm" title="${esc(is.slice(2).map(i=>i.l).join(", "))}">+${is.length-2}</span>`:"") : pill("In orde","done",1);
     cells=date+act+klas+verv+cost+`<div class="c-stat">${op}</div>`;
   }
   return `<div class="bl-item" data-id="${esc(t.id)}"><div class="bl-row${isPast(t)?" past":""}${cancel?" cancel":""}" tabindex="0" role="button" aria-label="${esc(t.activiteit+", "+fmtLong(t.datumStart))}">${cells}</div></div>`;
 }
+/* B13: de kolom Kostprijs. Vet het totaal (activiteit, vervoer en een exclusief voorschot samen); klein de prijs van de
+   activiteit als die afwijkt, en de prijs per persoon op het totaal. Een annulering toont de annuleringskosten. */
+function kostCel(t,k){
+  const nas=isNasch(t), n=persAantal(t), raming=nas&&!!GROEP_LBL[t.deelnemersGroep];
+  if(isCancel(t)){
+    const a=t.annulering||{}, wel=a.metKosten==="wel"||a.busMetKosten==="wel";
+    if(wel){ const d=[a.metKosten==="wel"?a.kosten:0, a.busMetKosten==="wel"?a.busKosten:0], onb=d.some(x=>x==null);
+      return `<b>${onb?"bedrag volgt":esc(euro(d.reduce((s,x)=>s+x,0)))}</b><small>annuleringskosten</small>`; }
+    if(a.metKosten==="geen") return `<span class="muted">geen kosten</span>`;
+  }
+  if(t.prijsStatus==="tebevestigen") return `<b class="muted" style="font-weight:500">nog te bevestigen</b>`;
+  if(k.tot==null) return k.actTot!=null ? `<b>${esc(euro(k.actTot))}</b><small>totaal volgt</small>` : `<span class="muted">—</span>`;
+  if(k.tot===0) return "<b>Gratis</b>";
+  const sub=[];
+  if(k.actTot!=null && k.actTot!==k.tot) sub.push((nas?"nascholing ":"uitstap ")+(k.actTot===0?"gratis":euro(k.actTot)));
+  if(k.perAll!=null && n>(nas?1:0)) sub.push((raming?"± ":"")+euro(k.perAll)+" p.p.");   // ± = raming bij een hele groep
+  return `<b>${esc(euro(k.tot))}</b>${sub.map(x=>`<small>${esc(x)}</small>`).join("")}`;
+}
+/* Vervoer in de lijst, voor leerkracht en beheerder gelijk: de vervoerwijze, daaronder de maatschappij met de prijs,
+   en bij een bus het label met de busstatus (handig met de filter "Met bus") */
+function vervSub(t,k){
+  const firma = t.busNodig ? (t.busmaatschappij||"") : "";
+  const prijs = k.verv!=null ? euro(k.verv) : "";
+  if(!firma && !prijs) return "";
+  return `<small class="vl"${firma?` title="${esc(firma)}"`:""}>${firma?`<span class="vf">${esc(firma)}</span>`:""}${prijs?`<span class="vp">${firma?" · ":""}${esc(prijs)}</span>`:""}</small>`;
+}
+/* Een cel met een nummer en klein het bedrag eronder (weergave Bestelbons) */
+const bonCel = (nr,bedrag,ts,leeg) => `<div class="c-cell m-hide"><div style="min-width:0"><div>${nr?hl(nr,ts):`<span class="muted">${leeg||"—"}</span>`}</div>${bedrag!=null&&bedrag>0?`<small>${esc(euro(bedrag))}</small>`:""}</div></div>`;
 /* Een nascholing in de lijst: titel en organisatie, deelnemers, locatie, status en inschrijving */
 function rowNasHTML(t,ts,date){
   const k=kosten(t), cancel=isCancel(t), groep=t.deelnemersGroep&&t.deelnemersGroep!=="naam", kls=nasKlassen(t);
-  const nieuw=isAdmin&&t.ingevoerdOp>seenTs()?`<span class="flags"><span class="mtag" style="background:var(--teal-l);color:var(--teal-xd)">Nieuw</span></span>`:"";
+  const nieuw=isAdmin&&!isInfo(t)&&t.ingevoerdOp>seenTs(t.categorie)?`<span class="flags"><span class="mtag" style="background:var(--teal-l);color:var(--teal-xd)">Nieuw</span></span>`:"";
   const act=`<div class="c-act"><b>${hl(titelVan(t),ts)}</b><small>${t.activiteit?hl(t.activiteit,ts):"&nbsp;"}${nieuw}</small></div>`;
   const sub = groep ? esc(plural(t.aantalDeelnemers,"deelnemer","deelnemers")) : kls.length ? "klas "+hl(kls.join(", "),ts) : (t.aantalDeelnemers>1?esc(plural(t.aantalDeelnemers,"deelnemer","deelnemers")):"");
   const dn=`<div class="c-cell c-klas c-dn"><div class="dn-names">${groep?esc(GROEP_LBL[t.deelnemersGroep]):(hl(deelnemersTxt(t),ts)||`<span class="muted">—</span>`)}</div>${sub?`<small>${sub}</small>`:""}</div>`;
   const pl=PLAATS[t.plaats], vs=t.plaats==="locatie"?vervSamen(t):"";
   const loc=`<div class="c-cell c-verv"><span class="vi">${ic(pl?pl.ic:"pin",16)}</span><div style="min-width:0"><div>${hl(plaatsTxt(t),ts)}</div>${vs?`<small>${esc(vs)}</small>`:""}</div></div>`;
-  const cost=`<div class="c-cost m-hide">${t.prijsStatus==="gratis"?"<b>Gratis</b>":t.prijsStatus==="tebevestigen"?`<b class="muted" style="font-weight:500">nog te bevestigen</b>`:`<b>${esc(euro(k.act))}</b>${k.per!=null&&t.aantalDeelnemers>1?`<small>${esc(euro(k.per))} p.p.</small>`:""}`}</div>`;
+  const cost=`<div class="c-cost m-hide">${kostCel(t,k)}</div>`;
   let cells;
-  if(!isAdmin) cells=date+act+dn+loc+`<div class="c-stat">${statusPills(t,1)}${inschPill(t,1)}</div>`;
+  if(!isAdmin) cells=date+act+dn+loc+cost+`<div class="c-stat">${statusPills(t,1)}${inschPill(t,1)}</div>`;
   else if(ui.ovMode==="bon"){
     const fs=t.factuurStatus, fb=fs?pill("Factuur: "+(FACT_ST[fs]||[""])[0].toLowerCase(),(FACT_ST[fs]||["",""])[1],1):"";
-    cells=date+act+dn+cost+`<div class="c-cell m-hide">${t.internBestelbonUitstap?hl(t.internBestelbonUitstap,ts):`<span class="muted">—</span>`}</div><div class="c-stat">${fb}</div>`;
+    cells=date+act+dn+cost+bonCel(t.internBestelbonUitstap,k.actTot,ts)+`<div class="c-stat">${fb}</div>`;
   } else {
     const is=issues(t);
-    const op = cancel ? pill("Geannuleerd","warn",1)+is.filter(i=>i.k==="factuur").map(i=>pill(i.l,i.c,1)).join("")
-      : is.length ? is.slice(0,2).map(i=>pill(i.l,i.c,1)).join("")+(is.length>2?`<span class="pill muted sm" title="${esc(is.slice(2).map(i=>i.l).join(", "))}">+${is.length-2}</span>`:"") : pill("In orde","done",1);
+    const ci=is.filter(i=>i.k==="factuur"||i.k==="intrekken"||i.k==="bon");
+    const op = cancel ? pill("Geannuleerd","warn",1)+ci.slice(0,1).map(i=>pill(i.l,i.c,1)).join("")+(ci.length>1?`<span class="pill muted sm" title="${esc(ci.slice(1).map(i=>i.l).join(", "))}">+${ci.length-1}</span>`:"")
+      : is.length ? is.slice(0,2).map(i=>pill(i.l,i.c,1)).join("")+(is.length>2?`<span class="pill muted sm" title="${esc(is.slice(2).map(i=>i.l).join(", "))}">+${is.length-2}</span>`:"")
+      : isInfo(t) ? pill("Geregistreerd","muted",1,PLAN_TIP.geregistreerd) : pill("In orde","done",1);
     cells=date+act+dn+loc+cost+`<div class="c-stat">${op}</div>`;
   }
   return `<div class="bl-item" data-id="${esc(t.id)}"><div class="bl-row${isPast(t)?" past":""}${cancel?" cancel":""}" tabindex="0" role="button" aria-label="${esc("Nascholing: "+titelVan(t)+", "+fmtLong(t.datumStart))}">${cells}</div></div>`;
@@ -3187,19 +3410,19 @@ function renderOverzicht(){
       <select class="sel" id="ovKlas" aria-label="Filter op klas"></select>
       <select class="sel" id="ovVerv" aria-label="Filter op vervoer">${VERV_OPT.map(([v,l])=>`<option value="${v}">${l}</option>`).join("")}</select>
       <select class="sel" id="ovNKlas" aria-label="Filter op klas" hidden></select><select class="sel" id="ovNDeeln" aria-label="Filter op deelnemer" hidden></select>
-      <select class="sel" id="ovNAanvr" aria-label="Filter op aanvrager" hidden></select><select class="sel" id="ovNPlaats" aria-label="Filter op plaats" hidden></select>
+      <select class="sel" id="ovNAanvr" aria-label="Filter op aanvrager" hidden></select><select class="sel" id="ovNPlaats" aria-label="Filter op plaats" hidden></select><select class="sel" id="ovNInfo" aria-label="Filter op opvolging" hidden></select>
       <div class="seg" id="ovPer" role="group" aria-label="Periode">${[["komend","Komende"],["sj","Dit schooljaar"],["alles","Alles"]].map(([k,l])=>`<button data-per="${k}">${l}</button>`).join("")}</div>
       <select class="sel" id="ovGroep" aria-label="Groeperen"><option value="">Niet groeperen</option><option value="maand">Per maand</option><option value="klas">Per klas</option></select>`;
     $("ovSearch").value=ui.q;
   }
   $("ovKlas").innerHTML=klOpts; $("ovKlas").classList.toggle("set",!!ui.klas);
   $("ovVerv").value=ui.verv; $("ovVerv").classList.toggle("set",!!ui.verv);
-  /* Weergave nascholingen: geen klas- of vervoerfilter, groeperen enkel per maand */
+  /* Weergave nascholingen: eigen filters (klas van een deelnemer, deelnemer, aanvrager, plaats, opvolging); groeperen per maand, klas of deelnemer */
   const nas=ui.soort==="nascholing";
   $("ovKlas").hidden=nas; $("ovVerv").hidden=nas;
   $("ovSearch").placeholder = nas ? "Zoek op titel, organisatie, deelnemer, bonnummer…" : "Zoek op activiteit, klas, plaats, leerkracht, bonnummer…";
   $("ovGroep").innerHTML=[["","Niet groeperen"],["maand","Per maand"],["klas","Per klas"],...(nas?[["deelnemer","Per deelnemer"]]:[])].map(([v,l])=>`<option value="${v}">${l}</option>`).join("");
-  ["ovNKlas","ovNDeeln","ovNAanvr","ovNPlaats"].forEach(id=>$(id).hidden=!nas);
+  ["ovNKlas","ovNDeeln","ovNAanvr","ovNPlaats","ovNInfo"].forEach(id=>$(id).hidden=!nas);
   if(nas){
     const ns=liveTrips().filter(isNasch), uniek=l=>[...new Set(l.map(s=>String(s||"").trim()).filter(Boolean))], abc=l=>l.sort((a,b)=>a.localeCompare(b,"nl"));
     const opt=(id,leeg,list,cur)=>{ $(id).innerHTML=`<option value="">${leeg}</option>`+list.map(v=>`<option value="${esc(v)}"${v===cur?" selected":""}>${esc(v)}</option>`).join("")
@@ -3209,6 +3432,8 @@ function renderOverzicht(){
     opt("ovNAanvr","Alle aanvragers",abc(uniek(ns.map(t=>t.leerkracht))),ui.nAanvr);
     $("ovNPlaats").innerHTML=[["","Alle plaatsen"],["locatie","Op locatie"],["online","Online"],["school","Op school"]].map(([v,l])=>`<option value="${v}"${v===ui.nPlaats?" selected":""}>${l}</option>`).join("");
     $("ovNPlaats").classList.toggle("set",!!ui.nPlaats);
+    $("ovNInfo").innerHTML=[["","Alle nascholingen"],["opvolging","Met opvolging"],["info","Informatief"]].map(([v,l])=>`<option value="${v}"${v===ui.nInfo?" selected":""}>${l}</option>`).join("");
+    $("ovNInfo").classList.toggle("set",!!ui.nInfo);
   }
   $("ovSearchW").classList.toggle("has",!!ui.q);
   const perOff=isAdmin&&!!ui.werk;
@@ -3229,7 +3454,7 @@ function renderOverzicht(){
   if(ui.klas && !nas) af.push(["klas",`Klas ${esc(ui.klas)}`]);
   if(ui.verv && !nas) af.push(["verv",esc((VERV_OPT.find(v=>v[0]===ui.verv)||["",""])[1])]);
   if(nas){ if(ui.nKlas) af.push(["nKlas",`Klas ${esc(ui.nKlas)}`]); if(ui.nDeeln) af.push(["nDeeln",`Deelnemer: ${esc(ui.nDeeln)}`]);
-    if(ui.nAanvr) af.push(["nAanvr",`Aangevraagd door ${esc(ui.nAanvr)}`]); if(ui.nPlaats) af.push(["nPlaats",esc((PLAATS[ui.nPlaats]||{l:""}).l)]); }
+    if(ui.nAanvr) af.push(["nAanvr",`Aangevraagd door ${esc(ui.nAanvr)}`]); if(ui.nPlaats) af.push(["nPlaats",esc((PLAATS[ui.nPlaats]||{l:""}).l)]); if(ui.nInfo) af.push(["nInfo",ui.nInfo==="info"?"Informatief":"Met opvolging"]); }
   if(isAdmin&&ui.werk) af.push(["werk",esc((WERK.find(w=>w[0]===ui.werk)||["",""])[1])]);
   const nBus=rows.filter(t=>t.busNodig&&!isCancel(t)).length;
   let sum=soortSeg();
@@ -3252,12 +3477,12 @@ function renderOverzicht(){
   }
   sum+=af.map(([k,l])=>`<span class="af">${l}<button data-unf="${k}" aria-label="Filter wissen">${ic("x",12,2.4)}</button></span>`).join("");
   if(af.length>1) sum+=`<button class="btn-link" data-unf="alles">Wis filters</button>`;
-  sum+=`<span class="sum-right">${nas?"":`<button class="btn btn-primary btn-sm admin-only" id="ovOfferte">${ic("bus",15)}Offertes busritten${offerteKandidaten(false).length?` <span class="bdg">${offerteKandidaten(false).length}</span>`:""}</button>`}<span class="seg sm admin-only" id="ovMode" role="group" aria-label="Weergave">${[["standaard","Opvolging"],["bon","Bestelbonnen"]].map(([k,l])=>`<button data-mode="${k}" class="${ui.ovMode===k?"on":""}" aria-pressed="${ui.ovMode===k}">${l}</button>`).join("")}</span><button class="btn btn-ghost btn-sm" id="ovPrint">${ic("printer",15)}Afdrukken</button>
+  sum+=`<span class="sum-right">${nas?"":`<button class="btn btn-primary btn-sm admin-only" id="ovOfferte">${ic("bus",15)}Offertes busritten${offerteKandidaten(false).length?` <span class="bdg">${offerteKandidaten(false).length}</span>`:""}</button>`}<span class="seg sm admin-only" id="ovMode" role="group" aria-label="Weergave">${[["standaard","Opvolging"],["bon","Bestelbonnen"]].map(([k,l])=>`<button data-mode="${k}" class="${ui.ovMode===k?"on":""}" aria-pressed="${ui.ovMode===k}">${l}</button>`).join("")}</span><button class="btn btn-ghost btn-sm" id="ovXlsx">${ic("download",15)}Excel</button><button class="btn btn-ghost btn-sm" id="ovPrint">${ic("printer",15)}Afdrukken</button>
     <button class="btn btn-ghost btn-sm admin-only" id="ovCsvSel">${ic("download",15)}CSV selectie</button><button class="btn btn-ghost btn-sm admin-only" id="ovCsvAll">${ic("download",15)}CSV alles</button></span>`;
   $("ovSum").innerHTML=sum;
   /* lijst */
   const list=$("ovList"); list.style.setProperty("--cols",C.cols);
-  const head=`<div class="bl-head">${C.head.map(([k,l,r])=>k?`<button class="sort${ui.sort.key===k?" on":""}${r?" r":""}" data-sort="${k}" aria-label="Sorteer op ${l}">${l}${ic(ui.sort.key===k&&ui.sort.dir<0?"arrowUp":"arrowDown",12,2.4)}</button>`:`<span${r?' class="r"':""}>${l}</span>`).join("")}</div>`;
+  const head=`<div class="bl-head">${C.head.map(([k,l,r])=>k?`<button class="sort${ui.sort.key===k&&!werkSort()?" on":""}${r?" r":""}" data-sort="${k}" aria-label="Sorteer op ${l}">${l}${ic(ui.sort.key===k&&ui.sort.dir<0?"arrowUp":"arrowDown",12,2.4)}</button>`:`<span${r?' class="r"':""}>${l}</span>`).join("")}</div>`;
   if(!D.loaded && !D.failed){ list.innerHTML=head+`<div class="skeleton"></div><div class="skeleton" style="width:88%"></div><div class="skeleton" style="width:94%"></div>`; return; }
   if(!D.loaded && D.failed){ list.innerHTML=`<div class="load-err">${emptyState("alert","De lijst kon niet geladen worden","Er is geen verbinding met de database.",`<div style="margin-top:14px"><button class="btn btn-primary" id="ovRetry">${ic("refresh",16)}Opnieuw proberen</button></div>`)}</div>`; $("ovRetry").onclick=()=>boot(); return; }
   if(!rows.length){
@@ -3301,6 +3526,7 @@ function bindOverzicht(host){
     if(e.target.id==="ovNDeeln"){ ui.nDeeln=e.target.value; rer(); }
     if(e.target.id==="ovNAanvr"){ ui.nAanvr=e.target.value; rer(); }
     if(e.target.id==="ovNPlaats"){ ui.nPlaats=e.target.value; rer(); }
+    if(e.target.id==="ovNInfo"){ ui.nInfo=e.target.value; rer(); }
   });
   host.addEventListener("click",e=>{
     const t=e.target; let el;
@@ -3308,13 +3534,17 @@ function bindOverzicht(host){
     if((el=t.closest("[data-per]"))){ ui.periode=el.dataset.per; ui.werk=""; rer(); return; }
     if((el=t.closest("[data-soort]"))){ const v=el.dataset.soort; if(v!==ui.soort){ ui.soort=v; ui.werk=""; if(v==="uitstap"&&ui.groep==="deelnemer") ui.groep=""; pasWereldToe(); rer(); } return; }
     if((el=t.closest("[data-mode]"))){ ui.ovMode=el.dataset.mode; rer(); return; }
-    if((el=t.closest("[data-werk]"))){ ui.werk = ui.werk===el.dataset.werk ? "" : el.dataset.werk; rer(); return; }
-    if(t.closest("#ovSeen")){ lsSet(LS_SEEN,new Date().toISOString()); ui.werk=""; rer(); toast("Alles als gezien gemarkeerd"); return; }
+    if((el=t.closest("[data-werk]"))){ ui.werk = ui.werk===el.dataset.werk ? "" : el.dataset.werk; ui.sortGekozen=false; rer(); return; }
+    if(t.closest("#ovSeen")){ lsSet(ui.soort==="nascholing"?LS_SEEN_NAS:LS_SEEN,new Date().toISOString()); ui.werk=""; rer(); toast("Alles als gezien gemarkeerd"); return; }
     if((el=t.closest("[data-unf]"))){ const k=el.dataset.unf; if(k==="q"||k==="alles"){ ui.q=""; $("ovSearch").value=""; } const nasV=ui.soort==="nascholing"; if(k==="klas"||(k==="alles"&&!nasV)){ ui.klas=""; savePrefs(); } if(k==="verv"||(k==="alles"&&!nasV)) ui.verv="";
-      if(k==="nKlas"||(k==="alles"&&nasV)) ui.nKlas=""; if(k==="nDeeln"||(k==="alles"&&nasV)) ui.nDeeln=""; if(k==="nAanvr"||(k==="alles"&&nasV)) ui.nAanvr=""; if(k==="nPlaats"||(k==="alles"&&nasV)) ui.nPlaats=""; if(k==="werk"||k==="alles") ui.werk=""; rer(); return; }
-    if((el=t.closest("[data-sort]"))){ const k=el.dataset.sort; if(ui.sort.key===k) ui.sort.dir*=-1; else ui.sort={key:k,dir:1}; rer(); return; }
+      if(k==="nKlas"||(k==="alles"&&nasV)) ui.nKlas=""; if(k==="nDeeln"||(k==="alles"&&nasV)) ui.nDeeln=""; if(k==="nAanvr"||(k==="alles"&&nasV)) ui.nAanvr=""; if(k==="nPlaats"||(k==="alles"&&nasV)) ui.nPlaats=""; if(k==="nInfo"||(k==="alles"&&nasV)) ui.nInfo=""; if(k==="werk"||k==="alles") ui.werk=""; rer(); return; }
+    if((el=t.closest("[data-sort]"))){ const k=el.dataset.sort;
+      if(werkSort()) ui.sort={key:k,dir:1}; else if(ui.sort.key===k) ui.sort.dir*=-1; else ui.sort={key:k,dir:1};
+      ui.sortGekozen=true; rer(); return; }
     if(t.closest("#ovPrint")){ printList(); return; }
     if(t.closest("#ovOfferte")){ openOfferte(); return; }
+    if(t.closest("#ovXlsx")){ const nas=ui.soort==="nascholing";
+      exportExcel(visibleTrips(),ui.soort,`${nas?"nascholingen":"uitstappen"}_${todayISO()}.xlsx`,selectieTxt(),{deeln:nas?ui.nDeeln:"",klas:nas?ui.nKlas:""}); return; }
     if(t.closest("#ovCsvSel")){ (ui.soort==="nascholing"?exportCSVNas:exportCSV)(visibleTrips(),"selectie"); return; }
     if(t.closest("#ovCsvAll")){ if(ui.soort==="nascholing") exportCSVNas(liveTrips().filter(isNasch),"alles"); else exportCSV(liveTrips().filter(x=>!isNasch(x)),"alles"); return; }
     const row=t.closest(".bl-item"); if(row) openDetail(row.dataset.id);
@@ -3345,25 +3575,25 @@ function exportCSV(list,soort,naam){
     t.busNodig?cNum(t.prijsVervoer):"",t.internBestelbonBus,t.busNodig?(FACT_ST[t.factuurStatusBus]||[""])[0]:"",vervoer(t)==="openbaar"?cNum(kosten(t).verv):"",PRIJS_ST[t.prijsStatus]||"",cNum(k.act),cNum(k.per),
     t.betaalwijze,t.voorschot?cNum(t.voorschotBedrag):"",t.voorschot?(t.voorschotInclusief==="incl"?"inclusief":t.voorschotInclusief==="excl"?"exclusief":""):"",fmtNum(t.voorschotVervalt),fmtNum(t.voorschotBetaaldOp),
     t.internBestelbonUitstap,(FACT_ST[t.factuurStatus]||[""])[0],t.smartschool&&t.smartschool.op?("overgenomen "+fmtNum(t.smartschool.op.slice(0,10))+(ssChanged(t).length?" (daarna gewijzigd)":"")):"",
-    t.opmerking,t.adminNotitie,...(isAdmin?[t.interneNotitie]:[]),t.annulering?`${t.annulering.reden}${t.annulering.kosten?` (kosten ${cNum(t.annulering.kosten)})`:""}`:"",t.ingevoerdOp?fmtNum(t.ingevoerdOp.slice(0,10)):""]; });
+    t.opmerking,t.adminNotitie,...(isAdmin?[t.interneNotitie]:[]),t.annulering?`${t.annulering.reden}${annTxtPlain(t)}`:"",t.ingevoerdOp?fmtNum(t.ingevoerdOp.slice(0,10)):""]; });
   const csv="\ufeff"+[cols,...rows].map(r=>r.map(csvCell).join(";")).join("\r\n");
   download(naam||`uitstappen_${soort}_${todayISO()}.csv`,csv,"text/csv;charset=utf-8");
   toast(`CSV gedownload (${plural(list.length,"uitstap","uitstappen")})`);
 }
 
 function exportCSVNas(list,soort,naam){
-  const cols=["Aanvraag","Schooljaar","Startdatum","Titel","Organisatie","Status","Deelnemers","Aantal deelnemers","Klassen deelnemers","Opvang klas","Aangevraagd door",
+  const cols=["Aanvraag","Schooljaar","Startdatum","Titel","Organisatie","Status","Deelnemers","Aantal deelnemers","Klassen deelnemers","Aangevraagd door",
     "Plaats","Straat","Nr","Postcode","Stad/Gemeente","Locatie (indien anders)","Tel of GSM organisatie","E-mail organisatie","Vervoer deelnemers",
     "Inschrijving","Inschrijven vóór","Link aanbod","Bestelbonnummer nodig","Bestelbonnummer doorgegeven","Prijs","Kostprijs","Prijs per deelnemer","Betaalwijze","Voorschot","Voorschot in/excl","Voorschot te betalen tegen","Voorschot betaald op",
     "Bestelbon","Factuur","Opmerking leerkracht","Mededeling administratie",...(isAdmin?["Interne notitie"]:[]),"Annulering","Ingediend op"];
   const rows=list.map(t=>{ const k=kosten(t), groep=t.deelnemersGroep&&t.deelnemersGroep!=="naam";
-    return [t._nr,schooljaarVan(t.datumStart),fmtNum(t.datumStart),t.titel,t.activiteit,(PLAN_ST[t.planStatus]||[""])[0],deelnemersTxt(t),t.aantalDeelnemers||"",nasKlassen(t).join(" "),t.opvangNodig?"ja":"",t.leerkracht,
+    return [t._nr,schooljaarVan(t.datumStart),fmtNum(t.datumStart),t.titel,t.activiteit,(PLAN_ST[t.planStatus]||[""])[0],deelnemersTxt(t),t.aantalDeelnemers||"",nasKlassen(t).join(" "),t.leerkracht,
       (PLAATS[t.plaats]||{l:""}).l,t.straat,t.nummer,t.postcode,t.stad,t.locatieAnders?locAdres(t):"",telTxt(t.contactTel),t.contactEmail,
       groep?"":(t.deelnemers||[]).filter(d=>d.vervoer).map(d=>`${d.naam}: ${DN_VERV_KORT[d.vervoer]}`).join("; "),
       inschTxt(t),fmtNum(t.inschrijvenVoor),t.inschrijfLink,t.bestelbon?(BON_LBL[t.bestelbon]||t.bestelbon):"",fmtNum(t.bestelbonDoorgegevenOp),PRIJS_ST[t.prijsStatus]||"",cNum(k.act),cNum(k.per),
       t.betaalwijze,t.voorschot?cNum(t.voorschotBedrag):"",t.voorschot?(t.voorschotInclusief==="incl"?"inclusief":t.voorschotInclusief==="excl"?"exclusief":""):"",fmtNum(t.voorschotVervalt),fmtNum(t.voorschotBetaaldOp),
       t.internBestelbonUitstap,(FACT_ST[t.factuurStatus]||[""])[0],t.opmerking,t.adminNotitie,...(isAdmin?[t.interneNotitie]:[]),
-      t.annulering?`${t.annulering.reden}${t.annulering.kosten?` (kosten ${cNum(t.annulering.kosten)})`:""}`:"",t.ingevoerdOp?fmtNum(t.ingevoerdOp.slice(0,10)):""]; });
+      t.annulering?`${t.annulering.reden}${annTxtPlain(t)}`:"",t.ingevoerdOp?fmtNum(t.ingevoerdOp.slice(0,10)):""]; });
   const csv="\ufeff"+[cols,...rows].map(r=>r.map(csvCell).join(";")).join("\r\n");
   download(naam||`nascholingen_${soort}_${todayISO()}.csv`,csv,"text/csv;charset=utf-8");
   toast(`CSV gedownload (${plural(list.length,"nascholing","nascholingen")})`);
@@ -3454,7 +3684,7 @@ function renderDetail(id,refreshOnly){
       ${isAdmin&&t.busNodig?`<button class="btn btn-ghost btn-sm" data-d="busmail">${ic("mail",15)}Busaanvraag mailen</button>`:""}
       ${isAdmin?`<button class="btn btn-ghost btn-sm" data-d="sstxt">${ic("smart",15)}Tekst voor Smartschool</button>`:""}
     </div>`;
-  if(isCancel(t)) h+=`<div class="fwarn" style="background:var(--coral-soft);border-color:var(--coral-line);color:var(--coral-t)">${ic("alert",16)}<div><b>Deze uitstap is geannuleerd.</b> ${esc(t.annulering&&t.annulering.reden||"")}${t.annulering&&t.annulering.kosten?` · annuleringskosten ${esc(euro(t.annulering.kosten))}`:""}</div></div>`;
+  if(isCancel(t)) h+=`<div class="fwarn" style="background:var(--coral-soft);border-color:var(--coral-line);color:var(--coral-t)">${ic("alert",16)}<div><b>Deze uitstap is geannuleerd.</b> ${esc(t.annulering&&t.annulering.reden||"")}${esc(annTxtPlain(t))}</div></div>`;
   if(t.adminNotitie) h+=`<div class="msg-box admin"><span class="mb-h">Mededeling van de administratie</span>${esc(t.adminNotitie)}</div>`;
   h+=`<div class="dsecs">
     <div class="dsec"><h4>${ic("cal",15)}Wanneer en wie</h4><dl class="dl">
@@ -3482,7 +3712,7 @@ function renderDetail(id,refreshOnly){
     h+=`<div class="dsec"><h4>${ic("receipt",15)}Opvolging<button class="btn-link h-act" data-d="editfact">${ic("pencil",13)}Bestelbons en prijzen invullen</button></h4>
       <div class="tile-row">
         ${t.busNodig?tile("bus","busStatus",t.busStatus,"Busstatus",{attr:"data-qt"})+tile("factBus","factuurStatusBus",t.factuurStatusBus,"Factuur bus",{attr:"data-qt"}):""}
-        ${tile("fact","factuurStatus",t.factuurStatus,"Factuur uitstap",{attr:"data-qt",locked:gratis,lockTxt:"gratis uitstap"})}
+        ${tile("fact","factuurStatus",t.factuurStatus,"Factuur uitstap",{attr:"data-qt",locked:gratis&&!(t.annulering&&t.annulering.metKosten==="wel"),lockTxt:"gratis uitstap"})}${intrekTegels(t)}
       </div>
       <dl class="dl" style="margin-top:12px">
       ${dd("Bestelbon uitstap",esc(t.internBestelbonUitstap))}${t.busNodig?dd("Bestelbon bus",esc(t.internBestelbonBus))+dd("Kostprijs bus",esc(euro(t.prijsVervoer))):""}
@@ -3534,14 +3764,13 @@ function renderDetailNas(t,refreshOnly){
       <button class="btn btn-ghost btn-sm" data-d="kopie">${ic("copy",15)}Kopiëren als nieuwe aanvraag</button>
       ${link?`<a class="btn btn-ghost btn-sm" href="${esc(link)}" target="_blank" rel="noopener">${ic("link",15)}Aanbod openen</a>`:""}
     </div>`;
-  if(isCancel(t)) h+=`<div class="fwarn" style="background:var(--coral-soft);border-color:var(--coral-line);color:var(--coral-t)">${ic("alert",16)}<div><b>Deze nascholing is geannuleerd.</b> ${esc(t.annulering&&t.annulering.reden||"")}${t.annulering&&t.annulering.kosten?` · annuleringskosten ${esc(euro(t.annulering.kosten))}`:""}</div></div>`;
+  if(isCancel(t)) h+=`<div class="fwarn" style="background:var(--coral-soft);border-color:var(--coral-line);color:var(--coral-t)">${ic("alert",16)}<div><b>Deze nascholing is geannuleerd.</b> ${esc(t.annulering&&t.annulering.reden||"")}${esc(annTxtPlain(t))}</div></div>`;
   if(t.adminNotitie) h+=`<div class="msg-box admin"><span class="mb-h">Mededeling van de administratie</span>${esc(t.adminNotitie)}</div>`;
   h+=`<div class="dsecs">
     <div class="dsec"><h4>${ic("cal",15)}Wanneer en wie</h4><dl class="dl">
       ${dd("Startdatum",esc(cap(fmtLong(t.datumStart))))}
       ${dd(groep||t.aantalDeelnemers!==1?"Deelnemers":"Deelnemer",dnLijst)}
       ${groep||t.aantalDeelnemers>1?dd("Aantal",esc(t.aantalDeelnemers)):""}
-      ${t.opvangNodig?dd("Opvang klas",esc(kls.length?"nodig voor "+kls.join(", "):"nodig tijdens de lesuren")):""}
       ${dd("Aangevraagd door",esc(t.leerkracht))}
       ${dd("Ingediend op",esc(fmtStamp(t.ingevoerdOp)))}
     </dl></div>
@@ -3554,7 +3783,7 @@ function renderDetailNas(t,refreshOnly){
     <div class="dsec"><h4>${ic("mail",15)}Inschrijving</h4><dl class="dl">
       ${dd("Inschrijving",esc(inschTxt(t)))}
       ${t.inschrijving==="secretariaat"?dd("Inschrijven vóór",esc(fmtDY(t.inschrijvenVoor))):""}
-      ${t.bestelbon==="nee"?dd("Bestelbonnummer","niet nodig voor de inschrijving"):bonNodig(t)?dd("Bestelbonnummer",t.internBestelbonUitstap?`<b>${esc(t.internBestelbonUitstap)}</b>${t.bestelbonStatus==="doorgegeven"&&t.bestelbonDoorgegevenOp?` <span class="muted">· doorgegeven op ${esc(fmtDY(t.bestelbonDoorgegevenOp))}</span>`:""}`:esc("nodig, "+(BON_LBL[t.bestelbon]||""))):""}
+      ${t.bestelbon==="nee"?dd("Bestelbonnummer","niet nodig voor de inschrijving"):bonNodig(t)?dd("Bestelbonnummer",t.internBestelbonUitstap?`<b>${esc(t.internBestelbonUitstap)}</b>${t.bestelbonStatus==="doorgegeven"&&t.bestelbonDoorgegevenOp?` <span class="muted">· doorgegeven op ${esc(fmtDY(t.bestelbonDoorgegevenOp))}</span>`:""}${isAdmin?` <button class="btn-link" data-d="bonmsg">${ic("copy",13)}Bericht kopiëren</button>`:""}`:esc("nodig, "+(BON_LBL[t.bestelbon]||""))):""}
       ${dd("Aanbod",link?`<a href="${esc(link)}" target="_blank" rel="noopener">${esc(link.replace(/^https?:\/\//,""))}</a>`:"")}
     </dl></div>
     <div class="dsec"><h4>${ic("euro",15)}Kosten en betaling</h4>${costBlock(t,k)}</div>
@@ -3564,9 +3793,10 @@ function renderDetailNas(t,refreshOnly){
     h+=`<div class="dsec"><h4>${ic("receipt",15)}Opvolging<button class="btn-link h-act" data-d="editfact">${ic("pencil",13)}Bestelbon en prijs invullen</button></h4>
       <div class="tile-row">
         ${t.inschrijving==="secretariaat"?tile("insch","inschrijfStatus",t.inschrijfStatus,"Inschrijving",{attr:"data-qt"})
-          :t.inschrijving==="zelf"?tile("insch","inschrijfStatus","zelf","Inschrijving",{attr:"data-qt",locked:true,lockTxt:"niets te doen voor het secretariaat"}):""}
+          :t.inschrijving==="zelf"?tile("insch","inschrijfStatus","zelf","Inschrijving",{attr:"data-qt",locked:true,lockTxt:"niets te doen voor het secretariaat"})
+          :t.inschrijving==="geen"?tile("insch","inschrijfStatus","geen","Inschrijving",{attr:"data-qt",locked:true,lockTxt:"geen inschrijving nodig"}):""}
         ${bonNodig(t)?tile("bonnr","bestelbonStatus",t.bestelbonStatus,"Bestelbonnummer",{attr:"data-qt",locked:!t.internBestelbonUitstap,lockTxt:"vul eerst het nummer in"}):""}
-        ${tile("fact","factuurStatus",t.factuurStatus,"Factuur nascholing",{attr:"data-qt",locked:gratis,lockTxt:"gratis nascholing"})}
+        ${tile("fact","factuurStatus",t.factuurStatus,"Factuur nascholing",{attr:"data-qt",locked:gratis&&!(t.annulering&&t.annulering.metKosten==="wel"),lockTxt:"gratis nascholing"})}${intrekTegels(t)}
       </div>
       <dl class="dl" style="margin-top:12px">
       ${dd("Bestelbon nascholing",esc(t.internBestelbonUitstap))}
@@ -3588,18 +3818,33 @@ function renderDetailNas(t,refreshOnly){
   $("dlg").scrollTop = wasOpen ? sc : 0;
   $("dlg").onclick=e=>detailClick(e,t.id);
 }
+/* B12: een bestelbon die door een annulering zonder kosten vervalt, moet ingetrokken worden */
+function intrekTegels(t){
+  if(!isCancel(t) || !t.annulering) return "";
+  const a=t.annulering;
+  return (a.metKosten==="geen"&&t.internBestelbonUitstap ? tile("intrek","bonIngetrokkenOp",t.bonIngetrokkenOp?"ingetrokken":"intrekken",isNasch(t)?"Bestelbon nascholing":"Bestelbon uitstap",{attr:"data-qt"}) : "")
+    +(a.busMetKosten==="geen"&&t.internBestelbonBus ? tile("intrek","bonBusIngetrokkenOp",t.bonBusIngetrokkenOp?"ingetrokken":"intrekken","Bestelbon bus",{attr:"data-qt"}) : "");
+}
+/* De annuleringskosten in woorden (detail, CSV) */
+function annTxtPlain(t){
+  const a=t.annulering||{}, bus=t.busNodig&&a.busMetKosten;
+  const een=(m,b,w)=>m==="wel" ? `${w}annuleringskosten ${b!=null?euro(b):"(bedrag nog onbekend)"}` : m==="geen" ? `${w}geen annuleringskosten` : "";
+  const d=[een(a.metKosten,a.kosten,bus?"activiteit: ":""), bus?een(a.busMetKosten,a.busKosten,"bus: "):""];
+  if(!a.metKosten && a.kosten>0) d.push("annuleringskosten "+euro(a.kosten));
+  return d.filter(Boolean).map(x=>" · "+x).join("");
+}
 function costBlock(t,k){
-  if(t.prijsStatus==="tebevestigen" && k.verv==null) return `<div class="muted" style="font-size:13.5px">Prijs nog te bevestigen.${t.betaalwijze?` Betaling via ${esc(t.betaalwijze)}.`:""}</div>`;
+  if(t.prijsStatus==="tebevestigen" && k.verv==null && !t.voorschot) return `<div class="muted" style="font-size:13.5px">Prijs nog te bevestigen.${t.betaalwijze?` Betaling via ${esc(t.betaalwijze)}.`:""}</div>`;
   const L=(a,b,c="")=>`<div class="cl ${c}"><span>${a}</span><span>${b}</span></div>`;
   let h=`<div class="cost-tbl">`;
-  const A=isNasch(t)?"Nascholing":"Uitstap", P1=isNasch(t)?"deelnemer":"leerling";
+  const A=isNasch(t)?"Nascholing":"Uitstap", P1=isNasch(t)?"deelnemer":"leerling", ram=isNasch(t)&&GROEP_LBL[t.deelnemersGroep]?" (raming)":"";
   if(t.prijsStatus==="gratis") h+=L(A,"gratis");
   else if(t.prijsStatus==="tebevestigen") h+=L(A,"nog te bevestigen");
   else { h+=L(t.voorschot&&t.voorschotInclusief==="excl"?A+" (zonder voorschot)":A,esc(euro(k.act)));
-    if(k.per!=null) h+=L(t.kostprijsBasis==="perLln"?"Prijsbasis: per "+P1:"Per "+P1,`${esc(euro(k.per))} × ${persAantal(t)}`,"sub");
+    if(k.per!=null) h+=L((t.kostprijsBasis==="perLln"?"Prijsbasis: per "+P1:"Per "+P1)+ram,`${esc(euro(k.per))} × ${persAantal(t)}`,"sub");
     if(t.voorschot && t.voorschotInclusief==="excl") h+=L("Voorschot",esc(euro(k.vs))); }
   if(k.verv!=null) h+=L(t.busNodig?"Bus":"Openbaar vervoer",esc(euro(k.verv)));
-  if(k.tot!=null && (k.verv!=null || (t.voorschot&&t.voorschotInclusief==="excl"))) h+=L("Totaal",esc(euro(k.tot)),"tot")+(k.perAll!=null?L("Totaal per leerling",esc(euro(k.perAll)),"sub"):"");
+  if(k.tot!=null && (k.verv!=null || (t.voorschot&&t.voorschotInclusief==="excl"))) h+=L("Totaal",esc(euro(k.tot)),"tot")+(k.perAll!=null?L("Totaal per "+P1+ram,esc(euro(k.perAll)),"sub"):"");
   else if(!k.volledig && (k.verv!=null || (t.busNodig||t.vervoerwijze==="openbaar"))) h+=L("Totaal","volgt zodra alle prijzen gekend zijn","tot");
   if(t.betaalwijze) h+=L("Betaling",esc(t.betaalwijze),"sub");
   if(t.voorschot){
@@ -3632,7 +3877,7 @@ function reqHTML(a,t){
 const REQ_LBL={datumStart:"Datum",datumEind:"Einddatum",vertrekSchool:"Vertrek school",terug:"Vertrek op locatie",terugSchool:"Terug op school",aantalLln:"Aantal leerlingen",
   aantalBegeleiders:"Begeleiders",klassen:"Klassen",prijs:"Prijs",aantalDeelnemers:"Aantal deelnemers"};
 function reqShow(f,v,t){
-  if(f==="prijs") return v ? `${euro(parseEuro(v.kostIn))} ${v.kostprijsBasis==="perLln"?(isNasch(t)?"per deelnemer":"per leerling"):"totaal"}` : "";
+  if(f==="prijs") return v ? v.gratis ? "gratis" : `${euro(parseEuro(v.kostIn))} ${v.kostprijsBasis==="perLln"?(isNasch(t)?"per deelnemer":"per leerling"):"totaal"}` : "";
   if(f==="aantalLln"||f==="aantalBegeleiders"||f==="aantalDeelnemers") return String(v);
   return showVal(f,v);
 }
@@ -3645,11 +3890,12 @@ async function detailClick(e,id){
   const t=tripById(id); if(!t) return;
   let el;
   if((el=e.target.closest("[data-qt]")) && !el.disabled){
-    const f=el.dataset.qt, nv=nextState(el.dataset.kind,t[f]);
+    const kind=el.dataset.kind, f=el.dataset.qt, intrek=kind==="intrek", nv=nextState(kind,intrek?(t[f]?"ingetrokken":"intrekken"):t[f]);
+    const lt = intrek ? (f==="bonBusIngetrokkenOp"?"Bestelbon bus":"Bestelbon")+(nv==="ingetrokken"?" ingetrokken":" nog in te trekken") : `${lblVan(f,t)}: ${showVal(f,nv,t)}`;
     el.disabled=true;
-    try{ await patchTrip(id,x=>{ x[f]=nv; if(f==="busStatus"&&nv==="bevestigd"&&!x.busBevestigdOp) x.busBevestigdOp=todayISO();
+    try{ await patchTrip(id,x=>{ x[f]=intrek?(nv==="ingetrokken"?todayISO():null):nv; if(f==="busStatus"&&nv==="bevestigd"&&!x.busBevestigdOp) x.busBevestigdOp=todayISO();
         if(f==="inschrijfStatus") x.ingeschrevenOp = nv==="ingeschreven" ? todayISO() : null;
-        if(f==="bestelbonStatus") x.bestelbonDoorgegevenOp = nv==="doorgegeven" ? todayISO() : null; },`${lblVan(f,t)}: ${showVal(f,nv,t)}`); renderAll(); toast(`${lblVan(f,t)}: ${showVal(f,nv,t).toLowerCase()}`); }
+        if(f==="bestelbonStatus") x.bestelbonDoorgegevenOp = nv==="doorgegeven" ? todayISO() : null; },lt); renderAll(); toast(intrek?lt:`${lblVan(f,t)}: ${showVal(f,nv,t).toLowerCase()}`); }
     catch(err){ dbFail(err,"Bewaren"); el.disabled=false; }
     return;
   }
@@ -3663,6 +3909,10 @@ async function detailClick(e,id){
   else if(d==="edit") startEdit(t);
   else if(d==="editfact") startEdit(t,null,null,"fact");
   else if(d==="busmail") busMail(t);
+  /* W10: het nummer bezorgen gaat buiten de tool; dit bericht plak je in Smartschool */
+  else if(d==="bonmsg"){ const vn=String(t.leerkracht||"").trim().split(/\s+/)[0]||"";
+    const ok=await copyText(`Dag ${vn}, het bestelbonnummer voor je nascholing "${titelVan(t)}"${t.activiteit?` (${t.activiteit})`:""} van ${fmtLong(t.datumStart)} is ${t.internBestelbonUitstap}.`);
+    toast(ok?"Bericht gekopieerd. Plak het in Smartschool.":"Kopiëren lukte niet", ok?"ok":"err"); }
   else if(d==="sstxt"){ const ok=await copyText(ssText(t)); toast(ok?"Tekst voor Smartschool gekopieerd":"Kopiëren lukte niet", ok?"ok":"err"); }
   else if(d==="ss") toggleSS(t);
   else if(d==="vsbetaald"){ try{ await patchTrip(id,x=>{ x.voorschotBetaaldOp=todayISO(); },"Voorschot betaald"); renderAll(); toast("Voorschot als betaald aangeduid"); }catch(err){ dbFail(err,"Bewaren"); } }
@@ -3707,11 +3957,11 @@ const ED_TABS=[["alg","Algemeen"],["best","Bestemming & uren"],["fact","Vervoer 
 const ED_TABS_NAS=[["alg","Algemeen"],["best","Locatie & deelnemers"],["fact","Inschrijving & facturatie"]];
 const edTabs = () => (ED.M && ED.M.categorie==="nascholing") ? ED_TABS_NAS : ED_TABS;
 function startEdit(t,prefill,reqId,tab){
-  ED.base=clone(t); ED.M=toModel(t); ED.state={E:{}}; ED.reqId=reqId||null; ED.hl=[];
+  ED.base=clone(t); ED.M=toModel(t); ED.M._basisDatum=t.datumStart; ED.state={E:{}}; ED.reqId=reqId||null; ED.hl=[];
   /* De aanvraag zoals ze was toen je ze opende (met haar versie): zo wordt een intussen genomen beslissing niet overschreven */
   { const a=reqId?D.reqs.find(x=>x.id===reqId):null; ED.req=a?clone(a):null; }
   if(prefill){ Object.keys(prefill).forEach(f=>{ ED.M[f]=prefill[f]; ED.hl.push(f); }); }
-  ED.orig=JSON.stringify(ED.M);
+  ED.orig=JSON.stringify(Object.fromEntries(Object.entries(ED.M).filter(([k])=>k[0]!=="_")));
   ED.tab = tab || (ED.hl.length ? tabOf(ED.hl[0]==="prijs"?"kostIn":ED.hl[0]) : (ssGet("klimop_uit_edtab")||"fact"));
   detailMode="edit"; renderEdit(t);
 }
@@ -3810,15 +4060,32 @@ async function saveEdit(id){
       ok:naarN?"Omzetten naar nascholing":"Omzetten naar uitstap"});
     if(!ok) return;
   }
+  /* B06: een al doorgegeven bestelbonnummer verandert: opnieuw doorgeven? */
+  if(isNasch(next) && base.bestelbonStatus==="doorgegeven" && next.bestelbonStatus==="doorgegeven" && base.internBestelbonUitstap && next.internBestelbonUitstap
+     && next.internBestelbonUitstap!==base.internBestelbonUitstap){
+    const opnieuw=await confirmDialog({title:"Nieuw bestelbonnummer",html:`<p>Het vorige nummer (<b>${esc(base.internBestelbonUitstap)}</b>) werd al aan de aanvrager doorgegeven. Moet het nieuwe nummer opnieuw doorgegeven worden?</p>`,
+      ok:"Ja, opnieuw doorgeven",cancel:"Nee, zo laten"});
+    if(opnieuw){ next.bestelbonStatus="doorgeven"; next.bestelbonDoorgegevenOp=null; }
+  }
+  /* W04: het secretariaat schreef al in, en de deelnemers of de datum veranderen: inschrijving aanpassen? */
+  if(isNasch(next) && next.inschrijving==="secretariaat" && base.inschrijfStatus==="ingeschreven" && next.inschrijfStatus==="ingeschreven"
+     && ["deelnemers","aantalDeelnemers","deelnemersGroep","datumStart"].some(f=>JSON.stringify(norm(base)[f])!==JSON.stringify(next[f]))){
+    const aanpassen=await confirmDialog({title:"Inschrijving aanpassen?",html:`<p>De deelnemers of de datum veranderen, maar de nascholing staat al op <b>Ingeschreven</b>. Moet de inschrijving bij de organisatie aangepast worden?</p><p class="hint" style="margin-top:8px">Bij ja komt ze weer bij <b>Nog in te schrijven</b>.</p>`,
+      ok:"Ja, aanpassen",cancel:"Nee, zo laten"});
+    if(aanpassen){ next.inschrijfStatus="teschrijven"; next.ingeschrevenOp=null; }
+  }
+  ch.splice(0,ch.length,...diffTrips(norm(base),next));
   ED.busy=true; const b=$("edSave"); b.classList.add("busy"); b.innerHTML=`<span class="spin"></span>Bezig met bewaren…`;
   try{
     /* Verwerk je een aanvraag: staat ze nog open? Anders niets overschrijven en de keuze aan jou laten. */
     if(req){
-      const cur=await guarded(()=>API.getReq(req.id)).catch(()=>null);
-      const st=cur&&cur.data&&cur.data.status;
+      let cur;
+      try{ cur=await guarded(()=>API.getReq(req.id)); }
+      catch(e){ toast("De aanvraag kon niet nagekeken worden ("+(e.network?"geen verbinding":"fout bij het ophalen")+"). Er is niets bewaard; probeer opnieuw.","err"); return; }
+      const st=cur ? (cur.data&&cur.data.status) : "weg";
       if(cur){ const n=fromReq(cur), i=D.reqs.findIndex(x=>x.id===n.id); if(i>=0) D.reqs[i]=n; }
       if(st && st!=="open"){
-        const verder=await confirmDialog({title:"Aanvraag intussen al behandeld",html:`<p>Deze aanvraag werd intussen al <b>${st==="verwerkt"?"verwerkt":"afgewezen"}</b> door iemand anders. Die beslissing blijft staan.</p><p>Wil je je wijzigingen aan de uitstap toch bewaren, los van de aanvraag?</p>`,ok:"Wijzigingen toch bewaren",cancel:"Terug naar bewerken"});
+        const verder=await confirmDialog({title:st==="weg"?"Aanvraag niet meer gevonden":"Aanvraag intussen al behandeld",html:`<p>${st==="weg"?"Deze aanvraag bestaat niet meer.":`Deze aanvraag werd intussen al <b>${st==="verwerkt"?"verwerkt":"afgewezen"}</b> door iemand anders.`} Die beslissing blijft staan.</p><p>Wil je je wijzigingen aan de uitstap toch bewaren, los van de aanvraag?</p>`,ok:"Wijzigingen toch bewaren",cancel:"Terug naar bewerken"});
         if(!verder) return;
         req=null; ED.req=null; ED.reqId=null;
         if(!ch.length){ detailMode="lees"; ED.M=null; renderAll(); renderDetail(id); toast("Geen wijzigingen"); return; }
@@ -3830,7 +4097,7 @@ async function saveEdit(id){
     const saved=await saveTrip(next,base,{log:logTxt?logTxt.trim():null});
     let reqFout=null;
     if(req){ try{ await updateReq(Object.assign({},req,{status:"verwerkt",afgehandeldOp:new Date().toISOString(),
-      nadien:Object.fromEntries(Object.keys(req.velden||{}).map(f=>[f,reqCur(next,f)]))})); }catch(e){ reqFout=e; } }
+      nadien:Object.fromEntries(Object.keys(req.velden||{}).map(f=>[f,reqCur(saved||next,f)]))})); }catch(e){ reqFout=e; } }
     detailMode="lees"; ED.M=null; ED.req=null; renderAll(); renderDetail(id);
     if(reqFout){
       console.error(reqFout);
@@ -3915,10 +4182,15 @@ async function sendReq(t){
   const velden={};
   if(RQ.type==="wijziging"){
     [["datumStart"],["datumEind"],["vertrekSchool"],["terug"],["terugSchool"]].forEach(([f])=>{ const x=v("rq_"+f); if(x && x!==t[f]) velden[f]=x; });
-    ["aantalLln","aantalBegeleiders","aantalDeelnemers"].forEach(f=>{ const x=v("rq_"+f); if(x!==""){ if(!isInt(x)) errs.push(`${REQ_LBL[f]}: gebruik een heel getal.`); else if(+x!==t[f]) velden[f]=+x; } });
+    ["aantalLln","aantalBegeleiders","aantalDeelnemers"].forEach(f=>{ const x=v("rq_"+f); if(x!==""){
+      if(!isInt(x)) errs.push(`${REQ_LBL[f]}: gebruik een heel getal.`);
+      else if(+x<1) errs.push(`${REQ_LBL[f]}: minstens 1. Gaat de ${isNasch(t)?"nascholing":"uitstap"} niet door? Kies dan Annulering aanvragen.`);
+      else if(f==="aantalDeelnemers" && +x>(t.deelnemersGroep==="naam"?MAX_NAMEN:999)) errs.push(`${REQ_LBL[f]}: controleer het aantal.`);
+      else if(+x!==t[f]) velden[f]=+x; } });
+    if(velden.aantalDeelnemers!=null && t.deelnemersGroep==="naam" && velden.aantalDeelnemers<t.aantalDeelnemers && !toel) errs.push("Wie neemt niet meer deel? Vermeld het in de toelichting.");
     const a=sortKlassen(RQ.klassen), b=sortKlassen(t.klassen);
     if(JSON.stringify(a)!==JSON.stringify(b)){ if(!a.length) errs.push("Kies minstens één klas."); else velden.klassen=a; }
-    const pr=v("rq_prijs"); if(pr){ const n=parseEuro(pr); if(n==null||isNaN(n)) errs.push("Prijs: geen geldig bedrag."); else velden.prijs={kostIn:euroIn(n),kostprijsBasis:RQ.basis}; }
+    const pr=v("rq_prijs"); if(pr){ const n=parseEuro(pr); if(n==null||isNaN(n)) errs.push("Prijs: geen geldig bedrag."); else velden.prijs = n===0 ? {gratis:true} : {kostIn:euroIn(n),kostprijsBasis:RQ.basis}; }
     if(velden.datumStart && t.type==="meerdaags" && !velden.datumEind) errs.push("Geef ook de nieuwe einddatum.");
     if(!Object.keys(velden).length && !toel) errs.push("Duid aan wat er moet veranderen, of beschrijf het in de toelichting.");
   } else if(!toel) errs.push(`Geef aan waarom de ${isNasch(t)?"nascholing":"uitstap"} niet doorgaat.`);
@@ -3940,7 +4212,9 @@ function processReq(t,a){
   if(a.type==="annulering"){ startEdit(t,{planStatus:"geannuleerd",annuleringReden:a.toelichting||""},a.id); return; }
   const pre={};
   Object.entries(a.velden||{}).forEach(([f,v])=>{
-    if(f==="prijs"){ pre.prijsStatus="bekend"; pre.kostIn=v.kostIn; pre.kostprijsBasis=v.kostprijsBasis; }
+    if(f==="prijs"){ if(v.gratis) pre.prijsStatus="gratis"; else { pre.prijsStatus="bekend"; pre.kostIn=v.kostIn; pre.kostprijsBasis=v.kostprijsBasis; } }
+    /* Minder deelnemers: wie wegvalt, kies je zelf met de verwijderknop (de aanvraag staat bovenaan) */
+    else if(f==="aantalDeelnemers" && t.deelnemersGroep==="naam" && v<t.aantalDeelnemers){}
     else if(f==="aantalLln"||f==="aantalBegeleiders"||f==="aantalDeelnemers") pre[f]=String(v);
     else pre[f]=v;
   });
@@ -3983,7 +4257,7 @@ function busMail(t){
 
 /* Tekst over een nascholing (agenda): wat, wanneer, wie, waar */
 function nasText(t){
-  const lines=[titelVan(t), t.activiteit?`Organisatie: ${t.activiteit}`:"", `Wanneer: ${fmtLong(t.datumStart)}`, `Deelnemers: ${deelnemersTxt(t)}`,
+  const lines=[titelVan(t), t.activiteit?`Organisatie: ${t.activiteit}`:"", `Startdatum: ${fmtLong(t.datumStart)} (bij meerdere dagen enkel de eerste dag)`, `Deelnemers: ${deelnemersTxt(t)}`,
     `Plaats: ${t.plaats==="locatie"?(bestemming(t)||"op locatie"):((PLAATS[t.plaats]||{l:""}).l).toLowerCase()}`];
   if(t.inschrijfLink) lines.push(`Aanbod: ${t.inschrijfLink}`);
   if(isCancel(t)) lines.unshift("GEANNULEERD");
@@ -4041,7 +4315,7 @@ function printFicheNas(t){
   const dn = groep ? esc(GROEP_LBL[t.deelnemersGroep]||"") : (t.deelnemers||[]).map(d=>esc(d.naam)+([d.klas,loc&&d.vervoer?DN_VERV_KORT[d.vervoer]:""].filter(Boolean).length?` <span class="psmall">(${esc([d.klas,loc&&d.vervoer?DN_VERV_KORT[d.vervoer]:""].filter(Boolean).join(", "))})</span>`:"")).join("<br>");
   $("printArea").innerHTML=printHead("Nascholingsfiche",`Aanvraag #${esc(t._nr)}<br>afgedrukt op ${esc(fmtDY(todayISO()))}`)+`<div class="fiche">
     <h2>${esc(titelVan(t))}</h2><div class="sub">${esc(cap(fmtLong(t.datumStart)))}${t.activiteit?" · "+esc(t.activiteit):""}${isCancel(t)?" · GEANNULEERD":""}</div>
-    <div class="fs"><h3>Deelnemers</h3><dl>${row(groep||t.aantalDeelnemers!==1?"Deelnemers":"Deelnemer",dn)}${groep||t.aantalDeelnemers>1?row("Aantal",esc(t.aantalDeelnemers)):""}${t.opvangNodig?row("Opvang klas",esc(kls.length?"nodig voor "+kls.join(", "):"nodig tijdens de lesuren")):""}${row("Aangevraagd door",esc(t.leerkracht))}</dl></div>
+    <div class="fs"><h3>Deelnemers</h3><dl>${row(groep||t.aantalDeelnemers!==1?"Deelnemers":"Deelnemer",dn)}${groep||t.aantalDeelnemers>1?row("Aantal",esc(t.aantalDeelnemers)):""}${row("Aangevraagd door",esc(t.leerkracht))}</dl></div>
     <div class="fs"><h3>Locatie en contact</h3><dl>${row("Plaats",esc((PLAATS[t.plaats]||{l:""}).l))}${loc?row(t.locatieAnders?"Adres organisatie":"Adres",esc(adres(t)))+(t.locatieAnders?row("Locatie",esc(locAdres(t))):""):""}${row("Tel of GSM",esc(telTxt(t.contactTel)))}${row("E-mail",esc(t.contactEmail))}</dl></div>
     <div class="fs"><h3>Inschrijving</h3><dl>${row("Inschrijving",esc(inschTxt(t)))}${t.inschrijving==="secretariaat"?row("Inschrijven vóór",esc(fmtDY(t.inschrijvenVoor))):""}${t.bestelbon==="nee"?row("Bestelbonnummer","niet nodig"):bonNodig(t)?row("Bestelbonnummer",t.internBestelbonUitstap?esc(t.internBestelbonUitstap):esc("nodig, "+(BON_LBL[t.bestelbon]||""))):""}${row("Aanbod",esc(t.inschrijfLink))}</dl></div>
     <div class="fs"><h3>Kosten</h3><dl>${row("Kostprijs",t.prijsStatus==="gratis"?"gratis":t.prijsStatus==="tebevestigen"?"nog te bevestigen":esc(euro(k.act))+(k.per!=null&&persAantal(t)>1?` (${esc(euro(k.per))} per deelnemer)`:""))}${row("Betaling",esc(t.betaalwijze))}${t.voorschot?row("Voorschot",esc(euro(t.voorschotBedrag))+(t.voorschotVervalt?" · tegen "+esc(fmtDY(t.voorschotVervalt)):"")):""}</dl></div>
@@ -4201,7 +4475,7 @@ function printMonth(ym){
   let rows="";
   for(let ws=start; ws<=end; ws=addDays(ws,7)){
     rows+="<tr>"+[...Array(7)].map((_,i)=>{ const d=addDays(ws,i), its=items.filter(it=>it.s<=d&&it.e>=d), vak=its.find(it=>it.kind==="vak");
-      return `<td class="${i>4?"we ":""}${vak?"pv":""}"><div class="pd">${d.slice(0,7)===ym?parseISO(d).getDate():""}</div>${d.slice(0,7)!==ym?"":its.map(it=>it.kind==="vak"?(it.s===d||d===first||i===0?`<span class="psmall">${esc(it.naam)}</span>`:""):`<span class="pe ${it.kind==="meer"?"m":it.kind==="melding"?"n":it.kind==="nasch"?"nasch":""}">${esc(it.naam)}${it.t?` <span class="psmall">${esc(isNasch(it.t)?deelnemersTxt(it.t):sortKlassen(it.t.klassen).join(", "))}${it.t.vertrekSchool&&it.s===d?" · "+esc(fmtTime(it.t.vertrekSchool)):""}</span>`:""}</span>`).join("")}</td>`; }).join("")+"</tr>";
+      return `<td class="${i>4?"we ":""}${vak?"pv":""}"><div class="pd">${d.slice(0,7)===ym?parseISO(d).getDate():""}</div>${d.slice(0,7)!==ym?"":its.map(it=>it.kind==="vak"?(it.s===d||d===first||i===0?`<span class="psmall">${esc(it.naam)}</span>`:""):`<span class="pe ${it.kind==="meer"?"m":it.kind==="melding"?"n":it.kind==="nasch"?"nasch":""}${it.t&&isCancel(it.t)?" pc":""}">${it.t&&isCancel(it.t)?"<b>Geannuleerd:</b> ":""}${esc(it.naam)}${it.t?` <span class="psmall">${esc(isNasch(it.t)?deelnemersTxt(it.t):sortKlassen(it.t.klassen).join(", "))}${it.t.vertrekSchool&&it.s===d?" · "+esc(fmtTime(it.t.vertrekSchool)):""}</span>`:""}</span>`).join("")}</td>`; }).join("")+"</tr>";
   }
   $("printArea").innerHTML=printHead(`Kalender ${MAANDEN[m]} ${y}`,`${ui.klas?"Klas "+esc(ui.klas)+"<br>":""}afgedrukt op ${esc(fmtDY(todayISO()))}`)+
     `<table class="pcal"><thead><tr>${["Maandag","Dinsdag","Woensdag","Donderdag","Vrijdag","Za","Zo"].map((d,i)=>`<th${i>4?' class="we"':""}>${d}</th>`).join("")}</tr></thead><tbody>${rows}</tbody></table>`;
@@ -4449,7 +4723,156 @@ function buildBusXlsx(set,rows){
 }
 
 /* ============================================================
-   ARCHIEF: vorige schooljaren (alleen lezen) en de prullenbak
+   EXCEL: de lijst zoals je ze ziet, als .xlsx (teal voor uitstappen, zand voor nascholingen)
+   ============================================================ */
+function xlLijstStyles(zand){
+  const C = zand ? {kop:"FF7A6236",titel:"FF4A3C1F",zebra:"FFF7F4EE",rand:"FFE8E0CF",ink:"FF29241A",grijs:"FF665B48"}
+                 : {kop:"FF0B7E78",titel:"FF08534F",zebra:"FFF4F8F7",rand:"FFD5E1DF",ink:"FF16302E",grijs:"FF5D716F"};
+  const F=o=>`<font>${o.b?"<b/>":""}<sz val="${o.sz||11}"/><color rgb="${o.c||C.ink}"/><name val="Aptos Narrow"/><family val="2"/></font>`;
+  const fonts=[F({}),F({b:1,c:"FFFFFFFF"}),F({b:1,sz:15,c:C.titel}),F({sz:10,c:C.grijs})];
+  const fill=rgb=>`<fill><patternFill patternType="solid"><fgColor rgb="${rgb}"/><bgColor indexed="64"/></patternFill></fill>`;
+  const fills=[`<fill><patternFill patternType="none"/></fill>`,`<fill><patternFill patternType="gray125"/></fill>`,fill(C.kop),fill(C.zebra)];
+  const rand=["left","right","top","bottom"].map(k=>`<${k} style="thin"><color rgb="${C.rand}"/></${k}>`).join("");
+  const borders=[`<border><left/><right/><top/><bottom/><diagonal/></border>`,`<border>${rand}<diagonal/></border>`];
+  const X=(font,fl,bd,fmt,al)=>`<xf numFmtId="${fmt||0}" fontId="${font}" fillId="${fl}" borderId="${bd}" xfId="0"${fmt?' applyNumberFormat="1"':""} applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment ${al}/></xf>`;
+  const top='vertical="top"', wrap='vertical="top" wrapText="1"', mid='horizontal="center" vertical="top"';
+  /* 0 standaard · 1 kolomkop · 2 titel · 3 uitleg · daarna per rijkleur: tekst, lange tekst, datum, bedrag, getal */
+  const xfs=[X(0,0,0,0,top),X(1,2,1,0,'vertical="center" wrapText="1"'),X(2,0,0,0,'vertical="center"'),X(3,0,0,0,'vertical="center"')];
+  [0,3].forEach(fl=>xfs.push(X(0,fl,1,0,top),X(0,fl,1,0,wrap),X(0,fl,1,164,mid),X(0,fl,1,165,top),X(0,fl,1,1,mid)));
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+<numFmts count="2"><numFmt numFmtId="164" formatCode="dd/mm/yyyy"/><numFmt numFmtId="165" formatCode="[$€-813] #,##0.00"/></numFmts>
+<fonts count="${fonts.length}">${fonts.join("")}</fonts><fills count="${fills.length}">${fills.join("")}</fills><borders count="${borders.length}">${borders.join("")}</borders>
+<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>
+<cellXfs count="${xfs.length}">${xfs.join("")}</cellXfs>
+<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles>
+</styleSheet>`;
+}
+const XLS = {tekst:4, lang:5, datum:6, euro:7, getal:8};
+const xlCol = i => { let s=""; i++; while(i>0){ const m=(i-1)%26; s=String.fromCharCode(65+m)+s; i=Math.floor((i-1)/26); } return s; };
+const xlTxt = (ref,v,st) => `<c r="${ref}" s="${st}" t="inlineStr"><is><t xml:space="preserve">${xmlEsc(v)}</t></is></c>`;
+function xlCel(ref,v,soort,zebra){
+  const st=XLS[soort]+(zebra?5:0);
+  if(v==null||v==="") return `<c r="${ref}" s="${st}"/>`;
+  if(soort==="datum") return parseISO(v) ? `<c r="${ref}" s="${st}"><v>${xlSerial(v)}</v></c>` : `<c r="${ref}" s="${st}"/>`;
+  if(soort==="euro"||soort==="getal") return isFinite(v) ? `<c r="${ref}" s="${st}"><v>${+v}</v></c>` : `<c r="${ref}" s="${st}"/>`;
+  return xlTxt(ref,v,st);
+}
+function xlSheet(sh,titel,meta,eerste){
+  const K=sh.kolommen, L=xlCol(K.length-1), last=4+sh.rijen.length, R=[];
+  R.push(`<row r="1" ht="24" customHeight="1">${xlTxt("A1",titel,2)}</row>`, `<row r="2" ht="16" customHeight="1">${xlTxt("A2",meta,3)}</row>`);
+  R.push(`<row r="4" ht="30" customHeight="1">${K.map((k,i)=>xlTxt(xlCol(i)+"4",k.t,1)).join("")}</row>`);
+  sh.rijen.forEach((rij,j)=>{ const r=5+j; R.push(`<row r="${r}">${K.map((k,i)=>xlCel(xlCol(i)+r,rij[i],k.s||"tekst",j%2===1)).join("")}</row>`); });
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
+<sheetPr><pageSetUpPr fitToPage="1"/></sheetPr><dimension ref="A1:${L}${last}"/>
+<sheetViews><sheetView showGridLines="0"${eerste?' tabSelected="1"':""} workbookViewId="0"><pane ySplit="4" topLeftCell="A5" activePane="bottomLeft" state="frozen"/><selection pane="bottomLeft" activeCell="A5" sqref="A5"/></sheetView></sheetViews>
+<sheetFormatPr defaultRowHeight="15"/>
+<cols>${K.map((k,i)=>`<col min="${i+1}" max="${i+1}" width="${k.w||14}" customWidth="1"/>`).join("")}</cols>
+<sheetData>${R.join("")}</sheetData>${sh.rijen.length?`<autoFilter ref="A4:${L}${last}"/>`:""}
+<pageMargins left="0.4" right="0.4" top="0.5" bottom="0.6" header="0.3" footer="0.3"/>
+<pageSetup paperSize="9" orientation="landscape" fitToWidth="1" fitToHeight="0"/>
+</worksheet>`;
+}
+function buildLijstXlsx({titel,meta,zand,sheets}){
+  const n=sheets.length;
+  const defs=sheets.map((s,i)=>s.rijen.length?`<definedName name="_xlnm._FilterDatabase" localSheetId="${i}" hidden="1">'${xmlEsc(s.naam)}'!$A$4:$${xlCol(s.kolommen.length-1)}$${4+s.rijen.length}</definedName>`:"").join("");
+  const files=[
+    {name:"[Content_Types].xml",data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/>
+<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>
+${sheets.map((s,i)=>`<Override PartName="/xl/worksheets/sheet${i+1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join("")}
+<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>
+<Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/>
+<Override PartName="/docProps/app.xml" ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml"/></Types>`},
+    {name:"_rels/.rels",data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>
+<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/>
+<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties" Target="docProps/app.xml"/></Relationships>`},
+    {name:"docProps/core.xml",data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<dc:title>${xmlEsc(titel)}</dc:title><dc:creator>GO! basisschool Klim-Op</dc:creator><dcterms:created xsi:type="dcterms:W3CDTF">${new Date().toISOString().slice(0,19)}Z</dcterms:created></cp:coreProperties>`},
+    {name:"docProps/app.xml",data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties"><Application>Microsoft Excel</Application></Properties>`},
+    {name:"xl/workbook.xml",data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><bookViews><workbookView activeTab="0"/></bookViews>
+<sheets>${sheets.map((s,i)=>`<sheet name="${xmlEsc(s.naam)}" sheetId="${i+1}" r:id="rId${i+1}"/>`).join("")}</sheets>${defs?`<definedNames>${defs}</definedNames>`:""}</workbook>`},
+    {name:"xl/_rels/workbook.xml.rels",data:`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${sheets.map((s,i)=>`<Relationship Id="rId${i+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${i+1}.xml"/>`).join("")}
+<Relationship Id="rId${n+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`},
+    {name:"xl/styles.xml",data:xlLijstStyles(zand)},
+    ...sheets.map((s,i)=>({name:`xl/worksheets/sheet${i+1}.xml`,data:xlSheet(s,titel,meta,i===0)}))
+  ];
+  return zipBlob(files,"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+}
+/* De bladen */
+function xlUitstappen(list){
+  const kol=[{t:"Aanvraag",w:9,s:"getal"},{t:"Datum",w:11,s:"datum"},{t:"Einddatum",w:11,s:"datum"},{t:"Activiteit",w:30,s:"lang"},{t:"Bestemming",w:18},
+    {t:"Klassen",w:16,s:"lang"},{t:"Leerlingen",w:10,s:"getal"},{t:"Begeleiders",w:11,s:"getal"},{t:"Vervoer",w:15},{t:"Busmaatschappij",w:17},
+    {t:"Status",w:12},{t:"Bus",w:17},{t:"Kostprijs uitstap",w:13,s:"euro"},{t:"Kostprijs vervoer",w:13,s:"euro"},{t:"Totaal",w:13,s:"euro"},{t:"Prijs per leerling",w:12,s:"euro"},
+    {t:"Betaalwijze",w:14},{t:"Bestelbon uitstap",w:16},{t:"Bestelbon bus",w:16},{t:"Factuur uitstap",w:15},{t:"Factuur bus",w:15},{t:"Aangevraagd door",w:20},
+    {t:"Annulering",w:26,s:"lang"},{t:"Opmerking",w:32,s:"lang"}];
+  const rijen=list.map(t=>{ const k=kosten(t), c=isCancel(t);
+    return [t._nr, t._datumFout?null:t.datumStart, t.type==="meerdaags"?t.datumEind:null, t.activiteit, bestemmingStad(t), sortKlassen(t.klassen).join(", "),
+      t.aantalLln||null, t.aantalBegeleiders||null, t.busNodig?"Bus":vervoerTxt(t), t.busNodig?t.busmaatschappij:"", lkStatus(t)[0],
+      t.busNodig&&!c?(BUS_ST[t.busStatus]||[""])[0]:"", k.actTot, k.verv, k.tot, k.perAll, t.betaalwijze||"", t.internBestelbonUitstap||"",
+      t.busNodig?(t.internBestelbonBus||""):"", (FACT_ST[t.factuurStatus]||[""])[0], t.busNodig?(FACT_ST[t.factuurStatusBus]||[""])[0]:"",
+      t.leerkracht||"", t.annulering?(t.annulering.reden||"")+annTxtPlain(t):"", t.opmerking||""]; });
+  return {naam:"Uitstappen",kolommen:kol,rijen};
+}
+function xlNascholingen(list){
+  const kol=[{t:"Aanvraag",w:9,s:"getal"},{t:"Startdatum",w:11,s:"datum"},{t:"Titel",w:32,s:"lang"},{t:"Organisatie",w:22,s:"lang"},{t:"Status",w:14},
+    {t:"Deelnemers",w:34,s:"lang"},{t:"Aantal",w:8,s:"getal"},{t:"Klassen",w:12},{t:"Plaats",w:12},{t:"Adres of locatie",w:28,s:"lang"},
+    {t:"Inschrijving",w:24,s:"lang"},{t:"Bestelbonnummer nodig",w:18},{t:"Kostprijs",w:12,s:"euro"},{t:"Prijs per deelnemer",w:12,s:"euro"},
+    {t:"Betaalwijze",w:14},{t:"Bestelbon",w:15},{t:"Factuur",w:15},{t:"Aangevraagd door",w:20},{t:"Annulering",w:26,s:"lang"},{t:"Opmerking",w:32,s:"lang"}];
+  const rijen=list.map(t=>{ const k=kosten(t);
+    return [t._nr, t._datumFout?null:t.datumStart, titelVan(t), t.activiteit||"", lkStatus(t)[0], deelnemersTxt(t), t.aantalDeelnemers||null, nasKlassen(t).join(", "),
+      (PLAATS[t.plaats]||{l:""}).l, t.plaats==="locatie"?(bestemming(t)||""):"", inschTxt(t)||"", t.inschrijving==="zelf"?(BON_LBL[t.bestelbon]||""):"",
+      k.tot!=null?k.tot:k.actTot, t.aantalDeelnemers>1?k.perAll:null, t.betaalwijze||"", t.internBestelbonUitstap||"", (FACT_ST[t.factuurStatus]||[""])[0],
+      t.leerkracht||"", t.annulering?(t.annulering.reden||"")+annTxtPlain(t):"", t.opmerking||""]; });
+  return {naam:"Nascholingen",kolommen:kol,rijen};
+}
+/* Per deelnemer: één rij per collega en per nascholing (een hele groep: één rij). Een filter op deelnemer of klas geldt ook hier. */
+function xlPerDeelnemer(list,o={}){
+  const kol=[{t:"Deelnemer",w:24},{t:"Klas",w:8},{t:"Startdatum",w:11,s:"datum"},{t:"Titel",w:32,s:"lang"},{t:"Organisatie",w:22,s:"lang"},
+    {t:"Plaats",w:12},{t:"Vervoer",w:22},{t:"Status",w:14},{t:"Aanvraag",w:9,s:"getal"}];
+  const rijen=[];
+  list.forEach(t=>{
+    const basis=[t._datumFout?null:t.datumStart, titelVan(t), t.activiteit||"", (PLAATS[t.plaats]||{l:""}).l];
+    if(t.deelnemersGroep!=="naam"){ if(!o.deeln && !o.klas) rijen.push([`${GROEP_LBL[t.deelnemersGroep]||"Groep"}${t.aantalDeelnemers?" (± "+t.aantalDeelnemers+")":""}`,"",...basis,"",lkStatus(t)[0],t._nr]); return; }
+    (t.deelnemers||[]).forEach(d=>{
+      if(o.deeln && d.naam!==o.deeln) return;
+      if(o.klas && d.klas!==o.klas) return;
+      rijen.push([d.naam,d.klas||"",...basis,DN_VERV[d.vervoer]||"",lkStatus(t)[0],t._nr]);
+    });
+  });
+  rijen.sort((a,b)=>String(a[0]).localeCompare(String(b[0]),"nl")||String(a[2]||"").localeCompare(String(b[2]||"")));
+  return {naam:"Per deelnemer",kolommen:kol,rijen};
+}
+/* Wat er in de selectie zit, in woorden (bovenaan in het bestand) */
+function selectieTxt(){
+  const d=[];
+  if(isAdmin && ui.werk) d.push("Te doen: "+(((WERK.find(w=>w[0]===ui.werk)||[])[1])||ui.werk));
+  else d.push(ui.periode==="komend"?"Komende":ui.periode==="sj"?"Dit schooljaar":"Alles");
+  if(ui.q) d.push(`zoekterm "${ui.q}"`);
+  if(ui.soort==="nascholing"){
+    if(ui.nKlas) d.push("klas "+ui.nKlas); if(ui.nDeeln) d.push("deelnemer "+ui.nDeeln); if(ui.nAanvr) d.push("aangevraagd door "+ui.nAanvr);
+    if(ui.nPlaats) d.push(((PLAATS[ui.nPlaats]||{l:""}).l).toLowerCase()); if(ui.nInfo) d.push(ui.nInfo==="info"?"informatief":"met opvolging");
+  } else { if(ui.klas) d.push("klas "+ui.klas); if(ui.verv) d.push((((VERV_OPT.find(v=>v[0]===ui.verv)||[])[1])||"").toLowerCase()); }
+  return d.filter(Boolean).join(" · ");
+}
+function exportExcel(list,soort,naam,meta,o={}){
+  const nas=soort==="nascholing";
+  if(!list.length){ toast("Er is niets om te exporteren"); return; }
+  const sheets = nas ? [xlNascholingen(list),xlPerDeelnemer(list,o)] : [xlUitstappen(list)];
+  const titel = (nas?"Nascholingen":"Uitstappen en activiteiten")+" · GO! basisschool Klim-Op";
+  const uitleg = `${meta} · ${plural(list.length,nas?"nascholing":"uitstap",nas?"nascholingen":"uitstappen")} · gemaakt op ${fmtDY(todayISO())}`;
+  downloadBlob(buildLijstXlsx({titel,meta:uitleg,zand:nas,sheets}),naam);
+  toast("Excel-bestand gemaakt");
+}
+
+/* ============================================================
+   ARCHIEF: vorige schooljaren (doorzoeken, bekijken, exporteren) en de prullenbak (terugzetten)
    ============================================================ */
 const AR = { years:null };
 async function archYears(){
@@ -4491,7 +4914,7 @@ async function renderArchief(){
       <select class="sel set" id="arSJ" aria-label="Kies een schooljaar">${opts.map(y=>`<option${y===ui.archSJ?" selected":""}>${y}</option>`).join("")}</select>
       <div class="seg" id="arSoort" role="group" aria-label="Weergave">${[["uitstap","Uitstappen"],["nascholing","Nascholingen"]].map(([k,l])=>`<button data-arsoort="${k}" class="${ui.archSoort===k?"on":""}" aria-pressed="${ui.archSoort===k}">${l}</button>`).join("")}</div>
       <div class="search${ui.archQ?" has":""}" id="arSearchW"><span class="s-ic">${ic("search",16)}</span><input id="arSearch" value="${esc(ui.archQ)}" placeholder="Zoek in ${esc(ui.archSJ)}…" aria-label="Zoeken in het archief" autocomplete="off"><button class="s-clear" id="arClear" aria-label="Zoekterm wissen">${ic("x",15)}</button></div>
-      <button class="btn btn-ghost" id="arCsv">${ic("download",16)}CSV ${esc(ui.archSJ)}</button>
+      <button class="btn btn-ghost" id="arXlsx">${ic("download",16)}Excel ${esc(ui.archSJ)}</button><button class="btn btn-ghost" id="arCsv">${ic("download",16)}CSV ${esc(ui.archSJ)}</button>
     </div>
     ${isAdmin&&open.length?`<div class="fwarn" style="margin-bottom:12px">${ic("alert",16)}<div><b>${nasA?plural(open.length,"nascholing wacht","nascholingen wachten"):plural(open.length,"uitstap wacht","uitstappen wachten")} nog op een factuur</b> in ${esc(ui.archSJ)}. Je vindt ze ook bij Te doen in het overzicht.</div></div>`:""}
     <div class="bl-card" id="arList" style="--cols:${cols}">${nasA?`<div class="bl-head"><span>Datum</span><span>Nascholing</span><span>Deelnemers</span><span>Locatie</span><span class="r">Kostprijs</span><span>Status</span></div>`
@@ -4517,6 +4940,7 @@ async function renderArchief(){
   const si=$("arSearch"); si.oninput=()=>{ ui.archQ=si.value; const p=si.selectionStart; renderArchief().then(()=>{ const n=$("arSearch"); if(n){ n.focus(); n.setSelectionRange(p,p); } }); };
   si.onkeydown=e=>{ if(e.key==="Escape"){ ui.archQ=""; renderArchief(); } };
   $("arClear").onclick=()=>{ ui.archQ=""; renderArchief().then(()=>$("arSearch").focus()); };
+  $("arXlsx").onclick=()=>exportExcel(rows,nasA?"nascholing":"uitstap",`${nasA?"nascholingen":"uitstappen"}_${ui.archSJ}.xlsx`,"Schooljaar "+ui.archSJ+(ui.archQ?` · zoekterm "${ui.archQ}"`:""));
   $("arCsv").onclick=()=>nasA ? exportCSVNas(all,"archief",`nascholingen_${ui.archSJ}.csv`) : exportCSV(all,"archief",`uitstappen_${ui.archSJ}.csv`);
   host.onclick=async e=>{
     let el;
@@ -4713,6 +5137,7 @@ async function boot(){
   try{ await loadAll(); }
   catch(e){ console.error(e); D.failed=true; setConn("off"); renderAll(); toast("De gegevens konden niet geladen worden. Controleer je verbinding.","err"); return; }
   if(!lsGet(LS_SEEN)) lsSet(LS_SEEN, window.__SEEN_DEFAULT || new Date().toISOString());
+  if(!lsGet(LS_SEEN_NAS)) lsSet(LS_SEEN_NAS, lsGet(LS_SEEN));
   renderAll();
   openRechtstreeks();
 }
