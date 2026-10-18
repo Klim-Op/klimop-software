@@ -3320,13 +3320,13 @@ function rowHTML(t,ts){
   const klas=`<div class="c-cell c-klas klas-tags">${sortKlassen(t.klassen).map(x=>`<span class="klas-tag">${hl(x,ts)}</span>`).join("")}</div>`;
   const v=vervoer(t), vv=VERVOER[v];
   /* De vervoerkost staat bij het vervoer, met de busmaatschappij */
-  const verv=`<div class="c-cell c-verv"><span class="vi">${vv?ic(vv.ic,16):""}</span><div style="min-width:0"><div>${esc(t.busNodig?"Bus":vervoerTxt(t))}</div>${vervSub(t,k,true)}</div></div>`;
+  const verv=`<div class="c-cell c-verv"><span class="vi">${vv?ic(vv.ic,16):""}</span><div style="min-width:0"><div>${esc(t.busNodig?"Bus":vervoerTxt(t))}</div>${vervSub(t,k)}${t.busNodig&&!isCancel(t)?`<div class="verv-st">${busPill(t,1)}</div>`:""}</div></div>`;
   const cost=`<div class="c-cost m-hide">${kostCel(t,k)}</div>`;
   let cells;
   if(!isAdmin){
     const uren = t.vertrekSchool||t.terugSchool ? `${esc(fmtTime(t.vertrekSchool)||"…")}${t.terugSchool?`<small>terug ${esc(fmtTime(t.terugSchool))}</small>`:""}` : `<span class="muted">—</span>`;
     /* busstatus apart onder "Bus" in de kolom Vervoer, de status van de uitstap in de kolom Status */
-    const vervLk=`<div class="c-cell c-verv"><span class="vi">${vv?ic(vv.ic,16):""}</span><div style="min-width:0"><div>${esc(t.busNodig?"Bus":vervoerTxt(t))}</div>${vervSub(t,k,false)}${t.busNodig&&!cancel?`<div class="verv-st">${busPill(t,1)}</div>`:""}</div></div>`;
+    const vervLk=`<div class="c-cell c-verv"><span class="vi">${vv?ic(vv.ic,16):""}</span><div style="min-width:0"><div>${esc(t.busNodig?"Bus":vervoerTxt(t))}</div>${vervSub(t,k)}${t.busNodig&&!cancel?`<div class="verv-st">${busPill(t,1)}</div>`:""}</div></div>`;
     cells=date+act+klas+`<div class="c-cell m-hide">${uren}</div>`+vervLk+cost+`<div class="c-stat">${statusPills(t,1)}</div>`;
   } else if(ui.ovMode==="bon"){
     const fb=(s,l)=>s?pill(l+": "+(FACT_ST[s]||[""])[0].toLowerCase(),(FACT_ST[s]||["",""])[1],1):"";
@@ -3360,9 +3360,10 @@ function kostCel(t,k){
   if(k.perAll!=null && n>(nas?1:0)) sub.push((raming?"± ":"")+euro(k.perAll)+" p.p.");   // ± = raming bij een hele groep
   return `<b>${esc(euro(k.tot))}</b>${sub.map(x=>`<small>${esc(x)}</small>`).join("")}`;
 }
-/* Vervoer in de lijst: onder de vervoerwijze de maatschappij en de prijs */
-function vervSub(t,k,beheer){
-  const firma = t.busNodig ? (t.busmaatschappij || (beheer ? (BUS_ST[t.busStatus]||[""])[0] : "")) : "";
+/* Vervoer in de lijst, voor leerkracht en beheerder gelijk: de vervoerwijze, daaronder de maatschappij met de prijs,
+   en bij een bus het label met de busstatus (handig met de filter "Met bus") */
+function vervSub(t,k){
+  const firma = t.busNodig ? (t.busmaatschappij||"") : "";
   const prijs = k.verv!=null ? euro(k.verv) : "";
   if(!firma && !prijs) return "";
   return `<small class="vl"${firma?` title="${esc(firma)}"`:""}>${firma?`<span class="vf">${esc(firma)}</span>`:""}${prijs?`<span class="vp">${firma?" · ":""}${esc(prijs)}</span>`:""}</small>`;
