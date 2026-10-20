@@ -4867,7 +4867,7 @@ function exportExcel(list,soort,naam,meta,o={}){
   const sheets = nas ? [xlNascholingen(list),xlPerDeelnemer(list,o)] : [xlUitstappen(list)];
   const titel = (nas?"Nascholingen":"Uitstappen en activiteiten")+" · GO! basisschool Klim-Op";
   const uitleg = `${meta} · ${plural(list.length,nas?"nascholing":"uitstap",nas?"nascholingen":"uitstappen")} · gemaakt op ${fmtDY(todayISO())}`;
-  downloadBlob(buildLijstXlsx({titel,meta:uitleg,zand:nas,sheets}),naam);
+  downloadBlob(naam,buildLijstXlsx({titel,meta:uitleg,zand:nas,sheets}));   // eerst de naam, dan het bestand
   toast("Excel-bestand gemaakt");
 }
 
