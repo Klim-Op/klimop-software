@@ -1555,7 +1555,7 @@ const ADMIN_VIEWS = ["bestelbons","uitgaven","instellingen"];
 /* ---------- Supabase ----------
    Alle gegevens lopen via een eigen REST-laag met timeout. supabase-js dient enkel voor de aanmelding.
    Niets geldt als bewaard zonder bevestiging van de database. */
-const SUPA = {URL:"https://vmvxawjfryaijkhhnnyr.supabase.co", KEY:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZtdnhhd2pmcnlhaWpraGhubnlyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0NjM0NDgsImV4cCI6MjA5NjAzOTQ0OH0.6UMvrhkHwbrtQwOvn3od8X6DAKXSiPdtCeFdt3nZZdE"};
+const SUPA = {URL:"https://vmvxawjfryaijkhhnnyr.supabase.co", KEY:"sb_publishable_Xg0ezCxtbHfReSOcigRXvw_j5fwRjqg"};
 /* Tabellen. In het testbestand krijgen ze het voorvoegsel "test_" (kopieën), live geen. */
 const PFX = "";
 const T_ORD=PFX+"materiaal_bestellingen", T_ARCH=PFX+"materiaal_archief", T_BON=PFX+"materiaal_bestelbons", T_SET=PFX+"materiaal_instellingen";
@@ -1600,7 +1600,9 @@ const AUTH = window.MockAuth || supabaseAuth();   // MockAuth enkel in lokale te
 function supabaseAPI(){
   async function call(path,opt={}){
     const tok = opt.anon ? null : await AUTH.token();
-    const headers=Object.assign({apikey:SUPA.KEY,Authorization:"Bearer "+(tok||SUPA.KEY),"Content-Type":"application/json"},opt.headers||{});
+    /* De publishable key gaat enkel mee als apikey. Authorization enkel met het toegangsbewijs van een aangemelde gebruiker:
+       de nieuwe sleutels zijn geen JWT en horen niet als Bearer (sinds november 2026, overstap van de oude anon-sleutel). */
+    const headers=Object.assign({apikey:SUPA.KEY,"Content-Type":"application/json"},tok?{Authorization:"Bearer "+tok}:{},opt.headers||{});
     const ctl=new AbortController(), to=setTimeout(()=>ctl.abort(),12000);
     let r;
     try{ r=await fetch(SUPA.URL+"/rest/v1/"+path,{method:opt.method||"GET",headers,body:opt.body,signal:ctl.signal}); }
